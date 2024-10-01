@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import org.junit.Test;
+import org.junit.Before;
 
 import static org.junit.Assert.*;
 
@@ -10,8 +11,45 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+
+    CredentialValidator validator;
+
+    @Before
+    public void setup() {
+        validator = new CredentialValidator();
     }
+
+    @Test
+    public void checkIfPasswordIsEmpty() {
+        assertTrue(validator.isEmptyPassword(""));
+        assertFalse(validator.isEmptyPassword("Password123"));
+    }
+
+    @Test
+    public void checkIfPasswordIdIsValid() {
+        assertTrue(validator.isValidPassword("Pass@123"));
+    }
+
+    @Test
+    public void checkIfPasswordIdIsInvalid() {
+        assertFalse(validator.isValidPassword("pass"));
+        assertFalse(validator.isValidPassword("pass12345"));
+    }
+
+    @Test
+    public void checkIfEmailIsEmpty() {
+        assertTrue(validator.isEmptyEmailAddress(""));
+        assertFalse(validator.isEmptyEmailAddress("3130@dal.ca"));
+    }
+
+    @Test
+    public void checkIfEmailIsValid() {
+        assertTrue(validator.isValidEmailAddress("3130@dal.ca"));
+    }
+
+    @Test
+    public void checkIfEmailIsInvalid() {
+        assertFalse(validator.isValidEmailAddress("3130.dal.ca"));
+    }
+
 }
