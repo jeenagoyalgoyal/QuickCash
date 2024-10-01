@@ -8,6 +8,7 @@ import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,12 +16,12 @@ import org.junit.Test;
 public class UserRoleTest {
 
     @Rule
-    //public ActivityTestRule<RoleActivity> activity = new ActivityTestRule<>(RoleActivity.class,true,false);
+    public ActivityScenarioRule<RoleActivity> activity = new ActivityScenarioRule<>(RoleActivity.class);
 
     @Test
     public void testRoleSwitching(){
         //Getting RoleActivity
-       // activity.launchActivity(new Intent());
+        //activity.launchActivity(new Intent());
 
         //Test for initial role as employee
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
