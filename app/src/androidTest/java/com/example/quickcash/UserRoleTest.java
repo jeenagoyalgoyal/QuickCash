@@ -20,8 +20,6 @@ public class UserRoleTest {
 
     @Test
     public void testRoleSwitching(){
-        //Getting RoleActivity
-        //activity.launchActivity(new Intent());
 
         //Test for initial role as employee
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
@@ -37,5 +35,12 @@ public class UserRoleTest {
 
         // Check back to employee
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
+    }
+
+    @Test
+    public void testBtnTextSwitch(){
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employee")));
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employer")));
     }
 }
