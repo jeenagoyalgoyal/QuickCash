@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RoleActivity extends AppCompatActivity {
 
     private TextView welcomeText;
+    private String currentRole = "employee";
     private Button roleSwitch;
     private UseRole useRole;
 
@@ -42,7 +43,7 @@ public class RoleActivity extends AppCompatActivity {
         }
         else{
             welcomeText.setText("Welcome, employer");
-            roleSwitch.setText("Switch to employer");
+            roleSwitch.setText("Switch to employee");
         }
     }
 }

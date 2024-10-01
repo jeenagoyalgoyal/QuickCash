@@ -39,6 +39,9 @@ public class UserRoleTest {
 
     @Test
     public void testBtnTextSwitch(){
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employer")));
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
+        Espresso.onIdle();
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employee")));
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employer")));
