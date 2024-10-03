@@ -1,4 +1,6 @@
 package com.example.quickcash;
 
-public class RegistrationActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class RegistrationActivity extends AppCompatActivity {
 }

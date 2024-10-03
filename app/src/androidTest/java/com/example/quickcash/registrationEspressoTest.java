@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class registrationEspressoTest {
 
-    private activityScenario<RegistrationActivity> regActivityScenario;
+    private ActivityScenario<RegistrationActivity> regActivityScenario;
 
     @Before
     public void setup(){
@@ -16,6 +16,6 @@ public class registrationEspressoTest {
 
     @Test
     public void nameTest() {
-        Espresso.onView();
+
     }
 }
