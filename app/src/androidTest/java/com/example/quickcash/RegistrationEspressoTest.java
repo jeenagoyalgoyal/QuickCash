@@ -7,16 +7,20 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import androidx.test.core.app.ActivityScenario;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class registrationEspressoTest {
+public class RegistrationEspressoTest {
 
-    private ActivityScenario<RegistrationActivity> regActivityScenario;
+    private ActivityScenario<RegistrationActivity> activityScenario;
 
     @Before
     public void setup(){
-        regActivityScenario = ActivityScenario.launch(RegistrationActivity.class);;
+        activityScenario = ActivityScenario.launch(RegistrationActivity.class);
+        activityScenario.onActivity(activity -> {
+            activity.setupRegisterButton();
+        });
     }
 
     @Test
@@ -40,8 +44,5 @@ public class registrationEspressoTest {
         onView(withId(R.id.validPassword)).check(matches(withText("Valid Password")));
     }
 
-    @Test
-    public void invalidNameTest(){
 
-    }
 }
