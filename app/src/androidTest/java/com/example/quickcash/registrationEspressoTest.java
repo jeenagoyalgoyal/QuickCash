@@ -28,4 +28,9 @@ public class registrationEspressoTest {
         Espresso.onView(withId(R.id.buttonRegister)).perform(click());
         Espresso.onView(withId(R.id.validName)).check(matches(withText("Valid")));
     }
+
+    @Test
+    public void invalidNameTest(){
+
+    }
 }
