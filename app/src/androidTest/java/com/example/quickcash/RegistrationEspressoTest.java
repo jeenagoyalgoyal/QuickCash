@@ -65,4 +65,11 @@ public class registrationEspressoTest {
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
     }
+
+    @Test
+    public void invalidPasswordTest() {
+        onView(withId(R.id.enterPassword)).perform(typeText(INVALID_PASSWORD));
+        onView(withId(R.id.buttonRegister)).perform(click());
+        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
+    }
 }
