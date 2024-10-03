@@ -13,7 +13,7 @@ import junit.framework.AssertionFailedError;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RegistrationEspressoTest {
+public class registrationEspressoTest {
 
     private ActivityScenario<RegistrationActivity> activityScenario;
 
@@ -55,6 +55,13 @@ public class RegistrationEspressoTest {
     @Test
     public void invalidNameTest() {
         onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME));
+        onView(withId(R.id.buttonRegister)).perform(click());
+        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
+    }
+
+    @Test
+    public void invalidEmailTest() {
+        onView(withId(R.id.enterEmail)).perform(typeText(INVALID_EMAIL));
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
     }
