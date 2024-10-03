@@ -15,8 +15,16 @@
         android:ems="10"
         android:hint="Enter Name"
         android:inputType="text"
-        tools:layout_editor_absoluteX="79dp"
-        tools:layout_editor_absoluteY="129dp" />
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="126dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="104dp" />
 
     <EditText
         android:id="@+id/enterPassword"
@@ -25,32 +33,16 @@
         android:ems="10"
         android:hint="Enter Password"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="297dp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="107dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="188dp" />
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="306dp" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Password"
-        tools:layout_editor_absoluteX="82dp"
-        tools:layout_editor_absoluteY="278dp" />
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="287dp" />
 
     <Button
         android:id="@+id/buttonRegister"
@@ -86,7 +78,15 @@
         android:ems="10"
         android:hint="Enter Email"
         android:inputType="text"
-        tools:layout_editor_absoluteX="80dp"
-        tools:layout_editor_absoluteY="214dp" />
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="215dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        tools:layout_editor_absoluteX="98dp"
+        tools:layout_editor_absoluteY="189dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
