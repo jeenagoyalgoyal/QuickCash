@@ -35,7 +35,13 @@ public class registrationEspressoTest {
         Espresso.onView(withId(R.id.buttonRegister)).perform(click());
         Espresso.onView(withId(R.id.validEmail)).check(matches(withText("Valid Email")));
     }
-    
+
+    @Test
+    public void validPasswordTest() {
+        Espresso.onView(withId(R.id.enterPassword)).perform(typeText("example@email.com"));
+        Espresso.onView(withId(R.id.buttonRegister)).perform(click());
+        Espresso.onView(withId(R.id.validPassword)).check(matches(withText("Valid Password")));
+    }
 
     @Test
     public void invalidNameTest(){
