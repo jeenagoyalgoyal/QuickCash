@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

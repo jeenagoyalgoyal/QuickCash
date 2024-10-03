@@ -8,6 +8,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import androidx.test.core.app.ActivityScenario;
 
+import junit.framework.AssertionFailedError;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,5 +46,16 @@ public class RegistrationEspressoTest {
         onView(withId(R.id.validPassword)).check(matches(withText("Valid Password")));
     }
 
+    //Setting up Invalid message and inputs
+    private final String INVALID_MESSAGE = "Invalid Name";
+    private final String INVALID_EMAIL = "Invalid@EMAIL.EMAIL";
+    private final String INVALID_NAME = "Invalid_Name";
+    private final String INVALID_PASSWORD = "Invalid_Pass";
 
+    @Test
+    public void invalidNameTest() {
+        onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME));
+        onView(withId(R.id.buttonRegister)).perform(click());
+        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
+    }
 }
