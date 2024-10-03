@@ -19,15 +19,23 @@ public class registrationEspressoTest {
 
     @Before
     public void setup(){
-        regActivityScenario = ActivityScenario.launch(RegistrationActivity.class);
+        regActivityScenario = ActivityScenario.launch(RegistrationActivity.class);;
     }
 
     @Test
     public void validNameTest() {
         Espresso.onView(withId(R.id.enterName)).perform(typeText("example name"));
         Espresso.onView(withId(R.id.buttonRegister)).perform(click());
-        Espresso.onView(withId(R.id.validName)).check(matches(withText("Valid")));
+        Espresso.onView(withId(R.id.validName)).check(matches(withText("Valid Name")));
     }
+
+    @Test
+    public void validEmailTest() {
+        Espresso.onView(withId(R.id.enterEmail)).perform(typeText("example@email.com"));
+        Espresso.onView(withId(R.id.buttonRegister)).perform(click());
+        Espresso.onView(withId(R.id.validEmail)).check(matches(withText("Valid Email")));
+    }
+    
 
     @Test
     public void invalidNameTest(){
