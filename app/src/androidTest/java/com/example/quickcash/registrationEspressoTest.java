@@ -18,4 +18,9 @@ public class registrationEspressoTest {
     public void nameTest() {
 
     }
+
+    @Test
+    public void invalidNameTest(){
+
+    }
 }
