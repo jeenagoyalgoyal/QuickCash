@@ -1,10 +1,8 @@
 package com.example.quickcash;
 
-import android.telephony.ims.RegistrationManager;
-
 import androidx.test.core.app.ActivityScenario;
-
 import org.junit.Before;
+import androidx.test.espresso.Espresso;
 import org.junit.Test;
 
 public class registrationEspressoTest {
@@ -15,6 +13,9 @@ public class registrationEspressoTest {
     public void setup(){
         regActivityScenario = ActivityScenario.launch(RegistrationActivity.class);
     }
-    
 
+    @Test
+    public void nameTest() {
+        Espresso.onView();
+    }
 }
