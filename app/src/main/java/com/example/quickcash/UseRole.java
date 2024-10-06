@@ -3,9 +3,9 @@ package com.example.quickcash;
 public class UseRole {
 
     private static UseRole instance;
-    private String currentRole;
+    private String currentRole = "employee";
 
-    private UseRole(){
+    public UseRole(){
         currentRole = "employee";
     }
 

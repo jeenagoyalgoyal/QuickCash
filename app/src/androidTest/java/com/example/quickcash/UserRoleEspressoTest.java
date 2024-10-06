@@ -1,10 +1,6 @@
 package com.example.quickcash;
 
-import android.content.Intent;
-
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -13,7 +9,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class UserRoleTest {
+public class UserRoleEspressoTest {
 
     @Rule
     public ActivityScenarioRule<RoleActivity> activity = new ActivityScenarioRule<>(RoleActivity.class);
@@ -37,12 +33,11 @@ public class UserRoleTest {
     // Tests for updation on button text based on correct role assigned
     @Test
     public void testBtnTextSwitch() {
-        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employer")));
-        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
-        Espresso.onIdle();
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employee")));
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employer")));
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).check(ViewAssertions.matches(ViewMatchers.withText("Switch to employee")));
     }
 
     //Test Multiple Switches
