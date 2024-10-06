@@ -28,7 +28,8 @@ public class RoleActivity extends AppCompatActivity {
         roleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                useRole.switchRole();
+                String id = "testUser";
+                useRole.switchRole(id);
                 update();
             }
         });
