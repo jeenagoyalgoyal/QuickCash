@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,5 +42,17 @@ public class UserRoleJunitTest {
 
         useRole.switchRole();
         assertEquals("employer", useRole.getCurrentRole());
+    }
+
+    @Test
+    public void testSingleInstance(){
+        UseRole other = UseRole.getInstance();
+        assertEquals(useRole,other);
+    }
+
+    @Test
+    public void testForNotNull(){
+        assertNotNull("UseRole should not be null", useRole);
+        assertNotNull("Current Role is not null", useRole.getCurrentRole());
     }
 }
