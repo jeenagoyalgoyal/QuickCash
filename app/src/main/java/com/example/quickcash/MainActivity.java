@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -60,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //Switching Role
+        if(id == R.id.switch_role) {
+            String userid = "userID";
+            Intent intent = new Intent(MainActivity.this, RoleActivity.class);
+            intent.putExtra("userID", userid);
+            startActivity(intent);
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
