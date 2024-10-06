@@ -23,4 +23,23 @@ public class UserRoleJunitTest {
         useRole.switchRole();
         assertEquals("employer", useRole.getCurrentRole());
     }
+
+    @Test
+    public void testSwitchBackRole(){
+        useRole.switchRole();
+        useRole.switchRole();
+        assertEquals("employee", useRole.getCurrentRole());
+    }
+
+    @Test
+    public void testMultipleSwitch(){
+        useRole.switchRole();
+        assertEquals("employer", useRole.getCurrentRole());
+
+        useRole.switchRole();
+        assertEquals("employee", useRole.getCurrentRole());
+
+        useRole.switchRole();
+        assertEquals("employer", useRole.getCurrentRole());
+    }
 }
