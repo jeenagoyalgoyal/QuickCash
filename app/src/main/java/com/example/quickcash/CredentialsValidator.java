@@ -3,8 +3,7 @@ package com.example.quickcash;
 public class CredentialsValidator {
 
     public static boolean isValidBannerID(String BannerID) {
-        //implement pending
-        return false;
+        return (BannerID.matches("^B00[0-9]+") && BannerID.length() == 9);
     }
 
     public static boolean isEmptyBannerID(String BannerID) {
@@ -17,7 +16,7 @@ public class CredentialsValidator {
         return false;
     }
 
-    public static boolean isValidRole(String employer) {
+    public static boolean isValidRole(String userRole) {
         //implement pending
         return false;
     }
