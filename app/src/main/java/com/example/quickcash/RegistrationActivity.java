@@ -21,7 +21,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,10 +50,17 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     protected String getName() {
-        return null;
+        EditText nameBox = findViewById(R.id.enterName);
+        return nameBox.getText().toString().trim();
     }
 
-    protected String getEmailAddress() {
-        return;
+    protected String getEmail() {
+        EditText emailBox = findViewById(R.id.enterEmail);
+        return emailBox.getText().toString().trim();
+    }
+
+    protected String getPassword() {
+        EditText passwordBox = findViewById(R.id.enterPassword);
+        return passwordBox.getText().toString().trim();
     }
 }
