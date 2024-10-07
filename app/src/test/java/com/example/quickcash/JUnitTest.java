@@ -21,7 +21,6 @@ public class JUnitTest {
     protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca";
     protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd";
 
-
     @Test
     public void checkIfValidName(){
         assertTrue(CredentialsValidator.isValidName(VALID_NAME));
