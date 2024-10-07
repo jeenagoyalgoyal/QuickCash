@@ -8,7 +8,22 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class RegistrationActivity extends AppCompatActivity {
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +35,26 @@ public class RegistrationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        this.setupRegisterButton();
     }
 
     protected void setupRegisterButton(){
-        //Do nothing for now
+        Button registerButton = findViewById(R.id.buttonRegister);
+        registerButton.setOnClickListener(this);
+
     }
 
+    @Override
+    public void onClick(View view) {
+        String name;
+    }
+
+    protected String getName() {
+        return null;
+    }
+
+    protected String getEmailAddress() {
+        return;
+    }
 }

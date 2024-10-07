@@ -13,7 +13,7 @@ import junit.framework.AssertionFailedError;
 import org.junit.Before;
 import org.junit.Test;
 
-public class registrationEspressoTest {
+public class RegistrationEspressoTest {
 
     private ActivityScenario<RegistrationActivity> activityScenario;
 
