@@ -25,5 +25,4 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void setupRegisterButton(){
         //Do nothing for now
     }
-
 }
