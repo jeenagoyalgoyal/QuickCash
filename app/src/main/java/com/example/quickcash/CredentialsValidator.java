@@ -15,7 +15,6 @@ public class CredentialsValidator {
     }
 
     public static boolean isValidRole(String userRole) {
-        //implement pending
-        return false;
+        return (userRole.equals("Employer") || userRole.equals("Employee"));
     }
 }
