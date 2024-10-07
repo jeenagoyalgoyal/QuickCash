@@ -42,7 +42,7 @@ public class UserRoleEspressoTest {
 
     //Test Multiple Switches
     @Test
-    public void testMultipleSwitches(){
+    public void testMultipleSwitches() {
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employer")));
@@ -53,8 +53,34 @@ public class UserRoleEspressoTest {
 
 
     }
-}
 
 
     //Test for elements for UI are shown or hidden specific to the role
 
+    //Employee hidden buttons
+    @Test
+    public void testEmployeeButtons() {
+        Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
+
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job Posting")));
+        Espresso.onView(ViewMatchers.withId(R.id.profileButton)).check(ViewAssertions.matches(ViewMatchers.withText("My Profile")));
+        Espresso.onView(ViewMatchers.withId(R.id.scheduleButton)).check(ViewAssertions.matches(ViewMatchers.withText("Work Schedule")));
+        Espresso.onView(ViewMatchers.withId(R.id.taskButton)).check(ViewAssertions.matches(ViewMatchers.withText("Tasks & Projects")));
+        Espresso.onView(ViewMatchers.withId(R.id.performanceButton)).check(ViewAssertions.matches(ViewMatchers.withText("Performance Reviews")));
+        Espresso.onView(ViewMatchers.withId(R.id.notificationsButton)).check(ViewAssertions.matches(ViewMatchers.withText("Notifications & Settings")));
+    }
+
+    //Employer hidden buttons
+    @Test
+    public void testEmployerButtons() {
+        Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employer")));
+
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Manage Job Posting")));
+        Espresso.onView(ViewMatchers.withId(R.id.profileButton)).check(ViewAssertions.matches(ViewMatchers.withText("Employee Directory")));
+        Espresso.onView(ViewMatchers.withId(R.id.scheduleButton)).check(ViewAssertions.matches(ViewMatchers.withText("Analytics & Reports")));
+        Espresso.onView(ViewMatchers.withId(R.id.taskButton)).check(ViewAssertions.matches(ViewMatchers.withText("Tasks & Assignments")));
+        Espresso.onView(ViewMatchers.withId(R.id.performanceButton)).check(ViewAssertions.matches(ViewMatchers.withText("Schedule & Meetings")));
+        Espresso.onView(ViewMatchers.withId(R.id.notificationsButton)).check(ViewAssertions.matches(ViewMatchers.withText("Notifications & Settings")));
+    }
+
+}

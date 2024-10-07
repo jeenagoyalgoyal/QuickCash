@@ -7,10 +7,58 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/notificationsButton"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="4dp"
+        android:text="Notifications"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="536dp" />
+
+    <Button
+        android:id="@+id/jobPosting"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:text="Job Posting"
+        app:layout_constraintBottom_toTopOf="@+id/profileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
+
+    <Button
+        android:id="@+id/performanceButton"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="4dp"
+        android:text="Performance"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="476dp" />
+
+    <Button
+        android:id="@+id/scheduleButton"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:text="Schedule"
+        app:layout_constraintBottom_toTopOf="@+id/taskButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileButton" />
+
+    <Button
+        android:id="@+id/taskButton"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:text="Tasks"
+        app:layout_constraintBottom_toTopOf="@+id/performanceButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scheduleButton" />
+
+    <Button
         android:id="@+id/roleSwitch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="472dp"
+        android:layout_marginTop="604dp"
         android:text="Click to Switch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,4 +78,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/profileButton"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:text="Directory"
+        app:layout_constraintBottom_toTopOf="@+id/scheduleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jobPosting" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
