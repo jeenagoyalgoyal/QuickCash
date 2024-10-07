@@ -16,6 +16,14 @@ public class RoleActivity extends AppCompatActivity {
     private UseRole useRole;
     private String id;
 
+    //Buttons for role specific (Logan)
+    private Button jobPosting;
+    private Button profileButton;
+    private Button scheduleButton;
+    private Button taskButton;
+    private Button performanceButton;
+    private Button notificationsButton;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -27,6 +35,14 @@ public class RoleActivity extends AppCompatActivity {
         useRole = UseRole.getInstance();
         welcomeText = findViewById(R.id.welcomeText);
         roleSwitch = findViewById(R.id.roleSwitch);
+
+        //Role specific buttons (Logan)
+        jobPosting = findViewById(R.id.jobPosting);
+        profileButton = findViewById(R.id.profileButton);
+        scheduleButton = findViewById(R.id.scheduleButton);
+        taskButton = findViewById(R.id.taskButton);
+        performanceButton = findViewById(R.id.performanceButton);
+        notificationsButton = findViewById(R.id.notificationsButton);
 
         update();
 
@@ -45,10 +61,26 @@ public class RoleActivity extends AppCompatActivity {
         if(role.equals("employee")){
             welcomeText.setText("Welcome, employee");
             roleSwitch.setText("Switch to employer");
+
+            // Update buttons for employee
+            jobPosting.setText("Search Job Posting");
+            profileButton.setText("My Profile");
+            scheduleButton.setText("Work Schedule");
+            taskButton.setText("Tasks & Projects");
+            performanceButton.setText("Performance Reviews");
+            notificationsButton.setText("Notifications & Settings");
         }
         else{
             welcomeText.setText("Welcome, employer");
             roleSwitch.setText("Switch to employee");
+
+            // Update buttons for employer
+            jobPosting.setText("Manage Job Posting");
+            profileButton.setText("Employee Directory");
+            scheduleButton.setText("Analytics & Reports");
+            taskButton.setText("Tasks & Assignments");
+            performanceButton.setText("Schedule & Meetings");
+            notificationsButton.setText("Notifications & Settings");
         }
     }
 }
