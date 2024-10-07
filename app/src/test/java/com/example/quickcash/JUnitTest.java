@@ -18,12 +18,17 @@ public class JUnitTest {
 
 
     @Test
-    public void isValidBannerID(){
-        assertTrue(CredentialsValidator.isValidBannerID());
+    public void checkIfValidBannerID(){
+        assertTrue(CredentialsValidator.isValidBannerID(VALID_BANNER_ID));
     }
 
     @Test
-    public void isEmptyBannerID(){
+    public void checkIfEmptyBannerID(){
         assertTrue(CredentialsValidator.isEmptyBannerID(EMPTY_BANNER_ID));
+    }
+
+    @Test
+    public void checkIfValidEmailAddress(){
+        assertTrue(CredentialsValidator.isValidBannerID());
     }
 }
