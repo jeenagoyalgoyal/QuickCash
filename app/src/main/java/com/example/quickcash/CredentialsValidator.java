@@ -2,12 +2,12 @@ package com.example.quickcash;
 
 public class CredentialsValidator {
 
-    public static boolean isValidBannerID(String BannerID) {
-        return (BannerID.matches("^B00[0-9]+") && BannerID.length() == 9);
+    public static boolean isEmptyInput(String BannerID) {
+        return (BannerID.matches(new String()));
     }
 
-    public static boolean isEmptyBannerID(String BannerID) {
-        return (BannerID.matches(new String()));
+    public static boolean isValidBannerID(String BannerID) {
+        return (BannerID.matches("^B00[0-9]+") && BannerID.length() == 9);
     }
 
     public static boolean isValidEmailAddress(String emailAddress){
