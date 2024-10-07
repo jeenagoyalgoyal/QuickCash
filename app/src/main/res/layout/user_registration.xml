@@ -81,16 +81,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="32dp"
         android:text="Confirm Password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enterEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/enterPassword" />
 
     <EditText
         android:id="@+id/editTextTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="101dp"
+        android:layout_marginTop="3dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
         android:hint="Enter Password"
@@ -98,27 +99,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="442dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/validPassword2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="252dp"
         android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-        tools:layout_editor_absoluteX="250dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="155dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="155dp"
         android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="651dp" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
 
     <EditText
         android:id="@+id/enterEmail"
@@ -169,32 +172,32 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_width="114dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="32dp"
         android:text="Role"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-        tools:layout_editor_absoluteX="101dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
     <Spinner
         android:id="@+id/spinnerRole"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="101dp"
-        android:layout_marginBottom="60dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
+        android:layout_width="207dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/validRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="252dp"
         android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRole"
-        tools:layout_editor_absoluteX="252dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

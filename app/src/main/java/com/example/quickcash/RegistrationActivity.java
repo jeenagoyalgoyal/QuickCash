@@ -21,7 +21,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -55,6 +54,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     protected String getEmailAddress() {
-        return;
+        return null;
     }
 }
