@@ -16,4 +16,9 @@ public class CredentialsValidator {
         //implement pending
         return false;
     }
+
+    public static boolean isValidRole(String employer) {
+        //implement pending
+        return false;
+    }
 }

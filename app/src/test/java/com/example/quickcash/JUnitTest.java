@@ -44,4 +44,16 @@ public class JUnitTest {
     public void checkIfInvalidEmailAddress(){
         assertFalse(CredentialsValidator.isValidEmailAddress(INVALID_EMAIL_ADDRESS));
     }
+
+    @Test
+    public void checkIfValidRole(){
+        assertTrue(CredentialsValidator.isValidRole("Employer"));
+        assertTrue(CredentialsValidator.isValidRole("Employee"));
+    }
+
+    @Test
+    public void checkIfInvalidRole(){
+        assertFalse(CredentialsValidator.isValidRole("ppalsdpal"));
+        assertFalse(CredentialsValidator.isValidRole(new String()));
+    }
 }
