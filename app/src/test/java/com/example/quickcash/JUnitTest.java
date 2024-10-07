@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 public class JUnitTest {
 
     protected final String VALID_BANNER_ID = "B00831332";
+    protected final String INVALID_BANNER_ID = "S00831332";
     protected final String EMPTY_STRING = new String();
     protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca";
     protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd";
@@ -22,6 +23,11 @@ public class JUnitTest {
     @Test
     public void checkIfValidBannerID(){
         assertTrue(CredentialsValidator.isValidBannerID(VALID_BANNER_ID));
+    }
+
+    @Test
+    public void checkIfInvalidBannerID(){
+        assertFalse(CredentialsValidator.isValidBannerID(INVALID_BANNER_ID));
     }
 
     @Test
