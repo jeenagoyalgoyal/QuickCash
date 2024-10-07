@@ -4,20 +4,28 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2024-10-06T06:18:44.361614Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/JEENA/.android/avd/Medium_Phone_API_35_1.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="testInitialRole()">
+      <SelectionState runConfigName="testSingleInstance()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testRoleUpdate()">
+      <SelectionState runConfigName="testForNotNull()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testAssignedRole()">
+      <SelectionState runConfigName="testRoleUpdateInDatabase()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="UserRoleTest">
+      <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testBtnTextSwitch()">
+      <SelectionState runConfigName="testSwitchMain()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

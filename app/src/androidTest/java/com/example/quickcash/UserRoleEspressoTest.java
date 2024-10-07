@@ -50,9 +50,9 @@ public class UserRoleEspressoTest {
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employer")));
-
-
     }
+
+
 }
 
 
