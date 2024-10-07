@@ -6,8 +6,9 @@ public class CredentialsValidator {
         return (BannerID.matches(new String()));
     }
 
-    public static boolean isValidBannerID(String BannerID) {
-        return (BannerID.matches("^B00[0-9]+") && BannerID.length() == 9);
+    public static boolean isValidName(String Name) {
+        //implement soon
+        return false;
     }
 
     public static boolean isValidEmailAddress(String emailAddress){

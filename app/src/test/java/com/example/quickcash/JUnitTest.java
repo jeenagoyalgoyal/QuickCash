@@ -13,21 +13,21 @@ import static org.junit.Assert.assertTrue;
  */
 public class JUnitTest {
 
-    protected final String VALID_BANNER_ID = "B00831332";
-    protected final String INVALID_BANNER_ID = "S00831332";
+    protected final String VALID_NAME = "Dhruv Sharma";
+    protected final String INVALID_NAME = "@123 123@";
     protected final String EMPTY_STRING = new String();
     protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca";
     protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd";
 
 
     @Test
-    public void checkIfValidBannerID(){
-        assertTrue(CredentialsValidator.isValidBannerID(VALID_BANNER_ID));
+    public void checkIfValidName(){
+        assertTrue(CredentialsValidator.isValidName(VALID_NAME));
     }
 
     @Test
-    public void checkIfInvalidBannerID(){
-        assertFalse(CredentialsValidator.isValidBannerID(INVALID_BANNER_ID));
+    public void checkIfInvalidName(){
+        assertFalse(CredentialsValidator.isValidName(INVALID_NAME));
     }
     @Test
     public void checkIfEmptyInput(){
@@ -55,4 +55,5 @@ public class JUnitTest {
         assertFalse(CredentialsValidator.isValidRole("ppalsdpal"));
         assertFalse(CredentialsValidator.isValidRole(new String()));
     }
+
 }
