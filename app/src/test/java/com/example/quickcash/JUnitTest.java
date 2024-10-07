@@ -13,8 +13,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class JUnitTest {
 
-    protected final String VALID_NAME = "Dhruv Sharma";
+    protected final String VALID_NAME = "John Doe";
     protected final String INVALID_NAME = "@123 123@";
+    protected final String VALID_PASSWORD = "QuickCash#";
+    protected final String INVALID_PASSWORD = "John#";
     protected final String EMPTY_STRING = new String();
     protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca";
     protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd";
@@ -56,4 +58,14 @@ public class JUnitTest {
         assertFalse(CredentialsValidator.isValidRole(new String()));
     }
 
+    @Test
+    public void checkIfValidPassword(){
+        assertTrue(CredentialsValidator.isValidPassword(VALID_PASSWORD, VALID_NAME, VALID_EMAIL_ADDRESS));
+    }
+
+    @Test
+    public void checkIfInvalidPassword(){
+        //Invalid password can't contain the name
+        assertFalse(CredentialsValidator.isValidPassword(INVALID_PASSWORD, VALID_NAME, VALID_EMAIL_ADDRESS));
+    }
 }
