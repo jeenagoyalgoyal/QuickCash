@@ -13,13 +13,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class JUnitTest {
 
-    protected final String VALID_NAME = "John Doe";
-    protected final String INVALID_NAME = "123$123";
-    protected final String VALID_PASSWORD = "QuickCash#";
+    protected final String VALID_NAME = "John Doe ";
+    protected final String INVALID_NAME = "123$123 ";
+    protected final String VALID_PASSWORD = "QuickCash# ";
     protected final String INVALID_PASSWORD = "John# ";
     protected final String EMPTY_STRING = new String();
-    protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca";
-    protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd";
+    protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca ";
+    protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd ";
 
     @Test
     public void checkIfValidName(){
