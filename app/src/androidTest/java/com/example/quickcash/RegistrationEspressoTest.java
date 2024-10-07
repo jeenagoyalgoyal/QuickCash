@@ -8,8 +8,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import androidx.test.core.app.ActivityScenario;
 
-import junit.framework.AssertionFailedError;
-
 import org.junit.Before;
 import org.junit.Test;
 
