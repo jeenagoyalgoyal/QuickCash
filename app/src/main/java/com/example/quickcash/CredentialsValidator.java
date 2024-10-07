@@ -11,7 +11,7 @@ public class CredentialsValidator {
         return true;
     }
 
-    public static boolean isValidEmailAddress(String emailAddress){
+    public static boolean isValidEmail(String emailAddress){
         return (emailAddress.matches("[[a-zA-Z]*[0-9]*]+@[a-zA-Z]+\\.[a-zA-Z]+"));
     }
 
@@ -20,7 +20,6 @@ public class CredentialsValidator {
     }
 
     public static boolean isValidPassword(String Password, String Name, String emailAddress) {
-        //Do something
-        return false;
+        return ((!Password.contains(Name) && !Password.contains(emailAddress)) && Password.length() >= 8);
     }
 }

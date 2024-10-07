@@ -37,13 +37,13 @@ public class JUnitTest {
     }
 
     @Test
-    public void checkIfValidEmailAddress(){
-        assertTrue(CredentialsValidator.isValidEmailAddress(VALID_EMAIL_ADDRESS));
+    public void checkIfValidEmail(){
+        assertTrue(CredentialsValidator.isValidEmail(VALID_EMAIL_ADDRESS));
     }
 
     @Test
-    public void checkIfInvalidEmailAddress(){
-        assertFalse(CredentialsValidator.isValidEmailAddress(INVALID_EMAIL_ADDRESS));
+    public void checkIfInvalidEmail(){
+        assertFalse(CredentialsValidator.isValidEmail(INVALID_EMAIL_ADDRESS));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class JUnitTest {
 
     @Test
     public void checkIfInvalidPassword(){
-        //Invalid password can't contain the name
+        //Invalid password can't contain the name and email and is greater than or equal to 8 chars in length
         assertFalse(CredentialsValidator.isValidPassword(INVALID_PASSWORD, VALID_NAME, VALID_EMAIL_ADDRESS));
     }
 }
