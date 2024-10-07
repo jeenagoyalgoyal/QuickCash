@@ -17,6 +17,7 @@ import com.example.quickcash.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +63,12 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.action_logout) {
+            Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.action_profile) {
+            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);
