@@ -7,8 +7,7 @@ public class CredentialsValidator {
     }
 
     public static boolean isValidName(String Name) {
-        //Do something
-        return true;
+        return Name.matches("([A-Za-z]+ [A-Za-z]+)| [A-Za-z]+");
     }
 
     public static boolean isValidEmail(String emailAddress){
