@@ -6,4 +6,9 @@ public class CredentialsValidator {
         //implement pending
         return false;
     }
+
+    public static boolean isEmptyBannerID(String emptyBannerId) {
+        //implement pending
+        return false;
+    }
 }

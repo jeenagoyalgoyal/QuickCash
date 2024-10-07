@@ -21,4 +21,9 @@ public class JUnitTest {
     public void isValidBannerID(){
         assertTrue(CredentialsValidator.isValidBannerID());
     }
+
+    @Test
+    public void isEmptyBannerID(){
+        assertTrue(CredentialsValidator.isEmptyBannerID(EMPTY_BANNER_ID));
+    }
 }
