@@ -7,8 +7,7 @@ public class CredentialsValidator {
     }
 
     public static boolean isEmptyBannerID(String BannerID) {
-        //implement pending
-        return false;
+        return (BannerID.matches(new String()));
     }
 
     public static boolean isValidEmailAddress(String emailAddress){
