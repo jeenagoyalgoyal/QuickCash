@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         }else if(id == R.id.action_logout) {
             Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
         }else if(id == R.id.action_profile) {
+            Intent intent = new Intent(MainActivity.this, Profile.class);
+            startActivity(intent);
+            finish();
             Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
 
         }

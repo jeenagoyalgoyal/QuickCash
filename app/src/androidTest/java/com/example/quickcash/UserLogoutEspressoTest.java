@@ -35,6 +35,7 @@ import static org.junit.Assert.*;
 public class UserLogoutEspressoTest {
 
     public ActivityScenario<MainActivity> activityScenario;
+    public ActivityScenario<Profile> profileScenario;
     public Menu menu;
 
     @Before
@@ -42,14 +43,28 @@ public class UserLogoutEspressoTest {
         activityScenario = ActivityScenario.launch(MainActivity.class);
         activityScenario.onActivity(activity -> {
         });
+        profileScenario = ActivityScenario.launch(Profile.class);
     }
 
-    //Test to navigate to
+    //Test to navigate to ProfileScreen
     @Test
     public void navigateToProfileScreen(){
         onView(withContentDescription("More options")).perform(click());
         onView(withText("Profile")).perform(click());
         onView(withId(R.id.logout_button)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void confirmDialogBox(){
+        onView(withId(R.id.logout_button)).perform(click());
+        onView(withText("Are you sure you want to Logout")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void navigateProfileToLogin(){
+        onView(withId(R.id.logout_button)).perform(click());
+        onView(withText("Yes")).perform(click());
+        onView(withText("First Fragment")).check(matches(isDisplayed()));
     }
 
 
