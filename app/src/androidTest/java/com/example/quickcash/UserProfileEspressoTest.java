@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,6 +20,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -32,30 +34,32 @@ import org.junit.runners.JUnit4;
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
-public class UserLogoutEspressoTest {
+public class UserProfileEspressoTest {
 
-    public ActivityScenario<MainActivity> activityScenario;
+    public ActivityScenario<Profile> profileScenario;
 
     @Before
     public void setup() {
-        activityScenario = ActivityScenario.launch(MainActivity.class);
-        activityScenario.onActivity(activity -> {
-        });
-    }
+        profileScenario = ActivityScenario.launch(Profile.class);
 
-    //Test to navigate to ProfileScreen
-    @Test
-    public void navigateDashboardToProfileScreen(){
-        onView(withContentDescription("More options")).perform(click());
-        onView(withText("Profile")).perform(click());
-        onView(withId(R.id.logout_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void navigateDashboardToLoginScreen(){
-        onView(withContentDescription("More options")).perform(click());
-        onView(withText("Profile")).perform(click());
-        onView(withText("Logout")).perform(click());
+    public void confirmDialogBox(){
+        onView(withId(R.id.logout_button)).perform(click());
+        onView(withText("Are you sure you want to Logout")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkDialogBoxNoButton(){
+        onView(withId(R.id.logout_button)).perform(click());
+        onView(withText("No")).perform(click());
+        onView(withText("Profile")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void navigateProfileToLogin(){
+        onView(withId(R.id.logout_button)).perform(click());
         onView(withText("Yes")).perform(click());
         onView(withText("Login Screen")).check(matches(isDisplayed()));
     }

@@ -22,12 +22,15 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SessionManager sessionManager;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sessionManager = new SessionManager(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

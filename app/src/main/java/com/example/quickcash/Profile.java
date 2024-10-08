@@ -11,11 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Profile extends AppCompatActivity {
 
+    SessionManager sessionManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-        onCreateLogoutDialogue();
+        this.onCreateLogoutDialogue();
+        sessionManager =new SessionManager(this);
     }
 
     protected void onCreateLogoutDialogue(){
@@ -49,8 +52,9 @@ public class Profile extends AppCompatActivity {
 
     public boolean performLogout(Boolean choice){
         if (choice) {
+            sessionManager.logoutUser();
             getSharedPreferences("user_session", MODE_PRIVATE).edit().clear().apply();
-            Intent intent = new Intent(Profile.this, MainActivity.class);
+            Intent intent = new Intent(Profile.this, Login.class);
             startActivity(intent);
             finish();
             return true;
