@@ -11,13 +11,13 @@ public class CredentialsValidator {
     public static boolean isValidName(String Name) {
         Name = Name.trim();
 
-        return Name.matches("([A-Za-z0-9 ])+") && Name.length()>=3;
+        return Name.matches("[^(!@#$%&*)]*") && Name.length()>=3;
     }
 
     public static boolean isValidEmail(String emailAddress){
         emailAddress = emailAddress.trim();
 
-        return (emailAddress.matches("[[a-zA-Z]*[0-9]*]+@([a-zA-Z]+\\.[a-zA-Z]+\\.*)+"));
+        return (emailAddress.matches("[^@]+@([a-zA-Z]+\\.[a-zA-Z]+)(\\.([a-zA-Z]+\\.[a-zA-Z]+))*"));
     }
 
     public static boolean isValidRole(String userRole) {

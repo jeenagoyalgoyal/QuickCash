@@ -9,38 +9,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.service.autofill.Sanitizer;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import javax.security.auth.login.LoginException;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -64,8 +51,8 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         this.loadRoleSpinner();
-        this.setupRegisterButton();
         this.initializeDatabaseAccess();
+        this.setupRegisterButton();
     }
 
     private void initializeDatabaseAccess() {
@@ -156,20 +143,22 @@ public class RegistrationActivity extends AppCompatActivity {
                 password2SetStatusMessage(errorLabel);
 
                 if (validFlag) {
+
+                    addToDatabase(name, email, password, role);
+
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(RegistrationActivity.this, "User Registered", Toast.LENGTH_LONG).show();
-
                                 addToDatabase(name, email, password, role);
-                                //To be added for integration with login activity
-
-                                //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                                //startActivity(intent);
 
                             } else {
-                                Toast.makeText(RegistrationActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
+                                Exception exception = task.getException();
+                                if (exception instanceof FirebaseAuthUserCollisionException) {
+                                    Toast.makeText(RegistrationActivity.this, "Email already in use by another account.", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(RegistrationActivity.this, "Error: "+exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     });
@@ -179,72 +168,77 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void addToDatabase(String name, String email, String password, String role) {
-        String sanitizedEmail = sanitizeEmail(email);
-        userRef = database.getReference("Users").child(sanitizedEmail);
+        String userStringCreatorEmail = emailToUserStringCreator(email);
+
+        userRef = database.getReference("Users");
+
+        userRef = database.getReference("Users").child(userStringCreatorEmail);
         Map<String, String> userData = new HashMap<>();
         userData.put("name", name);
         userData.put("email", email);
         userData.put("password", password);
         userData.put("role", role);
-
         userRef.updateChildren((Map) userData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "User data added to Firebase", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(RegistrationActivity.this, "Failed to add user data", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    //To be added for integration with login activity
+
+                    //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                    //startActivity(intent);
+                } else {
+                    Toast.makeText(RegistrationActivity.this, "Failed to add user data", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
-    public static String sanitizeEmail(String email) {
-        return email.replace(".", ",");
-    }
+    public static String emailToUserStringCreator(String email) {
+                return email.replace(".", ",");
+            }
 
-    protected String getName() {
-        EditText nameBox = findViewById(R.id.enterName);
-        return nameBox.getText().toString().trim();
-    }
+            protected String getName() {
+                EditText nameBox = findViewById(R.id.enterName);
+                return nameBox.getText().toString().trim();
+            }
 
-    protected String getEmail() {
-        EditText emailBox = findViewById(R.id.enterEmail);
-        return emailBox.getText().toString().trim();
-    }
+            protected String getEmail() {
+                EditText emailBox = findViewById(R.id.enterEmail);
+                return emailBox.getText().toString().trim();
+            }
 
-    protected String getPassword() {
-        EditText passwordBox = findViewById(R.id.enterPassword);
-        return passwordBox.getText().toString().trim();
-    }
+            protected String getPassword() {
+                EditText passwordBox = findViewById(R.id.enterPassword);
+                return passwordBox.getText().toString().trim();
+            }
 
-    protected String getPassword2() {
-        EditText password2Box = findViewById(R.id.enterPassword2);
-        return password2Box.getText().toString().trim();
-    }
+            protected String getPassword2() {
+                EditText password2Box = findViewById(R.id.enterPassword2);
+                return password2Box.getText().toString().trim();
+            }
 
-    protected String getRole() {
-        Spinner roleSpinner = findViewById(R.id.spinnerRole);
-        return roleSpinner.getSelectedItem().toString().trim();
-    }
+            protected String getRole() {
+                Spinner roleSpinner = findViewById(R.id.spinnerRole);
+                return roleSpinner.getSelectedItem().toString().trim();
+            }
 
-    protected void nameSetStatusMessage(String errorLabel) {
-        TextView validNameLabel = findViewById(R.id.validName);
-        validNameLabel.setText(errorLabel.trim());
-    }
+            protected void nameSetStatusMessage(String errorLabel) {
+                TextView validNameLabel = findViewById(R.id.validName);
+                validNameLabel.setText(errorLabel.trim());
+            }
 
-    protected void emailSetStatusMessage(String errorLabel) {
-        TextView validEmailLabel = findViewById(R.id.validEmail);
-        validEmailLabel.setText(errorLabel.trim());
-    }
+            protected void emailSetStatusMessage(String errorLabel) {
+                TextView validEmailLabel = findViewById(R.id.validEmail);
+                validEmailLabel.setText(errorLabel.trim());
+            }
 
-    protected void passwordSetStatusMessage(String errorLabel) {
-        TextView validPasswordLabel = findViewById(R.id.validPassword);
-        validPasswordLabel.setText(errorLabel.trim());
-    }
+            protected void passwordSetStatusMessage(String errorLabel) {
+                TextView validPasswordLabel = findViewById(R.id.validPassword);
+                validPasswordLabel.setText(errorLabel.trim());
+            }
 
-    protected void password2SetStatusMessage(String errorLabel) {
-        TextView validPasswordLabel2 = findViewById(R.id.validPassword2);
-        validPasswordLabel2.setText(errorLabel.trim());
-    }
+            protected void password2SetStatusMessage(String errorLabel) {
+                TextView validPasswordLabel2 = findViewById(R.id.validPassword2);
+                validPasswordLabel2.setText(errorLabel.trim());
+            }
 }
