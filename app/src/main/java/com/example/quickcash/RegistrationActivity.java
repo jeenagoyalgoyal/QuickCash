@@ -149,13 +149,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 password2SetStatusMessage(errorLabel);
 
                 if (validFlag) {
-
+                    //do valid database stuff
                 }
             }
         });
     }
-
-
 
     protected String getName() {
         EditText nameBox = findViewById(R.id.enterName);
