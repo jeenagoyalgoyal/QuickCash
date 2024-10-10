@@ -8,15 +8,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 public class FirebaseCRUD {
     private final FirebaseDatabase database;
     
     private DatabaseReference passwordRef = null;
     private DatabaseReference emailRef = null;
-    private DatabaseReference Name = null;
+    private DatabaseReference nameRef = null;
+    private DatabaseReference roleRef = null;
 
     private String extractedEmailAddress;
     private String extractedPassword;
+    private String extractedRole;
+    private String extractedName;
 
 
     public FirebaseCRUD(FirebaseDatabase database) {
@@ -26,8 +30,18 @@ public class FirebaseCRUD {
     }
 
     protected void initializeDatabaseRefs() {
+        this.roleRef = getRoleRef();
+        this.nameRef = getNameRef();
         this.passwordRef = getPasswordRef();
         this.emailRef = getEmailAddressRef();
+    }
+
+    private DatabaseReference getRoleRef() {
+        return this.database.getReference("Role");
+    }
+
+    private DatabaseReference getNameRef() {
+        return this.database.getReference("Name");
     }
 
 
@@ -44,7 +58,6 @@ public class FirebaseCRUD {
         this.setEmailListener();
         this.setPasswordListener();
     }
-
 
     protected void setEmailListener() {
         this.emailRef.addValueEventListener(new ValueEventListener() {
@@ -78,6 +91,14 @@ public class FirebaseCRUD {
 
     public String getExtractedPassword() {
         return this.extractedPassword;
+    }
+
+    public String getExtractedRole() {
+        return this.extractedRole;
+    }
+
+    public String getExtractedName() {
+        return this.extractedName;
     }
 
 }

@@ -17,7 +17,7 @@ public class CredentialsValidator {
     public static boolean isValidEmail(String emailAddress){
         emailAddress = emailAddress.trim();
 
-        return (emailAddress.matches("[[a-zA-Z]*[0-9]*]+@[a-zA-Z]+\\.[a-zA-Z]+"));
+        return (emailAddress.matches("[[a-zA-Z]*[0-9]*]+@([a-zA-Z]+\\.[a-zA-Z]+\\.*)+"));
     }
 
     public static boolean isValidRole(String userRole) {

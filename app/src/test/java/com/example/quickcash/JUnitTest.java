@@ -16,9 +16,8 @@ public class JUnitTest {
     protected final String VALID_NAME = "John Doe ";
     protected final String INVALID_NAME = "123$123 ";
     protected final String VALID_PASSWORD = "QuickCash# ";
-    protected final String INVALID_PASSWORD = "John# ";
     protected final String EMPTY_STRING = new String();
-    protected final String VALID_EMAIL_ADDRESS = "cg443818@dal.ca ";
+    protected final String VALID_EMAIL_ADDRESS = "cg443818@mathstat.dal.ca ";
     protected final String INVALID_EMAIL_ADDRESS = "ad.asd.ads.asd ";
 
     @Test
@@ -65,6 +64,6 @@ public class JUnitTest {
     @Test
     public void checkIfInvalidPassword(){
         //Invalid password can't contain the name and email and is greater than or equal to 8 chars in length
-        assertFalse(CredentialsValidator.isValidPassword(INVALID_PASSWORD, VALID_NAME, VALID_EMAIL_ADDRESS));
+        assertFalse(CredentialsValidator.isValidPassword(VALID_NAME, VALID_NAME, VALID_EMAIL_ADDRESS));
     }
 }
