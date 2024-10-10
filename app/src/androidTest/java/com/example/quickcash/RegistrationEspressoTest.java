@@ -17,7 +17,7 @@ public class RegistrationEspressoTest {
 
     private final String VALID_EMAIL = "example@mail.com";
     private final String VALID_NAME = "John Doe";
-    private final String VALID_PASSWORD = "Password123";
+    private final String VALID_PASSWORD = "Password123!";
 
     private final String INVALID_EMAIL = "InvalidEMAIL.EMAIL";
     private final String INVALID_NAME = "Invalid-Name";

@@ -1,8 +1,7 @@
 package com.example.quickcash;
 
 import org.junit.Test;
-import org.junit.Before;
-import org.junit.Test;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -11,7 +10,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class JUnitTest {
+public class RegistrationJUnitTest {
 
     protected final String VALID_NAME = "John Doe ";
     protected final String INVALID_NAME = "123$123 ";
