@@ -13,11 +13,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText emailBox, passwordBox;
     private TextView statusLabel;
     private FirebaseAuth mAuth;
+
+    // Regex patterns for email and password validation
+    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$"; // At least 6 characters, at least one letter and one number
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +46,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (email.isEmpty() || password.isEmpty()) {
             statusLabel.setText("Email or Password cannot be empty.");
+        } else if (!isValidEmail(email)) {
+            statusLabel.setText("Invalid email format.");
+        } else if (!isValidPassword(password)) {
+            statusLabel.setText("Password must be at least 6 characters long and contain at least one letter and one number.");
         } else {
             loginUser(email, password);
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        return Pattern.compile(PASSWORD_PATTERN).matcher(password).matches();
     }
 
     private void loginUser(String email, String password) {
