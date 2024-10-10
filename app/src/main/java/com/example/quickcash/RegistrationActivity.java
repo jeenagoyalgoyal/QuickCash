@@ -62,7 +62,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void initializeDatabaseAccess() {
-        database = FirebaseDatabase.getInstance("https://csci-3130-g15-default-rtdb.firebaseio.com/");
+        database = FirebaseDatabase.getInstance("https://quick-cash-411fe-default-rtdb.firebaseio.com/");
         crud = new FirebaseCRUD(database);
 
     }
