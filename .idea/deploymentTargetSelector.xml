@@ -8,16 +8,13 @@
       <SelectionState runConfigName="RegistrationEspressoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="RegistrationActivity (1)">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="validPasswordTest()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="invalidEmailTest()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="invalidPasswordTest()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="unmatchedPasswordTest()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

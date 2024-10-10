@@ -105,7 +105,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             errorLabel = "invalid!";
         } else if (!password.equals(password2)){
             validFlag = false;
-            errorLabel = "Passwords do not match!";
+            errorLabel = "passwords do not match!";
         } else {
             errorLabel = "valid";
         }
@@ -119,7 +119,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             errorLabel = "invalid!";
         } else if (!password.equals(password2)){
             validFlag = false;
-            errorLabel = "Passwords do not match!";
+            errorLabel = "passwords do not match!";
         } else {
             errorLabel = "valid";
         }
