@@ -15,11 +15,9 @@ public class FirebaseCRUD {
     private DatabaseReference passwordRef = null;
     private DatabaseReference emailRef = null;
     private DatabaseReference nameRef = null;
-    private DatabaseReference roleRef = null;
 
     private String extractedEmailAddress;
     private String extractedPassword;
-    private String extractedRole;
     private String extractedName;
 
 
@@ -30,14 +28,9 @@ public class FirebaseCRUD {
     }
 
     protected void initializeDatabaseRefs() {
-        this.roleRef = getRoleRef();
         this.nameRef = getNameRef();
         this.passwordRef = getPasswordRef();
         this.emailRef = getEmailAddressRef();
-    }
-
-    private DatabaseReference getRoleRef() {
-        return this.database.getReference("Role");
     }
 
     private DatabaseReference getNameRef() {
@@ -61,6 +54,7 @@ public class FirebaseCRUD {
 
     protected void setEmailListener() {
         this.emailRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 extractedEmailAddress = snapshot.getValue(String.class);
@@ -74,6 +68,7 @@ public class FirebaseCRUD {
 
     protected void setPasswordListener() {
         this.passwordRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 extractedPassword = snapshot.getValue(String.class);
@@ -91,10 +86,6 @@ public class FirebaseCRUD {
 
     public String getExtractedPassword() {
         return this.extractedPassword;
-    }
-
-    public String getExtractedRole() {
-        return this.extractedRole;
     }
 
     public String getExtractedName() {

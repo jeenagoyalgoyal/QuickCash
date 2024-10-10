@@ -32,3 +32,4 @@ public class CredentialsValidator {
         return (Password.length() >= 8 && Password.matches(".*[.*)(+@#$%&!?><{}/\\]\\[]+.*"));
     }
 }
+

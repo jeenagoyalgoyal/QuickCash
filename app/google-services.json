@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "322340286611",
+    "firebase_url": "https://csci-3130-g15-default-rtdb.firebaseio.com",
+    "project_id": "csci-3130-g15",
+    "storage_bucket": "csci-3130-g15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322340286611:android:ab1f2108dcbbbd31d11d66",
+        "android_client_info": {
+          "package_name": "com.example.quickcash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB-BiyxU5rsD3nkrwQcyzcq0so6KwcCoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
