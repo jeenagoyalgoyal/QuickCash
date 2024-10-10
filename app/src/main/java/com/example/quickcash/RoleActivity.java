@@ -69,6 +69,14 @@ public class RoleActivity extends AppCompatActivity {
             taskButton.setText("Tasks & Projects");
             performanceButton.setText("Performance Reviews");
             notificationsButton.setText("Notifications & Settings");
+
+            //showing the buttons visibility
+            jobPosting.setVisibility(View.VISIBLE);
+            profileButton.setVisibility(View.VISIBLE);
+            scheduleButton.setVisibility(View.VISIBLE);
+            taskButton.setVisibility(View.VISIBLE);
+            performanceButton.setVisibility(View.VISIBLE);
+            notificationsButton.setVisibility(View.VISIBLE);
         }
         else{
             welcomeText.setText("Welcome, employer");
@@ -81,6 +89,14 @@ public class RoleActivity extends AppCompatActivity {
             taskButton.setText("Tasks & Assignments");
             performanceButton.setText("Schedule & Meetings");
             notificationsButton.setText("Notifications & Settings");
+
+            //showing the buttons visibility
+            jobPosting.setVisibility(View.VISIBLE);
+            profileButton.setVisibility(View.VISIBLE);
+            scheduleButton.setVisibility(View.VISIBLE);
+            taskButton.setVisibility(View.VISIBLE);
+            performanceButton.setVisibility(View.VISIBLE);
+            notificationsButton.setVisibility(View.VISIBLE);
         }
     }
 }
