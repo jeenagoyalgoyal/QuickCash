@@ -26,11 +26,9 @@ public class CredentialsValidator {
         return (userRole.equals("Employer") || userRole.equals("Employee"));
     }
 
-    public static boolean isValidPassword(String Password, String Name, String emailAddress) {
+    public static boolean isValidPassword(String Password) {
         Password = Password.trim();
-        Name = Name.trim();
-        emailAddress = emailAddress.trim();
 
-        return ( (!Password.contains(Name.trim()) && !Password.contains(emailAddress.trim()) ) && Password.length() >= 8);
+        return (Password.length() >= 8);
     }
 }

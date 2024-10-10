@@ -15,6 +15,17 @@ public class RegistrationEspressoTest {
 
     private ActivityScenario<RegistrationActivity> activityScenario;
 
+    private final String VALID_EMAIL = "example@mail.com";
+    private final String VALID_NAME = "John Doe";
+    private final String VALID_PASSWORD = "Password123";
+
+    private final String INVALID_EMAIL = "InvalidEMAIL.EMAIL";
+    private final String INVALID_NAME = "Invalid-Name";
+    private final String INVALID_PASSWORD = "badpass";
+
+    private final String INVALID_MESSAGE = "invalid!";
+    private final String VALID_MESSAGE = "valid";
+
     @Before
     public void setup(){
         activityScenario = ActivityScenario.launch(RegistrationActivity.class);
@@ -25,30 +36,25 @@ public class RegistrationEspressoTest {
 
     @Test
     public void validNameTest() {
-        onView(withId(R.id.enterName)).perform(typeText("example name"));
+        onView(withId(R.id.enterName)).perform(typeText(VALID_NAME));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText("Valid Name")));
+        onView(withId(R.id.validName)).check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
     public void validEmailTest() {
-        onView(withId(R.id.enterEmail)).perform(typeText("example@email.com"));
+        onView(withId(R.id.enterEmail)).perform(typeText(VALID_EMAIL));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validEmail)).check(matches(withText("Valid Email")));
+        onView(withId(R.id.validEmail)).check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
     public void validPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText("example@email.com"));
+        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
+        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText("Valid Password")));
+        onView(withId(R.id.validPassword)).check(matches(withText(VALID_MESSAGE)));
     }
-
-    //Setting up Invalid message and inputs
-    private final String INVALID_MESSAGE = "Invalid Name";
-    private final String INVALID_EMAIL = "Invalid@EMAIL.EMAIL";
-    private final String INVALID_NAME = "Invalid_Name";
-    private final String INVALID_PASSWORD = "Invalid_Pass";
 
     @Test
     public void invalidNameTest() {
@@ -61,13 +67,13 @@ public class RegistrationEspressoTest {
     public void invalidEmailTest() {
         onView(withId(R.id.enterEmail)).perform(typeText(INVALID_EMAIL));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
+        onView(withId(R.id.validEmail)).check(matches(withText(INVALID_MESSAGE)));
     }
 
     @Test
     public void invalidPasswordTest() {
         onView(withId(R.id.enterPassword)).perform(typeText(INVALID_PASSWORD));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
+        onView(withId(R.id.validPassword)).check(matches(withText(INVALID_MESSAGE)));
     }
 }
