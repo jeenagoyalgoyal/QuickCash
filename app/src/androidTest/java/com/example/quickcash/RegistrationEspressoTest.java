@@ -89,6 +89,15 @@ public class RegistrationEspressoTest {
     }
 
     @Test
+    public void validRoleTest() {
+        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
+        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD));
+        onView(withId(R.id.buttonRegister)).perform(click());
+        onView(withId(R.id.validPassword)).check(matches(withText(VALID_MESSAGE)));
+    }
+
+
+    @Test
     public void invalidNameTest() {
         onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME));
         onView(withId(R.id.buttonRegister)).perform(click());
