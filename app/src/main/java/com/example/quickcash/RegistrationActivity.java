@@ -9,6 +9,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.service.autofill.Sanitizer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,11 +30,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.security.auth.login.LoginException;
 
@@ -42,6 +48,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseDatabase database = null;
     private FirebaseAuth mAuth;
     private boolean validFlag = true;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,11 +162,11 @@ public class RegistrationActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegistrationActivity.this, "User Registered", Toast.LENGTH_LONG).show();
 
+                                addToDatabase(name, email, password, role);
                                 //To be added for integration with login activity
 
-                                Intent intent = new Intent(RegistrationActivity.this, FirebaseCRUD.class);
-                                startActivity(intent);
-                                finish();
+                                //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                                //startActivity(intent);
 
                             } else {
                                 Toast.makeText(RegistrationActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
@@ -169,6 +176,31 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void addToDatabase(String name, String email, String password, String role) {
+        String sanitizedEmail = sanitizeEmail(email);
+        userRef = database.getReference("Users").child(sanitizedEmail);
+        Map<String, String> userData = new HashMap<>();
+        userData.put("name", name);
+        userData.put("email", email);
+        userData.put("password", password);
+        userData.put("role", role);
+
+        userRef.updateChildren((Map) userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(RegistrationActivity.this, "User data added to Firebase", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(RegistrationActivity.this, "Failed to add user data", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    public static String sanitizeEmail(String email) {
+        return email.replace(".", ",");
     }
 
     protected String getName() {

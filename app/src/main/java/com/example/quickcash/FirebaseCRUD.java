@@ -20,12 +20,13 @@ public class FirebaseCRUD {
     private String extractedPassword;
     private String extractedName;
 
-
-
     public FirebaseCRUD(FirebaseDatabase database) {
         this.database = database;
         this.initializeDatabaseRefs();
         this.initializeDatabaseRefListeners();
+    }
+
+    private void registerToLogin() {
     }
 
     protected void initializeDatabaseRefs() {
