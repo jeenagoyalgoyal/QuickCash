@@ -2,21 +2,25 @@ package com.example.quickcash;
 
 import androidx.core.util.PatternsCompat;
 
+/**
+ * CredentialValidator provides methods to validate user credentials.
+ */
 public class CredentialValidator {
-    protected boolean isEmptyPassword(String Password) {
-        return Password.isEmpty();
+
+    public boolean isEmptyPassword(String password) {
+        return password == null || password.isEmpty();
     }
 
-    protected boolean isValidPassword(String Password) {
-        return false;
+    public boolean isValidPassword(String password) {
+        // Example validation: password must be at least 6 characters
+        return password != null && password.length() >= 6;
     }
 
-    protected boolean isEmptyEmailAddress(String Password) {
-        return Password.isEmpty();
+    public boolean isEmptyEmailAddress(String email) {
+        return email == null || email.isEmpty();
     }
 
-    protected boolean isValidEmailAddress(String emailAddress) {
-        return false;
+    public boolean isValidEmailAddress(String email) {
+        return email != null && PatternsCompat.EMAIL_ADDRESS.matcher(email).matches();
     }
-
 }
