@@ -62,7 +62,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void initializeDatabaseAccess() {
-        database = FirebaseDatabase.getInstance("https://quick-cash-411fe-default-rtdb.firebaseio.com/");
+        database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         crud = new FirebaseCRUD(database);
 
     }
@@ -149,7 +149,23 @@ public class RegistrationActivity extends AppCompatActivity {
                 password2SetStatusMessage(errorLabel);
 
                 if (validFlag) {
-                    //do valid database stuff
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegistrationActivity.this, "User Registered", Toast.LENGTH_LONG).show();
+
+                                //To be added for integration with login activity
+
+                                Intent intent = new Intent(RegistrationActivity.this, FirebaseCRUD.class);
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+                                Toast.makeText(RegistrationActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }
             }
         });

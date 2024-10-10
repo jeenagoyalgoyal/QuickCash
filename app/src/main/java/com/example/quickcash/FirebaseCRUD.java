@@ -21,6 +21,7 @@ public class FirebaseCRUD {
     private String extractedName;
 
 
+
     public FirebaseCRUD(FirebaseDatabase database) {
         this.database = database;
         this.initializeDatabaseRefs();
