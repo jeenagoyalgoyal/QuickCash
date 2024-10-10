@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void moveToWelcomePage() {
         // Intent to move to the welcome page
-        Intent intent = new Intent(this, FirstFragment.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
