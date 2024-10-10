@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.FirebaseDatabaseKtxRegistrar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +13,13 @@ public class UserRoleJunitTest {
 
     private UseRole useRole;
     private DatabaseReference db;
+    private RoleActivity roleActivity;
 
     @Before
     public void setUseRole(){
         db = FirebaseDatabase.getInstance().getReference("testUsers");
         useRole =UseRole.getInstance();
+        roleActivity = new RoleActivity();
     }
     @Test
     public void testInitialRole(){
@@ -77,4 +78,5 @@ public class UserRoleJunitTest {
             }
         });
     }
+
 }

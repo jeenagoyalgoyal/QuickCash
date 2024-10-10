@@ -10,19 +10,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RoleActivity extends AppCompatActivity {
 
-    private TextView welcomeText;
+    public TextView welcomeText;
     private String currentRole = "employee";
     private Button roleSwitch;
     private UseRole useRole;
     private String id;
 
     //Buttons for role specific (Logan)
-    private Button jobPosting;
-    private Button profileButton;
-    private Button scheduleButton;
-    private Button taskButton;
-    private Button performanceButton;
-    private Button notificationsButton;
+    public Button jobPosting;
+    public Button profileButton;
+    public Button scheduleButton;
+    public Button taskButton;
+    public Button performanceButton;
+    public Button notificationsButton;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -56,7 +56,7 @@ public class RoleActivity extends AppCompatActivity {
 
     }
 
-    private void update(){
+    public void update(){
         String role = useRole.getCurrentRole();
         if(role.equals("employee")){
             welcomeText.setText("Welcome, employee");

@@ -3,9 +3,6 @@ package com.example.quickcash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.sql.DatabaseMetaData;
-import java.util.Date;
-
 public class UseRole {
 
     private static UseRole instance;
@@ -46,5 +43,9 @@ public class UseRole {
                 .addOnFailureListener(e ->{
                     //fail
                 });
+    }
+
+    public void setCurrentRole(String employee) {
+        this.currentRole=currentRole;
     }
 }
