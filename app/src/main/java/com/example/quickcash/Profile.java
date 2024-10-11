@@ -54,7 +54,7 @@ public class Profile extends AppCompatActivity {
         if (choice) {
             sessionManager.logoutUser();
             getSharedPreferences("user_session", MODE_PRIVATE).edit().clear().apply();
-            Intent intent = new Intent(Profile.this, Login.class);
+            Intent intent = new Intent(Profile.this, LoginActivity.class);
             startActivity(intent);
             finish();
             return true;

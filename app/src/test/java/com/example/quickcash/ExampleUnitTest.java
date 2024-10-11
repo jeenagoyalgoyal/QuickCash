@@ -12,11 +12,11 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
 
-    CredentialValidator validator;
+    CredentialsValidator validator;
 
     @Before
     public void setup() {
-        validator = new CredentialValidator();
+        validator = new CredentialsValidator();
     }
 
     @Test
@@ -44,12 +44,12 @@ public class ExampleUnitTest {
 
     @Test
     public void checkIfEmailIsValid() {
-        assertTrue(validator.isValidEmailAddress("3130@dal.ca"));
+        assertTrue(validator.isValidEmail("3130@dal.ca"));
     }
 
     @Test
     public void checkIfEmailIsInvalid() {
-        assertFalse(validator.isValidEmailAddress("3130.dal.ca"));
+        assertFalse(validator.isValidEmail("3130.dal.ca"));
     }
 
 }

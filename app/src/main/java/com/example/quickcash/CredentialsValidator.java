@@ -1,5 +1,7 @@
 package com.example.quickcash;
 
+import androidx.core.util.PatternsCompat;
+
 public class CredentialsValidator {
 
     public static boolean isEmptyInput(String Input) {
@@ -31,5 +33,14 @@ public class CredentialsValidator {
 
         return (Password.length() >= 8 && Password.matches(".*[.*)(+@#$%&!?><{}/\\]\\[]+.*"));
     }
+
+    public boolean isEmptyPassword(String password) {
+        return password == null || password.isEmpty();
+    }
+
+    public boolean isEmptyEmailAddress(String email) {
+        return email == null || email.isEmpty();
+    }
+
 }
 

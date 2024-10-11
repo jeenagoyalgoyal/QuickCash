@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickCash"
         tools:targetApi="31">
-        <activity android:name=".Login"></activity>
+        <activity android:name=".RegistrationActivity" />
         <activity android:name=".Profile"></activity>
         <activity
             android:name=".LoginActivity"
