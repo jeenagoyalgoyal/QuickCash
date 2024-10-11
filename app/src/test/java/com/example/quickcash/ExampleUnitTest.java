@@ -22,8 +22,8 @@ public class ExampleUnitTest {
 
     @Test
     public void checkIfPasswordIdIsValid() {
-        assertTrue(validator.isValidPassword("Pass123"));
-        assertTrue(validator.isValidPassword("ComplexPassword"));
+        assertTrue(validator.isValidPassword("Pass@123"));
+        assertFalse(validator.isValidPassword("ComplexPassword"));
     }
 
     @Test
