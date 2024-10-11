@@ -7,11 +7,11 @@ import static org.junit.Assert.*;
 
 public class ExampleUnitTest {
 
-    CredentialValidator validator;
+    CredentialsValidator validator;
 
     @Before
     public void setup() {
-        validator = new CredentialValidator();
+        validator = new CredentialsValidator();
     }
 
     @Test
@@ -41,14 +41,14 @@ public class ExampleUnitTest {
 
     @Test
     public void checkIfEmailIsValid() {
-        assertTrue(validator.isValidEmailAddress("3130@dal.ca"));
-        assertTrue(validator.isValidEmailAddress("user.name+tag@domain.com"));
+        assertTrue(validator.isValidEmail("3130@dal.ca"));
+        assertTrue(validator.isValidEmail("user.name+tag@domain.com"));
     }
 
     @Test
     public void checkIfEmailIsInvalid() {
-        assertFalse(validator.isValidEmailAddress("3130.dal.ca")); // Missing @
-        assertFalse(validator.isValidEmailAddress("user@domain")); // Missing top-level domain
-        assertFalse(validator.isValidEmailAddress("user@.com")); // Missing domain name
+        assertFalse(validator.isValidEmail("3130.dal.ca")); // Missing @
+        assertFalse(validator.isValidEmail("user@domain")); // Missing top-level domain
+        assertFalse(validator.isValidEmail("user@.com")); // Missing domain name
     }
 }
