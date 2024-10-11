@@ -36,7 +36,7 @@ public class RoleActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
         roleSwitch = findViewById(R.id.roleSwitch);
 
-        //Role specific buttonsgit 
+        //Role specific buttons
         jobPosting = findViewById(R.id.jobPosting);
         profileButton = findViewById(R.id.profileButton);
         scheduleButton = findViewById(R.id.scheduleButton);
