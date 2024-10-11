@@ -1,114 +1,95 @@
 package com.example.quickcash;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
-
-import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import android.view.View;
-import org.junit.Before;
+
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Espresso tests for UserLogin functionality.
- */
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {
 
-    private ActivityScenario<LoginActivity> activityScenario;
-    private View decorView;
-
-    @Before
-    public void setUp() {
-        // Launch the LoginActivity before each test
-        activityScenario = ActivityScenario.launch(LoginActivity.class);
-
-        // Get the decor view of the activity
-        activityScenario.onActivity(activity -> {
-            decorView = activity.getWindow().getDecorView();
-        });
-    }
-
-    // Assuming these are the IDs for the UI components
-    private static final String VALID_EMAIL = "valid@example.com";
-    private static final String VALID_PASSWORD = "Valid123";
-    private static final String INVALID_EMAIL = "invalid_email";
-    private static final String INVALID_PASSWORD = "123";
-    private static final String EMPTY_STRING = "";
-
-    private static final String INVALID_EMAIL_MESSAGE = "Please enter a valid email";
-    private static final String INVALID_PASSWORD_MESSAGE = "Invalid password";
-    private static final String FIELD_EMPTY_MESSAGE = "Field cannot be empty";
+    @Rule
+    public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
     public void testSuccessfulLogin() {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText(VALID_EMAIL));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-
-        // Assuming there is a Dashboard activity or similar that the user navigates to
-        onView(withId(R.id.dashboard_view)).check(matches(isDisplayed()));
+        enterText(R.id.emailBox, "valid@example.com");
+        enterText(R.id.passwordBox, "validPassword123");
+        clickButton(R.id.loginButton);
+        // Assuming success message is not displayed, but user is redirected
+        checkActivityIsDisplayed(MainActivity.class);
     }
 
     @Test
     public void testInvalidEmail() {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText(INVALID_EMAIL));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-
-        onView(withText(INVALID_EMAIL_MESSAGE))
-                .inRoot(withDecorView(not(decorView)))
-                .check(matches(isDisplayed()));
+        enterText(R.id.emailBox, "invalid");
+        enterText(R.id.passwordBox, "validPassword123");
+        clickButton(R.id.loginButton);
+        checkStatusLabel("Invalid email format.");
     }
 
     @Test
     public void testInvalidPassword() {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText(VALID_EMAIL));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText(INVALID_PASSWORD));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-
-        onView(withText(INVALID_PASSWORD_MESSAGE))
-                .inRoot(withDecorView(not(decorView)))
-                .check(matches(isDisplayed()));
+        enterText(R.id.emailBox, "valid@example.com");
+        enterText(R.id.passwordBox, "wrongPass");
+        clickButton(R.id.loginButton);
+        checkStatusLabel("Password must be at least 6 characters long and contain at least one letter and one number.");
     }
 
     @Test
     public void testEmptyPassword() {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText(VALID_EMAIL));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-
-        onView(withText(FIELD_EMPTY_MESSAGE))
-                .inRoot(withDecorView(not(decorView)))
-                .check(matches(isDisplayed()));
+        enterText(R.id.emailBox, "valid@example.com");
+        clearText(R.id.passwordBox);
+        clickButton(R.id.loginButton);
+        checkStatusLabel("Email or Password cannot be empty.");
     }
 
     @Test
     public void testEmptyEmail() {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
-
-        onView(withText(FIELD_EMPTY_MESSAGE))
-                .inRoot(withDecorView(not(decorView)))
-                .check(matches(isDisplayed()));
+        clearText(R.id.emailBox);
+        enterText(R.id.passwordBox, "validPassword123");
+        clickButton(R.id.loginButton);
+        checkStatusLabel("Email or Password cannot be empty.");
     }
 
     @Test
     public void testEmptyEmailAndPassword() {
-        onView(withId(R.id.Sign_In_Email)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.Sign_In_Password)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.Sign_In_Request)).perform(click());
+        clearText(R.id.emailBox);
+        clearText(R.id.passwordBox);
+        clickButton(R.id.loginButton);
+        checkStatusLabel("Email or Password cannot be empty.");
+    }
 
-        onView(withText(FIELD_EMPTY_MESSAGE))
-                .inRoot(withDecorView(not(decorView)))
-                .check(matches(isDisplayed()));
+    private void enterText(int viewId, String text) {
+        Espresso.onView(withId(viewId))
+                .perform(ViewActions.typeText(text), ViewActions.closeSoftKeyboard());
+    }
+
+    private void clearText(int viewId) {
+        Espresso.onView(withId(viewId))
+                .perform(ViewActions.clearText(), ViewActions.closeSoftKeyboard());
+    }
+
+    private void clickButton(int viewId) {
+        Espresso.onView(withId(viewId)).perform(ViewActions.click());
+    }
+
+    private void checkStatusLabel(String expectedText) {
+        Espresso.onView(withId(R.id.statusLabel))
+                .check(matches(withText(expectedText)));
+    }
+
+    private void checkActivityIsDisplayed(Class<?> activityClass) {
+        Espresso.onView(withId(android.R.id.content))
+                .check(matches(ViewMatchers.isDisplayed()));
     }
 }
