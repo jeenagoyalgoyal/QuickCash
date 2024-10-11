@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.quickcash"
-        minSdk 34
+        minSdk 30
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding true
@@ -44,8 +44,8 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.espresso.core
     androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
 }
