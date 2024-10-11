@@ -6,15 +6,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 public class FirebaseCRUD {
     private final FirebaseDatabase database;
-
+    
     private DatabaseReference passwordRef = null;
     private DatabaseReference emailRef = null;
+    private DatabaseReference nameRef = null;
 
     private String extractedEmailAddress;
     private String extractedPassword;
+    private String extractedName;
 
     public FirebaseCRUD(FirebaseDatabase database) {
         this.database = database;
@@ -22,18 +26,28 @@ public class FirebaseCRUD {
         this.initializeDatabaseRefListeners();
     }
 
+    private void registerToLogin() {
+    }
+
     protected void initializeDatabaseRefs() {
+        this.nameRef = getNameRef();
         this.passwordRef = getPasswordRef();
         this.emailRef = getEmailAddressRef();
     }
+
+    private DatabaseReference getNameRef() {
+        return this.database.getReference("Name");
+    }
+
 
     protected DatabaseReference getEmailAddressRef() {
         return this.database.getReference("emailAddress");
     }
 
-    protected DatabaseReference getPasswordRef() {
+    protected DatabaseReference getPasswordRef(){
         return this.database.getReference("password");
     }
+
 
     protected void initializeDatabaseRefListeners() {
         this.setEmailListener();
@@ -41,7 +55,8 @@ public class FirebaseCRUD {
     }
 
     protected void setEmailListener() {
-        this.emailRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        this.emailRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 extractedEmailAddress = snapshot.getValue(String.class);
@@ -49,13 +64,13 @@ public class FirebaseCRUD {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors here
             }
         });
     }
 
     protected void setPasswordListener() {
-        this.passwordRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        this.passwordRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 extractedPassword = snapshot.getValue(String.class);
@@ -63,7 +78,6 @@ public class FirebaseCRUD {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors here
             }
         });
     }
@@ -73,10 +87,11 @@ public class FirebaseCRUD {
     }
 
     public String getExtractedPassword() {
-        if (extractedPassword != null) {
-            return this.extractedPassword;
-        } else {
-            return "Password not yet available";
-        }
+        return this.extractedPassword;
     }
+
+    public String getExtractedName() {
+        return this.extractedName;
+    }
+
 }
