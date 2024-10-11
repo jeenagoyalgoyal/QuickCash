@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -180,10 +181,19 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    //To be added for integration with login activity
+                    /*UNCOMMENT BELOW CODE WHEN INTEGRATING WITH LOGIN
+                    Intent to be used to autofill if you guys want to do that for login, otherwise
+                    remove the intent.putExtra'.
 
-                    //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                    //startActivity(intent);
+                    Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+
+                    intent.putExtra("name",name);
+                    intent.putExtra("email",email);
+                    intent.putExtra("password",password);
+                    intent.putExtra("role", role);
+
+                    startActivity(intent);
+                    */
                     Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_LONG).show();

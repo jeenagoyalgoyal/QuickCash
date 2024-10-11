@@ -11,7 +11,7 @@ public class CredentialsValidator {
     public static boolean isValidName(String Name) {
         Name = Name.trim();
 
-        return Name.matches("[^(!@#$%&*)]*") && Name.length()>=3;
+        return Name.matches("[^(!@#$%&*\\-)]*") && Name.length()>=3;
     }
 
     public static boolean isValidEmail(String emailAddress){
