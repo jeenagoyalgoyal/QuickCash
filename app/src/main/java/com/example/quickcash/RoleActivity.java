@@ -30,7 +30,7 @@ public class RoleActivity extends AppCompatActivity {
         setContentView(R.layout.role_switch);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("userID");
+        id = intent.getStringExtra("Email");
 
         useRole = UseRole.getInstance();
         welcomeText = findViewById(R.id.welcomeText);
