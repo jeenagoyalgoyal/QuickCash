@@ -14,7 +14,7 @@ public class RoleActivity extends AppCompatActivity {
     private String currentRole = "employee";
     private Button roleSwitch;
     private UseRole useRole;
-    private String id;
+    private int id;
 
     //Buttons for role specific (Logan)
     public Button jobPosting;
@@ -30,7 +30,7 @@ public class RoleActivity extends AppCompatActivity {
         setContentView(R.layout.role_switch);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("Email");
+        id = intent.getIntExtra("userID", -1);
 
         useRole = UseRole.getInstance();
         welcomeText = findViewById(R.id.welcomeText);

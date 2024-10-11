@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Switching Role
         if(id == R.id.switch_role) {
-            String userid = "Email";
+            int userid = 123;
             Intent intent = new Intent(MainActivity.this, RoleActivity.class);
-            intent.putExtra("Email", userid);
+            intent.putExtra("userID", userid);
             startActivity(intent);
             return true;
         }

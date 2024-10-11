@@ -6,7 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class UseRole {
 
     private static UseRole instance;
-    private String currentRole = "employee";
+    private String currentRole;
 
     private DatabaseReference db;
 
@@ -26,7 +26,7 @@ public class UseRole {
         return currentRole;
     }
 
-    public void switchRole(String id){
+    public void switchRole(int id){
         if(currentRole.equals("employee")){
             currentRole = "employer";
         }
@@ -35,17 +35,14 @@ public class UseRole {
         }
         updateDatabase(id, currentRole);
     }
-    private void updateDatabase(String id, String role){
-        db.child(id).child("role").setValue(role)
-                .addOnSuccessListener( y -> {
-            //success
-        })
-                .addOnFailureListener(e ->{
-                    //fail
-                });
+    private void updateDatabase(int id, String role){
+        db.child(String.valueOf(id)).child("role").setValue(role)
+                .addOnSuccessListener( y -> {})
+                .addOnFailureListener(e ->{});
     }
 
-    public void setCurrentRole(String employee) {
+    public void setCurrentRole(int id, String currentRole) {
         this.currentRole=currentRole;
+        updateDatabase(id, currentRole);
     }
 }

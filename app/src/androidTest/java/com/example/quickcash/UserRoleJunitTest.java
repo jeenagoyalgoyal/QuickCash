@@ -3,23 +3,31 @@ package com.example.quickcash;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class UserRoleJunitTest {
 
     private UseRole useRole;
     private DatabaseReference db;
-    private RoleActivity roleActivity;
+
+
+    @Rule
+    public ActivityScenarioRule<RoleActivity> actRul = new ActivityScenarioRule<>(RoleActivity.class);
 
     @Before
     public void setUseRole(){
-        db = FirebaseDatabase.getInstance().getReference("testUsers");
+        db = FirebaseDatabase.getInstance().getReference("Users");
+        int id = 123;
         useRole =UseRole.getInstance();
-        roleActivity = new RoleActivity();
+        useRole.setCurrentRole(id,"employee");
+
     }
     @Test
     public void testInitialRole(){
@@ -28,14 +36,14 @@ public class UserRoleJunitTest {
 
     @Test
     public void testSwitchRole(){
-        String id = "testUser";
+        int id = 123;
         useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
     }
 
     @Test
     public void testSwitchBackRole(){
-        String id = "testUser";
+        int id = 123;
         useRole.switchRole(id);
         useRole.switchRole(id);
         assertEquals("employee", useRole.getCurrentRole());
@@ -43,7 +51,7 @@ public class UserRoleJunitTest {
 
     @Test
     public void testMultipleSwitch(){
-        String id = "testUser";
+        int id = 123;
         useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
 
@@ -68,10 +76,10 @@ public class UserRoleJunitTest {
 
     @Test
     public void testRoleUpdateInDatabase(){
-        String id = "testUser";
+        int id = 123;
         useRole.switchRole(id);
 
-        db.child(id).child("role").get().addOnCompleteListener(event ->{
+        db.child(String.valueOf(id)).child("role").get().addOnCompleteListener(event ->{
             if(event.isSuccessful()){
                 String role = event.getResult().getValue(String.class);
                 assertEquals("employer", role);
