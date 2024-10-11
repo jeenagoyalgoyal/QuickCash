@@ -5,18 +5,13 @@ import org.junit.Before;
 
 import static org.junit.Assert.*;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
 public class ExampleUnitTest {
 
-    CredentialsValidator validator;
+    CredentialValidator validator;
 
     @Before
     public void setup() {
-        validator = new CredentialsValidator();
+        validator = new CredentialValidator();
     }
 
     @Test
@@ -27,13 +22,15 @@ public class ExampleUnitTest {
 
     @Test
     public void checkIfPasswordIdIsValid() {
-        assertTrue(validator.isValidPassword("Pass@123"));
+        assertTrue(validator.isValidPassword("Pass123"));
+        assertTrue(validator.isValidPassword("ComplexPassword"));
     }
 
     @Test
     public void checkIfPasswordIdIsInvalid() {
-        assertFalse(validator.isValidPassword("pass"));
-        assertFalse(validator.isValidPassword("pass12345"));
+        assertFalse(validator.isValidPassword("pass")); // Too short
+        assertFalse(validator.isValidPassword("123")); // Too short
+        assertFalse(validator.isValidPassword("")); // Empty password
     }
 
     @Test
@@ -44,12 +41,14 @@ public class ExampleUnitTest {
 
     @Test
     public void checkIfEmailIsValid() {
-        assertTrue(validator.isValidEmail("3130@dal.ca"));
+        assertTrue(validator.isValidEmailAddress("3130@dal.ca"));
+        assertTrue(validator.isValidEmailAddress("user.name+tag@domain.com"));
     }
 
     @Test
     public void checkIfEmailIsInvalid() {
-        assertFalse(validator.isValidEmail("3130.dal.ca"));
+        assertFalse(validator.isValidEmailAddress("3130.dal.ca")); // Missing @
+        assertFalse(validator.isValidEmailAddress("user@domain")); // Missing top-level domain
+        assertFalse(validator.isValidEmailAddress("user@.com")); // Missing domain name
     }
-
 }
