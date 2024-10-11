@@ -44,14 +44,16 @@ public class RegistrationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.user_registration);
 
-        TextView loginTextView = findViewById(R.id.textViewLogin);
-        loginTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        //Hyperlink
+
+//        TextView loginTextView = findViewById(R.id.textViewLogin);
+//        loginTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
     }
