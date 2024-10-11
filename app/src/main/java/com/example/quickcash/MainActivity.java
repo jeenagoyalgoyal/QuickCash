@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -17,15 +18,19 @@ import com.example.quickcash.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SessionManager sessionManager;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sessionManager = new SessionManager(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -62,7 +67,15 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.action_logout) {
+            Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.action_profile) {
+            Intent intent = new Intent(MainActivity.this, Profile.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);
