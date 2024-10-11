@@ -144,8 +144,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 if (validFlag) {
 
-                    addToDatabase(name, email, password, role);
-
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -186,8 +184,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
                     //startActivity(intent);
+                    Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(RegistrationActivity.this, "Failed to add user data", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_LONG).show();
                 }
             }
         });
