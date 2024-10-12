@@ -26,7 +26,11 @@ public class RegistrationEspressoTest {
     private final String INVALID_PASSWORD = "badpass";
 
     private final String EMPTY_MESSAGE = "cannot be empty!";
-    private final String INVALID_MESSAGE = "invalid!";
+
+    private final String INVALID_MESSAGE_EMAIL = "invalid email, please check format!";
+    private final String INVALID_MESSAGE_NAME = "must be longer than 2 characters and cannot contain special characters!";
+    private final String INVALID_MESSAGE_PASSWORD = "password must be longer than 8 characters and contain at-least 1 special character!";
+
     private final String VALID_MESSAGE = "valid";
     private final String UNMATCH_MESSAGE = "passwords do not match!";
 
@@ -101,28 +105,28 @@ public class RegistrationEspressoTest {
     public void invalidNameTest() {
         onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE)));
+        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE_NAME)));
     }
 
     @Test
     public void invalidEmailTest() {
         onView(withId(R.id.enterEmail)).perform(typeText(INVALID_EMAIL));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validEmail)).check(matches(withText(INVALID_MESSAGE)));
+        onView(withId(R.id.validEmail)).check(matches(withText(INVALID_MESSAGE_EMAIL)));
     }
 
     @Test
     public void invalidPasswordTest() {
         onView(withId(R.id.enterPassword)).perform(typeText(INVALID_PASSWORD));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText(INVALID_MESSAGE)));
+        onView(withId(R.id.validPassword)).check(matches(withText(INVALID_MESSAGE_PASSWORD)));
     }
 
     @Test
     public void invalidPassword2Test() {
         onView(withId(R.id.enterPassword2)).perform(typeText(INVALID_PASSWORD));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword2)).check(matches(withText(INVALID_MESSAGE)));
+        onView(withId(R.id.validPassword2)).check(matches(withText(INVALID_MESSAGE_PASSWORD)));
     }
 
     @Test
@@ -130,7 +134,6 @@ public class RegistrationEspressoTest {
         onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
         onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD+1));
         onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText(UNMATCH_MESSAGE)));
         onView(withId(R.id.validPassword2)).check(matches(withText(UNMATCH_MESSAGE)));
 
     }

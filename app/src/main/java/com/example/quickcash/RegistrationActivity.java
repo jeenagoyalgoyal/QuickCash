@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -54,6 +55,15 @@ public class RegistrationActivity extends AppCompatActivity {
         this.loadRoleSpinner();
         this.initializeDatabaseAccess();
         this.setupRegisterButton();
+
+        TextView registerTextView = findViewById(R.id.textViewLogin);
+        registerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initializeDatabaseAccess() {
@@ -91,57 +101,68 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 validFlag = true;
                 String errorLabel = new String();
+                String color = new String();
 
                 if (validator.isEmptyInput(name)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
+                    color = "#EB0101";
                 } else if (!validator.isValidName(name)) {
                     validFlag = false;
                     errorLabel = "must be longer than 2 characters and cannot contain special characters!";
+                    color = "#EB0101";
                 } else {
                     errorLabel = "valid";
+                    color = "#0DBC00";
                 }
-                nameSetStatusMessage(errorLabel);
+                nameSetStatusMessage(errorLabel, color);
 
                 if (validator.isEmptyInput(email)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
+                    color = "#EB0101";
                 } else if (!validator.isValidEmail(email)) {
                     validFlag = false;
                     errorLabel = "invalid email, please check format!";
+                    color = "#EB0101";
                 } else {
                     errorLabel = "valid";
+                    color = "#0DBC00";
                 }
-                emailSetStatusMessage(errorLabel);
+                emailSetStatusMessage(errorLabel, color);
 
                 if (validator.isEmptyInput(password)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
+                    color = "#EB0101";
                 } else if (!validator.isValidPassword(password)) {
                     validFlag = false;
                     errorLabel = "password must be longer than 8 characters and contain at-least 1 special character!";
-                } else if (!password.equals(password2)){
-                    validFlag = false;
-                    errorLabel = "passwords do not match!";
+                    color = "#EB0101";
                 } else {
                     errorLabel = "valid";
+                    color = "#0DBC00";
                 }
-                passwordSetStatusMessage(errorLabel);
+                passwordSetStatusMessage(errorLabel, color);
 
                 if (validator.isEmptyInput(password2)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
+                    color = "#EB0101";
                 } else if (!validator.isValidPassword(password2)) {
                     validFlag = false;
                     errorLabel = "password must be longer than 8 characters and contain at-least 1 special character!";
+                    color = "#EB0101";
                 } else if (!password.equals(password2)){
                     validFlag = false;
                     errorLabel = "passwords do not match!";
+                    color = "#EB0101";
                 } else {
                     errorLabel = "valid";
+                    color = "#0DBC00";
                 }
 
-                password2SetStatusMessage(errorLabel);
+                password2SetStatusMessage(errorLabel, color);
 
                 if (validFlag) {
 
@@ -167,11 +188,11 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void addToDatabase(String name, String email, String password, String role) {
-        String userStringCreatorEmail = emailToUserStringCreator(email);
+        String validParentNodeName = emailToValidParentNodeName(email);
 
         userRef = database.getReference("Users");
 
-        userRef = database.getReference("Users").child(userStringCreatorEmail);
+        userRef = database.getReference("Users").child(validParentNodeName);
         Map<String, String> userData = new HashMap<>();
         userData.put("name", name);
         userData.put("email", email);
@@ -191,7 +212,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    public static String emailToUserStringCreator(String email) {
+    public static String emailToValidParentNodeName(String email) {
         return email.replace(".", ",");
     }
 
@@ -220,23 +241,27 @@ public class RegistrationActivity extends AppCompatActivity {
         return roleSpinner.getSelectedItem().toString().trim();
     }
 
-    protected void nameSetStatusMessage(String errorLabel) {
+    protected void nameSetStatusMessage(String errorLabel, String color) {
         TextView validNameLabel = findViewById(R.id.validName);
+        validNameLabel.setTextColor(Color.parseColor(color));
         validNameLabel.setText(errorLabel.trim());
     }
 
-    protected void emailSetStatusMessage(String errorLabel) {
+    protected void emailSetStatusMessage(String errorLabel, String color) {
         TextView validEmailLabel = findViewById(R.id.validEmail);
+        validEmailLabel.setTextColor(Color.parseColor(color));
         validEmailLabel.setText(errorLabel.trim());
     }
 
-    protected void passwordSetStatusMessage(String errorLabel) {
+    protected void passwordSetStatusMessage(String errorLabel, String color) {
         TextView validPasswordLabel = findViewById(R.id.validPassword);
+        validPasswordLabel.setTextColor(Color.parseColor(color));
         validPasswordLabel.setText(errorLabel.trim());
     }
 
-    protected void password2SetStatusMessage(String errorLabel) {
+    protected void password2SetStatusMessage(String errorLabel, String color) {
         TextView validPasswordLabel2 = findViewById(R.id.validPassword2);
+        validPasswordLabel2.setTextColor(Color.parseColor(color));
         validPasswordLabel2.setText(errorLabel.trim());
     }
 }
