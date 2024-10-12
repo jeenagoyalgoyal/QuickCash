@@ -5,7 +5,7 @@ import org.junit.Before;
 
 import static org.junit.Assert.*;
 
-public class ExampleUnitTest {
+public class LoginJUnitTest {
 
     CredentialsValidator validator;
 
