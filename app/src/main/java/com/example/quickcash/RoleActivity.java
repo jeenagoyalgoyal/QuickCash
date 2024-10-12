@@ -16,7 +16,7 @@ public class RoleActivity extends AppCompatActivity {
     private UseRole useRole;
     private int id;
 
-    //Buttons for role specific (Logan)
+    //Buttons for role specific features
     public Button jobPosting;
     public Button profileButton;
     public Button scheduleButton;
@@ -36,7 +36,7 @@ public class RoleActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
         roleSwitch = findViewById(R.id.roleSwitch);
 
-        //Role specific buttons (Logan)
+        //Role specific buttons
         jobPosting = findViewById(R.id.jobPosting);
         profileButton = findViewById(R.id.profileButton);
         scheduleButton = findViewById(R.id.scheduleButton);
