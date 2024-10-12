@@ -5,9 +5,6 @@
       <SelectionState runConfigName="UserRoleJunitTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testRoleUpdateInDatabase()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="Tests in 'com.example.quickcash'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
