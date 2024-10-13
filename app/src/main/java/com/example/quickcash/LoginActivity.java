@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        String email = emailBox.getText().toString().trim();
+        String email = emailBox.getText().toString().toLowerCase().trim();
         String password = passwordBox.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                statusLabel.setText("Error accessing database. Please try again.");
+                statusLabel.setText("No account found with this email.");
                 Log.e("LoginActivity", "Database error: " + databaseError.getMessage());
             }
         });

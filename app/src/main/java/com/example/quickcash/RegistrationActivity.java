@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -219,12 +220,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
     protected String getName() {
         EditText nameBox = findViewById(R.id.enterName);
-        return nameBox.getText().toString().trim();
+        return nameBox.getText().toString().toLowerCase().trim();
     }
 
     protected String getEmail() {
         EditText emailBox = findViewById(R.id.enterEmail);
-        return emailBox.getText().toString().trim();
+        return emailBox.getText().toString().toLowerCase().trim();
     }
 
     protected String getPassword() {
@@ -239,7 +240,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     protected String getRole() {
         Spinner roleSpinner = findViewById(R.id.spinnerRole);
-        return roleSpinner.getSelectedItem().toString().trim();
+        return roleSpinner.getSelectedItem().toString().toLowerCase().trim();
     }
 
     protected void nameSetStatusMessage(String errorLabel, String color) {
