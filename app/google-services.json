@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "864088011240",
+    "firebase_url": "https://assignment2-b9dc7-default-rtdb.firebaseio.com",
+    "project_id": "assignment2-b9dc7",
+    "storage_bucket": "assignment2-b9dc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864088011240:android:cd04897385b9d16a5c745d",
+        "android_client_info": {
+          "package_name": "ca.dal.cs.csci3130.a2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBURGT_W7HrF8-VQPc1-oXjb7bgUgqM9wI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864088011240:android:62e343ecb808f2d75c745d",
+        "android_client_info": {
+          "package_name": "com.example.quickcash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBURGT_W7HrF8-VQPc1-oXjb7bgUgqM9wI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
