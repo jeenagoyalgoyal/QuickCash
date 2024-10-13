@@ -14,6 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.quickcash.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import android.view.Menu;
 import android.view.MenuItem;

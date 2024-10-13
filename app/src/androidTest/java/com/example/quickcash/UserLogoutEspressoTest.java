@@ -39,8 +39,6 @@ public class UserLogoutEspressoTest {
     @Before
     public void setup() {
         activityScenario = ActivityScenario.launch(MainActivity.class);
-        activityScenario.onActivity(activity -> {
-        });
     }
 
     //Test to navigate to ProfileScreen
