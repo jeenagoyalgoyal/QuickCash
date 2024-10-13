@@ -57,7 +57,7 @@ public class UserLogoutEspressoTest {
         onView(withText("Profile")).perform(click());
         onView(withText("Logout")).perform(click());
         onView(withText("Yes")).perform(click());
-        onView(withText("Login Screen")).check(matches(isDisplayed()));
+        onView(withText("Login")).check(matches(isDisplayed()));
     }
 
 }
