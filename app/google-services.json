@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "241394322832",
-    "project_id": "quick-cash-411fe",
-    "storage_bucket": "quick-cash-411fe.appspot.com"
+    "project_number": "880264578418",
+    "firebase_url": "https://quickcash-8f278-default-rtdb.firebaseio.com",
+    "project_id": "quickcash-8f278",
+    "storage_bucket": "quickcash-8f278.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:241394322832:android:a853a6ee0932e48440b715",
+        "mobilesdk_app_id": "1:880264578418:android:5abd0fd1e3a037834fc9eb",
         "android_client_info": {
           "package_name": "com.example.quickcash"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDwQBIj7H9gFDWFYSADVZ8BBTUYNRa2920"
+          "current_key": "AIzaSyAtaT9zShNlSF9EnM3p2wjbJFA66MEO3Xs"
         }
       ],
       "services": {
