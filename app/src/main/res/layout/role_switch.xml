@@ -13,7 +13,7 @@
         android:layout_marginStart="4dp"
         android:text="Notifications"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="536dp" />
+        app:layout_constraintTop_toBottomOf="@+id/performanceButton" />
 
     <Button
         android:id="@+id/jobPosting"
@@ -32,7 +32,7 @@
         android:layout_marginStart="4dp"
         android:text="Performance"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="476dp" />
+        app:layout_constraintTop_toBottomOf="@+id/taskButton" />
 
     <Button
         android:id="@+id/scheduleButton"
@@ -58,12 +58,11 @@
         android:id="@+id/roleSwitch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="604dp"
         android:text="Click to Switch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
     <TextView
         android:id="@+id/welcomeText"
