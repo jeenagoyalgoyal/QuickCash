@@ -29,9 +29,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
+
     // Regex patterns for email and password validation
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$"; // At least 6 characters, at least one letter and one number
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.*)(+@#$%&!?><{}/\\]\\[]).{6,}$"; // At least 6 characters, at least one letter, one number and one special character
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        String email = emailBox.getText().toString().trim();
+        String email = emailBox.getText().toString().toLowerCase().trim();
         String password = passwordBox.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
@@ -74,12 +75,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginUser(email, password);
         }
     }
-
-    private boolean isValidEmail(String email) {
+    public static boolean isEmptyEmailAddress(String email){return email.isEmpty();}
+    public static boolean isValidEmail(String email) {
         return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
     }
-
-    private boolean isValidPassword(String password) {
+    public static boolean isEmptyPassword(String password){return password.isEmpty();}
+    public static boolean isValidPassword(String password) {
         return Pattern.compile(PASSWORD_PATTERN).matcher(password).matches();
     }
 
@@ -108,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                statusLabel.setText("Error accessing database. Please try again.");
+                statusLabel.setText("No account found with this email.");
                 Log.e("LoginActivity", "Database error: " + databaseError.getMessage());
             }
         });
