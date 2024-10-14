@@ -1,22 +1,23 @@
 package com.example.quickcash;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.activity.EdgeToEdge;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.quickcash.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,9 +61,25 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //Switching Role
+        if(id == R.id.switch_role) {
+            int userid = 123;
+            Intent intent = new Intent(MainActivity.this, RoleActivity.class);
+            intent.putExtra("userID", userid);
+            startActivity(intent);
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        //Navigating to Profile Screen
+        if(id == R.id.action_profile) {
+            Intent intent = new Intent(MainActivity.this, Profile.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);

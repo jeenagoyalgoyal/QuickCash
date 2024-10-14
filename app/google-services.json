@@ -6,7 +6,7 @@
     "storage_bucket": "quickcash-8f278.appspot.com"
   },
   "client": [
-    {touch test.txt
+    {
       "client_info": {
         "mobilesdk_app_id": "1:880264578418:android:5abd0fd1e3a037834fc9eb",
         "android_client_info": {
