@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                statusLabel.setText("No account found with this email.");
+                statusLabel.setText("Error accessing database, please try again");
                 Log.e("LoginActivity", "Database error: " + databaseError.getMessage());
             }
         });
@@ -129,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         moveToWelcomePage();
                     } else {
                         handleLoginError(task.getException());
@@ -148,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void moveToWelcomePage() {
         // Intent to move to the welcome page
-        Intent intent = new Intent(this, Profile.class);
+        Intent intent = new Intent(this, RoleActivity.class);
         startActivity(intent);
     }
 }
