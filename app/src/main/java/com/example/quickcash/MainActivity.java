@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 
@@ -71,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        //Navigating to Profile Screen
+        if(id == R.id.action_profile) {
+            Intent intent = new Intent(MainActivity.this, Profile.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);

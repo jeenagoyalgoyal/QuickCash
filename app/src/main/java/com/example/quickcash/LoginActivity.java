@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +25,11 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private FirebaseCRUD crud = null;
+    private FirebaseDatabase database = null;
+    private FirebaseAuth mAuth;
     private EditText emailBox, passwordBox;
     private TextView statusLabel;
-    private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
 
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         statusLabel = findViewById(R.id.statusLabel);
         Button loginButton = findViewById(R.id.loginButton);
 
+        this.initializeDatabaseAccess();
+
         loginButton.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
 
@@ -58,6 +63,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
             }
         });
+    }
+
+    private void initializeDatabaseAccess() {
+        database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
+        crud = new FirebaseCRUD(database);
+
     }
 
     @Override
@@ -109,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                statusLabel.setText("No account found with this email.");
+                statusLabel.setText("Error accessing database, please try again");
                 Log.e("LoginActivity", "Database error: " + databaseError.getMessage());
             }
         });
@@ -119,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         moveToWelcomePage();
                     } else {
                         handleLoginError(task.getException());
@@ -138,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void moveToWelcomePage() {
         // Intent to move to the welcome page
-        Intent intent = new Intent(this, Profile.class);
+        Intent intent = new Intent(this, RoleActivity.class);
         startActivity(intent);
     }
 }

@@ -11,12 +11,29 @@ public class SessionManager {
     private final SharedPreferences.Editor editor;
     private Context context;
 
-
     public SessionManager(Context context){
         this.context = context;
-        preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        preferences =context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = preferences.edit();
     }
+
+    //Create a login Session when the user is logged in
+    public void createLoginSession(){
+        editor.putBoolean(IS_LOGGED_IN, true);
+        editor.commit();
+    }
+
+    //Method to clear all session data
+    public void logoutUser(){
+        editor.clear();
+        editor.apply();
+    }
+
+    //Method to check if user is logged in
+    public boolean checkIfLoggedIn(){
+        return preferences.getBoolean(IS_LOGGED_IN, false);
+    }
+
 
 
 }
