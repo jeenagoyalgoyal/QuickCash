@@ -22,6 +22,7 @@ public class Profile extends AppCompatActivity {
         sessionManager =new SessionManager(this);
     }
 
+    //Method to set up the Logout Dialog button
     protected void onCreateLogoutDialogue(){
         Button logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +33,7 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    // Method to display a confirmation dialog for logging out
     private void logoutConfirmationDialogue(){
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
@@ -51,6 +53,7 @@ public class Profile extends AppCompatActivity {
                 .show();
     }
 
+    // Method to perform the logout
     public boolean performLogout(Boolean choice){
         if (choice) {
             sessionManager.logoutUser();

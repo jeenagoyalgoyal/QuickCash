@@ -34,25 +34,26 @@ import static org.junit.Assert.*;
 @RunWith(JUnit4.class)
 public class UserLogoutEspressoTest {
 
-    public ActivityScenario<MainActivity> activityScenario;
+    public ActivityScenario<RoleActivity> activityScenario;
 
     @Before
     public void setup() {
-        activityScenario = ActivityScenario.launch(MainActivity.class);
+        activityScenario = ActivityScenario.launch(RoleActivity.class);
     }
+
 
     //Test to navigate to ProfileScreen
     @Test
     public void navigateDashboardToProfileScreen(){
-        onView(withContentDescription("More options")).perform(click());
-        onView(withText("Profile")).perform(click());
-        onView(withId(R.id.logout_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.profileButton)).perform(click());
+        onView(withText("Profile")).check(matches(isDisplayed()));
     }
 
+    //Test to navigate from Dashboard to Login Screen
     @Test
     public void navigateDashboardToLoginScreen(){
-        onView(withContentDescription("More options")).perform(click());
-        onView(withText("Profile")).perform(click());
+        onView(withId(R.id.profileButton)).perform(click());
+        onView(withText("Profile")).check(matches(isDisplayed()));
         onView(withText("Logout")).perform(click());
         onView(withText("Yes")).perform(click());
         onView(withText("Login")).check(matches(isDisplayed()));

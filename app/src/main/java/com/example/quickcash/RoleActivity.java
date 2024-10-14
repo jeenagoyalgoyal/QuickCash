@@ -54,6 +54,15 @@ public class RoleActivity extends AppCompatActivity {
             }
         });
 
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RoleActivity.this, Profile.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     public void update(){

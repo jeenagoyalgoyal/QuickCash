@@ -24,9 +24,11 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private FirebaseCRUD crud = null;
+    private FirebaseDatabase database = null;
+    private FirebaseAuth mAuth;
     private EditText emailBox, passwordBox;
     private TextView statusLabel;
-    private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
 
@@ -44,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         statusLabel = findViewById(R.id.statusLabel);
         Button loginButton = findViewById(R.id.loginButton);
 
+        this.initializeDatabaseAccess();
+
         loginButton.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
 
@@ -58,6 +62,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
             }
         });
+    }
+
+    private void initializeDatabaseAccess() {
+        database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
+        crud = new FirebaseCRUD(database);
+
     }
 
     @Override

@@ -17,16 +17,19 @@ public class SessionManager {
         editor = preferences.edit();
     }
 
+    //Create a login Session when the user is logged in
     public void createLoginSession(){
         editor.putBoolean(IS_LOGGED_IN, true);
         editor.commit();
     }
 
+    //Method to clear all session data
     public void logoutUser(){
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 
+    //Method to check if user is logged in
     public boolean checkIfLoggedIn(){
         return preferences.getBoolean(IS_LOGGED_IN, false);
     }
