@@ -40,6 +40,9 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD--dFEh9svGF1jgxH_d9SJPBxRgioUNVM"/>
     </application>
 
 </manifest>

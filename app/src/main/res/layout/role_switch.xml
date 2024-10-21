@@ -10,7 +10,7 @@
         android:id="@+id/notificationsButton"
         android:layout_width="404dp"
         android:layout_height="49dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="180dp"
         android:text="Notifications"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/performanceButton" />
@@ -29,7 +29,8 @@
         android:id="@+id/performanceButton"
         android:layout_width="404dp"
         android:layout_height="49dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="8dp"
         android:text="Performance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskButton" />
