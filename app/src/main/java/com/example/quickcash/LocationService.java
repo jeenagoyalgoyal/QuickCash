@@ -8,19 +8,20 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 public class LocationService implements LocationListener{
 
-    private  final Activity activity;
+    private   Activity activity;
     private  LocationManager locationManager;
     private Location currentLocation;
 
     public LocationService(Activity activity){
         this.activity=activity;
-        this.locationManager=(LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        this.locationManager=(LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
     }
 
 
@@ -45,11 +46,16 @@ public class LocationService implements LocationListener{
     }
 
     private void startLocationUpdate(){
-
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        }
     }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
+        this.currentLocation = location;
     }
+
+
 }
