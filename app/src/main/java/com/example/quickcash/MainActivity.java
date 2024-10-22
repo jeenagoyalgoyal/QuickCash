@@ -1,10 +1,13 @@
 package com.example.quickcash;
 
 import static android.telephony.CellLocation.requestLocationUpdate;
+import static androidx.constraintlayout.motion.widget.Debug.getLocation;
 import static androidx.core.location.LocationManagerCompat.getCurrentLocation;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,9 +16,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.activity.EdgeToEdge;
-import android.Manifest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,26 +31,42 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.quickcash.databinding.ActivityMainBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_LOCATION_PERMISSION = 1001 ;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE=1;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private LocationHelper locationHelper;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            detectAndDisplayLocation();
+        }
+        else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        }
+
         setSupportActionBar(binding.toolbar);
-        locationHelper= new LocationHelper(this);
-        checkLocationPermissions();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -63,67 +82,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void checkLocationPermissions() {
-        if (!locationHelper.isLocationPermissionGranted()) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            }, REQUEST_LOCATION_PERMISSION);
-        } else {
-            requestUpdate(); // If permission is already granted
-        }
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                requestUpdate(); // Request location updates if permission granted
+                // Permission granted, fetch location
+                detectAndDisplayLocation();
             } else {
-                Toast.makeText(this, "Location permission is required to access your location", Toast.LENGTH_SHORT).show();
+                // Permission denied
+                Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void requestUpdate() {
-        locationHelper.requestLocationUpdate(new LocationHelper.LocationCallback() {
-            @Override
-            public void onLocationReceived(Location location) {
-                // Handle received location
-                String localArea = "Lat: " + location.getLatitude() + ", Lon: " + location.getLongitude();
-                TextView locationView= findViewById(R.id.location_detect);
-                locationView.setText(localArea);
-                Toast.makeText(MainActivity.this, "Your location: " + localArea, Toast.LENGTH_LONG).show();
-            }
+    private void detectAndDisplayLocation() {
+        try {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            String localArea = "Latitude: " + latitude + ", Longitude: " + longitude;
+                            Toast.makeText(MainActivity.this, "Current Location: " + localArea, Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(MainActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
+                    });
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
 
-            @Override
-            public void onPermissionDenied() {
-                showLocationInput();
-                Toast.makeText(MainActivity.this, "Location permission denied", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
-
-    private void showLocationInput() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Your Location");
-
-        // Set up the input field
-        final EditText input = new EditText(this);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            String manualLocation = input.getText().toString();
-            TextView locationTextView = findViewById(R.id.location_detect);
-            locationTextView.setText("Manual Location: " + manualLocation);
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-        builder.show();
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
