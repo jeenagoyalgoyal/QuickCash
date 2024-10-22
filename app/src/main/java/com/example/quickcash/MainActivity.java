@@ -1,19 +1,23 @@
 package com.example.quickcash;
 
+import static android.telephony.CellLocation.requestLocationUpdate;
 import static androidx.core.location.LocationManagerCompat.getCurrentLocation;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-
+import android.Manifest;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -29,8 +33,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_LOCATION_PERMISSION = 1001 ;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    private LocationHelper locationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
+        locationHelper= new LocationHelper(this);
+        checkLocationPermissions();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -53,6 +61,66 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void checkLocationPermissions() {
+        if (!locationHelper.isLocationPermissionGranted()) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, REQUEST_LOCATION_PERMISSION);
+        } else {
+            requestUpdate(); // If permission is already granted
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestUpdate(); // Request location updates if permission granted
+            } else {
+                Toast.makeText(this, "Location permission is required to access your location", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void requestUpdate() {
+        locationHelper.requestLocationUpdate(new LocationHelper.LocationCallback() {
+            @Override
+            public void onLocationReceived(Location location) {
+                // Handle received location
+                String localArea = "Lat: " + location.getLatitude() + ", Lon: " + location.getLongitude();
+                TextView locationView= findViewById(R.id.location_detect);
+                locationView.setText(localArea);
+                Toast.makeText(MainActivity.this, "Your location: " + localArea, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onPermissionDenied() {
+                showLocationInput();
+                Toast.makeText(MainActivity.this, "Location permission denied", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showLocationInput() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Your Location");
+
+        // Set up the input field
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            String manualLocation = input.getText().toString();
+            TextView locationTextView = findViewById(R.id.location_detect);
+            locationTextView.setText("Manual Location: " + manualLocation);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 
 

@@ -42,6 +42,7 @@ dependencies {
     implementation libs.firebase.database
     implementation libs.firebase.auth
     implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation libs.uiautomator
     testImplementation libs.junit
     testImplementation libs.espresso.core
 
