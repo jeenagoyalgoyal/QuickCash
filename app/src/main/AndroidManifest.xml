@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickCash"
         tools:targetApi="31">
+
+        <!-- Existing Activities -->
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -28,12 +30,29 @@
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity android:name=".RoleActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- New Search Results Activity -->
+        <activity
+            android:name=".SearchResultsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- New Map Activity -->
+        <activity
+            android:name=".MapActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
