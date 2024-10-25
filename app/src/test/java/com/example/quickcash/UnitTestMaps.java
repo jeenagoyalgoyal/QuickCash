@@ -140,7 +140,6 @@ public class UnitTestMaps {
         assertEquals(0.0, registrationActivity.getTestLatitude(), 0.0001);
         assertEquals(0.0, registrationActivity.getTestLongitude(), 0.0001);
     }
-
-
+    
 
 }
