@@ -283,7 +283,7 @@ protected void onStop() {
         this.fusedLocationProviderClient=fusedLocationProviderClient;
     }
 
-    private void initializeDatabaseAccess() {
+    void initializeDatabaseAccess() {
         database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         crud = new FirebaseCRUD(database);
 
