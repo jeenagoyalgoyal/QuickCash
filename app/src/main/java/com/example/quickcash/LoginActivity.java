@@ -50,6 +50,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FusedLocationProviderClient fusedLocationClient;
     private double latitude;
     private double longitude;
+    private boolean manualLocationDetect = false;
+    private EditText location;
+    private Button LocButton;
 
 
     // Regex patterns for email and password validation
@@ -84,8 +87,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        location= findViewById(R.id.Location);
+        LocButton=findViewById(R.id.LocButton);
+        LocButton.setOnClickListener(e -> handleManualLocationInput());
         requestLocationPermission();
 
+    }
+
+    private void handleManualLocationInput() {
+        String manualLocation = location.getText().toString().trim();
+
+        if (manualLocation.isEmpty()) {
+            Toast.makeText(this, "Location field cannot be empty", Toast.LENGTH_SHORT).show();
+        } else {
+            manualLocationDetect = true;
+            Toast.makeText(this, "Manual Location set to: " + manualLocation, Toast.LENGTH_SHORT).show();
+            moveToNextManualLocation(RoleActivity.class);
+        }
+    }
+
+    private void moveToNextAutoLocation(double latitude, double longitude) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        startActivity(intent);
+    }
+    private void moveToNextManualLocation(Class<RoleActivity> manualLocation) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("manualLocation", manualLocation);
+        startActivity(intent);
     }
 
     private void initializeDatabaseAccess() {
@@ -202,14 +232,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     longitude = locationResult.getLastLocation().getLongitude();
 
                     fusedLocationClient.removeLocationUpdates(locationCallback);
+                    moveToNextWithDelay(RoleActivity.class,null);
 
-                    // Launch MapsActivity with the detected location
-                    Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-                    intent.putExtra("latitude", latitude);
-                    intent.putExtra("longitude", longitude);
-                    startActivity(intent);
-
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> moveToWelcomePage(), 3000); // 3 seconds delay
                 }
             }
         };
@@ -218,6 +242,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
         }
     }
+
+    private void moveToNextWithDelay(Class<?> nextActivity, String manualLocation) {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent intent = new Intent(LoginActivity.this, nextActivity);
+            if (manualLocation != null) {
+                intent.putExtra("manualLocation", manualLocation);
+            } else {
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+            }
+            startActivity(intent);
+            finish();
+        }, 3000);
+    }
+
+
     private void moveToWelcomePage() {
         // Intent to move to the welcome page
         Intent intent = new Intent(this, RoleActivity.class);
