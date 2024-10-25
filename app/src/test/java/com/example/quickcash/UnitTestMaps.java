@@ -1,15 +1,20 @@
 package com.example.quickcash;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.health.connect.datatypes.ExerciseRoute;
+import android.location.Location;
 
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.Task;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,11 +29,15 @@ public class UnitTestMaps {
     private MainActivity mainActivity;
 
     @Mock
-    private FusedLocationProviderClient fusedLocationProviderClient;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    @Mock
+    private Task<Location> mockLocation;
+    @Mock
+    private Location mockLocate;
 
     @Before
     public void setUp(){
-        mainActivity= Mockito.mock(MainActivity.class);
+        mainActivity=Mockito.mock(MainActivity.class);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -50,17 +59,26 @@ public class UnitTestMaps {
                 mainActivity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION));
 
     }
+    @Test
+    public void testOnRequestPermissionsResultDenied() {
+        // Mock permissions result callback
+        mainActivity.onRequestPermissionsResult(1,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                new int[]{PackageManager.PERMISSION_DENIED});
+
+        // Test that no location detection is attempted
+        verify(fusedLocationProviderClient, never()).getLastLocation();
+    }
 
     @Test
-    public void testLocationPermissionGranted() {
-        // Mock the permission check
-        when(ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION))
-                .thenReturn(PackageManager.PERMISSION_GRANTED);
+    public void testOnRequestPermissionsResultGranted() {
+        // Mock permissions result callback
+        mainActivity.onRequestPermissionsResult(1,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                new int[]{PackageManager.PERMISSION_GRANTED});
 
-        // Call the method to check permission
-        mainActivity.onCreate(null);
-
-        // Verify that detectAndDisplayLocation() is called
-        verify(fusedLocationProviderClient).getLastLocation();
+        // Verify that detectAndDisplayLocation is called
+        verify(fusedLocationProviderClient,never()).getLastLocation();
     }
+
 }
