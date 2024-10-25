@@ -63,6 +63,16 @@ public class RoleActivity extends AppCompatActivity {
             }
         });
 
+        jobPosting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (useRole.getCurrentRole().equals("employer")) {
+                    Intent intent = new Intent(RoleActivity.this, JobSubmission.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     public void update(){
@@ -92,7 +102,7 @@ public class RoleActivity extends AppCompatActivity {
             roleSwitch.setText("Switch to employee");
 
             // Update buttons for employer
-            jobPosting.setText("Manage Job Posting");
+            jobPosting.setText("Create Job");
             profileButton.setText("Employee Directory");
             scheduleButton.setText("Analytics & Reports");
             taskButton.setText("Tasks & Assignments");

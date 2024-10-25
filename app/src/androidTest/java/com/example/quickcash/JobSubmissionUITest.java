@@ -46,7 +46,7 @@ public class JobSubmissionUITest {
     public void checkJobSubmissionForm(){
         onView(withText("Switch to employer")).perform(click());
         onView(withText("Create Job")).perform(click());
-        onView(withText("Job Sumission Form")).check(matches(isDisplayed()));
+        onView(withText("Job Submission Form")).check(matches(isDisplayed()));
     }
 
 }
