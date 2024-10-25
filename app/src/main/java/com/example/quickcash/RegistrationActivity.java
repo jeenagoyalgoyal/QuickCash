@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quickcash.ui.MapsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -206,9 +207,10 @@ public class RegistrationActivity extends AppCompatActivity {
                         "\nLatitude: " + latitude +
                         "\nLongitude: " + longitude;
                 Toast.makeText(this, locationInfo, Toast.LENGTH_LONG).show();
-                isLocationReceived = true;
-                testLatitude = latitude;
-                testLongitude = longitude;
+                Intent intent = new Intent(RegistrationActivity.this, MapsActivity.class);
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                startActivity(intent);
 
             } else {
                 Toast.makeText(this, "Unable to find location name", Toast.LENGTH_SHORT).show();

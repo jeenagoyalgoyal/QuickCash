@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
             }
         });
+
     }
 
     private void initializeDatabaseAccess() {
@@ -153,4 +154,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent(this, RoleActivity.class);
         startActivity(intent);
     }
+
+
+
+
 }
