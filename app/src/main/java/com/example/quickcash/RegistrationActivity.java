@@ -58,7 +58,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE=1;
     private FusedLocationProviderClient fusedLocationProviderClient;
-
+    private double testLatitude = 0.0;
+    private double testLongitude = 0.0;
+    private boolean isLocationReceived = false;
     LocationCallback locationCallback;
 
     @Override
@@ -106,7 +108,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void requestPermissions() {
+    void requestPermissions() {
         // Request location permission every time the app starts
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -120,7 +122,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private void shouldShowRequestPermissionRationale() {
+    void shouldShowRequestPermissionRationale() {
         new AlertDialog.Builder(this)
                 .setTitle("Location Permission Required")
                 .setMessage("This app needs access to your location to display your current location.")
@@ -192,7 +194,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private void displayLocationInfo(double latitude, double longitude) {
+    void displayLocationInfo(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -204,12 +206,35 @@ public class RegistrationActivity extends AppCompatActivity {
                         "\nLatitude: " + latitude +
                         "\nLongitude: " + longitude;
                 Toast.makeText(this, locationInfo, Toast.LENGTH_LONG).show();
+                isLocationReceived = true;
+                testLatitude = latitude;
+                testLongitude = longitude;
+
             } else {
                 Toast.makeText(this, "Unable to find location name", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Toast.makeText(this, "Failed to get location name", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public boolean isLocationReceived() {
+        return isLocationReceived;
+    }
+
+    public double getTestLatitude() {
+        return testLatitude;
+    }
+
+    public double getTestLongitude() {
+        return testLongitude;
+    }
+
+    // Reset method for testing
+    public void resetLocationFlags() {
+        isLocationReceived = false;
+        testLatitude = 0.0;
+        testLongitude = 0.0;
     }
 //    private void detectAndDisplayLocation() {
 //        try {
