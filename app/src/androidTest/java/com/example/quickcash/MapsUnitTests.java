@@ -19,10 +19,18 @@ import org.junit.Test;
 import android.Manifest;
 
 public class MapsUnitTests {
+
+
     @Before
     public void setup() {
+
+        //launching the login activity to check for test case
+
         launch(LoginActivity.class);
+
     }
+
+    //test case for permission on UI granted
 
     @Test
     public void testLocationPermissionNotGranted() {
