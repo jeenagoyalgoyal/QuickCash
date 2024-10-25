@@ -10,7 +10,7 @@
         android:id="@+id/notificationsButton"
         android:layout_width="404dp"
         android:layout_height="49dp"
-        android:layout_marginStart="180dp"
+        android:layout_marginStart="4dp"
         android:text="Notifications"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/performanceButton" />
@@ -29,8 +29,8 @@
         android:id="@+id/performanceButton"
         android:layout_width="404dp"
         android:layout_height="49dp"
-        android:layout_marginStart="180dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:text="Performance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskButton" />
@@ -94,7 +94,7 @@
         android:layout_width="384dp"
         android:layout_height="46dp"
         android:text="Location "
-        tools:layout_editor_absoluteX="198dp"
-        tools:layout_editor_absoluteY="534dp" />
+        tools:layout_editor_absoluteX="13dp"
+        tools:layout_editor_absoluteY="490dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
