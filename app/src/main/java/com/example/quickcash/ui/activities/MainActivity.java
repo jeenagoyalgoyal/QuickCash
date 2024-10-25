@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,14 +7,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.quickcash.ui.models.Profile;
+import com.example.quickcash.R;
 import com.example.quickcash.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 

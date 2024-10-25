@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quickcash.ui.models.Profile;
+import com.example.quickcash.R;
+import com.example.quickcash.ui.models.UseRole;
 
 public class RoleActivity extends AppCompatActivity {
 

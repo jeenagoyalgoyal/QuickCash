@@ -1,6 +1,4 @@
-package com.example.quickcash;
-
-import androidx.core.util.PatternsCompat;
+package com.example.quickcash.ui.utils;
 
 import java.util.regex.Pattern;
 

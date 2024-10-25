@@ -1,6 +1,7 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -8,6 +9,9 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import com.example.quickcash.R;
+import com.example.quickcash.ui.models.Profile;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +31,7 @@ public class LogoutDialogBoxTest {
 
     @Test
     public void confirmDialogBox(){
-        onView(withId(R.id.logout_button)).perform(click());
+        onView(ViewMatchers.withId(R.id.logout_button)).perform(click());
         onView(withText("Are you sure you want to Logout")).check(matches(isDisplayed()));
     }
 

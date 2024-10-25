@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.validation;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

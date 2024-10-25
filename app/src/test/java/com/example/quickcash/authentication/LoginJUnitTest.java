@@ -1,8 +1,10 @@
-package com.example.quickcash;
+package com.example.quickcash.authentication;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import com.example.quickcash.ui.activities.LoginActivity;
 
 public class LoginJUnitTest {
 

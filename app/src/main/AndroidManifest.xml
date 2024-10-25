@@ -15,17 +15,17 @@
 
         <!-- Existing Activities -->
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".ui.activities.RegistrationActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".Profile"></activity>
+        <activity android:name=".ui.activities.MainActivity"></activity>
+        <activity android:name=".ui.models.Profile"></activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.activities.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -34,14 +34,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RoleActivity"
+        <activity android:name=".ui.activities.RoleActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
         <!-- New Search Results Activity -->
         <activity
-            android:name=".SearchResultsActivity"
+            android:name=".ui.activities.SearchResultsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -52,7 +52,7 @@
 
         <!-- New Map Activity -->
         <activity
-            android:name=".MapActivity"
+            android:name=".ui.activities.MapActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>

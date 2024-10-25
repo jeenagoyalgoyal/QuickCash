@@ -1,4 +1,4 @@
-package com.example.quickcash.ui;
+package com.example.quickcash.ui.activities;
 
 import android.os.Bundle;
 

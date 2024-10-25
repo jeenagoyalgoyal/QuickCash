@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -7,6 +7,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
+
+import com.example.quickcash.R;
+import com.example.quickcash.ui.activities.RegistrationActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +48,7 @@ public class RegistrationEspressoTest {
 
     @Test
     public void emptyNameTest() {
-        onView(withId(R.id.enterName)).perform(typeText(EMPTY_STRING));
+        onView(ViewMatchers.withId(R.id.enterName)).perform(typeText(EMPTY_STRING));
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validName)).check(matches(withText(EMPTY_MESSAGE)));
     }

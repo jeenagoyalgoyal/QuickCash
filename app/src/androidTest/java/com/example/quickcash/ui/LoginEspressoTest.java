@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -13,6 +13,10 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import com.example.quickcash.R;
+import com.example.quickcash.ui.activities.LoginActivity;
+import com.example.quickcash.ui.activities.MainActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {

@@ -1,10 +1,12 @@
-package com.example.quickcash;
+package com.example.quickcash.session;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
+import com.example.quickcash.ui.activities.RoleActivity;
+import com.example.quickcash.ui.models.UseRole;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

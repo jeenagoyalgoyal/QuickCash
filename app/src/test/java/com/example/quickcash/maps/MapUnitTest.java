@@ -1,7 +1,9 @@
-package com.example.quickcash;
+package com.example.quickcash.maps;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import com.example.quickcash.ui.activities.MapActivity;
 
 public class MapUnitTest {
     //To be checked:

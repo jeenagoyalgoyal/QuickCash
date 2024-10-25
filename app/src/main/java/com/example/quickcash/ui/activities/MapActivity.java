@@ -1,8 +1,10 @@
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quickcash.R;
 
 public class MapActivity extends AppCompatActivity {
 
