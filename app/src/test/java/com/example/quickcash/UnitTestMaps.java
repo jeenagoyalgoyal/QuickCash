@@ -26,7 +26,7 @@ import org.mockito.MockitoAnnotations;
 public class UnitTestMaps {
 
     @InjectMocks
-    private MainActivity mainActivity;
+    private RegistrationActivity mainActivity;
 
     @Mock
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -37,7 +37,7 @@ public class UnitTestMaps {
 
     @Before
     public void setUp(){
-        mainActivity=Mockito.mock(MainActivity.class);
+        mainActivity=Mockito.mock(RegistrationActivity.class);
         MockitoAnnotations.initMocks(this);
     }
 

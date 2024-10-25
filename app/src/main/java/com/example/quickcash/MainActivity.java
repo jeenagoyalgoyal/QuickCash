@@ -43,10 +43,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int LOCATION_PERMISSION_REQUEST_CODE=1;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private FusedLocationProviderClient fusedLocationProviderClient;
 
 
     @Override
@@ -56,14 +54,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            detectAndDisplayLocation();
-        }
-        else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-        }
 
         setSupportActionBar(binding.toolbar);
 
@@ -81,38 +71,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, fetch location
-                detectAndDisplayLocation();
-            } else {
-                // Permission denied
-                Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
-    private void detectAndDisplayLocation() {
-        try {
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
-                        if (location != null) {
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            String localArea = "Latitude: " + latitude + ", Longitude: " + longitude;
-                            Toast.makeText(MainActivity.this, "Current Location: " + localArea, Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(MainActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
-                    });
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
-        }
 
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -158,7 +119,5 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void setFusedLocationProviderClient(FusedLocationProviderClient fusedLocationProviderClient) {
-        this.fusedLocationProviderClient=fusedLocationProviderClient;
-    }
+
 }
