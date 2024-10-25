@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".Profile"></activity>
+        <activity android:name=".JobSearchParameterActivity"></activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
