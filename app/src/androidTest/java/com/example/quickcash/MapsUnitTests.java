@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import static androidx.test.core.app.ActivityScenario.launch;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.runner.lifecycle.Stage.RESUMED;
 import static org.junit.Assert.assertEquals;
 
@@ -34,11 +35,13 @@ public class MapsUnitTests {
 
     @Test
     public void testLocationPermissionNotGranted() {
-        int permissionStatus = ApplicationProvider.getApplicationContext()
+        int permissionStatus = getApplicationContext()
                 .checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
 
         // Check if permission is denied (-1)
         assertEquals(PackageManager.PERMISSION_DENIED, permissionStatus);
     }
+
+
 
 }
