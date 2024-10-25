@@ -60,7 +60,7 @@ public class UserRoleEspressoTest {
         int id=123;
         Espresso.onView(ViewMatchers.withId(R.id.roleSwitch)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
-        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job Posting")));
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
         Espresso.onView(ViewMatchers.withId(R.id.profileButton)).check(ViewAssertions.matches(ViewMatchers.withText("My Profile")));
         Espresso.onView(ViewMatchers.withId(R.id.scheduleButton)).check(ViewAssertions.matches(ViewMatchers.withText("Work Schedule")));
         Espresso.onView(ViewMatchers.withId(R.id.taskButton)).check(ViewAssertions.matches(ViewMatchers.withText("Tasks & Projects")));
