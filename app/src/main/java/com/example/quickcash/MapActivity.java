@@ -16,4 +16,11 @@ public class MapActivity extends AppCompatActivity {
 
         // Here we implement the map functionality (e.g., using Google Maps API)
     }
+
+    //Placeholders for implementation of getting job details logic
+    public static String getJobTitle(String name) {
+        //Change input to what is required
+        //Implement getter using firebase
+        return "null";
+    }
 }
