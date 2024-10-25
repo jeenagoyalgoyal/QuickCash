@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             statusLabel.setText("Login failed. Please try again.");
         }
     }
-    private void requestLocationPermission() {
+    void requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void getCurrentLocation() {
+    void getCurrentLocation() {
         LocationRequest locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10000)
@@ -226,6 +226,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
+    public void setFusedLocationProviderClient(FusedLocationProviderClient mockFusedLocationProviderClient) {
+        this.fusedLocationClient=fusedLocationClient;
+    }
 }
