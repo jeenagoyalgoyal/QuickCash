@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MapActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +24,9 @@ public class MapActivity extends AppCompatActivity {
         //Change input to what is required
         //Implement getter using firebase
         return "null";
+    }
+    public static int getSalary(String name, String job) {
+        //return salary based on the job by given person(job is "job" input and person is "name" input)
+        return -1;
     }
 }
