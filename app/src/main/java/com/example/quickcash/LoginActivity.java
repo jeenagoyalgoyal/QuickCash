@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import static androidx.core.content.ContextCompat.startActivity;
 import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQUEST_CODE;
 
 import android.content.Intent;
@@ -102,20 +103,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             manualLocationDetect = true;
             Toast.makeText(this, "Manual Location set to: " + manualLocation, Toast.LENGTH_SHORT).show();
-            moveToNextManualLocation(RoleActivity.class);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                intent.putExtra("manualLocation", manualLocation);
+                startActivity(intent);
+                moveToNextWithDelay(null);
+            }, 3000);
         }
-    }
-
-    private void moveToNextAutoLocation(double latitude, double longitude) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra("latitude", latitude);
-        intent.putExtra("longitude", longitude);
-        startActivity(intent);
-    }
-    private void moveToNextManualLocation(Class<RoleActivity> manualLocation) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra("manualLocation", manualLocation);
-        startActivity(intent);
     }
 
     private void initializeDatabaseAccess() {
@@ -232,7 +226,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     longitude = locationResult.getLastLocation().getLongitude();
 
                     fusedLocationClient.removeLocationUpdates(locationCallback);
-                    moveToNextWithDelay(RoleActivity.class,null);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                        intent.putExtra("latitude", latitude);
+                        intent.putExtra("longitude", longitude);
+                        startActivity(intent);
+                        moveToNextWithDelay(null);
+                    }, 3000);
 
                 }
             }
@@ -243,9 +243,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void moveToNextWithDelay(Class<?> nextActivity, String manualLocation) {
+    private void moveToNextWithDelay( String manualLocation) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(LoginActivity.this, nextActivity);
+            Intent intent = new Intent(LoginActivity.this, RoleActivity.class);
             if (manualLocation != null) {
                 intent.putExtra("manualLocation", manualLocation);
             } else {
@@ -258,15 +258,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void moveToWelcomePage() {
-        // Intent to move to the welcome page
-        Intent intent = new Intent(this, RoleActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-
-    public void setFusedLocationProviderClient(FusedLocationProviderClient mockFusedLocationProviderClient) {
-        this.fusedLocationClient=fusedLocationClient;
-    }
 }
