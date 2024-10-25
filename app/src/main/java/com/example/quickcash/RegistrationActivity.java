@@ -1,9 +1,13 @@
 package com.example.quickcash;
 
+import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,6 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -51,6 +59,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE=1;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
+    LocationCallback locationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +77,9 @@ public class RegistrationActivity extends AppCompatActivity {
         requestPermissions();
 
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            detectAndDisplayLocation();
+//            detectAndDisplayLocation();
+            startLocationUpdates();
+
         }
         else{
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)){
@@ -104,7 +115,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            detectAndDisplayLocation(); // Permission already granted
+//            detectAndDisplayLocation(); // Permission already granted
+            startLocationUpdates();
         }
     }
 
@@ -132,7 +144,8 @@ public class RegistrationActivity extends AppCompatActivity {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, fetch location
-                detectAndDisplayLocation();
+//                detectAndDisplayLocation();
+                startLocationUpdates();
             } else {
                 // Permission denied
                 Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
@@ -155,24 +168,92 @@ public class RegistrationActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void detectAndDisplayLocation() {
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(PRIORITY_HIGH_ACCURACY)
+                .setInterval(10000) // 10 seconds interval
+                .setFastestInterval(5000); // 5 seconds fastest interval
+
+         locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                    double latitude = locationResult.getLastLocation().getLatitude();
+                    double longitude = locationResult.getLastLocation().getLongitude();
+                    displayLocationInfo(latitude, longitude);
+                }
+            }
+        };
+
         try {
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
-                        if (location != null) {
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            String localArea = "Latitude: " + latitude + ", Longitude: " + longitude;
-                            Toast.makeText(RegistrationActivity.this, "Current Location: " + localArea, Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(RegistrationActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
-                    });
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
         } catch (SecurityException e) {
             Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
         }
-
     }
+
+    private void displayLocationInfo(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String addressName = address.getAddressLine(0);
+
+                String locationInfo = "Location: " + addressName +
+                        "\nLatitude: " + latitude +
+                        "\nLongitude: " + longitude;
+                Toast.makeText(this, locationInfo, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Unable to find location name", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to get location name", Toast.LENGTH_SHORT).show();
+        }
+    }
+//    private void detectAndDisplayLocation() {
+//        try {
+//            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+//                if (location != null) {
+//                    double latitude = location.getLatitude();
+//                    double longitude = location.getLongitude();
+//
+//                    // Convert lat/long to a human-readable address
+//                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+//                    try {
+//                        // Get address from lat/long
+//                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+//                        if (addresses != null && !addresses.isEmpty()) {
+//                            Address address = addresses.get(0);
+//                            String addressName = address.getAddressLine(0);
+//
+//                            // Display latitude, longitude, and address
+//                            String locationInfo = "Location: "+addressName+ " Latitude: " + latitude +
+//                                    ", Longitude: " + longitude ;
+//                            Toast.makeText(RegistrationActivity.this, "Current Location: " + locationInfo, Toast.LENGTH_LONG).show();
+//                        } else {
+//                            Toast.makeText(RegistrationActivity.this, "Unable to find location name", Toast.LENGTH_SHORT).show();
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        Toast.makeText(RegistrationActivity.this, "Failed to get location name", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }).addOnFailureListener(e -> {
+//                Toast.makeText(RegistrationActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
+//            });
+//        } catch (SecurityException e) {
+//            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+@Override
+protected void onStop() {
+    super.onStop();
+    // Stop location updates when the activity is not visible
+    if (fusedLocationProviderClient != null && locationCallback != null) {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
+}
     public void setFusedLocationProviderClient(FusedLocationProviderClient fusedLocationProviderClient) {
         this.fusedLocationProviderClient=fusedLocationProviderClient;
     }
