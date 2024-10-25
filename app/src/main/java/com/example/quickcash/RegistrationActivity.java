@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,6 +35,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -171,17 +173,17 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void startLocationUpdates() {
-        LocationRequest locationRequest = LocationRequest.create()
-                .setPriority(PRIORITY_HIGH_ACCURACY)
-                .setInterval(10000) // 10 seconds interval
-                .setFastestInterval(5000); // 5 seconds fastest interval
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000) // 10 seconds interval
+                .setMinUpdateIntervalMillis(5000) // 5 seconds fastest interval
+                .build();
 
-         locationCallback = new LocationCallback() {
+        locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult != null && !locationResult.getLocations().isEmpty()) {
-                    double latitude = locationResult.getLastLocation().getLatitude();
-                    double longitude = locationResult.getLastLocation().getLongitude();
+                    Location location= locationResult.getLastLocation();
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
                     displayLocationInfo(latitude, longitude);
                 }
             }
@@ -195,7 +197,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     void displayLocationInfo(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(this, Locale.CANADA);
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
@@ -236,52 +238,14 @@ public class RegistrationActivity extends AppCompatActivity {
         testLatitude = 0.0;
         testLongitude = 0.0;
     }
-//    private void detectAndDisplayLocation() {
-//        try {
-//            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
-//                if (location != null) {
-//                    double latitude = location.getLatitude();
-//                    double longitude = location.getLongitude();
-//
-//                    // Convert lat/long to a human-readable address
-//                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-//                    try {
-//                        // Get address from lat/long
-//                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-//                        if (addresses != null && !addresses.isEmpty()) {
-//                            Address address = addresses.get(0);
-//                            String addressName = address.getAddressLine(0);
-//
-//                            // Display latitude, longitude, and address
-//                            String locationInfo = "Location: "+addressName+ " Latitude: " + latitude +
-//                                    ", Longitude: " + longitude ;
-//                            Toast.makeText(RegistrationActivity.this, "Current Location: " + locationInfo, Toast.LENGTH_LONG).show();
-//                        } else {
-//                            Toast.makeText(RegistrationActivity.this, "Unable to find location name", Toast.LENGTH_SHORT).show();
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        Toast.makeText(RegistrationActivity.this, "Failed to get location name", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }).addOnFailureListener(e -> {
-//                Toast.makeText(RegistrationActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
-//            });
-//        } catch (SecurityException e) {
-//            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+
 @Override
 protected void onStop() {
     super.onStop();
-    // Stop location updates when the activity is not visible
     if (fusedLocationProviderClient != null && locationCallback != null) {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 }
-    public void setFusedLocationProviderClient(FusedLocationProviderClient fusedLocationProviderClient) {
-        this.fusedLocationProviderClient=fusedLocationProviderClient;
-    }
 
     void initializeDatabaseAccess() {
         database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
