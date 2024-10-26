@@ -44,4 +44,14 @@ public class MapUnitTest {
         assertFalse("Salary is always more than 0",0 < MapActivity.getSalary("John", "Data Scientist"));
         assertEquals("Salary for Data Scientist job by John is $30/hour", 30, MapActivity.getSalary("John", "Data Scientist"));
     }
+
+    @Test
+    public void testValidDuration(){
+        assertEquals("3 years is valid duration for contract",MapActivity.getDuration("John", "Data Scientist"), new String[]{"3","years"});
+    }
+
+    @Test
+    public void testInvalidDuration(){
+        assertFalse("Duration can't be less than 0", 0< Integer.parseInt(MapActivity.getDuration("John", "Data Scientist")[0]));
+    }
 }
