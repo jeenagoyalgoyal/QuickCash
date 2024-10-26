@@ -2,11 +2,7 @@ package com.example.quickcash.ui.repositories;
 
 import androidx.annotation.NonNull;
 import com.example.quickcash.ui.models.Job;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +16,27 @@ public class FirebaseCRUD {
     // Callback interface for job data
     public interface JobDataCallback {
         void onCallback(List<Job> jobList);
+    }
+
+    // Fetch all jobs method
+    public void getAllJobs(final JobDataCallback callback) {
+        database.getReference("Jobs")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<Job> jobList = new ArrayList<>();
+                        for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
+                            Job job = jobSnapshot.getValue(Job.class);
+                            if (job != null) jobList.add(job);
+                        }
+                        callback.onCallback(jobList);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle possible errors
+                    }
+                });
     }
 
     // Search jobs by jobTitle
