@@ -1,94 +1,85 @@
 package com.example.quickcash.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.quickcash.ui.models.Profile;
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.fragment.app.FragmentActivity;
 import com.example.quickcash.R;
-import com.example.quickcash.databinding.ActivityMainBinding;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.ui.repositories.FirebaseCRUD;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import java.util.List;
 
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
-public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private GoogleMap mMap;
+    private EditText searchQuery;
+    private Button btnSearch, btnShowMap;
+    private FirebaseCRUD firebaseCRUD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        searchQuery = findViewById(R.id.searchQuery);
+        btnSearch = findViewById(R.id.btnSearch);
+        btnShowMap = findViewById(R.id.btnShowMap);
 
-        setSupportActionBar(binding.toolbar);
+        // Initialize Firebase CRUD and Map
+        firebaseCRUD = new FirebaseCRUD();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // Button to search jobs and fetch data
+        btnSearch.setOnClickListener(v -> searchJobs(searchQuery.getText().toString()));
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        // Button to display job locations on map
+        btnShowMap.setOnClickListener(v -> displayJobsOnMap());
+    }
+
+    private void searchJobs(String query) {
+        firebaseCRUD.searchJobs(query, new FirebaseCRUD.JobDataCallback() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+            public void onCallback(List<Job> jobList) {
+                // Once jobs are fetched, show them on the map
+                displayJobsOnMap(jobList);
             }
         });
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        // Set default map view (example coordinates)
+        LatLng defaultLocation = new LatLng(37.7749, -122.4194); // San Francisco
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void displayJobsOnMap(List<Job> jobList) {
+        if (mMap != null) {
+            mMap.clear();  // Clear previous markers
 
-        //Switching Role
-        if(id == R.id.switch_role) {
-            int userid = 123;
-            Intent intent = new Intent(MainActivity.this, RoleActivity.class);
-            intent.putExtra("userID", userid);
-            startActivity(intent);
-            return true;
+            for (Job job : jobList) {
+                LatLng jobLocation = new LatLng(job.getLatitude(), job.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(jobLocation)
+                        .title(job.getJobTitle())
+                        .snippet("Salary: " + job.getSalary() + "\nDuration: " + job.getDuration()));
+            }
+
+            // Optionally move the camera to the first job's location
+            if (!jobList.isEmpty()) {
+                LatLng firstLocation = new LatLng(jobList.get(0).getLatitude(), jobList.get(0).getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLocation, 10));
+            }
         }
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        //Navigating to Profile Screen
-        if(id == R.id.action_profile) {
-            Intent intent = new Intent(MainActivity.this, Profile.class);
-            startActivity(intent);
-            finish();
-            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
     }
 }
