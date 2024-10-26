@@ -11,6 +11,9 @@
       <SelectionState runConfigName="checkJobSubmissionForm()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="checkCreateJobButtonPresent()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
