@@ -5,19 +5,13 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="JobSearchParameterActivity">
+      <SelectionState runConfigName="testNavigateJobSearch()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testSearchJobButtonVisibleOnEmployeeDashboard()">
+      <SelectionState runConfigName="testJobSearchVisible()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testNavigateToJobSearchPage()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="MainActivity">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="JobSearchParameterEspressoTest">
+      <SelectionState runConfigName="testFilterOptions()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

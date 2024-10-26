@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.Espresso;
@@ -57,6 +58,21 @@ public class JobSearchParameterEspressoTest {
 
         // Launch the Job Search page
         intended(hasComponent(JobSearchParameterActivity.class.getName()));
+    }
+
+    @Test
+    public void testFilterOptions() {
+        // On employee dashboard, click the Search Job button
+        Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).perform(ViewActions.click());
+
+        // Checks to see if text boxes are displayed in the job search page
+        Espresso.onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.companyName)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.salary)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.duration)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.location)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
     @After
