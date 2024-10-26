@@ -13,17 +13,7 @@
         android:theme="@style/Theme.QuickCash"
         tools:targetApi="31">
 
-        <!-- Existing Activities -->
-        <activity
-            android:name=".ui.activities.RegistrationActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.activities.MainActivity"></activity>
-        <activity android:name=".ui.models.Profile"></activity>
+        <!-- Launcher Activity -->
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="true"
@@ -34,28 +24,50 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activities.RoleActivity"
+        <!-- Registration Activity -->
+        <activity
+            android:name=".ui.activities.RegistrationActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
-        <!-- New Search Results Activity -->
+        <!-- Main Activity -->
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Role Selection Activity -->
+        <activity
+            android:name=".ui.activities.RoleActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Search Results Activity -->
         <activity
             android:name=".ui.activities.SearchResultsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
-        <!-- New Map Activity -->
+        <!-- Map Activity -->
         <activity
             android:name=".ui.activities.MapActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
+        <!-- Splash Activity (if applicable) -->
+        <!-- <activity
+            android:name=".ui.activities.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity> -->
+
+        <!-- Remove incorrect activity declaration for Profile model -->
+        <!-- If there is a ProfileActivity, include it here -->
     </application>
 
 </manifest>
