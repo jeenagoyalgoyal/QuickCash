@@ -215,7 +215,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     void getCurrentLocation() {
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000) // 10 seconds interval
-                .setMinUpdateIntervalMillis(5000) // 5 seconds fastest interval
+                .setMinUpdateIntervalMillis(5000)
+                .setWaitForAccurateLocation(true)// 5 seconds fastest interval
                 .build();
 
 

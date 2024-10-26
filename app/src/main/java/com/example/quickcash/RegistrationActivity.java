@@ -175,7 +175,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void startLocationUpdates() {
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000) // 10 seconds interval
-                .setMinUpdateIntervalMillis(5000) // 5 seconds fastest interval
+                .setMinUpdateIntervalMillis(5000)
+                .setWaitForAccurateLocation(true)
                 .build();
 
         locationCallback = new LocationCallback() {
@@ -196,6 +197,7 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     void displayLocationInfo(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(this, Locale.CANADA);

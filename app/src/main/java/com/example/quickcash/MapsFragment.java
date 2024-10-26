@@ -21,7 +21,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     GoogleMap map;
 
-    public static final double LATITUDE = 44.6488;  // Example for Halifax
+    public static final double LATITUDE = 44.6488;
     public static final double LONGITUDE = -63.5752;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
