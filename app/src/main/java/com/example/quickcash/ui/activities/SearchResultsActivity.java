@@ -13,6 +13,7 @@ import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.repositories.FirebaseCRUD;
 import com.example.quickcash.ui.repositories.FirebaseCRUD.JobDataCallback;
 import com.example.quickcash.ui.utils.JobAdapter;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;

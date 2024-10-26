@@ -8,4 +8,9 @@
 
     <!-- Google Maps API Key -->
     <string name="google_maps_api_key">AIzaSyANlFb9RL5lWkHzKSPg0xd5aDnhk0TquG4</string>
+
+    <!-- Missing Strings -->
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
 </resources>
