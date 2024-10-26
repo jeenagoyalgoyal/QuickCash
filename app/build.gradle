@@ -41,6 +41,7 @@ dependencies {
     implementation libs.navigation.ui
     implementation libs.firebase.database
     implementation libs.firebase.auth
+    implementation libs.play.services.maps
     testImplementation libs.junit
     testImplementation libs.espresso.core
     androidTestImplementation libs.ext.junit

@@ -16,7 +16,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import com.example.quickcash.R;
 import com.example.quickcash.ui.activities.LoginActivity;
-import com.example.quickcash.ui.activities.MainActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {

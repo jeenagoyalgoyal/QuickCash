@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="com.example.quickcash">
+
+    <!-- Required Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- If using location services, include these permissions -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
 
     <application
         android:allowBackup="true"
@@ -10,52 +16,54 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.QuickCash"
-        tools:targetApi="31">
+        android:theme="@style/Theme.QuickCash">
 
-        <!-- Existing Activities -->
-        <activity
-            android:name=".ui.activities.RegistrationActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.activities.MainActivity"></activity>
-        <activity android:name=".ui.models.Profile"></activity>
-        <activity
-            android:name=".ui.activities.LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key" />
 
-        <activity android:name=".ui.activities.RoleActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
-
-        <!-- New Search Results Activity -->
-        <activity
-            android:name=".ui.activities.SearchResultsActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <!-- New Map Activity -->
+        <!-- Map Activity as Launcher -->
         <activity
             android:name=".ui.activities.MapActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <!-- Login Activity -->
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Registration Activity -->
+        <activity
+            android:name=".ui.activities.RegistrationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Role Selection Activity -->
+        <activity
+            android:name=".ui.activities.RoleActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Search Results Activity -->
+        <activity
+            android:name=".ui.activities.SearchResultsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Splash Activity (if applicable) -->
+        <!-- <activity
+             android:name=".ui.activities.SplashActivity"
+             android:exported="true"
+             android:theme="@style/Theme.QuickCash" /> -->
+
     </application>
 
 </manifest>
