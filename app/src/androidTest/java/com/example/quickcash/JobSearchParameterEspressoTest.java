@@ -75,6 +75,16 @@ public class JobSearchParameterEspressoTest {
         Espresso.onView(ViewMatchers.withId(R.id.location)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
+    @Test
+    public void testFilterInteraction() {
+        // Test the filters by implementing data and seeing if it works
+        Espresso.onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Data Analyst")).check(ViewAssertions.matches(ViewMatchers.withText("Data Analyst")));
+        Espresso.onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Ubisoft")).check(ViewAssertions.matches(ViewMatchers.withText("Ubisoft")));
+        Espresso.onView(ViewMatchers.withId(R.id.salary)).perform(ViewActions.click(), ViewActions.typeText("75000")).check(ViewAssertions.matches(ViewMatchers.withText("75000")));
+        Espresso.onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("35")).check(ViewAssertions.matches(ViewMatchers.withText("35")));
+        Espresso.onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Halifax")).check(ViewAssertions.matches(ViewMatchers.withText("Halifax")));
+    }
+
     @After
     public void tearDown() {
         Intents.release();
