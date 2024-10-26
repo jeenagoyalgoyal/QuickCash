@@ -3,10 +3,9 @@
     package="com.example.quickcash">
 
     <!-- Required Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- If using location services, include these permissions -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
 
     <application
         android:allowBackup="true"
@@ -55,6 +54,12 @@
         <!-- Search Results Activity -->
         <activity
             android:name=".ui.activities.SearchResultsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Profile Activity -->
+        <activity
+            android:name=".ui.models.Profile"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 

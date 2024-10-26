@@ -77,6 +77,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     //Implement returning job titles based on name and pin selected
     public static String getJobTitle(String name) {
-        return "Data Scientist";
+        if ("John".equals(name)) {
+            return "Data Scientist";
+        } else {
+            return "Invalid";
+        }
     }
 }

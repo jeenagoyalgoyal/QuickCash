@@ -2,10 +2,12 @@ package com.example.quickcash.ui;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
@@ -48,97 +50,137 @@ public class RegistrationEspressoTest {
 
     @Test
     public void emptyNameTest() {
-        onView(ViewMatchers.withId(R.id.enterName)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText(EMPTY_MESSAGE)));
+        onView(withId(R.id.enterName))
+                .perform(typeText(EMPTY_STRING), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validName))
+                .check(matches(withText(EMPTY_MESSAGE)));
     }
 
     @Test
     public void emptyEmailTest() {
-        onView(withId(R.id.enterEmail)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validEmail)).check(matches(withText(EMPTY_MESSAGE)));
+        onView(withId(R.id.enterEmail))
+                .perform(typeText(EMPTY_STRING), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validEmail))
+                .check(matches(withText(EMPTY_MESSAGE)));
     }
 
     @Test
     public void emptyPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText(EMPTY_MESSAGE)));
+        onView(withId(R.id.enterPassword))
+                .perform(typeText(EMPTY_STRING), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword))
+                .check(matches(withText(EMPTY_MESSAGE)));
     }
 
     @Test
     public void emptyPassword2Test() {
-        onView(withId(R.id.enterPassword2)).perform(typeText(EMPTY_STRING));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword2)).check(matches(withText(EMPTY_MESSAGE)));
+        onView(withId(R.id.enterPassword2))
+                .perform(typeText(EMPTY_STRING), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword2))
+                .check(matches(withText(EMPTY_MESSAGE)));
     }
 
     @Test
     public void validNameTest() {
-        onView(withId(R.id.enterName)).perform(typeText(VALID_NAME));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText(VALID_MESSAGE)));
+        onView(withId(R.id.enterName))
+                .perform(typeText(VALID_NAME), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validName))
+                .check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
     public void validEmailTest() {
-        onView(withId(R.id.enterEmail)).perform(typeText(VALID_EMAIL));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validEmail)).check(matches(withText(VALID_MESSAGE)));
+        onView(withId(R.id.enterEmail))
+                .perform(typeText(VALID_EMAIL), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validEmail))
+                .check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
     public void validPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText(VALID_MESSAGE)));
+        onView(withId(R.id.enterPassword))
+                .perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.enterPassword2))
+                .perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword))
+                .check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
     public void validRoleTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText(VALID_MESSAGE)));
+        onView(withId(R.id.enterPassword))
+                .perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.enterPassword2))
+                .perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword))
+                .check(matches(withText(VALID_MESSAGE)));
     }
-
 
     @Test
     public void invalidNameTest() {
-        onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE_NAME)));
+        onView(withId(R.id.enterName))
+                .perform(typeText(INVALID_NAME), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validName))
+                .check(matches(withText(INVALID_MESSAGE_NAME)));
     }
 
     @Test
     public void invalidEmailTest() {
-        onView(withId(R.id.enterEmail)).perform(typeText(INVALID_EMAIL));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validEmail)).check(matches(withText(INVALID_MESSAGE_EMAIL)));
+        onView(withId(R.id.enterEmail))
+                .perform(typeText(INVALID_EMAIL), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validEmail))
+                .check(matches(withText(INVALID_MESSAGE_EMAIL)));
     }
 
     @Test
     public void invalidPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(INVALID_PASSWORD));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword)).check(matches(withText(INVALID_MESSAGE_PASSWORD)));
+        onView(withId(R.id.enterPassword))
+                .perform(typeText(INVALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword))
+                .check(matches(withText(INVALID_MESSAGE_PASSWORD)));
     }
 
     @Test
     public void invalidPassword2Test() {
-        onView(withId(R.id.enterPassword2)).perform(typeText(INVALID_PASSWORD));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword2)).check(matches(withText(INVALID_MESSAGE_PASSWORD)));
+        onView(withId(R.id.enterPassword2))
+                .perform(typeText(INVALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword2))
+                .check(matches(withText(INVALID_MESSAGE_PASSWORD)));
     }
 
     @Test
     public void unmatchedPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD+1));
-        onView(withId(R.id.buttonRegister)).perform(click());
-        onView(withId(R.id.validPassword2)).check(matches(withText(UNMATCH_MESSAGE)));
-
+        onView(withId(R.id.enterPassword))
+                .perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.enterPassword2))
+                .perform(typeText(VALID_PASSWORD + "1"), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+        onView(withId(R.id.validPassword2))
+                .check(matches(withText(UNMATCH_MESSAGE)));
     }
 }

@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import com.example.quickcash.R;
 import com.example.quickcash.ui.activities.LoginActivity;
+import com.example.quickcash.ui.activities.MapActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {
@@ -29,7 +30,7 @@ public class LoginEspressoTest {
         enterText(R.id.passwordBox, "validPassword123");
         clickButton(R.id.loginButton);
         // Assuming success message is not displayed, but user is redirected
-        checkActivityIsDisplayed(MainActivity.class);
+        checkActivityIsDisplayed(MapActivity.class);
     }
 
     @Test
