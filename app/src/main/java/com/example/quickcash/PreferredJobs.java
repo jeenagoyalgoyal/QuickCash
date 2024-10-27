@@ -20,4 +20,8 @@ public class PreferredJobs {
         // Remove job from the user's preferred jobs in the database
 
     }
+
+    public TempJob[] getJobs(String userID) {
+        return new TempJob[0];
+    }
 }
