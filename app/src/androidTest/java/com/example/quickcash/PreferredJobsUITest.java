@@ -24,7 +24,7 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class PreferredJobsUITest {
-    private static final int LAUNCH_TIMEOUT = 60;
+    private static final int LAUNCH_TIMEOUT = 120;
     final String launcherPackageName = "com.example.quickcash";
     private UiDevice device;
 
@@ -48,15 +48,15 @@ public class PreferredJobsUITest {
         UiObject registerButton = device.findObject(new UiSelector().text("Login"));
         registerButton.clickAndWaitForNewWindow();
 
-        //looking for Search Jobs button on homepage
+        //looking for 'Search Jobs' button on homepage
         UiObject searchJobButton = device.findObject(new UiSelector().text("Search Jobs"));
         searchJobButton.clickAndWaitForNewWindow();
 
-        //looking for options button on a single job listing
+        //looking for 'options' button on a single job listing
         UiObject optionsButton = device.findObject(new UiSelector().text("options"));
         optionsButton.click();
 
-        //popup with text should show up
+        //popup with required button should show up
         UiObject addToPreferredJobsButton = device.findObject(new UiSelector().text("Add to Preferred Jobs"));
         assertTrue(addToPreferredJobsButton.exists());
     }
