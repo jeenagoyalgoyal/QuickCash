@@ -1,28 +1,21 @@
 package com.example.quickcash;
 
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
+
 import static org.hamcrest.Matchers.equalTo;
 
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -65,7 +58,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.companyName)).check(matches(isDisplayed()));
         onView(withId(R.id.spinnerJobType)).check(matches(isDisplayed()));
         onView(withId(R.id.requirementText)).check(matches(isDisplayed()));
-        onView(withId(R.id.editTextNumber)).check(matches(isDisplayed()));
+        onView(withId(R.id.salaryText)).check(matches(isDisplayed()));
         onView(withId(R.id.spinnerUrgency)).check(matches(isDisplayed()));
         onView(withId(R.id.locationJob)).check(matches(isDisplayed()));
         onView(withId(R.id.expectedDuration)).check(matches(isDisplayed()));
