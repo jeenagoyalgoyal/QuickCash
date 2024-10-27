@@ -8,6 +8,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class RoleActivity extends AppCompatActivity {
 
     public TextView welcomeText;
@@ -24,8 +28,12 @@ public class RoleActivity extends AppCompatActivity {
     public Button performanceButton;
     public Button notificationsButton;
 
+    // Firebase
+    private FirebaseAuth mAuth;
+    private DatabaseReference userRef;
+
     @Override
-    protected void onCreate(Bundle savedInstance){
+    protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.role_switch);
 
@@ -36,7 +44,7 @@ public class RoleActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
         roleSwitch = findViewById(R.id.roleSwitch);
 
-        //Role specific buttons
+        // Role-specific buttons
         jobPosting = findViewById(R.id.jobPosting);
         profileButton = findViewById(R.id.profileButton);
         scheduleButton = findViewById(R.id.scheduleButton);
@@ -44,7 +52,8 @@ public class RoleActivity extends AppCompatActivity {
         performanceButton = findViewById(R.id.performanceButton);
         notificationsButton = findViewById(R.id.notificationsButton);
 
-        update();
+        // Fetch the current user role and update the UI
+        fetchAndSetUserRole();
 
         roleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,8 +81,24 @@ public class RoleActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
+
+    // New method to fetch the correct user role
+    private void fetchAndSetUserRole() {
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        useRole.fetchUserRole(email, new UseRole.OnRoleFetchedListener() {
+            @Override
+            public void onRoleFetched(String role) {
+                if (role != null) {
+                    useRole.setCurrentRole(id, role);
+                    update();
+                } else {
+                    welcomeText.setText("Error fetching role.");
+                }
+            }
+        });
+    }
+
 
     public void update(){
         String role = useRole.getCurrentRole();
@@ -119,3 +144,4 @@ public class RoleActivity extends AppCompatActivity {
         }
     }
 }
+
