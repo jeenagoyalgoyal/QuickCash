@@ -76,6 +76,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_7_API_35" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -259,6 +260,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_7_API_35" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -339,6 +341,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -365,6 +368,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

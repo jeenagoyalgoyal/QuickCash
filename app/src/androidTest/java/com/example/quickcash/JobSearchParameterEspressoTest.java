@@ -78,6 +78,10 @@ public class JobSearchParameterEspressoTest {
     @Test
     public void testFilterInteraction() {
         // Test the filters by implementing data and seeing if it works
+        Espresso.onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        Espresso.onView(ViewMatchers.withId(R.id.jobPosting)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Data Analyst")).check(ViewAssertions.matches(ViewMatchers.withText("Data Analyst")));
         Espresso.onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Ubisoft")).check(ViewAssertions.matches(ViewMatchers.withText("Ubisoft")));
         Espresso.onView(ViewMatchers.withId(R.id.salary)).perform(ViewActions.click(), ViewActions.typeText("75000")).check(ViewAssertions.matches(ViewMatchers.withText("75000")));

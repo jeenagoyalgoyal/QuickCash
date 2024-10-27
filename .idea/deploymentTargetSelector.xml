@@ -8,13 +8,13 @@
       <SelectionState runConfigName="testNavigateJobSearch()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testJobSearchVisible()">
+      <SelectionState runConfigName="testFilterInteraction()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="JobSearchParameterEspressoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="testFilterOptions()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testFilterInteraction()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
