@@ -36,12 +36,18 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Navigation dependencies
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
+
+    // Google Maps SDK dependency
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // Firebase dependencies
     implementation platform('com.google.firebase:firebase-bom:32.1.1')
-    implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
-    implementation 'androidx.navigation:navigation-ui:2.5.3'
-    implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'com.firebaseui:firebase-ui-database:8.0.0'
     implementation 'com.google.firebase:firebase-messaging:23.2.1'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
