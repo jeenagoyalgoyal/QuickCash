@@ -63,19 +63,34 @@
                 android:orientation="vertical"
                 android:padding="13dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Salary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Salary"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <EditText
-                android:id="@+id/salary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:hint="Enter Min Salary"
-                android:inputType="number"
-                android:width="150dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/minSalary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:hint="Min Salary"
+                    android:inputType="number"
+                    android:width="100dp"/>
+
+                <EditText
+                    android:id="@+id/maxSalary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:hint="Max Salary"
+                    android:inputType="number"
+                    android:width="100dp"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -114,6 +129,16 @@
             android:layout_height="wrap_content"
             tools:hint="Enter Preferred location"
             android:width="300dp"
+            android:layout_marginStart="13dp"/>
+
+        <TextView
+            android:id="@+id/jspErrorDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            tools:text="Location"
+            tools:textColor="r"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_marginStart="13dp"/>
 
         <Button

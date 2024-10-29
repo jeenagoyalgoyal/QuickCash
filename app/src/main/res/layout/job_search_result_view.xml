@@ -62,6 +62,14 @@
             android:textStyle="bold"
             tools:text="Duration: " />
 
+        <Button
+            android:id="@+id/showMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Show Map"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
 
     <View
