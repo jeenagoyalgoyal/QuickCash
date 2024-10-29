@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,8 +30,8 @@ public class RoleActivity extends AppCompatActivity {
     public Button notificationsButton;
 
     @Override
-    protected void onCreate(Bundle savedInstance){
-        super.onCreate(savedInstance);
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.role_switch);
 
         Intent intent = getIntent();
@@ -48,13 +49,40 @@ public class RoleActivity extends AppCompatActivity {
         performanceButton = findViewById(R.id.performanceButton);
         notificationsButton = findViewById(R.id.notificationsButton);
 
+        // Force employee role for testing
+        currentRole = "employee";
+        useRole = UseRole.getInstance();
+        useRole.setCurrentRole(id, "employee");
+
         update();
+
+        // Debug toast to show current role
+        Toast.makeText(this, "Current role: " + useRole.getCurrentRole(), Toast.LENGTH_SHORT).show();
 
         roleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 useRole.switchRole(id);
                 update();
+                // Debug toast after role switch
+                Toast.makeText(RoleActivity.this,
+                        "Switched to: " + useRole.getCurrentRole(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Add click listener for jobPosting button
+        jobPosting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Debug toast before starting SearchResultsActivity
+                Toast.makeText(RoleActivity.this,
+                        "Starting job search...",
+                        Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(RoleActivity.this, SearchResultsActivity.class);
+                intent.putExtra("search_query", ""); // Empty query to show all jobs
+                startActivity(intent);
             }
         });
 
@@ -66,7 +94,6 @@ public class RoleActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     public void update(){
