@@ -22,9 +22,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
 
-        <!-- Map Activity as Launcher -->
+        <!-- Login Activity as Launcher -->
         <activity
-            android:name=".ui.activities.MapActivity"
+            android:name=".ui.activities.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -33,9 +33,9 @@
             </intent-filter>
         </activity>
 
-        <!-- Login Activity -->
+        <!-- Map Activity -->
         <activity
-            android:name=".ui.activities.LoginActivity"
+            android:name=".ui.activities.MapActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 
@@ -62,12 +62,6 @@
             android:name=".ui.models.Profile"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
-
-        <!-- Splash Activity (if applicable) -->
-        <!-- <activity
-             android:name=".ui.activities.SplashActivity"
-             android:exported="true"
-             android:theme="@style/Theme.QuickCash" /> -->
 
     </application>
 
