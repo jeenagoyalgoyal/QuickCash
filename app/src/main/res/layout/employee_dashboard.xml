@@ -17,8 +17,8 @@
 
     <Button
         android:id="@+id/searchJobButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
         android:layout_marginTop="164dp"
         android:text="Search Job"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +27,8 @@
 
     <Button
         android:id="@+id/myProfileButton"
-        android:layout_width="119dp"
-        android:layout_height="52dp"
+        android:layout_width="295dp"
+        android:layout_height="47dp"
         android:layout_marginTop="248dp"
         android:text="My Profile"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,8 +37,8 @@
 
     <Button
         android:id="@+id/workScheduleButton"
-        android:layout_width="118dp"
-        android:layout_height="53dp"
+        android:layout_width="288dp"
+        android:layout_height="47dp"
         android:layout_marginTop="340dp"
         android:text="Work Schedule"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,8 +47,8 @@
 
     <Button
         android:id="@+id/tasksProjectsButton"
-        android:layout_width="118dp"
-        android:layout_height="55dp"
+        android:layout_width="297dp"
+        android:layout_height="49dp"
         android:layout_marginTop="428dp"
         android:text="Tasks and Projects"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,8 +57,8 @@
 
     <Button
         android:id="@+id/performanceReviewsButton"
-        android:layout_width="134dp"
-        android:layout_height="61dp"
+        android:layout_width="306dp"
+        android:layout_height="45dp"
         android:layout_marginTop="512dp"
         android:text="Performance Reviews"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +67,8 @@
 
     <Button
         android:id="@+id/employeeNotifications"
-        android:layout_width="141dp"
-        android:layout_height="60dp"
+        android:layout_width="286dp"
+        android:layout_height="45dp"
         android:layout_marginTop="600dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,8 +77,8 @@
 
     <Button
         android:id="@+id/switchToEmployerButton"
-        android:layout_width="150dp"
-        android:layout_height="56dp"
+        android:layout_width="294dp"
+        android:layout_height="44dp"
         android:layout_marginTop="676dp"
         android:text="Switch to Employer"
         app:layout_constraintEnd_toEndOf="parent"

@@ -32,7 +32,7 @@ public class JobSubmission extends AppCompatActivity {
     private Button submitButton;
 
     private DatabaseReference databaseReference = null;
-    private String employerId = null;
+    private String employerID = null;
 
 
     @Override
@@ -44,6 +44,9 @@ public class JobSubmission extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
 
         Intent intent = getIntent();
+
+        // Employer ID
+        employerID = intent.getStringExtra("employerID");
 
         formText = findViewById(R.id.jobSub);
         jobType = findViewById(R.id.spinnerJobType);
@@ -114,6 +117,7 @@ public class JobSubmission extends AppCompatActivity {
         String durationText = expectedDuration.getText().toString().trim();
         String startDateText = startDate.getText().toString().trim();
         // ID for database
+        String employerId = employerID;
         String jobId = databaseReference.push().getKey();
 
         Job job = new Job(jobTitleText, companyNameText, jobTypeText, requirementsText,

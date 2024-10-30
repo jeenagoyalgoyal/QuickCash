@@ -50,14 +50,6 @@ public class UseRole {
     }
 
 
-
-
-
-
-
-
-
-
     // Fetches the role of the user that is logging in
     public void fetchUserRole(String email, OnRoleFetchedListener listener) {
         String validName = emailToValidNodeName(email);

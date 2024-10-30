@@ -61,6 +61,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (useRole.getCurrentRole().equals("employer")) {
                     Intent intent = new Intent(EmployerHomepageActivity.this, JobSubmission.class);
+                    intent.putExtra("employerID", id);
                     startActivity(intent);
                 }
             }
