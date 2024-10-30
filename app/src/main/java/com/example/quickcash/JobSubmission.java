@@ -10,6 +10,9 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.util.ArrayList;
@@ -28,10 +31,17 @@ public class JobSubmission extends AppCompatActivity {
     private Button startDate;
     private Button submitButton;
 
+    private DatabaseReference databaseReference = null;
+    private String employerId = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.job_submission);
+
+        // Initialize Firebase database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
 
         Intent intent = getIntent();
 
@@ -83,5 +93,70 @@ public class JobSubmission extends AppCompatActivity {
             }
         });
 
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitJobPosting();
+            }
+        });
+
+    }
+
+    // Submitting the job to the firebase database
+    private void submitJobPosting() {
+        String jobTitleText = formText.getText().toString().trim();
+        String companyNameText = companyName.getText().toString().trim();
+        String jobTypeText = jobType.getSelectedItem().toString();
+        String requirementsText = requirements.getText().toString().trim();
+        int salaryValue = Integer.parseInt(salary.getText().toString().trim());
+        String urgencyText = jobUrgency.getSelectedItem().toString();
+        String locationText = location.getText().toString().trim();
+        String durationText = expectedDuration.getText().toString().trim();
+        String startDateText = startDate.getText().toString().trim();
+        // ID for database
+        String jobId = databaseReference.push().getKey();
+
+        Job job = new Job(jobTitleText, companyNameText, jobTypeText, requirementsText,
+                salaryValue, urgencyText, locationText, durationText, startDateText,
+                employerId, jobId);
+
+        if (jobId != null) {
+            databaseReference.child(jobId).setValue(job)
+                    .addOnCompleteListener(task -> {
+                        // Job is posted to database, gives user the message
+                        if (task.isSuccessful()) {
+                            Toast.makeText(JobSubmission.this, "Job posted successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                        // Else, failed to post
+                        else {
+                            Toast.makeText(JobSubmission.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    // Class for the jobs
+    public static class Job {
+        public String jobTitle, companyName, jobType, requirements, urgency, location, expectedDuration, startDate, employerId, jobId;
+        public int salary;
+
+        // Job function for database activity
+        public Job(String jobTitle, String companyName, String jobType, String requirements,
+                   int salary, String urgency, String location, String expectedDuration,
+                   String startDate, String employerId, String jobId) {
+            this.jobTitle = jobTitle;
+            this.companyName = companyName;
+            this.jobType = jobType;
+            this.requirements = requirements;
+            this.salary = salary;
+            this.urgency = urgency;
+            this.location = location;
+            this.expectedDuration = expectedDuration;
+            this.startDate = startDate;
+            this.employerId = employerId;
+            this.jobId = jobId;
+        }
     }
 }
+
+

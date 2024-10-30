@@ -24,12 +24,12 @@ import org.junit.runners.JUnit4;
 public class JobSubmissionUITest {
 
 
-    public ActivityScenario<RoleActivity> roleActivityActivityScenario;
+    public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
     public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
 
 
     public void setupRoleActivity() {
-        roleActivityActivityScenario = ActivityScenario.launch(RoleActivity.class);
+        employerActivityScenario = ActivityScenario.launch(EmployerHomepageActivity.class);
     }
 
     public void setupJobSubmissionActivityScenario(){
@@ -39,16 +39,15 @@ public class JobSubmissionUITest {
     @Test
     public void checkCreateJobButtonPresent(){
         setupRoleActivity();
-        onView(withText("Switch to employer")).perform(click());
         onView(withText("Create Job")).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkJobSubmissionForm(){
         setupRoleActivity();
-        onView(withText("Switch to employer")).perform(click());
-        onView(withText("Create Job")).perform(click());
-        onView(withText("Job Submission Form")).check(matches(isDisplayed()));
+        onView(withId(R.id.createJobButton)).perform(click());
+        setupJobSubmissionActivityScenario();
+        onView(withId(R.id.jobSub)).check(matches(isDisplayed()));
     }
 
     @Test

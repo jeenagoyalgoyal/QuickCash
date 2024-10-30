@@ -49,6 +49,15 @@ public class UseRole {
         updateDatabase(id, currentRole);
     }
 
+
+
+
+
+
+
+
+
+
     // Fetches the role of the user that is logging in
     public void fetchUserRole(String email, OnRoleFetchedListener listener) {
         String validName = emailToValidNodeName(email);
@@ -88,5 +97,9 @@ public class UseRole {
 
     public interface OnRoleFetchedListener {
         void onRoleFetched(String role);
+    }
+
+    public void setCurrentRole(String role) {
+        this.currentRole = role.toLowerCase(); // Ensure it's lowercase for consistency
     }
 }
