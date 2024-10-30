@@ -30,9 +30,21 @@ public class PreferredJobs {
 
 
     public void removeJob(TempJob job, String userID) {
-        // Remove job from the user's preferred jobs in the database
+        String jobID = job.getJobID(); // Assumes TempJob has a getJobID method
+        DatabaseReference userJobRef = databaseReference.child(userID).child(jobID);
 
+        // Remove the job from Firebase
+        userJobRef.removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    // Optional: handle successful removal (e.g., show success message)
+                    System.out.println("Job removed from preferred jobs.");
+                })
+                .addOnFailureListener(e -> {
+                    // Optional: handle failure (e.g., log error)
+                    System.err.println("Failed to remove job: " + e.getMessage());
+                });
     }
+
 
     public TempJob[] getJobs(String userID) {
         return new TempJob[0];
