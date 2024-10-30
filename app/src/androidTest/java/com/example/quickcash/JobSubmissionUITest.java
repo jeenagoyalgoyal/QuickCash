@@ -53,6 +53,7 @@ public class JobSubmissionUITest {
 
     @Test
     public void checkCreateJobButtonPresent() {
+
         setupRoleActivity();
         onView(withText("Create Job")).check(matches(isDisplayed()));
     }
