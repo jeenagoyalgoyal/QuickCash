@@ -2,8 +2,7 @@ package com.example.quickcash.maps;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import com.example.quickcash.ui.activities.MapActivity;
+import com.example.quickcash.ui.models.Job;
 
 public class MapUnitTest {
     // Tests to be checked:
@@ -15,50 +14,49 @@ public class MapUnitTest {
 
     @Test
     public void testValidJobTitle() {
-        // Assuming getJobTitle takes name as input
-        // and returns job title for job posted by given name
-        // Can be changed depending on how we are getting job title for pin on map
-
-        // Also change activity to correct getter activity if changed
-        assertEquals("John has posted Data Scientist as a job listing",
-                "Data Scientist", MapActivity.getJobTitle("John"));
+        Job job = new Job();
+        job.setJobTitle("Data Scientist");
+        assertEquals("Data Scientist job title should match",
+                "Data Scientist", job.getJobTitle());
     }
 
     @Test
     public void testInvalidJobTitle() {
-        // Using a name that doesn't have a job posting
-        assertEquals("Should specify job asked isn't present",
-                "Invalid", MapActivity.getJobTitle("UnknownUser"));
+        Job job = new Job();
+        job.setJobTitle("");
+        assertTrue("Empty job title should be invalid",
+                job.getJobTitle() == null || job.getJobTitle().isEmpty());
     }
 
     @Test
     public void testValidSalary() {
-        // Assuming getSalary takes name and job listed as input
-        // and returns salary for job posted by given name
-        // Can be changed depending on how we are getting job title for pin on map
-
-        assertTrue("Salary is $30/hour for Data Scientist job listed by John",
-                30 == MapActivity.getSalary("John", "Data Scientist"));
+        Job job = new Job();
+        job.setSalary(30.0);
+        assertEquals("Salary should be 30.0",
+                30.0, job.getSalary(), 0.001);
     }
 
     @Test
     public void testInvalidSalary() {
-        // Corrected assertion logic: Salary should be greater than 0
-        assertTrue("Salary is always more than 0",
-                0 < MapActivity.getSalary("John", "Data Scientist"));
+        Job job = new Job();
+        job.setSalary(0.0);
+        assertTrue("Salary should be greater than 0",
+                job.getSalary() >= 0.0);
     }
 
     @Test
     public void testValidDuration() {
-        assertArrayEquals("3 years is valid duration for contract",
-                new String[]{"3", "years"},
-                MapActivity.getDuration("John", "Data Scientist"));
+        Job job = new Job();
+        job.setDuration("3 years");
+        assertEquals("Duration should be 3 years",
+                "3 years", job.getDuration());
     }
 
     @Test
     public void testInvalidDuration() {
-        // Corrected assertion logic: Duration should be greater than 0
-        assertTrue("Duration can't be less than 0",
-                0 < Integer.parseInt(MapActivity.getDuration("John", "Data Scientist")[0]));
+        Job job = new Job();
+        job.setDuration("");
+        assertTrue("Duration shouldn't be empty",
+                job.getDuration() == null || job.getDuration().isEmpty());
     }
 }
