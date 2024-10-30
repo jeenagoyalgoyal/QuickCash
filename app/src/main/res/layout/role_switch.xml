@@ -15,15 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/performanceButton" />
 
-    <Button
-        android:id="@+id/jobPosting"
-        android:layout_width="404dp"
-        android:layout_height="49dp"
-        android:text="Job Posting"
-        app:layout_constraintBottom_toTopOf="@+id/profileButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
+
 
     <Button
         android:id="@+id/performanceButton"
@@ -53,6 +45,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scheduleButton" />
+
+    <Button
+        android:id="@+id/preferredJobButton"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="4dp"
+        android:text="Preferred Jobs"
+        app:layout_constraintTop_toBottomOf="@+id/jobPosting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <Button
+        android:id="@+id/jobPosting"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:text="Job Posting"
+        app:layout_constraintTop_toBottomOf="@+id/roleSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/roleSwitch"
@@ -86,6 +98,6 @@
         app:layout_constraintBottom_toTopOf="@+id/scheduleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/jobPosting" />
+        app:layout_constraintTop_toBottomOf="@+id/preferredJobButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -63,6 +63,16 @@ public class RoleActivity extends AppCompatActivity {
             }
         });
 
+        jobPosting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RoleActivity.this, JobsActivity.class);
+                startActivity(intent); // Navigate to JobsActivity
+            }
+        });
+
+
+
     }
 
     public void update(){
