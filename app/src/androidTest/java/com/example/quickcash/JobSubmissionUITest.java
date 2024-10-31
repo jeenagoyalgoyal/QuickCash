@@ -41,6 +41,7 @@ public class JobSubmissionUITest {
 
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
     public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
+    public ActivityScenario<LoginActivity> loginActivityActivityScenario;
 
 
     public void setupRoleActivity() {
@@ -49,6 +50,10 @@ public class JobSubmissionUITest {
 
     public void setupJobSubmissionActivityScenario() {
         jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmission.class);
+    }
+
+    public void setupLoginActivityActivityScenario(){
+        loginActivityActivityScenario = ActivityScenario.launch(LoginActivity.class);
     }
 
     @Test
@@ -203,7 +208,13 @@ public class JobSubmissionUITest {
 
     @Test
     public void testFormSubmitsSuccessfully() {
-        setupJobSubmissionActivityScenario();
+        setupLoginActivityActivityScenario();
+
+        onView(withId(R.id.emailBox)).perform(typeText( "valid@example.com"));
+        onView(withId(R.id.passwordBox)).perform(typeText("validPassword123"));
+        onView(withId(R.id.loginButton)).perform(click());
+
+        onView(withId(R.id.createJobButton)).perform(click());
 
         onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"));
         onView(withId(R.id.companyName)).perform(typeText("Tech Company"));
@@ -215,8 +226,11 @@ public class JobSubmissionUITest {
         onData(hasToString("High")).perform(click());
         onView(withId(R.id.locationJob)).perform(typeText("Halifax"));
         onView(withId(R.id.expectedDuration)).perform(typeText("20"));
+        onView(withId(R.id.startDate)).perform(click());
+        onView(withText("31")).perform(click());
+        onView(withText("OK")).perform(click());
 
-        onView(withId(R.id.jobSubmissionButton)).perform(swipeUp(), click());
+        onView(withId(R.id.jobSubmissionButton)).perform(click());
 
         onView(withText("Job Submission Successful!")).check(matches(isDisplayed()));
 

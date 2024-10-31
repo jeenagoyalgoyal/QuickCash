@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
@@ -34,7 +35,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class JobSearchParameterEspressoTest {
 
     @Rule
-    public ActivityScenarioRule<RoleActivity> activityRule = new ActivityScenarioRule<>(RoleActivity.class);
+    public ActivityScenarioRule<EmployeeHomepageActivity> activityRule = new ActivityScenarioRule<>(EmployeeHomepageActivity.class);
 
     @Before
     public void setup() {
@@ -45,20 +46,20 @@ public class JobSearchParameterEspressoTest {
     @Test
     public void testJobSearchVisible() {
         // This will launch the employee dashboard
-        ActivityScenario.launch(RoleActivity.class);
+        ActivityScenario.launch(EmployeeHomepageActivity.class);
 
         // Checks to see if Job Search button is there
-        onView(withId(R.id.jobPosting)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        onView(withId(R.id.searchJobButton)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
     }
 
     @Test
     public void testNavigateJobSearch() {
 
         // Employee dashboard with the Job Search button
-        onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
         // When Job search button is clicked
-        onView(withId(R.id.jobPosting)).perform(click());
+        onView(withId(R.id.searchJobButton)).perform(click());
 
         // Launch the Job Search page
         intended(hasComponent(JobSearchParameterActivity.class.getName()));
@@ -67,9 +68,9 @@ public class JobSearchParameterEspressoTest {
     @Test
     public void testFilterOptions() {
         // On employee dashboard, click the Search Job button
-        onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
 
         // Checks to see if text boxes are displayed in the job search page
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
@@ -83,9 +84,9 @@ public class JobSearchParameterEspressoTest {
     @Test
     public void testFilterInteraction() {
         // Test the filters by implementing data and seeing if it works
-        onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Data Analyst")).check(ViewAssertions.matches(ViewMatchers.withText("Data Analyst")));
         onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Ubisoft")).check(ViewAssertions.matches(ViewMatchers.withText("Ubisoft")));
