@@ -9,6 +9,11 @@ public class Job {
     private double latitude;
     private double longitude;
 
+    protected final double MIN_LATITUDE = -90.0;
+    protected final double MAX_LATITUDE = 90.0;
+    protected final double MIN_LONGITUDE = -180.0;
+    protected final double MAX_LONGITUDE = 180.0;
+
     // Empty constructor required for Firebase
     public Job() {}
 
@@ -23,9 +28,25 @@ public class Job {
     public void setDuration(String duration) { this.duration = duration; }
 
     public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
+    public void setLatitude(double latitude) {
+        if (latitude > MAX_LATITUDE) {
+            this.latitude = MAX_LATITUDE;
+        } else if (latitude < MIN_LATITUDE){
+            this.latitude = MIN_LATITUDE;
+        } else {
+            this.latitude = latitude;
+        }
+    }
 
     public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public void setLongitude(double longitude) {
+        if (longitude > MAX_LONGITUDE) {
+            this.longitude = MAX_LONGITUDE;
+        } else if (longitude < MIN_LONGITUDE){
+            this.longitude = MIN_LONGITUDE;
+        } else {
+            this.longitude = longitude;
+        }
+    }
 
 }

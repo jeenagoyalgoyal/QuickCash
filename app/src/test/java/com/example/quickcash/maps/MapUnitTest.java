@@ -71,8 +71,16 @@ public class MapUnitTest {
     @Test
     public void testInvalidLatitude() {
         Job job = new Job();
-        job.setLongitude(0);
-        assertTrue("Longitude should not be null",
-                job.getJobTitle() == null || job.getJobTitle().isEmpty());
+        job.setLatitude(-91.0);
+        assertTrue("Latitude should not be not Less than -90 or more than 90",
+                job.getLatitude()>= -90.0 || job.getLatitude() <= 90.0 );
+    }
+
+    @Test
+    public void testValidLongitude() {
+        Job job = new Job();
+        job.setLongitude(10.0);
+        assertEquals("Latitude should be 10.0",
+                10.0, job.getLongitude(), 0.0);
     }
 }
