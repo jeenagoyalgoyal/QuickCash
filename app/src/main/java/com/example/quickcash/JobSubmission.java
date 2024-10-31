@@ -218,6 +218,11 @@ public class JobSubmission extends AppCompatActivity {
 
                             // Reset the input fields when the job is posted
                             resetForm();
+
+                            // Send the user back to the homepage after submitting the job posting
+                            Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
+                            intentBackToEmployerPage.putExtra("employerID", employerID);
+                            startActivity(intentBackToEmployerPage);
                         }
                         
                         else {
