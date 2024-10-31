@@ -33,6 +33,7 @@
             </intent-filter>
         </activity>
 
+
         <!-- Map Activity -->
         <activity
             android:name=".ui.activities.MapActivity"
@@ -53,7 +54,7 @@
 
         <!-- Search Results Activity -->
         <activity
-            android:name=".ui.activities.SearchResultsActivity"
+            android:name=".ui.activities.SearchActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 

@@ -7,6 +7,9 @@
     android:layout_height="match_parent">
 
     <!-- Show Map Button -->
+
+    <!-- RecyclerView for job listings -->
+
     <Button
         android:id="@+id/showMapButton"
         android:layout_width="wrap_content"
@@ -14,10 +17,9 @@
         android:text="Show Map"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Location" />
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- RecyclerView for job listings -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -31,43 +33,69 @@
         android:id="@+id/ValidityChecker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/showMapButton"
-        tools:layout_editor_absoluteX="178dp" />
-
-    <TextView
-        android:id="@+id/JobTitle"
-        android:layout_width="135dp"
-        android:layout_height="64dp"
-        android:text="jobtitle"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="105dp" />
-
-    <TextView
-        android:id="@+id/Salary"
-        android:layout_width="129dp"
-        android:layout_height="63dp"
+        android:layout_marginStart="156dp"
         android:layout_marginTop="32dp"
-        android:text="Salary"
-        app:layout_constraintTop_toBottomOf="@+id/JobTitle"
-        tools:layout_editor_absoluteX="141dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showMapButton" />
 
-    <TextView
-        android:id="@+id/Duration"
-        android:layout_width="130dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="40dp"
-        android:text="Duration"
-        app:layout_constraintTop_toBottomOf="@+id/Salary"
-        tools:layout_editor_absoluteX="141dp" />
+    <EditText
+        android:id="@+id/JobTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="84dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="JobTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/Location"
+    <EditText
+        android:id="@+id/MinSalary"
         android:layout_width="133dp"
-        android:layout_height="45dp"
-        android:text="ManualLocation"
-        tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="388dp" />
+        android:layout_height="62dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="MinSalary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/JobTitle" />
+
+    <EditText
+        android:id="@+id/MaxSalary"
+        android:layout_width="144dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="MaxSalary"
+        app:layout_constraintStart_toEndOf="@+id/MinSalary"
+        app:layout_constraintTop_toBottomOf="@+id/JobTitle" />
+
+    <EditText
+        android:id="@+id/Duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Duration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MinSalary" />
+
+    <EditText
+        android:id="@+id/Location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="80dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Duration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

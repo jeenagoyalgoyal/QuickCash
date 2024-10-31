@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,19 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quickcash.R;
 import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.repositories.FirebaseCRUD;
-import com.example.quickcash.ui.repositories.FirebaseCRUD.JobDataCallback;
 import com.example.quickcash.ui.utils.JobAdapter;
+import com.example.quickcash.ui.utils.JobSearchValidator;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResultsActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
+
     private FirebaseCRUD firebaseCRUD;
     private RecyclerView recyclerView;
     private JobAdapter jobAdapter;
     private List<Job> jobList;
     private Button showMapButton;
+
+    private EditText jobTitle;
+    private EditText minSalary;
+    private EditText maxSalary;
+    private EditText duration;
+    private EditText location;
+    private EditText errorText;
+    private Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +57,40 @@ public class SearchResultsActivity extends AppCompatActivity {
         showMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMapWithJobs();
+
+                boolean flag = false;
+
+                jobTitle = findViewById(R.id.JobTitle);
+                    String jobTitleString = jobTitle.getText().toString().trim();
+                minSalary = findViewById(R.id.MinSalary);
+                    String minSalaryString = minSalary.getText().toString().trim();
+                maxSalary = (findViewById(R.id.MaxSalary));
+                    String maxSalaryString = maxSalary.getText().toString().trim();
+                duration = findViewById(R.id.Duration);
+                    String durationString = duration.getText().toString().trim();
+                location = findViewById(R.id.Location);
+                    String locationString = location.getText().toString().trim();
+                searchButton = findViewById(R.id.showMapButton);
+
+                if(JobSearchValidator.isValidSalaryString(minSalaryString, maxSalaryString)){
+                    Toast.makeText(SearchActivity.this,"!", Toast.LENGTH_LONG).show();
+                    flag = true;
+                } else if(JobSearchValidator.isValidJobTitle(jobTitleString)){
+                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+                    flag = true;
+                } else if (JobSearchValidator.isValidDuration(durationString)) {
+                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+                    flag = true;
+                } else if(JobSearchValidator.isValidLocation(locationString)){
+                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+                    flag = true;
+                }
+                if(flag){
+                    showMapWithJobs();
+                } else{
+                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -60,7 +103,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void performJobSearch(String query) {
-        firebaseCRUD.searchJobs(query, new JobDataCallback() {
+        firebaseCRUD.searchJobs(query, new FirebaseCRUD.JobDataCallback() {
             @Override
             public void onCallback(List<Job> jobs) {
                 jobList.clear();

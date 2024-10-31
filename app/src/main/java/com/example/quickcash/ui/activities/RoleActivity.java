@@ -80,7 +80,7 @@ public class RoleActivity extends AppCompatActivity {
                         "Starting job search...",
                         Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(RoleActivity.this, SearchResultsActivity.class);
+                Intent intent = new Intent(RoleActivity.this, SearchActivity.class);
                 intent.putExtra("search_query", ""); // Empty query to show all jobs
                 startActivity(intent);
             }

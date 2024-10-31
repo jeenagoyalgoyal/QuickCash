@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.activities.SearchResultsActivity;
+import com.example.quickcash.ui.activities.SearchActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,8 +17,8 @@ import org.junit.runner.RunWith;
 public class SearchResultsActivityTest {
 
     @Rule
-    public ActivityScenarioRule<SearchResultsActivity> activityRule =
-            new ActivityScenarioRule<>(SearchResultsActivity.class);
+    public ActivityScenarioRule<SearchActivity> activityRule =
+            new ActivityScenarioRule<>(SearchActivity.class);
 
     @Test
     public void testShowMapButtonIsVisible() {

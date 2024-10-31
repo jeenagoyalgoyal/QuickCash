@@ -42,5 +42,4 @@ public class JobSearchValidator {
     public static boolean allEmptyFields(){
         return false;
     }
-
 }
