@@ -131,6 +131,11 @@ public class JobSearchParameterActivity extends AppCompatActivity{
                         jobList.add(job);
                     }
                 }
+                if (jobList.isEmpty()) {
+                    errorText.setText("No Results Found");
+                } else {
+                    errorText.setText(""); // Clear any previous error
+                }
                 jobSearchAdapter.notifyDataSetChanged();
             }
 
