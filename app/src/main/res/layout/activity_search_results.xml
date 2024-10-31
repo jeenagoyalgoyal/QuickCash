@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/showMapButton" />
 
     <EditText
-        android:id="@+id/JobTitle"
+        android:id="@+id/jobTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -60,7 +60,7 @@
         android:inputType="text"
         android:text="MinSalary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/JobTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTitleText" />
 
     <EditText
         android:id="@+id/MaxSalary"
@@ -72,10 +72,10 @@
         android:inputType="text"
         android:text="MaxSalary"
         app:layout_constraintStart_toEndOf="@+id/MinSalary"
-        app:layout_constraintTop_toBottomOf="@+id/JobTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTitleText" />
 
     <EditText
-        android:id="@+id/Duration"
+        android:id="@+id/companyNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -96,6 +96,6 @@
         android:inputType="text"
         android:text="Location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Duration" />
+        app:layout_constraintTop_toBottomOf="@+id/companyNameText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,35 +60,36 @@ public class SearchActivity extends AppCompatActivity {
 
                 boolean flag = false;
 
-                jobTitle = findViewById(R.id.JobTitle);
+                jobTitle = findViewById(R.id.jobTitleText);
                     String jobTitleString = jobTitle.getText().toString().trim();
                 minSalary = findViewById(R.id.MinSalary);
                     String minSalaryString = minSalary.getText().toString().trim();
                 maxSalary = (findViewById(R.id.MaxSalary));
                     String maxSalaryString = maxSalary.getText().toString().trim();
-                duration = findViewById(R.id.Duration);
+                duration = findViewById(R.id.companyNameText);
                     String durationString = duration.getText().toString().trim();
                 location = findViewById(R.id.Location);
                     String locationString = location.getText().toString().trim();
                 searchButton = findViewById(R.id.showMapButton);
 
                 if(JobSearchValidator.isValidSalaryString(minSalaryString, maxSalaryString)){
-                    Toast.makeText(SearchActivity.this,"!", Toast.LENGTH_LONG).show();
+
                     flag = true;
                 } else if(JobSearchValidator.isValidJobTitle(jobTitleString)){
-                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+
                     flag = true;
                 } else if (JobSearchValidator.isValidDuration(durationString)) {
-                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+
                     flag = true;
                 } else if(JobSearchValidator.isValidLocation(locationString)){
-                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+
                     flag = true;
                 }
+
                 if(flag){
                     showMapWithJobs();
                 } else{
-                    Toast.makeText(SearchActivity.this, "!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchActivity.this, "All fields can't be empty!", Toast.LENGTH_LONG).show();
                 }
 
             }

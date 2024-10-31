@@ -1,17 +1,27 @@
 package com.example.quickcash.ui.activities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
 import com.example.quickcash.R;
+import com.example.quickcash.ui.models.Job;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +41,7 @@ import java.util.Map;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private Job job;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private ArrayList<String> latitudes;
@@ -38,6 +49,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<String> titles;
     private ArrayList<String> salaries;
     private ArrayList<String> durations;
+    private ArrayList<String> companies;
     private Map<String, Integer> markerToJobIndex;
     private Button backButton;
     private boolean useDummyData = true; // Flag to use dummy data for testing
@@ -63,6 +75,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 titles = intent.getStringArrayListExtra("titles");
                 salaries = intent.getStringArrayListExtra("salaries");
                 durations = intent.getStringArrayListExtra("durations");
+                companies = intent.getStringArrayListExtra("companies");
             }
         }
 
@@ -172,9 +185,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 // Create marker with job details
                 MarkerOptions markerOptions = new MarkerOptions()
                         .position(position)
-                        .title(titles.get(i))
-                        .snippet(String.format("Salary: $%.2f\nDuration: %s",
-                                salary, durations.get(i)));
+                        .title(titles.get(i));
 
                 // Add marker to map and store its reference
                 Marker marker = mMap.addMarker(markerOptions);
@@ -211,14 +222,45 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(MapActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
         // Get the index of the job from the marker
         Integer jobIndex = markerToJobIndex.get(marker.getId());
         if (jobIndex != null) {
             // Show job details
-            marker.showInfoWindow();
+            showJobDetailsDialog(jobIndex);
             return true;
         }
         return false;
+    }
+
+    private void showJobDetailsDialog(int jobIndex) {
+
+        final Dialog dialog = new Dialog(this);
+
+        dialog.setContentView(R.layout.dialog_job_details);
+
+        TextView titleText = dialog.findViewById(R.id.jobTitleText);
+        TextView companyText = dialog.findViewById(R.id.companyNameText);
+        TextView salaryText = dialog.findViewById(R.id.salaryText);
+        TextView durationText = dialog.findViewById(R.id.durationText);
+        ImageButton closeButton = dialog.findViewById(R.id.closeButton);
+
+        titleText.setText(titles.get(jobIndex));
+        //companyText.setText(companies.get(jobIndex));
+        salaryText.setText(String.format("$%,d/year", Integer.parseInt(salaries.get(jobIndex))));
+        durationText.setText(durations.get(jobIndex));
+
+        closeButton.setOnClickListener(v -> dialog.dismiss());    // Set dialog width to match parent with margins
+
+        /*
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setGravity(Gravity.CENTER);
+        }
+
+         */
+        dialog.show();
     }
 
     private void enableMyLocation() {
