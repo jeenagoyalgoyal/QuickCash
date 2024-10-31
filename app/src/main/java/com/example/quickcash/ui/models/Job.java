@@ -1,5 +1,7 @@
 package com.example.quickcash.ui.models;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Job {
     private String jobTitle;
     private double salary;
@@ -25,4 +27,5 @@ public class Job {
 
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
+
 }

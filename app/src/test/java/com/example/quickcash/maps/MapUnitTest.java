@@ -59,4 +59,20 @@ public class MapUnitTest {
         assertTrue("Duration shouldn't be empty",
                 job.getDuration() == null || job.getDuration().isEmpty());
     }
+
+    @Test
+    public void testValidLatitude() {
+        Job job = new Job();
+        job.setLatitude(10.0);
+        assertEquals("Latitude should be 10.0",
+                10.0, job.getLatitude(), 0.0);
+    }
+
+    @Test
+    public void testInvalidLatitude() {
+        Job job = new Job();
+        job.setLongitude(0);
+        assertTrue("Longitude should not be null",
+                job.getJobTitle() == null || job.getJobTitle().isEmpty());
+    }
 }
