@@ -25,7 +25,7 @@ public class RoleActivity extends AppCompatActivity {
     public Button notificationsButton;
 
     @Override
-    protected void onCreate(Bundle savedInstance){
+    protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.role_switch);
 
@@ -36,7 +36,7 @@ public class RoleActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
         roleSwitch = findViewById(R.id.roleSwitch);
 
-        //Role specific buttons
+        // Role specific buttons
         jobPosting = findViewById(R.id.jobPosting);
         profileButton = findViewById(R.id.profileButton);
         scheduleButton = findViewById(R.id.scheduleButton);
@@ -71,9 +71,15 @@ public class RoleActivity extends AppCompatActivity {
             }
         });
 
-
-
+        Button viewPreferredJobsButton = findViewById(R.id.preferredJobButton);
+        if (viewPreferredJobsButton != null) {
+            viewPreferredJobsButton.setOnClickListener(v -> {
+                Intent intent_back = new Intent(RoleActivity.this, PreferredJobsActivity.class);
+                startActivity(intent_back);
+            });
+        }
     }
+
 
     public void update(){
         String role = useRole.getCurrentRole();
