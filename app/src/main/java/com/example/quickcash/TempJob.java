@@ -38,7 +38,6 @@ public class TempJob {
     }
 
 
-    // Inner Job class to represent a job
     public static class Job {
         private int jobId;
         private String employerName;
@@ -68,4 +67,5 @@ public class TempJob {
             return "Job ID: " + jobId + ", Employer: " + employerName + ", Title: " + jobTitle;
         }
     }
+
 }
