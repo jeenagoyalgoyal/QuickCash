@@ -33,6 +33,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Search Activity -->
+        <activity
+            android:name=".ui.activities.SearchActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
 
         <!-- Map Activity -->
         <activity
@@ -49,12 +54,6 @@
         <!-- Role Selection Activity -->
         <activity
             android:name=".ui.activities.RoleActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
-        <!-- Search Results Activity -->
-        <activity
-            android:name=".ui.activities.SearchActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 
