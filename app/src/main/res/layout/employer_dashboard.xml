@@ -29,7 +29,7 @@
         android:id="@+id/employeeDirectoryButton"
         android:layout_width="285dp"
         android:layout_height="53dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="236dp"
         android:text="Employee Directory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,9 +39,10 @@
         android:id="@+id/analyticsReportButton"
         android:layout_width="288dp"
         android:layout_height="51dp"
-        android:layout_marginTop="352dp"
+        android:layout_marginTop="324dp"
         android:text="Analytics and Reports"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,9 +50,10 @@
         android:id="@+id/tasksAssignmentsButton"
         android:layout_width="291dp"
         android:layout_height="55dp"
-        android:layout_marginTop="436dp"
+        android:layout_marginTop="404dp"
         android:text="Tasks and Assignments"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.525"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,7 +61,7 @@
         android:id="@+id/scheduleMeetingsButton"
         android:layout_width="279dp"
         android:layout_height="44dp"
-        android:layout_marginTop="532dp"
+        android:layout_marginTop="480dp"
         android:text="Schedule and Meetings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,9 +71,10 @@
         android:id="@+id/employerNotificationsButton"
         android:layout_width="288dp"
         android:layout_height="45dp"
-        android:layout_marginTop="604dp"
+        android:layout_marginTop="544dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,10 +82,10 @@
         android:id="@+id/switchToEmployeeButton"
         android:layout_width="290dp"
         android:layout_height="46dp"
-        android:layout_marginTop="676dp"
+        android:layout_marginTop="616dp"
         android:text="Switch to Employee"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.459"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

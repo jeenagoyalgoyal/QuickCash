@@ -19,9 +19,10 @@
         android:id="@+id/searchJobButton"
         android:layout_width="304dp"
         android:layout_height="46dp"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="152dp"
         android:text="Search Job"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +30,7 @@
         android:id="@+id/myProfileButton"
         android:layout_width="295dp"
         android:layout_height="47dp"
-        android:layout_marginTop="248dp"
+        android:layout_marginTop="220dp"
         android:text="My Profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,9 +40,10 @@
         android:id="@+id/workScheduleButton"
         android:layout_width="288dp"
         android:layout_height="47dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="300dp"
         android:text="Work Schedule"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,9 +51,10 @@
         android:id="@+id/tasksProjectsButton"
         android:layout_width="297dp"
         android:layout_height="49dp"
-        android:layout_marginTop="428dp"
+        android:layout_marginTop="376dp"
         android:text="Tasks and Projects"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,9 +62,10 @@
         android:id="@+id/performanceReviewsButton"
         android:layout_width="306dp"
         android:layout_height="45dp"
-        android:layout_marginTop="512dp"
+        android:layout_marginTop="456dp"
         android:text="Performance Reviews"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,9 +73,10 @@
         android:id="@+id/employeeNotifications"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="600dp"
+        android:layout_marginTop="532dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,9 +84,10 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="676dp"
+        android:layout_marginTop="608dp"
         android:text="Switch to Employer"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

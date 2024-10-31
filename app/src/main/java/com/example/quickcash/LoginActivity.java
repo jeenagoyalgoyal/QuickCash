@@ -173,12 +173,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void navigateToEmployeeHomepage() {
-        Intent intent = new Intent(this, EmployeeHomepageActivity.class);
-        startActivity(intent);
+        Intent intentEmployer = new Intent(this, EmployeeHomepageActivity.class);
+        startActivity(intentEmployer);
     }
 
     private void navigateToEmployerHomepage() {
-        Intent intent = new Intent(this, EmployerHomepageActivity.class);
-        startActivity(intent);
+        Intent intentEmployee = new Intent(this, EmployerHomepageActivity.class);
+        startActivity(intentEmployee);
     }
 }

@@ -20,7 +20,11 @@ import java.util.List;
 
 public class JobSubmission extends AppCompatActivity {
 
+    // Job Submission Form title
     private TextView formText;
+
+    // Inputs for the employer
+    private EditText jobTitle;
     private Spinner jobType;
     private Spinner jobUrgency;
     private EditText companyName;
@@ -29,6 +33,8 @@ public class JobSubmission extends AppCompatActivity {
     private EditText location;
     private EditText expectedDuration;
     private Button startDate;
+
+    // Button to submit
     private Button submitButton;
 
     private DatabaseReference databaseReference = null;
@@ -43,29 +49,38 @@ public class JobSubmission extends AppCompatActivity {
         // Initialize Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
 
-        Intent intent = getIntent();
+        Intent intentJobSub = getIntent();
 
         // Employer ID
-        employerID = intent.getStringExtra("employerID");
+        employerID = intentJobSub.getStringExtra("employerID");
 
+
+        // Form title
         formText = findViewById(R.id.jobSub);
-        jobType = findViewById(R.id.spinnerJobType);
-        jobUrgency = findViewById(R.id.spinnerUrgency);
+
+        // The inputs from employer
+        jobTitle = findViewById(R.id.jobTitle);
         companyName = findViewById(R.id.companyName);
+        jobType = findViewById(R.id.spinnerJobType);
         requirements = findViewById(R.id.requirementText);
         salary = findViewById(R.id.salaryText);
+        jobUrgency = findViewById(R.id.spinnerUrgency);
         location = findViewById(R.id.locationJob);
         expectedDuration = findViewById(R.id.expectedDuration);
         startDate = findViewById(R.id.startDate);
+
+        // Button to submit the job posting
         submitButton = findViewById(R.id.jobSubmissionButton);
 
 
+        // Array list for the job type
         List<String> typeList = new ArrayList<>();
         typeList.add(0, "Select job type");
         typeList.add("Full-time");
         typeList.add("Part-time");
         typeList.add("Internship");
 
+        // Array list for the urgency
         List <String> urgencyList = new ArrayList<>();
         urgencyList.add(0,"Select urgency");
         urgencyList.add("High");
@@ -96,6 +111,7 @@ public class JobSubmission extends AppCompatActivity {
             }
         });
 
+        // When button for submission is clicked, we submit the job to database
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,16 +123,86 @@ public class JobSubmission extends AppCompatActivity {
 
     // Submitting the job to the firebase database
     private void submitJobPosting() {
-        String jobTitleText = formText.getText().toString().trim();
+        // Get text from form inputs
+        String jobTitleText = jobTitle.getText().toString().trim();
         String companyNameText = companyName.getText().toString().trim();
         String jobTypeText = jobType.getSelectedItem().toString();
         String requirementsText = requirements.getText().toString().trim();
-        int salaryValue = Integer.parseInt(salary.getText().toString().trim());
+        String salaryText = salary.getText().toString().trim();
         String urgencyText = jobUrgency.getSelectedItem().toString();
         String locationText = location.getText().toString().trim();
         String durationText = expectedDuration.getText().toString().trim();
         String startDateText = startDate.getText().toString().trim();
-        // ID for database
+
+        // Job Title
+        if (jobTitleText.isEmpty()) {
+            jobTitle.setError("Job Title is required.");
+            jobTitle.requestFocus();
+            return;
+        }
+
+        // Company Name
+        if (companyNameText.isEmpty()) {
+            companyName.setError("Company Name is required.");
+            companyName.requestFocus();
+            return;
+        }
+
+        // Job Type
+        if (jobTypeText.equals("Select job type")) {
+            Toast.makeText(this, "Please select a Job Type.", Toast.LENGTH_SHORT).show();
+            jobType.requestFocus();
+            return;
+        }
+
+        // Salary - Check if empty and validate as a positive integer
+        if (salaryText.isEmpty()) {
+            salary.setError("Salary is required.");
+            salary.requestFocus();
+            return;
+        }
+        int salaryValue;
+        try {
+            salaryValue = Integer.parseInt(salaryText);
+            if (salaryValue <= 0) {
+                salary.setError("Salary must be a positive number.");
+                salary.requestFocus();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            salary.setError("Please enter a valid integer for Salary.");
+            salary.requestFocus();
+            return;
+        }
+
+        // Urgency
+        if (urgencyText.equals("Select urgency")) {
+            Toast.makeText(this, "Please select Urgency.", Toast.LENGTH_SHORT).show();
+            jobUrgency.requestFocus();
+            return;
+        }
+
+        // Location
+        if (locationText.isEmpty()) {
+            location.setError("Location is required.");
+            location.requestFocus();
+            return;
+        }
+
+        // Expected Duration
+        if (durationText.isEmpty()) {
+            expectedDuration.setError("Expected Duration is required.");
+            expectedDuration.requestFocus();
+            return;
+        }
+
+        if (startDateText.isEmpty() || startDateText.equals("Start Date")) {
+            Toast.makeText(this, "Please select a Start Date.", Toast.LENGTH_SHORT).show();
+            startDate.requestFocus();
+            return;
+        }
+
+        // If all fields are valid, proceed to create the Job object and submit to Firebase
         String employerId = employerID;
         String jobId = databaseReference.push().getKey();
 
@@ -127,12 +213,9 @@ public class JobSubmission extends AppCompatActivity {
         if (jobId != null) {
             databaseReference.child(jobId).setValue(job)
                     .addOnCompleteListener(task -> {
-                        // Job is posted to database, gives user the message
                         if (task.isSuccessful()) {
-                            Toast.makeText(JobSubmission.this, "Job posted successfully!", Toast.LENGTH_SHORT).show();
-                        }
-                        // Else, failed to post
-                        else {
+                            Toast.makeText(JobSubmission.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
+                        } else {
                             Toast.makeText(JobSubmission.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
                         }
                     });

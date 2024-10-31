@@ -29,8 +29,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.employee_dashboard);
 
-        Intent intent = getIntent();
-        id = intent.getIntExtra("userID", -1);
+        Intent intentEmployeeDash = getIntent();
+        id = intentEmployeeDash.getIntExtra("userID", -1);
 
         useRole = UseRole.getInstance();
 
@@ -50,16 +50,16 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 useRole.switchRole(id);
-                Intent intent = new Intent(EmployeeHomepageActivity.this, EmployerHomepageActivity.class);
-                startActivity(intent);
+                Intent intentSwitchToEmployer = new Intent(EmployeeHomepageActivity.this, EmployerHomepageActivity.class);
+                startActivity(intentSwitchToEmployer);
             }
         });
 
         myProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EmployeeHomepageActivity.this, Profile.class);
-                startActivity(intent);
+                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, Profile.class);
+                startActivity(intentProfile);
                 finish();
             }
         });
