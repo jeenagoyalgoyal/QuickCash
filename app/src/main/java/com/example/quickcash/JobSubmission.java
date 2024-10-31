@@ -40,7 +40,7 @@ public class JobSubmission extends AppCompatActivity {
     private DatabaseReference databaseReference = null;
 
 
-    private String employerID = null;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -52,7 +52,7 @@ public class JobSubmission extends AppCompatActivity {
 
         // Send the email for storing as employerID
         Intent intentJobSub = getIntent();
-        employerID = intentJobSub.getStringExtra("email");
+        email = intentJobSub.getStringExtra("email");
 
         // Form title
         formText = findViewById(R.id.jobSub);
@@ -202,7 +202,7 @@ public class JobSubmission extends AppCompatActivity {
         }
 
         // EmployerID is the user email
-        String employerId = employerID;
+        String employerId = email.replace(".", ",");
 
         String jobId = databaseReference.push().getKey();
 
@@ -221,7 +221,7 @@ public class JobSubmission extends AppCompatActivity {
 
                             // Send the user back to the homepage after submitting the job posting
                             Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
-                            intentBackToEmployerPage.putExtra("employerID", employerID);
+                            intentBackToEmployerPage.putExtra("employerID", employerId);
                             startActivity(intentBackToEmployerPage);
                         }
                         

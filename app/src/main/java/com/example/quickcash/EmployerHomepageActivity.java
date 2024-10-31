@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -64,6 +65,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                 if (useRole.getCurrentRole().equals("employer")) {
                     Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmission.class);
                     intentJobSub.putExtra("employerID", email);
+                    Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
                 }
             }
