@@ -47,7 +47,6 @@ before_script:
   - unzip -d cmdline-tools cmdline-tools.zip
   - popd
   - export PATH=$PATH:${ANDROID_HOME}/cmdline-tools/tools/bin/
-  - echo "sdk.dir=${ANDROID_HOME}" > local.properties
 
   # Nothing fancy here, just checking sdkManager version
   - sdkmanager --version

@@ -1,13 +1,7 @@
 package com.example.quickcash;
 
-import static androidx.core.content.ContextCompat.startActivity;
-import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQUEST_CODE;
-
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,19 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.Manifest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.example.quickcash.ui.MapsActivity;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -47,14 +31,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText emailBox, passwordBox;
     private TextView statusLabel;
     private DatabaseReference databaseReference;
-
-    private LocationCallback locationCallback;
-    private FusedLocationProviderClient fusedLocationClient;
-    private double latitude;
-    private double longitude;
-    private boolean manualLocationDetect = false;
-    private EditText location;
-    private Button LocButton;
 
 
     // Regex patterns for email and password validation
@@ -87,30 +63,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
             }
         });
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        location= findViewById(R.id.Location);
-        LocButton=findViewById(R.id.LocButton);
-        LocButton.setOnClickListener(e -> handleManualLocationInput());
-        requestLocationPermission();
-
-    }
-
-    private void handleManualLocationInput() {
-        String manualLocation = location.getText().toString().trim();
-
-        if (manualLocation.isEmpty()) {
-            Toast.makeText(this, "Location field cannot be empty", Toast.LENGTH_SHORT).show();
-        } else {
-            manualLocationDetect = true;
-            Toast.makeText(this, "Manual Location set to: " + manualLocation, Toast.LENGTH_SHORT).show();
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-                intent.putExtra("manualLocation", manualLocation);
-                startActivity(intent);
-                moveToNextWithDelay(null);
-            }, 3000);
-        }
     }
 
     private void initializeDatabaseAccess() {
@@ -179,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
-                        getCurrentLocation();
+                        moveToWelcomePage();
                     } else {
                         handleLoginError(task.getException());
                     }
@@ -195,69 +147,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             statusLabel.setText("Login failed. Please try again.");
         }
     }
-    void requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        }
+
+    private void moveToWelcomePage() {
+        // Intent to move to the welcome page
+        Intent intent = new Intent(this, RoleActivity.class);
+        startActivity(intent);
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    void getCurrentLocation() {
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000) // 10 seconds interval
-                .setMinUpdateIntervalMillis(5000)
-                .setWaitForAccurateLocation(true)// 5 seconds fastest interval
-                .build();
-
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                if (locationResult != null && !locationResult.getLocations().isEmpty()) {
-                    latitude = locationResult.getLastLocation().getLatitude();
-                    longitude = locationResult.getLastLocation().getLongitude();
-
-                    fusedLocationClient.removeLocationUpdates(locationCallback);
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-                        intent.putExtra("latitude", latitude);
-                        intent.putExtra("longitude", longitude);
-                        startActivity(intent);
-                        moveToNextWithDelay(null);
-                    }, 3000);
-
-                }
-            }
-        };
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
-        }
-    }
-
-    private void moveToNextWithDelay( String manualLocation) {
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(LoginActivity.this, RoleActivity.class);
-            if (manualLocation != null) {
-                intent.putExtra("manualLocation", manualLocation);
-            } else {
-                intent.putExtra("latitude", latitude);
-                intent.putExtra("longitude", longitude);
-            }
-            startActivity(intent);
-            finish();
-        }, 3000);
-    }
-
-
 }

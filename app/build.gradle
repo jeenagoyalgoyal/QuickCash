@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
-    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -25,14 +24,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding true
-    }
-    lintOptions {
-        baseline file("lint-baseline.xml")
     }
 }
 
@@ -45,19 +41,11 @@ dependencies {
     implementation libs.navigation.ui
     implementation libs.firebase.database
     implementation libs.firebase.auth
-    implementation 'com.google.android.gms:play-services-location:21.3.0'
-    implementation libs.uiautomator
-    implementation libs.play.services.maps
     testImplementation libs.junit
     testImplementation libs.espresso.core
-
-
     androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
-    testImplementation 'org.mockito:mockito-core:5.14.2' // For standard mocking
-    androidTestImplementation 'org.mockito:mockito-android:5.14.2' // For Android specific mocking
-
 }
