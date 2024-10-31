@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.quickcash">
-
-    <!-- Required Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET" />
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -15,14 +10,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.QuickCash">
+        android:theme="@style/Theme.QuickCash"
+        tools:targetApi="34">
 
         <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
-
         <!-- Login Activity as Launcher -->
+
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="true"
@@ -32,6 +28,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.activities.RegistrationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activities.MainActivity"></activity>
+
+        <!-- Role Selection Activity -->
+        <activity
+            android:name=".ui.activities.RoleActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Profile Activity -->
+        <activity
+            android:name=".ui.models.Profile"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
 
         <!-- Search Activity -->
         <activity
@@ -45,23 +63,23 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 
-        <!-- Registration Activity -->
-        <activity
-            android:name=".ui.activities.RegistrationActivity"
+        <!-- Employee Homepage Activity -->
+        <activity android:name=".ui.activities.EmployeeHomepageActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
+            android:theme="@style/Theme.QuickCash">
+        </activity>
 
-        <!-- Role Selection Activity -->
-        <activity
-            android:name=".ui.activities.RoleActivity"
+        <!-- Employer Homepage Activity -->
+        <activity android:name=".ui.activities.EmployerHomepageActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
+            android:theme="@style/Theme.QuickCash">
+        </activity>
 
-        <!-- Profile Activity -->
-        <activity
-            android:name=".ui.models.Profile"
+        <!-- JobSubmissionPage Activity -->
+        <activity android:name=".ui.activities.JobSubmissionActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
+            android:theme="@style/Theme.QuickCash">
+        </activity>
 
     </application>
 
