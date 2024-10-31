@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +14,11 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollTo;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
@@ -99,26 +104,6 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withId(R.id.job_search_screen)).check(matches(isDisplayed()));
         // Checks if our job title shows up
         onView(ViewMatchers.withText("Data Analyst")).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testabc(){
-        onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Microsoft"));
-        onView(ViewMatchers.withId(R.id.search_job_parameter)).perform(ViewActions.click());
-        // Switches to the results
-        onView(ViewMatchers.withId(R.id.job_search_screen)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.companyResult)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test1(){
-        onView(ViewMatchers.withId(R.id.welcomeText)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome, employee")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
-        onView(ViewMatchers.withId(R.id.jobPosting)).perform(ViewActions.click());
-        onView(withText("Job Title")).check(matches(isDisplayed()));
     }
 
     @After
