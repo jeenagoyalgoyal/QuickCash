@@ -1,21 +1,25 @@
 package com.example.quickcash.ui.models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Job {
     private String jobTitle;
     private double salary;
     private String duration;
+    private String location;  // Human readable location (e.g., "Halifax, NS")
     private double latitude;
     private double longitude;
 
-    protected final double MIN_LATITUDE = -90.0;
-    protected final double MAX_LATITUDE = 90.0;
-    protected final double MIN_LONGITUDE = -180.0;
-    protected final double MAX_LONGITUDE = 180.0;
-
     // Empty constructor required for Firebase
     public Job() {}
+
+    // Constructor
+    public Job(String jobTitle, double salary, String duration, String location, double latitude, double longitude) {
+        this.jobTitle = jobTitle;
+        this.salary = salary;
+        this.duration = duration;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     // Getters and Setters
     public String getJobTitle() { return jobTitle; }
@@ -27,26 +31,12 @@ public class Job {
     public String getDuration() { return duration; }
     public void setDuration(String duration) { this.duration = duration; }
 
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+
     public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) {
-        if (latitude > MAX_LATITUDE) {
-            this.latitude = MAX_LATITUDE;
-        } else if (latitude < MIN_LATITUDE){
-            this.latitude = MIN_LATITUDE;
-        } else {
-            this.latitude = latitude;
-        }
-    }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
 
     public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) {
-        if (longitude > MAX_LONGITUDE) {
-            this.longitude = MAX_LONGITUDE;
-        } else if (longitude < MIN_LONGITUDE){
-            this.longitude = MIN_LONGITUDE;
-        } else {
-            this.longitude = longitude;
-        }
-    }
-
+    public void setLongitude(double longitude) { this.longitude = longitude; }
 }
