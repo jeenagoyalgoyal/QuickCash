@@ -38,8 +38,9 @@ public class JobSubmission extends AppCompatActivity {
     private Button submitButton;
 
     private DatabaseReference databaseReference = null;
-    private String employerID = null;
 
+
+    private String employerID = null;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -49,11 +50,9 @@ public class JobSubmission extends AppCompatActivity {
         // Initialize Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
 
+        // Send the email for storing as employerID
         Intent intentJobSub = getIntent();
-
-        // Employer ID
-        employerID = intentJobSub.getStringExtra("employerID");
-
+        employerID = intentJobSub.getStringExtra("email");
 
         // Form title
         formText = findViewById(R.id.jobSub);
@@ -202,8 +201,9 @@ public class JobSubmission extends AppCompatActivity {
             return;
         }
 
-        // If all fields are valid, proceed to create the Job object and submit to Firebase
+        // EmployerID is the user email
         String employerId = employerID;
+
         String jobId = databaseReference.push().getKey();
 
         Job job = new Job(jobTitleText, companyNameText, jobTypeText, requirementsText,

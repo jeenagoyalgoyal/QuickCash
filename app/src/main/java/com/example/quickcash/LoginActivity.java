@@ -150,6 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void fetchUserRole(String email) {
+
         UseRole useRole = UseRole.getInstance();
         useRole.fetchUserRole(email, new UseRole.OnRoleFetchedListener() {
             @Override
@@ -161,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (role.equalsIgnoreCase("employee")) {
                         navigateToEmployeeHomepage();
                     } else if (role.equalsIgnoreCase("employer")) {
-                        navigateToEmployerHomepage();
+                        navigateToEmployerHomepage(email);
                     } else {
                         statusLabel.setText("Role not recognized.");
                     }
@@ -173,12 +174,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void navigateToEmployeeHomepage() {
-        Intent intentEmployer = new Intent(this, EmployeeHomepageActivity.class);
-        startActivity(intentEmployer);
+        Intent intentEmployee = new Intent(this, EmployeeHomepageActivity.class);
+        startActivity(intentEmployee);
     }
 
-    private void navigateToEmployerHomepage() {
-        Intent intentEmployee = new Intent(this, EmployerHomepageActivity.class);
-        startActivity(intentEmployee);
+    private void navigateToEmployerHomepage(String email) {
+        Intent intentEmployer = new Intent(this, EmployerHomepageActivity.class);
+        intentEmployer.putExtra("email", email);
+        startActivity(intentEmployer);
     }
 }

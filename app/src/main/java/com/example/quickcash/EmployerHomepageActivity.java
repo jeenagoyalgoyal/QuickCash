@@ -32,6 +32,8 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         Intent intentEmployerDash = getIntent();
         id = intentEmployerDash.getIntExtra("userID", -1);
 
+        String email = intentEmployerDash.getStringExtra("email");
+
         useRole = UseRole.getInstance();
 
         welcomeEmployer = findViewById(R.id.welcomeEmployer);
@@ -61,7 +63,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (useRole.getCurrentRole().equals("employer")) {
                     Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmission.class);
-                    intentJobSub.putExtra("employerID", id);
+                    intentJobSub.putExtra("employerID", email);
                     startActivity(intentJobSub);
                 }
             }
