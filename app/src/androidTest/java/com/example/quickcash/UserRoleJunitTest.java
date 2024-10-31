@@ -17,9 +17,11 @@ public class UserRoleJunitTest {
     private UseRole useRole;
     private DatabaseReference db;
 
+    @Rule
+    public ActivityScenarioRule<EmployerHomepageActivity> employerActivityRule = new ActivityScenarioRule<>(EmployerHomepageActivity.class);
 
     @Rule
-    public ActivityScenarioRule<RoleActivity> actRul = new ActivityScenarioRule<>(RoleActivity.class);
+    public ActivityScenarioRule<EmployeeHomepageActivity> employeeActivityRule = new ActivityScenarioRule<>(EmployeeHomepageActivity.class);
 
     @Before
     public void setUseRole(){
@@ -82,7 +84,7 @@ public class UserRoleJunitTest {
         db.child(String.valueOf(id)).child("role").get().addOnCompleteListener(event ->{
             if(event.isSuccessful()){
                 String role = event.getResult().getValue(String.class);
-                assertEquals(null, role);
+                assertEquals("employer", role);
             }
         });
     }
