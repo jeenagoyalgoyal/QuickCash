@@ -106,18 +106,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         titles = new ArrayList<>();
         salaries = new ArrayList<>();
         durations = new ArrayList<>();
+        companies = new ArrayList<>();
 
         // Add dummy job locations around Halifax
         // Job 1 - Downtown Halifax
         latitudes.add("44.6488");
         longitudes.add("-63.5752");
+        companies.add("Microsoft");
         titles.add("Software Developer");
         salaries.add("75000");
         durations.add("Full-time");
 
+
         // Job 2 - Dartmouth
         latitudes.add("44.6667");
         longitudes.add("-63.5667");
+        companies.add("FERRY CO.");
         titles.add("Web Designer");
         salaries.add("65000");
         durations.add("Contract - 12 months");
@@ -125,6 +129,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         // Job 3 - Bedford
         latitudes.add("44.7213");
         longitudes.add("-63.6582");
+        companies.add("BUS CO.");
         titles.add("Data Analyst");
         salaries.add("70000");
         durations.add("Part-time");
@@ -132,6 +137,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         // Job 4 - Halifax Shopping Centre area
         latitudes.add("44.6497");
         longitudes.add("-63.6088");
+        companies.add("Walmart");
         titles.add("UX Researcher");
         salaries.add("80000");
         durations.add("Full-time");
@@ -139,6 +145,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         // Job 5 - Dalhousie University area
         latitudes.add("44.6366");
         longitudes.add("-63.5917");
+        companies.add("Dalhousie");
         titles.add("Teaching Assistant");
         salaries.add("25000");
         durations.add("Part-time");
@@ -243,23 +250,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         TextView companyText = dialog.findViewById(R.id.companyNameText);
         TextView salaryText = dialog.findViewById(R.id.salaryText);
         TextView durationText = dialog.findViewById(R.id.durationText);
-        ImageButton closeButton = dialog.findViewById(R.id.closeButton);
 
         titleText.setText(titles.get(jobIndex));
-        //companyText.setText(companies.get(jobIndex));
+        companyText.setText(companies.get(jobIndex));
         salaryText.setText(String.format("$%,d/year", Integer.parseInt(salaries.get(jobIndex))));
         durationText.setText(durations.get(jobIndex));
 
-        closeButton.setOnClickListener(v -> dialog.dismiss());    // Set dialog width to match parent with margins
-
-        /*
+        // Set dialog width to match parent with margins
         Window window = dialog.getWindow();
         if (window != null) {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window.setGravity(Gravity.CENTER);
         }
-
-         */
         dialog.show();
     }
 
