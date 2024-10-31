@@ -31,7 +31,13 @@ public class JobsActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, jobs);
         jobListView.setAdapter(adapter);
 
-
+        // Set up the back button
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(JobsActivity.this, RoleActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Call finish() if you don't want to keep the JobsActivity in the back stack
+        });
 
         jobListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

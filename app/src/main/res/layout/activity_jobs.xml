@@ -5,7 +5,14 @@
     android:orientation="vertical">
 
     <!-- Back Button -->
-
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back"
+        android:contentDescription="back button"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_margin="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
