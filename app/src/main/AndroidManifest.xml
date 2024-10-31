@@ -42,7 +42,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RoleActivity"
+        <activity android:name=".EmployeeHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".EmployerHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".JobSubmission"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
