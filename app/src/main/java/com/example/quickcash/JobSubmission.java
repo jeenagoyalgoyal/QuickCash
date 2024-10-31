@@ -215,11 +215,29 @@ public class JobSubmission extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(JobSubmission.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
-                        } else {
+
+                            // Reset the input fields when the job is posted
+                            resetForm();
+                        }
+                        
+                        else {
                             Toast.makeText(JobSubmission.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
+    }
+
+    // This is a function to clear the data input, set back to default
+    private void resetForm() {
+        jobTitle.setText("");
+        companyName.setText("");
+        jobType.setSelection(0);
+        requirements.setText("");
+        salary.setText("");
+        jobUrgency.setSelection(0);
+        location.setText("");
+        expectedDuration.setText("");
+        startDate.setText("Start Date");
     }
 
     // Class for the jobs
