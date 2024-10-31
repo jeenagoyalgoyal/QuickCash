@@ -218,7 +218,7 @@ public class JobSubmissionUITest {
 
         onView(withId(R.id.jobSubmissionButton)).perform(swipeUp(), click());
 
-        //onView(withText("Job Submission Successful!")).check(matches(isDisplayed()));
+        onView(withText("Job Submission Successful!")).check(matches(isDisplayed()));
 
     }
 }

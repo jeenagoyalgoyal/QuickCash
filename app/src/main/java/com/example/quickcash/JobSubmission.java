@@ -34,6 +34,13 @@ public class JobSubmission extends AppCompatActivity {
     private EditText expectedDuration;
     private Button startDate;
 
+    private TextView errorJSRequirement;
+    private TextView errorJSSalary;
+    private TextView errorJSUrgency;
+    private TextView errorJSLocation;
+    private TextView errorJSDuration;
+
+
     // Button to submit
     private Button submitButton;
 
@@ -78,6 +85,13 @@ public class JobSubmission extends AppCompatActivity {
 
         // Button to submit the job posting
         submitButton = findViewById(R.id.jobSubmissionButton);
+
+        // Errors
+        errorJSRequirement = findViewById(R.id.errorJSRequirement);
+        errorJSSalary = findViewById(R.id.errorJSSalary);
+        errorJSUrgency = findViewById(R.id.errorJSUrgency);
+        errorJSLocation = findViewById(R.id.errorJSLocation);
+        errorJSDuration = findViewById(R.id.errorJSDuration);
 
 
         // Array list for the job type
