@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,8 +15,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class UserRoleJunitTest {
-
+public class UserRoleEspressoTestLoganFix {
     private UseRole useRole;
     private DatabaseReference db;
 
@@ -26,12 +25,29 @@ public class UserRoleJunitTest {
     @Rule
     public ActivityScenarioRule<EmployeeHomepageActivity> employeeActivityRule = new ActivityScenarioRule<>(EmployeeHomepageActivity.class);
 
+
     @Before
     public void setUseRole(){
         db = FirebaseDatabase.getInstance().getReference("Users");
         int id = 123;
         useRole =UseRole.getInstance();
         useRole.setCurrentRole(id,"employee");
+
+    }
+
+    //Test for elements for UI are shown or hidden specific to the role
+
+    //Employee hidden buttons
+    @Test
+    public void testEmployeeButtons() {
+        int id=123;
+
+    }
+
+    //Employer hidden buttons
+    @Test
+    public void testEmployerButtons() {
+        int id=123;
 
     }
     @Test
@@ -91,5 +107,6 @@ public class UserRoleJunitTest {
             }
         });
     }
+
 
 }

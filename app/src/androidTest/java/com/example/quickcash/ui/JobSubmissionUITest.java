@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 
 import static androidx.test.espresso.Espresso.onData;
@@ -24,12 +24,15 @@ import android.widget.TextView;
 import static org.hamcrest.CoreMatchers.is;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasToString;
 
 
+import com.example.quickcash.R;
 import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.ui.activities.JobSubmissionActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +43,7 @@ public class JobSubmissionUITest {
 
 
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
-    public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
+    public ActivityScenario<JobSubmissionActivity> jobSubmissionActivityScenario;
 
 
     public void setupRoleActivity() {
@@ -48,7 +51,7 @@ public class JobSubmissionUITest {
     }
 
     public void setupJobSubmissionActivityScenario() {
-        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmission.class);
+        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmissionActivity.class);
     }
 
     @Test
@@ -61,7 +64,7 @@ public class JobSubmissionUITest {
     @Test
     public void checkJobSubmissionForm() {
         setupRoleActivity();
-        onView(withId(R.id.createJobButton)).perform(click());
+        onView(ViewMatchers.withId(R.id.createJobButton)).perform(click());
         setupJobSubmissionActivityScenario();
         onView(withId(R.id.jobSub)).check(matches(isDisplayed()));
     }
