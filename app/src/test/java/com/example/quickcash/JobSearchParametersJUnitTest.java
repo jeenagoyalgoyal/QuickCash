@@ -12,7 +12,7 @@ public class  JobSearchParametersJUnitTest {
     @Test
     public void testValidJobTitle() {
         assertTrue(JobSearchParameterActivity.isValidJobTitle("Data Analyst"));
-        assertTrue(JobSearchParameterActivity.isValidJobTitle(""));
+        assertFalse(JobSearchParameterActivity.isValidJobTitle(""));
         assertFalse(JobSearchParameterActivity.isValidJobTitle(null));
     }
 
