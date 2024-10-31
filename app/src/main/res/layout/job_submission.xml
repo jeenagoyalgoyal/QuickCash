@@ -18,6 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.147" />
 
+    <TextView
+        android:id="@+id/employerIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Employer ID"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
     <EditText
         android:id="@+id/jobTitle"
         android:layout_width="wrap_content"

@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     useRole.setCurrentRole(role);
                     // Navigate to the appropriate homepage
                     if (role.equalsIgnoreCase("employee")) {
-                        navigateToEmployeeHomepage();
+                        navigateToEmployeeHomepage(email);
                     } else if (role.equalsIgnoreCase("employer")) {
                         navigateToEmployerHomepage(email);
                     } else {
@@ -173,8 +173,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    private void navigateToEmployeeHomepage() {
+    private void navigateToEmployeeHomepage(String email) {
         Intent intentEmployee = new Intent(this, EmployeeHomepageActivity.class);
+        intentEmployee.putExtra("email", email);
         startActivity(intentEmployee);
     }
 

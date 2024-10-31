@@ -32,6 +32,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         Intent intentEmployeeDash = getIntent();
         id = intentEmployeeDash.getIntExtra("userID", -1);
 
+        String email = intentEmployeeDash.getStringExtra("email");
+
         useRole = UseRole.getInstance();
 
         welcomeEmployee = findViewById(R.id.welcomeEmployee);
@@ -51,6 +53,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 useRole.switchRole(id);
                 Intent intentSwitchToEmployer = new Intent(EmployeeHomepageActivity.this, EmployerHomepageActivity.class);
+                intentSwitchToEmployer.putExtra("email", email);
                 startActivity(intentSwitchToEmployer);
             }
         });

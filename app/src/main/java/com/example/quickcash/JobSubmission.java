@@ -39,6 +39,8 @@ public class JobSubmission extends AppCompatActivity {
 
     private DatabaseReference databaseReference = null;
 
+    private TextView employerIdTextView;
+
 
     private String email;
 
@@ -53,6 +55,12 @@ public class JobSubmission extends AppCompatActivity {
         // Send the email for storing as employerID
         Intent intentJobSub = getIntent();
         email = intentJobSub.getStringExtra("email");
+
+        // Initialize the employer ID TextView
+        employerIdTextView = findViewById(R.id.employerIdTextView);
+
+        // Display employerId on the form
+        employerIdTextView.setText("Employer ID: " + email);
 
         // Form title
         formText = findViewById(R.id.jobSub);
