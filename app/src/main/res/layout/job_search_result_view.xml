@@ -19,7 +19,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:textStyle="bold"
-            tools:text="Job Type: "/>
+            android:text="Job Type: "/>
 
         <TextView
             android:id="@+id/companyResult"
@@ -29,7 +29,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold"
-            tools:text="Company: " />
+            android:text="Company: " />
 
         <TextView
             android:id="@+id/locationResult"
@@ -39,7 +39,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold"
-            tools:text="Location: " />
+            android:text="Location: " />
 
         <TextView
             android:id="@+id/salaryResult"
@@ -49,25 +49,25 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold"
-            tools:text="Salary: " />
+            android:text="Salary: " />
 
         <TextView
             android:id="@+id/durationResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="2dp"
             android:layout_marginHorizontal="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold"
-            tools:text="Duration: " />
+            android:text="Duration: " />
 
         <Button
             android:id="@+id/showMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Show Map"
-            android:layout_marginBottom="20dp"
+            android:text="Show Map"
+            android:layout_marginBottom="3dp"
             android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
