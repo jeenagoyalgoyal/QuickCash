@@ -230,6 +230,7 @@ public class JobSubmission extends AppCompatActivity {
                             // Send the user back to the homepage after submitting the job posting
                             Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
                             intentBackToEmployerPage.putExtra("employerID", employerId);
+                            intentBackToEmployerPage.putExtra("email",email);
                             startActivity(intentBackToEmployerPage);
                         }
                         

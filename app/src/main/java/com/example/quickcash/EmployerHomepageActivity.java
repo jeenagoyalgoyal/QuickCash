@@ -54,6 +54,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 useRole.switchRole(id);
                 Intent intentSwitchToEmployee = new Intent(EmployerHomepageActivity.this, EmployeeHomepageActivity.class);
+                intentSwitchToEmployee.putExtra("email",email);
                 startActivity(intentSwitchToEmployee);
             }
         });
