@@ -28,7 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class JobSearchParameterActivity extends AppCompatActivity{
 
     private EditText jobTitle;
-    private EditText company;
+    private EditText companyName;
     private EditText minSalary;
     private EditText maxSalary;
     private EditText duration;
@@ -66,7 +66,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     public void init(){
         jobTitle = findViewById(R.id.jobTitle);
-        company = findViewById(R.id.companyName);
+        companyName = findViewById(R.id.companyName);
         minSalary = findViewById(R.id.minSalary);
         maxSalary = findViewById(R.id.maxSalary);
         duration = findViewById(R.id.duration);
@@ -86,7 +86,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     private void performSearch() {
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
-        String companyName = company.getText().toString().trim();
+        String company = companyName.getText().toString().trim();
         String minSalStr = minSalary.getText().toString().trim();
         String maxSalStr = maxSalary.getText().toString().trim();
         String jobDuration = duration.getText().toString().trim();
@@ -97,8 +97,8 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         // Apply filters based on non-empty inputs
         if (isValidJobTitle(title)) {
             query = query.orderByChild("jobTitle").equalTo(title);
-        }else if(isValidCompany(companyName)){
-            query =query.orderByChild("companyName").equalTo(companyName);
+        }else if(isValidCompany(company)){
+            query =query.orderByChild("companyName").equalTo(company);
         }else if (isValidLocation(jobLocation)) {
             query = query.orderByChild("location").equalTo(jobLocation);
         }else if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
@@ -150,7 +150,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     private boolean passesAdditionalFilters(Job job) {
         // Get the user input again
         String title = jobTitle.getText().toString().trim();
-        String company = jobTitle.getText().toString().trim();
+        String company = companyName.getText().toString().trim();
         String minSalStr = minSalary.getText().toString().trim();
         String maxSalStr = maxSalary.getText().toString().trim();
         String jobDuration = duration.getText().toString().trim();
@@ -227,7 +227,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     public boolean allEmptyFields(){
         return jobTitle.getText().toString().trim().isEmpty() &&
-               company.getText().toString().trim().isEmpty() &&
+               companyName.getText().toString().trim().isEmpty() &&
                minSalary.getText().toString().trim().isEmpty() &&
                maxSalary.getText().toString().trim().isEmpty() &&
                duration.getText().toString().trim().isEmpty() &&
@@ -241,7 +241,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         if(minS.isEmpty() || maxS.isEmpty()){
             return false;
         }else{
-            return isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
+            return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
         }
     }
 }
