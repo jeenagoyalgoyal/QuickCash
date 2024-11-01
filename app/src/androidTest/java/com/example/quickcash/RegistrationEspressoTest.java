@@ -6,6 +6,8 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
+
 import androidx.test.core.app.ActivityScenario;
 
 import org.junit.Before;
@@ -40,6 +42,15 @@ public class RegistrationEspressoTest {
         activityScenario.onActivity(activity -> {
             activity.setupRegisterButton();
         });
+    }
+
+
+    //TEMP TEST REMOVE REMOVE REMOVE
+    @Test
+    public void checkIfPasswordIsEmpty() {
+        FirebasePreferredEmployers test1 = new FirebasePreferredEmployers("testingemail@test,db");
+        test1.getPreferredEmployers();
+        assertEquals(2,2);
     }
 
     @Test
