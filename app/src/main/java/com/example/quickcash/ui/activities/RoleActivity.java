@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.quickcash.ui.models.Profile;
 import com.example.quickcash.R;
 import com.example.quickcash.ui.models.UseRole;
 

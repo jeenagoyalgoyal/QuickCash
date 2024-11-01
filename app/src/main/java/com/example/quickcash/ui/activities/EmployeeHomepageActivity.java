@@ -9,8 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.models.Profile;
 import com.example.quickcash.ui.models.UseRole;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
+import com.example.quickcash.ui.activities.Profile;
 
 public class EmployeeHomepageActivity extends AppCompatActivity {
 
@@ -74,10 +76,9 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         searchJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                useRole.switchRole(id);
-                Intent intentSwitchToEmployer = new Intent(EmployeeHomepageActivity.this, SearchActivity.class);
-                intentSwitchToEmployer.putExtra("email", email);
-                startActivity(intentSwitchToEmployer);
+                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, JobSearchParameterActivity.class);
+                startActivity(intentProfile);
+                finish();
             }
         });
 

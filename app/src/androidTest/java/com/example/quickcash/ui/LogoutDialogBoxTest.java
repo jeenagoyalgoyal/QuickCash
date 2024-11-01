@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -16,7 +15,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.models.Profile;
+import com.example.quickcash.ui.activities.Profile;
 
 import org.junit.Before;
 import org.junit.Test;

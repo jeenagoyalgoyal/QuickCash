@@ -6,12 +6,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quickcash.ui.models.JobToMap;
 import com.example.quickcash.ui.utils.JobSearchValidator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.repositories.FirebaseCRUD;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,7 +21,7 @@ import java.util.List;
 public class SearchActivity extends AppCompatActivity {
 
     private FirebaseCRUD firebaseCRUD;
-    private List<Job> jobList;
+    private List<JobToMap> jobList;
     private Button showMapButton;
 
     private TextView jobTitle;
@@ -114,7 +114,7 @@ public class SearchActivity extends AppCompatActivity {
         ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
 
-        for (Job job : jobList) {
+        for (JobToMap job : jobList) {
             titles.add(job.getJobTitle());
             salaries.add(String.valueOf(job.getSalary()));
             durations.add(job.getDuration());

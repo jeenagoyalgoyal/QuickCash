@@ -3,15 +3,12 @@ package com.example.quickcash.ui.activities;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.ui.models.JobToMap;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,7 +38,7 @@ import java.util.Map;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private Job job;
+    private JobToMap job;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private ArrayList<String> latitudes;

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.ui.models.JobToMap;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
-    private List<Job> jobList;
+    private List<JobToMap> jobList;
 
-    public JobAdapter(List<Job> jobList) {
+    public JobAdapter(List<JobToMap> jobList) {
         this.jobList = jobList;
     }
 
@@ -29,7 +29,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
-        Job job = jobList.get(position);
+        JobToMap job = jobList.get(position);
         holder.jobTitle.setText(job.getJobTitle());
         holder.salary.setText(String.format("$%.2f", job.getSalary()));
         holder.duration.setText(job.getDuration());

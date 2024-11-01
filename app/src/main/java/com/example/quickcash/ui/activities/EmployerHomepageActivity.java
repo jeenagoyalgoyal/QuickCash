@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.quickcash.ui.activities.JobSubmissionActivity;
+import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
 import com.example.quickcash.R;
 import com.example.quickcash.ui.models.UseRole;
 

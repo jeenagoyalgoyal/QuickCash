@@ -2,7 +2,7 @@ package com.example.quickcash.ui.repositories;
 
 import androidx.annotation.NonNull;
 
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.ui.models.JobToMap;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class FirebaseCRUD {
         // jobsRef.removeValue().addOnCompleteListener(task -> {
 
         // Halifax jobs
-        Job job1 = new Job();
+        JobToMap job1 = new JobToMap();
         job1.setJobTitle("Software Developer");
         job1.setSalary(75000);
         job1.setDuration("Full-time");
@@ -33,7 +33,7 @@ public class FirebaseCRUD {
         jobsRef.child("job1").setValue(job1);
 
         // Toronto jobs
-        Job job2 = new Job();
+        JobToMap job2 = new JobToMap();
         job2.setJobTitle("Web Designer");
         job2.setSalary(85000);
         job2.setDuration("Contract");
@@ -43,7 +43,7 @@ public class FirebaseCRUD {
         jobsRef.child("job2").setValue(job2);
 
         // Vancouver jobs
-        Job job3 = new Job();
+        JobToMap job3 = new JobToMap();
         job3.setJobTitle("Data Analyst");
         job3.setSalary(80000);
         job3.setDuration("Part-time");
@@ -53,7 +53,7 @@ public class FirebaseCRUD {
         jobsRef.child("job3").setValue(job3);
 
         // Montreal job
-        Job job4 = new Job();
+        JobToMap job4 = new JobToMap();
         job4.setJobTitle("UX Designer");
         job4.setSalary(70000);
         job4.setDuration("Full-time");
@@ -63,7 +63,7 @@ public class FirebaseCRUD {
         jobsRef.child("job4").setValue(job4);
 
         // Calgary job
-        Job job5 = new Job();
+        JobToMap job5 = new JobToMap();
         job5.setJobTitle("Project Manager");
         job5.setSalary(90000);
         job5.setDuration("Full-time");
@@ -80,11 +80,11 @@ public class FirebaseCRUD {
         jobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Job> jobList = new ArrayList<>();
+                List<JobToMap> jobList = new ArrayList<>();
                 String searchLower = query.toLowerCase().trim();
 
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
-                    Job job = jobSnapshot.getValue(Job.class);
+                    JobToMap job = jobSnapshot.getValue(JobToMap.class);
                     if (job != null) {
                         String location = job.getLocation().toLowerCase().trim();
 
@@ -106,6 +106,6 @@ public class FirebaseCRUD {
     }
 
     public interface JobDataCallback {
-        void onCallback(List<Job> jobList);
+        void onCallback(List<JobToMap> jobList);
     }
 }

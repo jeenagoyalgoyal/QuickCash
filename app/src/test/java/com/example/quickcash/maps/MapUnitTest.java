@@ -2,7 +2,7 @@ package com.example.quickcash.maps;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.models.JobMap;
 
 public class MapUnitTest {
     // Tests to be checked:
@@ -14,7 +14,7 @@ public class MapUnitTest {
 
     @Test
     public void testValidJobTitle() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setJobTitle("Data Scientist");
         assertEquals("Data Scientist job title should match",
                 "Data Scientist", job.getJobTitle());
@@ -22,7 +22,7 @@ public class MapUnitTest {
 
     @Test
     public void testInvalidJobTitle() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setJobTitle("");
         assertTrue("Empty job title should be invalid",
                 job.getJobTitle() == null || job.getJobTitle().isEmpty());
@@ -30,7 +30,7 @@ public class MapUnitTest {
 
     @Test
     public void testValidSalary() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setSalary(30.0);
         assertEquals("Salary should be 30.0",
                 30.0, job.getSalary(), 0.001);
@@ -38,7 +38,7 @@ public class MapUnitTest {
 
     @Test
     public void testInvalidSalary() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setSalary(0.0);
         assertTrue("Salary should be greater than 0",
                 job.getSalary() >= 0.0);
@@ -46,7 +46,7 @@ public class MapUnitTest {
 
     @Test
     public void testValidDuration() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setDuration("3 years");
         assertEquals("Duration should be 3 years",
                 "3 years", job.getDuration());
@@ -54,7 +54,7 @@ public class MapUnitTest {
 
     @Test
     public void testInvalidDuration() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setDuration("");
         assertTrue("Duration shouldn't be empty",
                 job.getDuration() == null || job.getDuration().isEmpty());
@@ -62,7 +62,7 @@ public class MapUnitTest {
 
     @Test
     public void testValidLatitude() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setLatitude(10.0);
         assertEquals("Latitude should be 10.0",
                 10.0, job.getLatitude(), 0.0);
@@ -70,7 +70,7 @@ public class MapUnitTest {
 
     @Test
     public void testInvalidLatitude() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setLatitude(-91.0);
         assertTrue("Latitude should not be not Less than -90 or more than 90",
                 job.getLatitude()>= -90.0 || job.getLatitude() <= 90.0 );
@@ -78,7 +78,7 @@ public class MapUnitTest {
 
     @Test
     public void testValidLongitude() {
-        Job job = new Job();
+        JobMap job = new JobMap();
         job.setLongitude(10.0);
         assertEquals("Latitude should be 10.0",
                 10.0, job.getLongitude(), 0.0);
