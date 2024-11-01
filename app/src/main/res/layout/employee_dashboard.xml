@@ -85,7 +85,7 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="584dp"
+        android:layout_marginTop="568dp"
         android:text="Switch to Employer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"
@@ -96,7 +96,10 @@
         android:id="@+id/preferredEmployersButton"
         android:layout_width="298dp"
         android:layout_height="53dp"
+        android:layout_marginTop="480dp"
         android:text="Preferred Employers"
-        tools:layout_editor_absoluteX="56dp"
-        tools:layout_editor_absoluteY="476dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.539"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

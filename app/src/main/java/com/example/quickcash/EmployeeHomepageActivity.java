@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
     public Button performanceReview;
     public Button employeeNotifications;
     public Button employerSwitch;
+    public Button preferredEmployers;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -45,6 +47,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         performanceReview = findViewById(R.id.performanceReviewsButton);
         employeeNotifications = findViewById(R.id.employeeNotifications);
         employerSwitch = findViewById(R.id.switchToEmployerButton);
+        preferredEmployers = findViewById(R.id.preferredEmployersButton);
 
 
         // SWITCHES TO EMPLOYEE DASH
@@ -67,6 +70,15 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
             }
         });
 
+        preferredEmployers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentPreferredEmployers = new Intent(EmployeeHomepageActivity.this, PreferredEmployersActivity.class);
+                intentPreferredEmployers.putExtra("email", email);
+                startActivity(intentPreferredEmployers);
+                finish();
+            }
+        });
 
 
 
