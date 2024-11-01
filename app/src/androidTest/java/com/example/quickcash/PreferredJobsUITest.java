@@ -48,16 +48,51 @@ public class PreferredJobsUITest {
         UiObject registerButton = device.findObject(new UiSelector().text("Login"));
         registerButton.clickAndWaitForNewWindow();
 
+        //Switching role from employer to employee
+        UiObject switchButton = device.findObject(new UiSelector().text("Switch to Employee"));
+        switchButton.clickAndWaitForNewWindow();
+
         //looking for 'Search Jobs' button on homepage
-        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Jobs"));
+        UiObject searchJobButton = device.findObject(new UiSelector().text("My Preferred Jobs"));
         searchJobButton.clickAndWaitForNewWindow();
 
         //looking for 'options' button on a single job listing
-        UiObject optionsButton = device.findObject(new UiSelector().text("options"));
+        UiObject optionsButton = device.findObject(new UiSelector().text("View Job"));
         optionsButton.click();
 
-        //popup with required button should show up
-        UiObject addToPreferredJobsButton = device.findObject(new UiSelector().text("Add to Preferred Jobs"));
-        assertTrue(addToPreferredJobsButton.exists());
+        //looking for 'options' button on a single job listing
+        UiObject closeButton = device.findObject(new UiSelector().text("Close"));
+        closeButton.click();
+    }
+
+    @Test
+    public void AddToPreferredJobs() throws UiObjectNotFoundException {
+        //logging in
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject registerButton = device.findObject(new UiSelector().text("Login"));
+        registerButton.clickAndWaitForNewWindow();
+
+        //Switching role from employer to employee
+        UiObject switchButton = device.findObject(new UiSelector().text("Switch to Employee"));
+        switchButton.clickAndWaitForNewWindow();
+
+        //looking for 'Search Jobs' button on homepage
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+
+        UiObject jobTitle = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitle.setText("Software Developer");
+
+        //Press Search
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.clickAndWaitForNewWindow();
+
+        //looking for 'options' button on a single job listing
+        UiObject optionsButton = device.findObject(new UiSelector().text("Add To My Preferred Jobs"));
+        optionsButton.click();
+
     }
 }
