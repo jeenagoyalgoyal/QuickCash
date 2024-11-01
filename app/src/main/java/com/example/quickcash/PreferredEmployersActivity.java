@@ -1,10 +1,8 @@
 package com.example.quickcash;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,7 +12,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +24,11 @@ import java.util.List;
 
 public class PreferredEmployersActivity extends AppCompatActivity {
     private String email;
-    private List<String> preferredEmployersList = new ArrayList<>();
+    private ArrayList<String> preferredEmployersList;
+    private ArrayAdapter<String> adapter;
     private String userID;
     private FirebaseDatabase database;
-    private DatabaseReference usersRef;
+    private DatabaseReference preferredEmployersRef;
     private String tempEmployee;
 
     @Override
@@ -46,34 +44,40 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
         //Intent intentPreferredEmployers = getIntent();
         //email = intentPreferredEmployers.getStringExtra("email");
-        email = "testingemail@test.db";
-
+        preferredEmployersList = new ArrayList<>();
+        email = "testingemail@test.db"; //TEMP
         this.userID = email.replace(".", ",");;
+
         this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         this.initializeDatabaseRefs();
-        this.setPreferredEmployersListener();
+        this.setPreferredEmployersListView();
+
     }
 
     protected void initializeDatabaseRefs() {
-        this.usersRef = getUsersRef();;
+        this.preferredEmployersRef = getPreferredEmployersRef();;
     }
 
-    private DatabaseReference getUsersRef() {
-            return this.database.getReference("Users");
+    private DatabaseReference getPreferredEmployersRef() {
+            return this.database.getReference("Users").child(userID).child("preferredEmployers");
     }
 
-    protected void setPreferredEmployersListener() {
-        this.usersRef.child(userID).child("preferredEmployers").addValueEventListener(new ValueEventListener() {
+    protected void setPreferredEmployersListView() {
+        //add listener to preferredEmployers
+        this.preferredEmployersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Toast.makeText(PreferredEmployersActivity.this, "ToatTest"+snapshot.child(String.valueOf(1)).getValue(String.class), Toast.LENGTH_LONG).show();
-                Log.e("FirebasePreferredEmployers", "employee:"+snapshot.child(String.valueOf(1)).getValue(String.class));
+                for (DataSnapshot employerDetails : snapshot.getChildren()){
+                String employerName = employerDetails.child("name").getValue(String.class);
+                String employerID = employerDetails.child("id").getValue(String.class);
+                Log.e("FirebasePreferredEmployers", "new testing! "+employerID+" "+employerName);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
+            //do stuff here
         });
-        Log.e("FirebasePreferredEmployers", "checking if employee returns"+tempEmployee);
     }
 
     public List<String> getPreferredEmployersList() {
