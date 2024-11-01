@@ -16,10 +16,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -61,6 +63,14 @@ public class JobSearchParameterActivity extends AppCompatActivity{
                     performSearch();
                 }
             }
+        });
+
+        // Set up the back button
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(JobSearchParameterActivity.this, EmployeeHomepageActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
     }
 

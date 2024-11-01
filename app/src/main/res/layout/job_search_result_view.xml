@@ -70,6 +70,23 @@
             android:layout_marginBottom="3dp"
             android:layout_gravity="center_horizontal"/>
 
+        <Button
+            android:id="@+id/btnAddToPreferred"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Preferred Jobs"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/preferredJobRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:outlineAmbientShadowColor="@color/cardview_dark_background"
+            tools:itemCount="2"
+            tools:listitem="@layout/job_search_result_view"/>
+
+
     </LinearLayout>
 
     <View
