@@ -2,31 +2,36 @@ package com.example.quickcash.ui.models;
 
 public class JobToMap {
     private String jobTitle;
-    private double salary;
+    private int salary;
     private String duration;
     private String location;  // Human readable location (e.g., "Halifax, NS")
     private double latitude;
     private double longitude;
+    private String companyName;
 
     // Empty constructor required for Firebase
     public JobToMap() {}
 
     // Constructor
-    public JobToMap(String jobTitle, double salary, String duration, String location, double latitude, double longitude) {
+    public JobToMap(String jobTitle, String companyName,int salary, String duration, String location, double latitude, double longitude) {
         this.jobTitle = jobTitle;
         this.salary = salary;
         this.duration = duration;
         this.location = location;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.companyName = companyName;
     }
 
     // Getters and Setters
     public String getJobTitle() { return jobTitle; }
     public void setJobTitle(String jobTitle) { this.jobTitle = jobTitle; }
 
-    public double getSalary() { return salary; }
-    public void setSalary(double salary) { this.salary = salary; }
+    public void setCompanyName(String companyName){this.companyName = companyName;}
+    public String getCompanyName(){return companyName;}
+
+    public int getSalary() { return salary; }
+    public void setSalary(int salary) { this.salary = salary; }
 
     public String getDuration() { return duration; }
     public void setDuration(String duration) { this.duration = duration; }

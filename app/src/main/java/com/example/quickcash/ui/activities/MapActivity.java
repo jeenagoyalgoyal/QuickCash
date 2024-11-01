@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -49,7 +50,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<String> companies;
     private Map<String, Integer> markerToJobIndex;
     private Button backButton;
-    private boolean useDummyData = true; // Flag to use dummy data for testing
+    private boolean useDummyData = false; // Flag to use dummy data for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 salaries = intent.getStringArrayListExtra("salaries");
                 durations = intent.getStringArrayListExtra("durations");
                 companies = intent.getStringArrayListExtra("companies");
+                Log.e("Latitude: ", latitudes.get(0));
+                Log.e("Longitude: ", longitudes.get(0));
             }
         }
 

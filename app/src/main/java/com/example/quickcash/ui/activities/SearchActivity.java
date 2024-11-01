@@ -36,34 +36,26 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        setContentView(R.layout.job_search_parameter);
 
         // Initialize Firebase
         firebaseCRUD = new FirebaseCRUD(FirebaseDatabase.getInstance());
-
-        // Initialize fields
-        jobTitle = findViewById(R.id.JobTitle);
-        minSalary = findViewById(R.id.MinSalary);
-        maxSalary = findViewById(R.id.MaxSalary);
-        duration = findViewById(R.id.Duration);
-        location = findViewById(R.id.Location);
 
         // Initialize Show Map Button
         showMapButton = findViewById(R.id.showMapButton);
 
         boolean flag = false;
 
-        jobTitle = findViewById(R.id.jobTitleText);
+        jobTitle = findViewById(R.id.jobTitle);
         String jobTitleString = jobTitle.getText().toString().trim();
-        minSalary = findViewById(R.id.MinSalary);
+        minSalary = findViewById(R.id.minSalary);
         String minSalaryString = minSalary.getText().toString().trim();
-        maxSalary = (findViewById(R.id.MaxSalary));
+        maxSalary = (findViewById(R.id.maxSalary));
         String maxSalaryString = maxSalary.getText().toString().trim();
-        duration = findViewById(R.id.companyNameText);
+        duration = findViewById(R.id.companyName);
         String durationString = duration.getText().toString().trim();
-        location = findViewById(R.id.Location);
+        location = findViewById(R.id.location);
         String locationString = location.getText().toString().trim();
-        searchButton = findViewById(R.id.showMapButton);
 
         if (JobSearchValidator.isValidSalaryString(minSalaryString, maxSalaryString)) {
             flag = true;

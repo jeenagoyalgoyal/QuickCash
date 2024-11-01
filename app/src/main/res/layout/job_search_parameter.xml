@@ -150,14 +150,22 @@
             android:id="@+id/search_job_parameter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:text="Search" />
+
+        <Button
+            android:id="@+id/showMapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Show Map" />
 
         <View
-            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/darker_gray"/>
+            android:layout_marginTop="0dp"
+            android:background="@android:color/darker_gray" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
