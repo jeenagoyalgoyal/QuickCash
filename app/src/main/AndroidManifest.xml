@@ -21,7 +21,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".Profile"></activity>
+        <activity
+            android:name=".Profile"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            </activity>
+        <activity
+            android:name=".JobSearchParameterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -33,7 +42,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RoleActivity"
+        <activity android:name=".EmployeeHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".EmployerHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".JobSubmission"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>

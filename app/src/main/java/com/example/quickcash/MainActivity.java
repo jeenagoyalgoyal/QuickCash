@@ -62,9 +62,23 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //Switching Role
-        if(id == R.id.switch_role) {
+        // Switching Role based on current user role
+        if (id == R.id.switch_role) {
+            UseRole useRole = UseRole.getInstance();
             int userid = 123;
-            Intent intent = new Intent(MainActivity.this, RoleActivity.class);
+            Intent intent;
+
+            // Check the current role and set the destination activity
+            if (useRole.getCurrentRole().equals("employer")) {
+                intent = new Intent(MainActivity.this, EmployeeHomepageActivity.class);
+                Toast.makeText(this, "Switched to Employee role", Toast.LENGTH_SHORT).show();
+            }
+
+            else {
+                intent = new Intent(MainActivity.this, EmployerHomepageActivity.class);
+                Toast.makeText(this, "Switched to Employer role", Toast.LENGTH_SHORT).show();
+            }
+
             intent.putExtra("userID", userid);
             startActivity(intent);
             return true;
