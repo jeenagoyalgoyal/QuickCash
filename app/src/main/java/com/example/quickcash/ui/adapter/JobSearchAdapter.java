@@ -59,26 +59,28 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
         holder.showMapButton.setOnClickListener(view -> {
+            //Intent for location and details on map
             Intent intentToMapSingleJob = new Intent(parent.getContext(), MapActivity.class);
+            //Get lat long
             LocationHelper.LocationResult lh = LocationHelper.getCoordinates(parent.getContext(), job.getLocation());
 
             //Map only reads ArrayLists of String from intent
-            ArrayList<String> latitudes = new ArrayList<>();
-            ArrayList<String> longitudes = new ArrayList<>();
+            ArrayList<Double> latitudes = new ArrayList<>();
+            ArrayList<Double> longitudes = new ArrayList<>();
             ArrayList<String> titles = new ArrayList<>();
             ArrayList<String> salaries = new ArrayList<>();
             ArrayList<String> durations = new ArrayList<>();
             ArrayList<String> companies = new ArrayList<>();
 
-            latitudes.add(String.valueOf(lh.latitude));
-            longitudes.add(String.valueOf(lh.longitude));
+            latitudes.add(lh.latitude);
+            longitudes.add(lh.longitude);
             titles.add(job.getJobTitle());
             salaries.add(String.valueOf(job.getSalary()));
             durations.add(job.getExpectedDuration());
             companies.add(job.getCompanyName());
 
-            intentToMapSingleJob.putStringArrayListExtra("latitudes", latitudes);
-            intentToMapSingleJob.putStringArrayListExtra("longitudes", longitudes);
+            intentToMapSingleJob.putExtra("latitudes", latitudes);
+            intentToMapSingleJob.putExtra("longitudes", longitudes);
             intentToMapSingleJob.putStringArrayListExtra("titles", titles);
             intentToMapSingleJob.putStringArrayListExtra("salaries", salaries);
             intentToMapSingleJob.putStringArrayListExtra("durations", durations);

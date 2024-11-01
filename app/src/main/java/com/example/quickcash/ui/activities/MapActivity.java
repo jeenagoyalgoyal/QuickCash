@@ -42,8 +42,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private JobToMap job;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
-    private ArrayList<String> latitudes;
-    private ArrayList<String> longitudes;
+    private ArrayList<Double> latitudes;
+    private ArrayList<Double> longitudes;
     private ArrayList<String> titles;
     private ArrayList<String> salaries;
     private ArrayList<String> durations;
@@ -68,14 +68,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             // Get the job data from the intent
             Intent intent = getIntent();
             if (intent != null) {
-                latitudes = intent.getStringArrayListExtra("latitudes");
-                longitudes = intent.getStringArrayListExtra("longitudes");
+                latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
+                longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
                 titles = intent.getStringArrayListExtra("titles");
                 salaries = intent.getStringArrayListExtra("salaries");
                 durations = intent.getStringArrayListExtra("durations");
                 companies = intent.getStringArrayListExtra("companies");
-                Log.e("Latitude: ", latitudes.get(0));
-                Log.e("Longitude: ", longitudes.get(0));
             }
         }
 
@@ -110,8 +108,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         // Add dummy job locations around Halifax
         // Job 1 - Downtown Halifax
-        latitudes.add("44.6488");
-        longitudes.add("-63.5752");
+        latitudes.add(44.6488);
+        longitudes.add(-63.5752);
         companies.add("Microsoft");
         titles.add("Software Developer");
         salaries.add("75000");
@@ -119,32 +117,32 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
 
         // Job 2 - Dartmouth
-        latitudes.add("44.6667");
-        longitudes.add("-63.5667");
+        latitudes.add(44.6667);
+        longitudes.add(-63.5667);
         companies.add("FERRY CO.");
         titles.add("Web Designer");
         salaries.add("65000");
         durations.add("Contract - 12 months");
 
         // Job 3 - Bedford
-        latitudes.add("44.7213");
-        longitudes.add("-63.6582");
+        latitudes.add(44.7213);
+        longitudes.add(-63.6582);
         companies.add("BUS CO.");
         titles.add("Data Analyst");
         salaries.add("70000");
         durations.add("Part-time");
 
         // Job 4 - Halifax Shopping Centre area
-        latitudes.add("44.6497");
-        longitudes.add("-63.6088");
+        latitudes.add(44.6497);
+        longitudes.add(-63.6088);
         companies.add("Walmart");
         titles.add("UX Researcher");
         salaries.add("80000");
         durations.add("Full-time");
 
         // Job 5 - Dalhousie University area
-        latitudes.add("44.6366");
-        longitudes.add("-63.5917");
+        latitudes.add(44.6366);
+        longitudes.add(-63.5917);
         companies.add("Dalhousie");
         titles.add("Teaching Assistant");
         salaries.add("25000");
@@ -183,8 +181,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         for (int i = 0; i < latitudes.size(); i++) {
             try {
-                double lat = Double.parseDouble(latitudes.get(i));
-                double lng = Double.parseDouble(longitudes.get(i));
+                double lat =latitudes.get(i);
+                double lng = longitudes.get(i);
                 double salary = Double.parseDouble(salaries.get(i));
 
                 LatLng position = new LatLng(lat, lng);
