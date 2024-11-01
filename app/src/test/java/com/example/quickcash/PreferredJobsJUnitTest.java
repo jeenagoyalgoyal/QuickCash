@@ -1,44 +1,70 @@
 package com.example.quickcash;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import com.example.quickcash.adapter.JobSearchAdapter;
+import com.example.quickcash.model.Job;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PreferredJobsJUnitTest {
 
-    //Dummy Jobs
-    protected final TempJob Job = new TempJob("dummy Job Information");
-    protected final TempJob Job2 = new TempJob("dummy Job Information 2");
-    //ID of account that preferred job adds job to
-    protected final String userID = "testingemail@test,db";
+    // Dummy Jobs
+    protected Job job;
+    protected Job job2;
+    // In-memory list to simulate preferred jobs
+    protected List<Job> preferredJobsList;
 
-    /*
-    It is assumed for now that jobs will be retrieved in an array format and that the last added job
-    is appended to the end of this array. Refactor this test as necessary depending on your code implementation.
-    */
+    @Before
+    public void setUp() {
+        job = new Job();
+        job.setJobTitle("dummy Job Information");
+        job.setCompanyName("Dummy Company");
+        job.setLocation("Dummy Location");
+        job.setSalary(50000);
+        job.setExpectedDuration("3 months");
 
+        job2 = new Job();
+        job2.setJobTitle("dummy Job Information 2");
+        job2.setCompanyName("Dummy Company 2");
+        job2.setLocation("Dummy Location 2");
+        job2.setSalary(60000);
+        job2.setExpectedDuration("6 months");
 
-    @Test
-    public void checkIfPreferredJobIsAdded(){
-       PreferredJobs prefJobs = new PreferredJobs();
-       prefJobs.addJob(Job, userID);
-       int indexOfAddedJob = prefJobs.getJobs(userID).length-1;
-       TempJob returnedJob = prefJobs.getJobs(userID)[indexOfAddedJob];
-       prefJobs.removeJob(Job, userID);
-       assertEquals(returnedJob, Job);
+        // Initialize the preferred jobs list
+        preferredJobsList = new ArrayList<>();
     }
 
     @Test
-    public void checkMultiplePreferredJobsAdded(){
-        PreferredJobs prefJobs = new PreferredJobs();
-        prefJobs.addJob(Job, userID);
-        prefJobs.addJob(Job2, userID);
-        int indexOfAddedJob = prefJobs.getJobs(userID).length-2;
-        TempJob returnedJob = prefJobs.getJobs(userID)[indexOfAddedJob];
-        prefJobs.removeJob(Job, userID);
-        prefJobs.removeJob(Job2, userID);
-        assertEquals(returnedJob, Job);
+    public void checkIfPreferredJobIsAdded() {
+        // Create a JobSearchAdapter with the in-memory preferred jobs list
+        JobSearchAdapter jobSearchAdapter = new JobSearchAdapter(preferredJobsList);
+
+        // Simulate adding the job to the preferred list
+        jobSearchAdapter.addJobToPreferredList(job, null); // Pass null for context since we won't use it
+
+        // Check if the job was added
+        assertEquals(1, preferredJobsList.size());
+        assertEquals(job.getJobTitle(), preferredJobsList.get(0).getJobTitle());
+    }
+
+    @Test
+    public void checkMultiplePreferredJobsAdded() {
+        // Create a JobSearchAdapter with the in-memory preferred jobs list
+        JobSearchAdapter jobSearchAdapter = new JobSearchAdapter(preferredJobsList);
+
+        // Simulate adding both jobs to the preferred list
+        jobSearchAdapter.addJobToPreferredList(job, null);
+        jobSearchAdapter.addJobToPreferredList(job2, null);
+
+        // Check if both jobs were added
+        assertEquals(2, preferredJobsList.size());
+        assertTrue(preferredJobsList.contains(job));
+        assertTrue(preferredJobsList.contains(job2));
     }
 }
