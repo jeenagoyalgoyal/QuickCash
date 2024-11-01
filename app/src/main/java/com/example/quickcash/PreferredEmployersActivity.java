@@ -24,12 +24,14 @@ import java.util.List;
 
 public class PreferredEmployersActivity extends AppCompatActivity {
     private String email;
-    private ArrayList<String> preferredEmployersList;
-    private ArrayAdapter<String> adapter;
     private String userID;
+
+    private ArrayList<String> preferredEmployersNameList;
+    private ArrayList<String> preferredEmployersIdList;
+    private ArrayAdapter<String> adapter;
+
     private FirebaseDatabase database;
     private DatabaseReference preferredEmployersRef;
-    private String tempEmployee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,6 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
         //Intent intentPreferredEmployers = getIntent();
         //email = intentPreferredEmployers.getStringExtra("email");
-        preferredEmployersList = new ArrayList<>();
         email = "testingemail@test.db"; //TEMP
         this.userID = email.replace(".", ",");;
 
@@ -65,29 +66,24 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     protected void setPreferredEmployersListView() {
         //add listener to preferredEmployers
         this.preferredEmployersRef.addValueEventListener(new ValueEventListener() {
+            PreferredEmployers preferredEmployers = new PreferredEmployers();
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //adding preferred employers to preferred employers object
                 for (DataSnapshot employerDetails : snapshot.getChildren()){
-                String employerName = employerDetails.child("name").getValue(String.class);
-                String employerID = employerDetails.child("id").getValue(String.class);
-                Log.e("FirebasePreferredEmployers", "new testing! "+employerID+" "+employerName);
+                    String id = employerDetails.child("id").getValue(String.class);
+                    String name =  employerDetails.child("name").getValue(String.class);
+                    preferredEmployers.addDetails(id, name);
+                    Log.e("FirebasePreferredEmployers", "new testing! "+id+" "+name);
                 }
+
+                //retrieving the list and displaying
+                preferredEmployersNameList = preferredEmployers.getNameList();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
-            //do stuff here
         });
-    }
-
-    public List<String> getPreferredEmployersList() {
-        return this.preferredEmployersList;
-    }
-
-    private void addPreferredEmployersList(String fetchedEmployer){
-        String fetchedEmployerTemp = fetchedEmployer+" ";
-        Log.e("FirebasePreferredEmployers", "checking temp employer"+fetchedEmployerTemp);
-        preferredEmployersList.add(fetchedEmployerTemp);
-        Log.e("FirebasePreferredEmployers", "checking temp employer in array"+preferredEmployersList.get(0));
     }
 }
