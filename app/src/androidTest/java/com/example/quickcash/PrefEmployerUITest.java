@@ -37,11 +37,6 @@ public class PrefEmployerUITest {
     }
 
     //TEMP TEST REMOVE REMOVE REMOVE
-    @Test
-    public void checkEmployeesRetreived() {
-        FirebasePreferredEmployers test1 = new FirebasePreferredEmployers("testingemail@test,db");
-        assertEquals("johndoe@gmail,com",test1.getPreferredEmployersList());
-    }
 
     @Test
     public void checkIfLandingPageIsVisible() {
