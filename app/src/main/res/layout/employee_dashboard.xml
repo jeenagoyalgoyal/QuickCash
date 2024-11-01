@@ -30,10 +30,10 @@
         android:id="@+id/myProfileButton"
         android:layout_width="295dp"
         android:layout_height="47dp"
-        android:layout_marginTop="172dp"
+        android:layout_marginTop="228dp"
         android:text="My Profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.577"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,10 +41,10 @@
         android:id="@+id/workScheduleButton"
         android:layout_width="288dp"
         android:layout_height="47dp"
-        android:layout_marginTop="236dp"
+        android:layout_marginTop="296dp"
         android:text="Work Schedule"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,10 +52,9 @@
         android:id="@+id/tasksProjectsButton"
         android:layout_width="297dp"
         android:layout_height="49dp"
-        android:layout_marginTop="312dp"
+        android:layout_marginTop="364dp"
         android:text="Tasks and Projects"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.561"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,10 +62,10 @@
         android:id="@+id/performanceReviewsButton"
         android:layout_width="306dp"
         android:layout_height="45dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="432dp"
         android:text="Performance Reviews"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,10 +73,10 @@
         android:id="@+id/employeeNotifications"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="440dp"
+        android:layout_marginTop="496dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.552"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,7 +84,7 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="572dp"
+        android:layout_marginTop="560dp"
         android:text="Switch to Employer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -96,10 +95,10 @@
         android:id="@+id/preferredJobsButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="504dp"
+        android:layout_marginTop="168dp"
         android:text="My Preferred Jobs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.572"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

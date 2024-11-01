@@ -63,22 +63,21 @@
             android:text="Duration: " />
 
         <Button
-            android:id="@+id/btnAddToPreferred"
+            android:id="@+id/ViewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add To My Preferred Jobs"
+            android:text="View Job"
             android:layout_marginBottom="3dp"
             android:layout_gravity="center_horizontal"/>
 
         <Button
-            android:id="@+id/showMap"
+            android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show Map"
+            android:text="Close"
             android:layout_marginBottom="3dp"
-            android:layout_gravity="center_horizontal"/>
-
-
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"/> <!-- Initially hidden -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/preferredJobRecyclerView"
@@ -87,7 +86,6 @@
             android:outlineAmbientShadowColor="@color/cardview_dark_background"
             tools:itemCount="2"
             tools:listitem="@layout/job_search_result_view"/>
-
 
     </LinearLayout>
 
