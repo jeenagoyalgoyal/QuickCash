@@ -131,7 +131,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
-                        moveToWelcomePage();
+                        // Fetch user role
+                        fetchUserRole(email);
                     } else {
                         handleLoginError(task.getException());
                     }
@@ -148,9 +149,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void moveToWelcomePage() {
-        // Intent to move to the welcome page
-        Intent intent = new Intent(this, RoleActivity.class);
-        startActivity(intent);
+    private void fetchUserRole(String email) {
+
+        UseRole useRole = UseRole.getInstance();
+        useRole.fetchUserRole(email, new UseRole.OnRoleFetchedListener() {
+            @Override
+            public void onRoleFetched(String role) {
+                if (role != null) {
+                    // Set the current role in UseRole
+                    useRole.setCurrentRole(role);
+                    // Navigate to the appropriate homepage
+                    if (role.equalsIgnoreCase("employee")) {
+                        navigateToEmployeeHomepage(email);
+                    } else if (role.equalsIgnoreCase("employer")) {
+                        navigateToEmployerHomepage(email);
+                    } else {
+                        statusLabel.setText("Role not recognized.");
+                    }
+                } else {
+                    statusLabel.setText("Role not found.");
+                }
+            }
+        });
+    }
+
+    private void navigateToEmployeeHomepage(String email) {
+        Intent intentEmployee = new Intent(this, EmployeeHomepageActivity.class);
+        intentEmployee.putExtra("email", email);
+        startActivity(intentEmployee);
+    }
+
+    private void navigateToEmployerHomepage(String email) {
+        Intent intentEmployer = new Intent(this, EmployerHomepageActivity.class);
+        intentEmployer.putExtra("email", email);
+        startActivity(intentEmployer);
     }
 }
