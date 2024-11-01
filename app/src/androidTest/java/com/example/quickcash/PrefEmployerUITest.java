@@ -78,23 +78,23 @@ public class PrefEmployerUITest {
     public void testPreferredEmployersButtonOnDashboard() throws UiObjectNotFoundException {
         // Log in
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
-        emailBox.setText("testuser@test.com");
+        emailBox.setText("testingemail@test.db");
         UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
-        passwordBox.setText("password123");
+        passwordBox.setText("Test_Pass123#");
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
 
         // Navigate to the employee dashboard
-        UiObject dashboardButton = device.findObject(new UiSelector().text("Dashboard"));
-        dashboardButton.clickAndWaitForNewWindow();
+        UiObject employeeButton = device.findObject(new UiSelector().text("Switch to Employee"));
+        employeeButton.clickAndWaitForNewWindow();
 
         // Check if "My Preferred Employers" button is visible
-        UiObject myPreferredEmployersButton = device.findObject(new UiSelector().text("My Preferred Employers"));
-        assertTrue("My Preferred Employers button should be visible on dashboard", myPreferredEmployersButton.exists());
+        UiObject preferredEmployersButton = device.findObject(new UiSelector().text("Preferred Employers"));
+        assertTrue("My Preferred Employers button should be visible on dashboard", preferredEmployersButton.exists());
 
         // Click on "My Preferred Employers" and verify the navigation to the preferred employers list page
-        myPreferredEmployersButton.clickAndWaitForNewWindow();
-        UiObject preferredEmployersPageTitle = device.findObject(new UiSelector().text("Preferred Employers"));
+        preferredEmployersButton.clickAndWaitForNewWindow();
+        UiObject preferredEmployersPageTitle = device.findObject(new UiSelector().text("Your Preferred Employers:"));
         assertTrue("User should navigate to Preferred Employers page", preferredEmployersPageTitle.exists());
     }
 }
