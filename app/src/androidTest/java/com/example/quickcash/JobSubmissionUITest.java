@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+//import static android.support.test.uiautomator;
 
 
 import android.graphics.Color;
@@ -35,12 +36,32 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.hasToString;
+
+import android.os.IBinder;
+import android.view.WindowManager;
+
+import androidx.test.espresso.Root;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 @RunWith(JUnit4.class)
 public class JobSubmissionUITest {
 
 
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
     public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
+    public ActivityScenario<LoginActivity> loginActivityActivityScenario;
 
 
     public void setupRoleActivity() {
@@ -49,6 +70,10 @@ public class JobSubmissionUITest {
 
     public void setupJobSubmissionActivityScenario() {
         jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmission.class);
+    }
+
+    public void setupLoginActivityActivityScenario(){
+        loginActivityActivityScenario = ActivityScenario.launch(LoginActivity.class);
     }
 
     @Test
@@ -203,7 +228,19 @@ public class JobSubmissionUITest {
 
     @Test
     public void testFormSubmitsSuccessfully() {
-        setupJobSubmissionActivityScenario();
+        setupLoginActivityActivityScenario();
+
+        onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"));
+        onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"));
+        onView(withId(R.id.loginButton)).perform(click());
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
+        onView(withId(R.id.createJobButton)).perform(click());
 
         onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"));
         onView(withId(R.id.companyName)).perform(typeText("Tech Company"));
@@ -215,10 +252,30 @@ public class JobSubmissionUITest {
         onData(hasToString("High")).perform(click());
         onView(withId(R.id.locationJob)).perform(typeText("Halifax"));
         onView(withId(R.id.expectedDuration)).perform(typeText("20"));
+        onView(withId(R.id.startDate)).perform(click());
+        onView(withText("31")).perform(click());
+        onView(withText("OK")).perform(click());
 
-        onView(withId(R.id.jobSubmissionButton)).perform(swipeUp(), click());
+        onView(withId(R.id.jobSubmissionButton)).perform(click());
 
-        onView(withText("Job Submission Successful!")).check(matches(isDisplayed()));
+        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
+    }
 
+    public static class ToastMatcher extends TypeSafeMatcher<Root> {
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("is toast");
+        }
+
+        @Override
+        public boolean matchesSafely(Root root) {
+            int type = root.getWindowLayoutParams().get().type;
+            if ((type == WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY) || (type == WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG)) {
+                IBinder windowToken = root.getDecorView().getWindowToken();
+                IBinder appToken = root.getDecorView().getApplicationWindowToken();
+                return windowToken == appToken;
+            }
+            return false;
+        }
     }
 }
