@@ -1,8 +1,10 @@
 package com.example.quickcash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,10 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PreferredEmployersActivity extends AppCompatActivity {
     private String email;
     private String userID;
+
+    private ListView listView;
 
     private ArrayList<String> preferredEmployersNameList;
     private ArrayList<String> preferredEmployersIdList;
@@ -44,15 +47,27 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             return insets;
         });
 
-        //Intent intentPreferredEmployers = getIntent();
-        //email = intentPreferredEmployers.getStringExtra("email");
-        email = "testingemail@test.db"; //TEMP
-        this.userID = email.replace(".", ",");;
+        //ID and email are gotten from intent
+        Intent intentPreferredEmployers = getIntent();
+        email = intentPreferredEmployers.getStringExtra("email");
 
-        this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
-        this.initializeDatabaseRefs();
-        this.setPreferredEmployersListView();
+        //listview stuff
+        listView = findViewById(R.id.preferredEmployeesListView);
+        preferredEmployersNameList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
+        listView.setAdapter(adapter);
 
+        //setting of ID and database code only executes if email is retrieved correctly
+        if (email!=null && !email.isEmpty()){
+            this.userID = email.replace(".", ",");;
+            this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
+            this.initializeDatabaseRefs();
+            this.setPreferredEmployersListView();
+        }
+        else {
+            Log.e("PreferredEmployers", "no ID initialized! (is the intent working correctly?)");
+        }
+        adapter.clear();
     }
 
     protected void initializeDatabaseRefs() {
@@ -71,18 +86,26 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //adding preferred employers to preferred employers object
-                for (DataSnapshot employerDetails : snapshot.getChildren()){
-                    String id = employerDetails.child("id").getValue(String.class);
-                    String name =  employerDetails.child("name").getValue(String.class);
-                    preferredEmployers.addDetails(id, name);
-                    Log.e("FirebasePreferredEmployers", "new testing! "+id+" "+name);
+                if (snapshot.hasChildren()){
+                    for (DataSnapshot employerDetails : snapshot.getChildren()){
+                        String id = employerDetails.child("id").getValue(String.class);
+                        String name =  employerDetails.child("name").getValue(String.class);
+                        preferredEmployers.addDetails(id, name);
+                    }
                 }
-
+                else {
+                    Toast.makeText(PreferredEmployersActivity.this, "You do not have any preferred employees saved!", Toast.LENGTH_LONG).show();
+                }
                 //retrieving the list and displaying
                 preferredEmployersNameList = preferredEmployers.getNameList();
+                //set data in listview
+                adapter.addAll(preferredEmployersNameList);
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(PreferredEmployersActivity.this, "Connection Error!", Toast.LENGTH_LONG).show();
+                Log.e("PreferredEmployers", "Error connection to firebase!");
             }
         });
     }
