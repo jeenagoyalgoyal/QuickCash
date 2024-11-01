@@ -14,16 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FirebasePreferredEmployers {
-
+    private List<String> preferredEmployersList = new ArrayList<>();
     private String userID;
     private final FirebaseDatabase database;
     private DatabaseReference usersRef;
-    private List<String> preferredEmployersList = new ArrayList<>();
+    private String tempEmployee;
+
 
     public FirebasePreferredEmployers(String userID) {
         this.userID = userID;
         this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         this.initializeDatabaseRefs();
+        this.setPreferredEmployersListener();
     }
 
     protected void initializeDatabaseRefs() {
@@ -34,38 +36,26 @@ public class FirebasePreferredEmployers {
         return this.database.getReference("Users");
     }
 
-    public void getPreferredEmployers(){
-        usersRef.child(userID).child("preferredEmployers").addListenerForSingleValueEvent(new ValueEventListener() {
+
+    protected void setPreferredEmployersListener() {
+        this.usersRef.child(userID).child("preferredEmployers").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    int employerIndex = 1;
-                    //get first employee
-                    String fetchedEmployer = dataSnapshot.child(String.valueOf(employerIndex)).getValue(String.class);
-                    if (fetchedEmployer != null) {
-                        //loop till no more employees
-                        while (fetchedEmployer!=null){
-                            //add to arraylist of employers
-                            preferredEmployersList.add(fetchedEmployer);
-                            //get next value
-                            employerIndex++;
-                            fetchedEmployer = dataSnapshot.child(String.valueOf(employerIndex)).getValue(String.class);
-                        }
-                    }
-                    else {
-                        Log.e("FirebasePreferredEmployers", "no preferred employers found");
-
-                    }
-                } else {
-                    Log.e("FirebasePreferredEmployers", "no data found for the employer ID");
-
-                }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tempEmployee=snapshot.child(String.valueOf(1)).getValue(String.class);
+                Log.e("FirebasePreferredEmployers", "employee:"+snapshot.child(String.valueOf(1)).getValue(String.class));
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("LoginActivity", "Database error: " + databaseError.getMessage());
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+        Log.e("FirebasePreferredEmployers", "checking if employee returns"+tempEmployee);
+    }
+
+    public String getPreferredEmployersList() {
+        return this.tempEmployee;
+    }
+
+    private void addPreferredEmployersList(String fetchedEmployer){
+        preferredEmployersList.add(fetchedEmployer);
     }
 }

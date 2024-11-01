@@ -45,13 +45,7 @@ public class RegistrationEspressoTest {
     }
 
 
-    //TEMP TEST REMOVE REMOVE REMOVE
-    @Test
-    public void checkIfPasswordIsEmpty() {
-        FirebasePreferredEmployers test1 = new FirebasePreferredEmployers("testingemail@test,db");
-        test1.getPreferredEmployers();
-        assertEquals(2,2);
-    }
+
 
     @Test
     public void emptyNameTest() {

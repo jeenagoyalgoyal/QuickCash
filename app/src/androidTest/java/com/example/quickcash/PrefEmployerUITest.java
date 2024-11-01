@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
@@ -33,6 +34,13 @@ public class PrefEmployerUITest {
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launcherIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
+    }
+
+    //TEMP TEST REMOVE REMOVE REMOVE
+    @Test
+    public void checkEmployeesRetreived() {
+        FirebasePreferredEmployers test1 = new FirebasePreferredEmployers("testingemail@test,db");
+        assertEquals("johndoe@gmail,com",test1.getPreferredEmployersList());
     }
 
     @Test
