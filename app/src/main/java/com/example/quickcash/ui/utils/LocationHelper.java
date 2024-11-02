@@ -37,16 +37,20 @@ public class LocationHelper {
 
             Geocoder geocoder = new Geocoder(context);
 
-            List<Address> addresses = geocoder.getFromLocationName(locationString, 1);
-
+            List<Address> addresses = geocoder.getFromLocationName(locationString, 5);
             if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-                return new LocationResult(
-                        address.getLatitude(),
-                        address.getLongitude(),
-                        null
-                );
+                for (Address address : addresses) {
+                    // Check if this address has valid coordinates
+                    if (address.getLatitude() != 0 && address.getLatitude() != 0) {
+                        return new LocationResult(
+                                address.getLatitude(),
+                                address.getLongitude(),
+                                null
+                        );
+                    }
+                }
             }
+
             return new LocationResult(0, 0, "Location not found");
 
         } catch (IOException e) {

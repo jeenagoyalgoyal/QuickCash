@@ -41,9 +41,12 @@ import java.util.Objects;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private JobToMap job;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
+    private Button backButton;
+    private boolean useDummyData = false; // Flag to use dummy data for testing
+
+    //Details
     private ArrayList<Double> latitudes;
     private ArrayList<Double> longitudes;
     private ArrayList<String> titles;
@@ -51,9 +54,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<String> durations;
     private ArrayList<String> companies;
     private Map<String, Integer> markerToJobIndex;
-    private Button backButton;
-    private boolean useDummyData = false; // Flag to use dummy data for testing
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

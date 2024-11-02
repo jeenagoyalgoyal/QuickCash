@@ -116,7 +116,6 @@ public class JobSubmissionActivity extends AppCompatActivity {
         urgencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         jobUrgency.setAdapter(urgencyAdapter);
 
-
         // Set up a date picker for the start date
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +203,10 @@ public class JobSubmissionActivity extends AppCompatActivity {
         // Location
         if (locationText.isEmpty()) {
             location.setError("Location is required.");
+            location.requestFocus();
+            return;
+        } else if(locationText.trim().split(" ").length<3){
+            location.setError("Location not specific enough. Pleas enter more than 3 words!");
             location.requestFocus();
             return;
         }
