@@ -95,6 +95,8 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                         FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
                         addToPreferredEmployersList(userId,job.getEmployerId(),holder.itemView.getContext());
+                    } else if (item.getTitle().equals("Add to Preferred Jobs")) {
+                        //Do preferred Job calls here!
                     }
                     return true;
                 }

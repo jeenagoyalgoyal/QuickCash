@@ -3,4 +3,7 @@
     <item
         android:id="@+id/add_to_preferred_employers"
         android:title="Add to Preferred Employers" />
+    <item
+        android:id="@+id/Add_to_Preferred_Jobs"
+        android:title="Add to Preferred Jobs" />
 </menu>
