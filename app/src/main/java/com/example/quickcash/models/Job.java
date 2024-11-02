@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.models;
+package com.example.quickcash.models;
 
 import android.content.Context;
 

@@ -1,10 +1,9 @@
 package com.example.quickcash.maps;
 
+import com.example.quickcash.models.JobToMap;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import com.example.quickcash.ui.deprecated.JobToMap;
 
 public class MapUnitTest {
     // Tests to be checked:
