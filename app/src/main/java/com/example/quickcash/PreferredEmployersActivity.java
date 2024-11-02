@@ -104,7 +104,6 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
     private void setupEmployerSelector(){
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            Toast.makeText(PreferredEmployersActivity.this, "You clicked: "+preferredEmployersIdList.get(position), Toast.LENGTH_LONG).show();
             displayJobsByEmployer(preferredEmployersIdList.get(position));
         });
     }

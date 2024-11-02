@@ -5,63 +5,51 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class PrefEmployerJUnit {
     private PreferredEmployers preferredEmployers;
 
-    @Before
-    public void setUp() {
-        preferredEmployers = new PreferredEmployers();
-    }
+    private String employerId1 = "employer1@test,com";
+    private String employerName1 = "employer1";
+    private String employerId2 = "employer2@test,com";
+    private String employerName2 = "employer2";
+
+
 
     @Test
     public void testAddEmployerSuccessfully() {
-        boolean result = preferredEmployers.addEmployer("employer123");
-        assertTrue("Employer should be added successfully", result);
-        assertTrue("Employer should be in preferred list", preferredEmployers.isEmployerPreferred("employer123"));
+        preferredEmployers = new PreferredEmployers();
+        assertTrue(preferredEmployers.addDetails(employerId1,employerName1));
     }
 
     @Test
-    public void testAddEmployerAlreadyInList() {
-        preferredEmployers.addEmployer("employer123");
-        boolean result = preferredEmployers.addEmployer("employer123");
-        assertFalse("Adding an already existing employer should return false", result);
-    }
-
-    @Test
-    public void testAddEmployerInvalidId() {
-        boolean result = preferredEmployers.addEmployer("");
-        assertFalse("Adding an empty employer ID should return false", result);
-        result = preferredEmployers.addEmployer(null);
-        assertFalse("Adding a null employer ID should return false", result);
+    public void testAddDuplicateEmployer() {
+        preferredEmployers = new PreferredEmployers();
+        preferredEmployers.addDetails(employerId1,employerName1);
+        assertFalse(preferredEmployers.addDetails(employerId1,employerName1));
     }
 
     @Test
     public void testGetPreferredEmployers() {
-        preferredEmployers.addEmployer("employer123");
-        preferredEmployers.addEmployer("employer456");
-        assertEquals("There should be 2 employers in the list", 2, preferredEmployers.getPreferredEmployers().size());
-        assertTrue("List should contain employer123", preferredEmployers.getPreferredEmployers().contains("employer123"));
-        assertTrue("List should contain employer456", preferredEmployers.getPreferredEmployers().contains("employer456"));
+        preferredEmployers = new PreferredEmployers();
+        preferredEmployers.addDetails(employerId1,employerName1);
+        ArrayList<String> ids = preferredEmployers.getIdList();
+        ArrayList<String> names = preferredEmployers.getNameList();
+        assertEquals(employerId1,ids.get(0));
+        assertEquals(employerName1,names.get(0));
     }
 
     @Test
-    public void testRemoveEmployerSuccessfully() {
-        preferredEmployers.addEmployer("employer123");
-        boolean result = preferredEmployers.removeEmployer("employer123");
-        assertTrue("Employer should be removed successfully", result);
-        assertFalse("Employer should no longer be in the list", preferredEmployers.isEmployerPreferred("employer123"));
-    }
-
-    @Test
-    public void testRemoveEmployerNotInList() {
-        boolean result = preferredEmployers.removeEmployer("nonexistentEmployer");
-        assertFalse("Removing a non-existent employer should return false", result);
-    }
-
-    @Test
-    public void testIsEmployerPreferred() {
-        preferredEmployers.addEmployer("employer123");
-        assertTrue("Employer should be in preferred list", preferredEmployers.isEmployerPreferred("employer123"));
-        assertFalse("Non-existent employer should not be in the list", preferredEmployers.isEmployerPreferred("employer456"));
+    public void testAddMultipleEmployers() {
+        preferredEmployers = new PreferredEmployers();
+        preferredEmployers.addDetails(employerId1,employerName1);
+        preferredEmployers.addDetails(employerId2,employerName2);
+        ArrayList<String> ids = preferredEmployers.getIdList();
+        ArrayList<String> names = preferredEmployers.getNameList();
+        assertEquals(employerId1,ids.get(0));
+        assertEquals(employerName1,names.get(0));
+        assertEquals(employerId2,ids.get(1));
+        assertEquals(employerName2,names.get(1));
     }
 }
