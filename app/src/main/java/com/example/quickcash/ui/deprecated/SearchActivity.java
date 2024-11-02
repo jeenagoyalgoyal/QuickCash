@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.activities;
+package com.example.quickcash.ui.deprecated;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quickcash.ui.activities.MapActivity;
 import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.utils.Validators.JobSearchValidator;
 

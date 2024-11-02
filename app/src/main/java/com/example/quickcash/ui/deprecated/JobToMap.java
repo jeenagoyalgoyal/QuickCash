@@ -1,5 +1,4 @@
-package com.example.quickcash.ui.models;
-
+package com.example.quickcash.ui.deprecated;
 
 //Class made initially to test Data transfer to map! replaced with Job class
 public class JobToMap {
