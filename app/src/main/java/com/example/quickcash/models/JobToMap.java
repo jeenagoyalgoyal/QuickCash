@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.models;
+package com.example.quickcash.models;
 
 
 //Class made initially to test Data transfer to map! replaced with Job class

@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.utils.Validators;
+package com.example.quickcash.repositories.validators;
 
 public class JobSearchValidator {
 

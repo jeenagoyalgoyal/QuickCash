@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.utils.Adapter;
+package com.example.quickcash.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.ui.activities.MapActivity;
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.models.Job;
 import com.example.quickcash.R;
 import com.example.quickcash.ui.utils.LocationHelper;
 

@@ -2,7 +2,7 @@ package com.example.quickcash.ui.utils.repositories;
 
 import androidx.annotation.NonNull;
 
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.models.Job;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;

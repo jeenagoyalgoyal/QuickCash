@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.ui.adapters.JobSearchAdapter;
+import com.example.quickcash.models.Job;
 import com.example.quickcash.ui.utils.LocationHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +43,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private JobSearchAdapter jobSearchAdapter;
     private List<Job> jobList;
-    private List<Job> jobListToMap;
     private DatabaseReference jobsRef;
 
     @Override
@@ -109,7 +108,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         jobList = new ArrayList<>();
-        jobListToMap = new ArrayList<Job>();
         jobSearchAdapter = new JobSearchAdapter(jobList, this);
         recyclerView.setAdapter(jobSearchAdapter);
     }
@@ -212,7 +210,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         }
 
         // Clear previous search results
-        jobListToMap.clear();
+        jobList.clear();
         jobSearchAdapter.notifyDataSetChanged();
 
         //Map only reads ArrayLists of String from intent
@@ -230,7 +228,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                jobListToMap.clear(); // Clear the list before adding new items
+                jobList.clear(); // Clear the list before adding new items
                 for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
                     //Previously used JobToMap but refactored to use Job class instead
                     Job job = jobSnapshot.getValue(Job.class);
@@ -250,12 +248,12 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                             companies.add(job.getCompanyName());
 
                             //Checking for empty jobs
-                            jobListToMap.add(job);
+                            jobList.add(job);
                         }
                     }
                 }
 
-                if (jobListToMap.isEmpty()) {
+                if (jobList.isEmpty()) {
                     errorText.setText("No Results Found");
                     errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else {
