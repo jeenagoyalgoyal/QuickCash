@@ -63,7 +63,7 @@
 
         <!-- Search Activity -->
         <activity
-            android:name=".ui.deprecated.SearchActivity"
+            android:name=".ui.activities.SearchActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 

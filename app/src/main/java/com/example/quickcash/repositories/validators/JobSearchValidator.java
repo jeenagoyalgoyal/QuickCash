@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.utils.Validators;
+package com.example.quickcash.repositories.validators;
 
 public class JobSearchValidator {
 
@@ -7,27 +7,29 @@ public class JobSearchValidator {
     }
 
     public static boolean isValidSalaryString(String minSalary, String maxSalary) {
-        //If both empty return true
-        if(minSalary.isEmpty() && maxSalary.isEmpty()) {
+        // If both empty return true
+        if (minSalary.isEmpty() && maxSalary.isEmpty()) {
             return true;
-            //If minSalary is empty and maxSalary is more than 0
-        } else if (minSalary.isEmpty()) {
-            if(Integer.parseInt(maxSalary) > 0) {
-                return true;
-            }
-            //If maxSalary is empty and minSalary is more than 0
-        } else if (maxSalary.isEmpty()) {
-            if(Integer.parseInt(minSalary) > 0) {
-                return true;
-            }
         }
 
-        //If both not empty, then check for validity.
-        return isValidSalaryRange(Integer.parseInt(minSalary), Integer.parseInt(maxSalary));
+        try {
+            // If minSalary is empty and maxSalary is valid
+            if (minSalary.isEmpty()) {
+                return Integer.parseInt(maxSalary) > 0;
+            }
+            // If maxSalary is empty and minSalary is valid
+            if (maxSalary.isEmpty()) {
+                return Integer.parseInt(minSalary) > 0;
+            }
+            // If both present, validate range
+            return isValidSalaryRange(Integer.parseInt(minSalary), Integer.parseInt(maxSalary));
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public static boolean isValidSalaryRange(int minSalary, int maxSalary) {
-        return (minSalary >= 0 && maxSalary >= 0 && minSalary <= maxSalary );
+        return minSalary >= 0 && maxSalary >= 0 && minSalary <= maxSalary;
     }
 
     public static boolean isValidDuration(String duration) {
@@ -35,10 +37,11 @@ public class JobSearchValidator {
     }
 
     public static boolean isValidLocation(String location) {
-        // Location must be non-null, non-empty, and contain actual text
-        return location != null &&
-                !location.trim().isEmpty() &&
-                location.trim().length() >= 3; // Minimum 3 chars for a valid location
+        if (location == null || location.trim().isEmpty()) {
+            return false;
+        }
+        // Location must be at least 3 characters long for meaningful search
+        return location.trim().length() >= 3;
     }
 
     public static boolean isValidCoordinates(double latitude, double longitude) {
@@ -48,10 +51,14 @@ public class JobSearchValidator {
 
     public static boolean allEmptyFields(String jobTitle, String minSalary,
                                          String maxSalary, String duration, String location) {
-        return (jobTitle == null || jobTitle.trim().isEmpty()) &&
-                (minSalary == null || minSalary.trim().isEmpty()) &&
-                (maxSalary == null || maxSalary.trim().isEmpty()) &&
-                (duration == null || duration.trim().isEmpty()) &&
-                (location == null || location.trim().isEmpty());
+        return isEmpty(jobTitle) &&
+                isEmpty(minSalary) &&
+                isEmpty(maxSalary) &&
+                isEmpty(duration) &&
+                isEmpty(location);
+    }
+
+    private static boolean isEmpty(String value) {
+        return value == null || value.trim().isEmpty();
     }
 }

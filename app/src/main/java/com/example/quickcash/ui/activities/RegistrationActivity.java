@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quickcash.ui.utils.Validators.CredentialsValidator;
-import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
+import com.example.quickcash.repositories.FirebaseCRUD;
 import com.example.quickcash.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
