@@ -44,4 +44,8 @@ public class PreferredEmployers {
     public ArrayList<String> getNameList() {
         return preferredEmployersNameList;
     }
+
+    public ArrayList<String> getIdList() {
+        return preferredEmployersIdList;
+    }
 }

@@ -1,9 +1,14 @@
 package com.example.quickcash;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,6 +41,9 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference preferredEmployersRef;
 
+    private Dialog dialog;
+    private ImageButton crossButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +65,12 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
         listView.setAdapter(adapter);
 
+        //dialog
+        dialog = new Dialog(this);
+
+        dialog.setContentView(R.layout.preferred_employer_jobs_dialog_box);
+        crossButton = dialog.findViewById(R.id.crossButton);
+
         //setting of ID and database code only executes if email is retrieved correctly
         if (email!=null && !email.isEmpty()){
             this.userID = email.replace(".", ",");;
@@ -67,18 +81,38 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         else {
             Log.e("PreferredEmployers", "no ID initialized! (is the intent working correctly?)");
         }
-        adapter.clear();
+
+        setupEmployerSelector();
+        setupCrossButton();
     }
 
     protected void initializeDatabaseRefs() {
         this.preferredEmployersRef = getPreferredEmployersRef();;
     }
 
+
+    private void setupEmployerSelector(){
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Toast.makeText(PreferredEmployersActivity.this, "You clicked: "+preferredEmployersIdList.get(position), Toast.LENGTH_LONG).show();
+            dialog.show();
+        });
+    }
+
+
+    private void setupCrossButton(){
+        crossButton.setOnClickListener(v -> {
+            dialog.cancel();
+        });
+    }
+
+
+
     private DatabaseReference getPreferredEmployersRef() {
             return this.database.getReference("Users").child(userID).child("preferredEmployers");
     }
 
     protected void setPreferredEmployersListView() {
+        adapter.clear();
         //add listener to preferredEmployers
         this.preferredEmployersRef.addValueEventListener(new ValueEventListener() {
             PreferredEmployers preferredEmployers = new PreferredEmployers();
@@ -95,8 +129,9 @@ public class PreferredEmployersActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(PreferredEmployersActivity.this, "You do not have any preferred employees saved!", Toast.LENGTH_LONG).show();
                 }
-                //retrieving the list and displaying
+                //retrieving the name and id lists
                 preferredEmployersNameList = preferredEmployers.getNameList();
+                preferredEmployersIdList = preferredEmployers.getIdList();
                 //set data in listview
                 adapter.addAll(preferredEmployersNameList);
                 adapter.notifyDataSetChanged();
