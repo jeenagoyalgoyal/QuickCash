@@ -91,13 +91,11 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    //set conditions for when different options are pressed
                     if (item.getTitle().equals("Add to Preferred Employers")){
                         FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
 
                         addToPreferredEmployersList(userId,job.getEmployerId(),holder.itemView.getContext());
-                        Toast.makeText(parent.getContext(), "preferred employee added! ", Toast.LENGTH_LONG).show();
                     }
                     return false;
                 }
@@ -139,24 +137,38 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         userPreferredEmployersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean employerNotPresent=true;
+                if (snapshot.hasChildren()){
+                  for (DataSnapshot preferredEmployer : snapshot.getChildren()){
+                      String presentEmployerId = preferredEmployer.child("id").getValue(String.class);
+                      if (employerId.equals(presentEmployerId)){
+                          employerNotPresent = false;
+                      }
+                  }
+                }
                 if (!snapshot.exists()){
                     userPreferredEmployersRef.setValue(new ArrayList<String>());
                 }
-                PreferredEmployerModel preferredEmployer = new PreferredEmployerModel();
-                preferredEmployer.setId(employerId);
-                preferredEmployer.setName(employerName); //TEMP
 
-                userPreferredEmployersRef.push().setValue(preferredEmployer).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(context, "Preferred employee added successfully!", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(context, "Failed to add preferred employee!", Toast.LENGTH_LONG).show();
+                if (employerNotPresent){
+                    PreferredEmployerModel preferredEmployer = new PreferredEmployerModel();
+                    preferredEmployer.setId(employerId);
+                    preferredEmployer.setName(employerName);
+
+                    userPreferredEmployersRef.push().setValue(preferredEmployer).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(context, "Preferred employee added successfully!", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, "Failed to add preferred employee!", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
+                else {
+                    Toast.makeText(context, "Employer already in preferred list!", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -177,7 +189,6 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
     }
-
 
     @Override
     public int getItemCount() {
