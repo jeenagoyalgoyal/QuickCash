@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.activities.SearchActivity;
+import com.example.quickcash.ui.deprecated.SearchActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
