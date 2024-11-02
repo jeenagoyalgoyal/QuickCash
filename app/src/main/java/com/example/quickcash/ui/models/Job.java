@@ -1,8 +1,10 @@
 package com.example.quickcash.ui.models;
 
-import com.example.quickcash.ui.interfaces.IJob;
+import android.content.Context;
 
-public class Job implements IJob {
+import com.example.quickcash.ui.utils.LocationHelper;
+
+public class Job {
     private String companyName;
     private String employerId;
     private String expectedDuration;
@@ -14,6 +16,8 @@ public class Job implements IJob {
     private int salary;
     private String startDate;
     private String urgency;
+    private Double longitude;
+    private Double latitude;
 
     public Job() {}
 
@@ -28,6 +32,8 @@ public class Job implements IJob {
     public int getSalary() {return salary;}
     public String getStartDate() {return startDate;}
     public String getUrgency() {return urgency;}
+    public Double getLongitude() {return longitude;}
+    public Double getLatitude() {return latitude;}
 
     public void setCompanyName(String companyName){this.companyName = companyName;}
     public void setEmployerId(String employerId) {this.employerId = employerId;}
@@ -35,9 +41,11 @@ public class Job implements IJob {
     public void setJobId(String jobId) {this.jobId = jobId;}
     public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
     public void setJobType(String jobType) {this.jobType = jobType;}
-    public void setLocation(String location) {this.location = location;}
     public void setRequirements(String requirements) {this.requirements = requirements;}
     public void setSalary(int salary) {this.salary = salary;}
     public void setStartDate(String startDate) {this.startDate = startDate;}
     public void setUrgency(String urgency) {this.urgency = urgency;}
+    public void setLocation(String location) {this.location = location;}
+    public void setLatitude(Double latitude) {this.latitude = latitude;}
+    public void setLongitude(Double longitude) {this.longitude = longitude;}
 }

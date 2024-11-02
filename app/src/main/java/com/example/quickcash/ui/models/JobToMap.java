@@ -1,14 +1,8 @@
 package com.example.quickcash.ui.models;
 
-import android.content.Intent;
 
-import com.example.quickcash.ui.activities.MapActivity;
-import com.example.quickcash.ui.interfaces.IJob;
-import com.example.quickcash.ui.utils.LocationHelper;
-
-import java.util.ArrayList;
-
-public class JobToMap implements IJob {
+//Class made initially to test Data transfer to map! replaced with Job class
+public class JobToMap {
     private String jobTitle;
     private int salary;
     private String duration;
@@ -41,8 +35,7 @@ public class JobToMap implements IJob {
     public int getSalary() { return salary; }
     public void setSalary(int salary) {this.salary = salary; }
 
-    @Override
-    public String getExpectedDuration() {return this.duration;}
+    public String getDuration() {return this.duration;}
     public void setDuration(String duration) { this.duration = duration; }
 
     public String getLocation() { return location; }

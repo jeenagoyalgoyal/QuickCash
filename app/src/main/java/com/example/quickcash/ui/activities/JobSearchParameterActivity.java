@@ -4,8 +4,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.interfaces.IJob;
-import com.example.quickcash.ui.models.JobToMap;
 import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
 import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.utils.LocationHelper;
@@ -23,7 +21,6 @@ import java.util.List;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +43,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private JobSearchAdapter jobSearchAdapter;
     private List<Job> jobList;
-    private List<JobToMap> jobListToMap;
+    private List<Job> jobListToMap;
     private DatabaseReference jobsRef;
 
     @Override
@@ -112,7 +109,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         jobList = new ArrayList<>();
-        jobListToMap = new ArrayList<>();
+        jobListToMap = new ArrayList<Job>();
         jobSearchAdapter = new JobSearchAdapter(jobList, this);
         recyclerView.setAdapter(jobSearchAdapter);
     }
@@ -230,11 +227,13 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 MapActivity.class);
         // Attach a listener to read the data
         query.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 jobListToMap.clear(); // Clear the list before adding new items
                 for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                    JobToMap job = jobSnapshot.getValue(JobToMap.class);
+                    //Previously used JobToMap but refactored to use Job class instead
+                    Job job = jobSnapshot.getValue(Job.class);
                     // Additional filtering if necessary
                     if (passesAdditionalFilters(job)) {
 
@@ -249,6 +248,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                             salaries.add(job.getSalary());
                             durations.add(job.getExpectedDuration());
                             companies.add(job.getCompanyName());
+
                             //Checking for empty jobs
                             jobListToMap.add(job);
                         }
@@ -283,7 +283,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         });
     }
 
-    private boolean passesAdditionalFilters(IJob job) {
+    private boolean passesAdditionalFilters(Job job) {
         // Get the user input again
         String title = jobTitle.getText().toString().trim();
         String company = companyName.getText().toString().trim();
@@ -382,6 +382,5 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
         }
     }
-
 
 }
