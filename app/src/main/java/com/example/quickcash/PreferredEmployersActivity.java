@@ -105,7 +105,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PreferredEmployersActivity.this, "Connection Error!", Toast.LENGTH_LONG).show();
-                Log.e("PreferredEmployers", "Error connection to firebase!");
+                Log.e("PreferredEmployers", "Error connecting to firebase!");
             }
         });
     }
