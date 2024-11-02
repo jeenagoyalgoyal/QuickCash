@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreferredEmployersActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     private String email;
     private String userID;
     private ListView listView;
@@ -59,14 +61,11 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         });
 
         //ID and email are gotten from intent
-        Intent intentPreferredEmployers = getIntent();
-        this.email = intentPreferredEmployers.getStringExtra("email");
 
-        //setup listview
-        listView = findViewById(R.id.preferredEmployeesListView);
-        preferredEmployersNameList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
-        listView.setAdapter(adapter);
+        this.mAuth = FirebaseAuth.getInstance();
+        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+
+        setupListView();
 
         //dialog code
         dialog = new Dialog(this);
@@ -99,6 +98,13 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             displayJobsByEmployer(preferredEmployersIdList.get(position));
         });
+    }
+
+    private void setupListView(){
+        listView = findViewById(R.id.preferredEmployeesListView);
+        preferredEmployersNameList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
+        listView.setAdapter(adapter);
     }
 
     private void setupRecyclerView(){
