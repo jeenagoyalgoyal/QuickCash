@@ -1,4 +1,5 @@
 package com.example.quickcash.adapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +13,40 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.List;
 
 public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapter.PreferredJobViewHolder> {
-    private List<Job> preferredJobList;
-    private DatabaseReference preferredJobsRef;
+
+    private final List<Job> preferredJobList;
+
+    public PreferredJobAdapter(List<Job> preferredJobList) {
+        this.preferredJobList = preferredJobList;
+    }
+
+    @Override
+    public PreferredJobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.preferred_job_adapter, parent, false);
+        return new PreferredJobViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(PreferredJobViewHolder holder, int position) {
+        Job job = preferredJobList.get(position);
+
+        holder.bind(job);
+    }
+
+    @Override
+    public int getItemCount() {
+        return preferredJobList.size();
+    }
 
     public static class PreferredJobViewHolder extends RecyclerView.ViewHolder {
-        public TextView jobTypeResult;
-        public TextView companyResult;
-        public TextView locationResult;
-        public TextView salaryResult;
-        public TextView durationResult;
-        public Button showMapButton;
-        public Button showViewButton;
-        public Button cancelButton;
+        private final TextView jobTypeResult;
+        private final TextView companyResult;
+        private final TextView locationResult;
+        private final TextView salaryResult;
+        private final TextView durationResult;
+        private final Button showMapButton;
+        private final Button showViewButton;
+        private final Button cancelButton;
 
         public PreferredJobViewHolder(View itemView) {
             super(itemView);
@@ -36,75 +59,49 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             showViewButton = itemView.findViewById(R.id.ViewButton);
             cancelButton = itemView.findViewById(R.id.cancelButton);
 
-            // Initially hide the additional fields
-            companyResult.setVisibility(View.GONE);
-            locationResult.setVisibility(View.GONE);
-            salaryResult.setVisibility(View.GONE);
-            durationResult.setVisibility(View.GONE);
+            initializeView();
+        }
 
+        private void initializeView() {
+            // Initially hide the additional fields and cancel button
+            toggleDetailVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
+        }
+
+        private void toggleDetailVisibility(int visibility) {
+            companyResult.setVisibility(visibility);
+            locationResult.setVisibility(visibility);
+            salaryResult.setVisibility(visibility);
+            durationResult.setVisibility(visibility);
+        }
+
+        public void bind(Job job) {
+            jobTypeResult.setText("Job Title: " + job.getJobTitle());
+
+            showViewButton.setOnClickListener(view -> {
+                if (companyResult.getVisibility() == View.GONE) {
+                    showJobDetails(job);
+                }
+            });
+
+            cancelButton.setOnClickListener(view -> hideJobDetails());
+        }
+
+        private void showJobDetails(Job job) {
+            companyResult.setText("Company: " + job.getCompanyName());
+            locationResult.setText("Location: " + job.getLocation());
+            salaryResult.setText("Salary: $" + job.getSalary());
+            durationResult.setText("Duration: " + job.getExpectedDuration());
+
+            toggleDetailVisibility(View.VISIBLE);
+            showViewButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.VISIBLE);
+        }
+
+        private void hideJobDetails() {
+            toggleDetailVisibility(View.GONE);
+            showViewButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.GONE);
         }
     }
-
-    public PreferredJobAdapter(List<Job> preferredJobList) {
-        this.preferredJobList = preferredJobList;
-    }
-
-    @Override
-    public PreferredJobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.preferred_job_adapter, parent, false);
-        PreferredJobViewHolder vh = new PreferredJobViewHolder(v);
-        return vh;
-    }
-
-    @Override
-    public void onBindViewHolder(PreferredJobViewHolder holder, int position) {
-        Job job = preferredJobList.get(position);
-        holder.jobTypeResult.setText("Job Title: " + job.getJobTitle());
-
-
-        // Pass the context from the holder's itemView
-        holder.showViewButton.setOnClickListener(view -> {
-            if (holder.companyResult.getVisibility() == View.GONE) {
-                holder.companyResult.setText("Company: " + job.getCompanyName());
-                holder.locationResult.setText("Location: " + job.getLocation());
-                holder.salaryResult.setText("Salary: $" + job.getSalary());
-                holder.durationResult.setText("Duration: " + job.getExpectedDuration());
-
-                holder.companyResult.setVisibility(View.VISIBLE);
-                holder.locationResult.setVisibility(View.VISIBLE);
-                holder.salaryResult.setVisibility(View.VISIBLE);
-                holder.durationResult.setVisibility(View.VISIBLE);
-                // Hide the View button and show the Cancel button
-                holder.showViewButton.setVisibility(View.GONE);
-                holder.cancelButton.setVisibility(View.VISIBLE);
-            } else {
-                // Hide the additional fields if they are already visible
-                holder.companyResult.setVisibility(View.GONE);
-                holder.locationResult.setVisibility(View.GONE);
-                holder.salaryResult.setVisibility(View.GONE);
-                holder.durationResult.setVisibility(View.GONE);
-
-
-            }
-        });
-
-        // Set up the Cancel button to hide additional fields
-        holder.cancelButton.setOnClickListener(view -> {
-            holder.companyResult.setVisibility(View.GONE);
-            holder.locationResult.setVisibility(View.GONE);
-            holder.salaryResult.setVisibility(View.GONE);
-            holder.durationResult.setVisibility(View.GONE);
-
-            // Show the View button and hide the Cancel button
-            holder.showViewButton.setVisibility(View.VISIBLE);
-            holder.cancelButton.setVisibility(View.GONE);
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return preferredJobList.size();
-    }
-
 }
-
