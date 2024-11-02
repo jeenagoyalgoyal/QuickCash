@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,8 +36,6 @@ public class PrefEmployerUITest {
         context.startActivity(launcherIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
     }
-
-    //TEMP TEST REMOVE REMOVE REMOVE
 
     @Test
     public void checkIfLandingPageIsVisible() {
@@ -93,5 +92,30 @@ public class PrefEmployerUITest {
         preferredEmployersButton.clickAndWaitForNewWindow();
         UiObject preferredEmployersPageTitle = device.findObject(new UiSelector().text("Your Preferred Employers:"));
         assertTrue("User should navigate to Preferred Employers page", preferredEmployersPageTitle.exists());
+    }
+
+    @Test
+    public void testMyPreferredEmployersJobsPopup() throws UiObjectNotFoundException {
+        // Log in
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        // Click on "My Preferred Employers"
+        UiObject preferredEmployersButton = device.findObject(new UiSelector().text("Preferred Employers"));
+        preferredEmployersButton.clickAndWaitForNewWindow();
+
+        UiObject preferredEmployerTesting2 = device.findObject(new UiSelector().text("testing2"));
+        preferredEmployerTesting2.click();
+
+        UiObject titleTextOfDialog = device.findObject(new UiSelector().textContains("Jobs Posted By This Employer"));
+        assertTrue("The popup containing the jobs posted by the employer should appear", titleTextOfDialog.exists());
+
+        UiObject crossButton = device.findObject(new UiSelector().clickable(true));
+        crossButton.click();
+        assertFalse("The popup containing the jobs posted by the employer should close", titleTextOfDialog.exists());
     }
 }

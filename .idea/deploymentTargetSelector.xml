@@ -19,6 +19,9 @@
       <SelectionState runConfigName="testAddToPreferredEmployersButton()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="testPreferredEmployersButtonOnDashboard()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

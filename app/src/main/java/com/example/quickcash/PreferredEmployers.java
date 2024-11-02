@@ -1,7 +1,6 @@
 package com.example.quickcash;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PreferredEmployers {
     private final ArrayList<String> preferredEmployersIdList = new ArrayList<>();

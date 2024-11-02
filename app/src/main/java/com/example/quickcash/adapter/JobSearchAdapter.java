@@ -94,10 +94,9 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                     if (item.getTitle().equals("Add to Preferred Employers")){
                         FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-
                         addToPreferredEmployersList(userId,job.getEmployerId(),holder.itemView.getContext());
                     }
-                    return false;
+                    return true;
                 }
             });
         });
@@ -149,7 +148,6 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                 if (!snapshot.exists()){
                     userPreferredEmployersRef.setValue(new ArrayList<String>());
                 }
-
                 if (employerNotPresent){
                     PreferredEmployerModel preferredEmployer = new PreferredEmployerModel();
                     preferredEmployer.setId(employerId);
@@ -170,7 +168,6 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                     Toast.makeText(context, "Employer already in preferred list!", Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("PreferredEmployers", "Error with database connection! (is the URL correct?)");

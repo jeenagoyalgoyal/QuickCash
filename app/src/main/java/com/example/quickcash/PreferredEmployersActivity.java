@@ -4,10 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
+
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -36,17 +34,13 @@ import java.util.List;
 public class PreferredEmployersActivity extends AppCompatActivity {
     private String email;
     private String userID;
-
     private ListView listView;
-
     private ArrayList<String> preferredEmployersNameList;
     private ArrayList<String> preferredEmployersIdList;
     private ArrayAdapter<String> adapter;
-
     private FirebaseDatabase database;
     private DatabaseReference preferredEmployersRef;
     private DatabaseReference jobsRef;
-
     private Dialog dialog;
     private ImageButton crossButton;
     private RecyclerView recyclerView;
@@ -68,21 +62,20 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         Intent intentPreferredEmployers = getIntent();
         this.email = intentPreferredEmployers.getStringExtra("email");
 
-        //listview stuff
+        //setup listview
         listView = findViewById(R.id.preferredEmployeesListView);
         preferredEmployersNameList = new ArrayList<>();
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
         listView.setAdapter(adapter);
 
-        //dialog
+        //dialog code
         dialog = new Dialog(this);
-
         dialog.setContentView(R.layout.preferred_employer_jobs_dialog_box);
         crossButton = dialog.findViewById(R.id.crossButton);
 
         //setting of ID and database code only executes if email is retrieved correctly
         if (email!=null && !email.isEmpty()){
-            this.userID = email.replace(".", ",");;
+            this.userID = sanitizeEmail(email);
             this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
             this.initializeDatabaseRefs();
             this.setPreferredEmployersListView();
@@ -190,5 +183,8 @@ public class PreferredEmployersActivity extends AppCompatActivity {
                 Log.e("PreferredEmployers", "Error connecting to firebase!");
             }
         });
+    }
+    private String sanitizeEmail(String email) {
+        return email.replace(".", ",");
     }
 }
