@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -15,17 +14,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 //import static android.support.test.uiautomator;
 
 
 import android.graphics.Color;
-import android.os.SystemClock;
 import android.widget.TextView;
 
 import static org.hamcrest.CoreMatchers.is;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.action.TypeTextAction;
 import androidx.test.espresso.assertion.ViewAssertions;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -36,10 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.hasToString;
@@ -48,12 +41,9 @@ import android.os.IBinder;
 import android.view.WindowManager;
 
 import androidx.test.espresso.Root;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(JUnit4.class)
 public class JobSubmissionUITest {
@@ -98,7 +88,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.companyName)).check(matches(isDisplayed()));
         onView(withId(R.id.spinnerJobType)).check(matches(isDisplayed()));
         onView(withId(R.id.requirementText)).check(matches(isDisplayed()));
-        onView(withId(R.id.salaryText)).check(matches(isDisplayed()));
+        onView(withId(R.id.jobTitleText)).check(matches(isDisplayed()));
         onView(withId(R.id.spinnerUrgency)).check(matches(isDisplayed()));
         onView(withId(R.id.locationJob)).check(matches(isDisplayed()));
         onView(withId(R.id.expectedDuration)).check(matches(isDisplayed()));
@@ -247,7 +237,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.spinnerJobType)).perform(click());
         onData(hasToString("Full-time")).perform(click());
         onView(withId(R.id.requirementText)).perform(typeText("Plumber"));
-        onView(withId(R.id.salaryText)).perform(typeText("25"));
+        onView(withId(R.id.jobTitleText)).perform(typeText("25"));
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
         onView(withId(R.id.locationJob)).perform(typeText("Halifax"));

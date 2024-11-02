@@ -19,8 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.models.Job;
-import com.example.quickcash.ui.models.JobToMap;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,7 +42,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private Button backButton;
-    private boolean useDummyData = false; // Flag to use dummy data for testing
+    private boolean useDummyData = true; // Flag to use dummy data for testing
 
     //Details
     private ArrayList<Double> latitudes;
@@ -53,6 +51,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<Integer> salaries;
     private ArrayList<String> durations;
     private ArrayList<String> companies;
+    private ArrayList<String> jobTypes;
+    private ArrayList<String> datesOfStart;
+    private ArrayList<String> requirements;
+
     private Map<String, Integer> markerToJobIndex;
 
     @Override
@@ -77,6 +79,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 titles = intent.getStringArrayListExtra("titles");
                 durations = intent.getStringArrayListExtra("durations");
                 companies = intent.getStringArrayListExtra("companies");
+
             }
         }
 
@@ -108,15 +111,22 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         salaries = new ArrayList<>();
         durations = new ArrayList<>();
         companies = new ArrayList<>();
+        jobTypes = new ArrayList<>();
+        datesOfStart = new ArrayList<>();
+        requirements = new ArrayList<>();
+
 
         // Add dummy job locations around Halifax
         // Job 1 - Downtown Halifax
         latitudes.add(44.6488);
         longitudes.add(-63.5752);
+        jobTypes.add("Full-Time");
+        datesOfStart.add("29-06-2004");
+        requirements.add("random random random\n random random random");
         companies.add("Microsoft");
         titles.add("Software Developer");
         salaries.add(75000);
-        durations.add("Full-time");
+        durations.add("10");
 
 
         // Job 2 - Dartmouth
@@ -125,7 +135,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         companies.add("FERRY CO.");
         titles.add("Web Designer");
         salaries.add(65000);
-        durations.add("Contract - 12 months");
+        durations.add("1");
+        jobTypes.add("Full-Time");
+        datesOfStart.add("29-06-2004");
+        requirements.add("random random random\n random random random");
 
         // Job 3 - Bedford
         latitudes.add(44.7213);
@@ -133,7 +146,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         companies.add("BUS CO.");
         titles.add("Data Analyst");
         salaries.add(70000);
-        durations.add("Part-time");
+        durations.add("10");
+        jobTypes.add("Full-Time");
+        datesOfStart.add("29-06-2004");
+        requirements.add("random random random\n random random random");
 
         // Job 4 - Halifax Shopping Centre area
         latitudes.add(44.6497);
@@ -141,7 +157,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         companies.add("Walmart");
         titles.add("UX Researcher");
         salaries.add(80000);
-        durations.add("Full-time");
+        durations.add("25");
+        jobTypes.add("Full-Time");
+        datesOfStart.add("29-06-2004");
+        requirements.add("random random random\n random random random");
 
         // Job 5 - Dalhousie University area
         latitudes.add(44.6366);
@@ -149,7 +168,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         companies.add("Dalhousie");
         titles.add("Teaching Assistant");
         salaries.add(25000);
-        durations.add("Part-time");
+        durations.add("10");
+        jobTypes.add("Full-Time");
+        datesOfStart.add("29-06-2004");
+        requirements.add("random random random\n random random random");
     }
 
     @Override
@@ -246,12 +268,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         dialog.setContentView(R.layout.dialog_job_details);
 
-        TextView titleText = dialog.findViewById(R.id.jobTitleText);
         TextView companyText = dialog.findViewById(R.id.companyNameText);
-        TextView salaryText = dialog.findViewById(R.id.salaryText);
         TextView durationText = dialog.findViewById(R.id.durationText);
+        TextView titleText = dialog.findViewById(R.id.jobTitleText);
+        TextView jobTypeText = dialog.findViewById(R.id.jobTypeText);
+        TextView requirementsText = dialog.findViewById(R.id.requirementsText);
+        TextView salaryText = dialog.findViewById(R.id.salaryText);
+        TextView dateOfStart = dialog.findViewById(R.id.dateOfStart);
 
         titleText.setText(titles.get(jobIndex));
+        jobTypeText.setText(jobTypes.get(jobIndex));
+        dateOfStart.setText(datesOfStart.get(jobIndex));
+        requirementsText.setText(requirements.get(jobIndex));
         companyText.setText(companies.get(jobIndex));
         salaryText.setText(String.format("$%,d/year", salaries.get(jobIndex)));
         durationText.setText(durations.get(jobIndex));

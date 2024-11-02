@@ -80,6 +80,10 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             ArrayList<Integer> salaries = new ArrayList<>();
             ArrayList<String> durations = new ArrayList<>();
             ArrayList<String> companies = new ArrayList<>();
+            ArrayList<String> jobTypes = new ArrayList<>();
+            ArrayList<String> datesOfStart = new ArrayList<>();
+            ArrayList<String> requirements = new ArrayList<>();
+
 
             latitudes.add(lh.latitude);
             longitudes.add(lh.longitude);
@@ -87,6 +91,9 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             salaries.add(job.getSalary());
             durations.add(job.getExpectedDuration());
             companies.add(job.getCompanyName());
+            datesOfStart.add(job.getStartDate());
+            requirements.add(job.getRequirements());
+            jobTypes.add(job.getJobType());
 
             intentToMapSingleJob.putExtra("latitudes", latitudes);
             intentToMapSingleJob.putExtra("longitudes", longitudes);
@@ -94,6 +101,9 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             intentToMapSingleJob.putStringArrayListExtra("titles", titles);
             intentToMapSingleJob.putStringArrayListExtra("durations", durations);
             intentToMapSingleJob.putStringArrayListExtra("companies", companies);
+            intentToMapSingleJob.putStringArrayListExtra("jobTypes", jobTypes);
+            intentToMapSingleJob.putStringArrayListExtra("datesOfStart", datesOfStart);
+            intentToMapSingleJob.putStringArrayListExtra("requirements", requirements);
 
             context.startActivity(intentToMapSingleJob);
         });

@@ -77,7 +77,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         companyName = findViewById(R.id.companyName);
         jobType = findViewById(R.id.spinnerJobType);
         requirements = findViewById(R.id.requirementText);
-        salary = findViewById(R.id.salaryText);
+        salary = findViewById(R.id.jobTitleText);
         jobUrgency = findViewById(R.id.spinnerUrgency);
         location = findViewById(R.id.locationJob);
         expectedDuration = findViewById(R.id.expectedDuration);
