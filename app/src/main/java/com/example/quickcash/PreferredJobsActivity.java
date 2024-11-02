@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.adapter.PreferredJobAdapter;
 import com.example.quickcash.model.Job;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,36 +27,52 @@ public class PreferredJobsActivity extends AppCompatActivity {
     private PreferredJobAdapter jobAdapter;
     private ArrayList<Job> preferredJobs;
     private DatabaseReference preferredJobsRef;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferred_jobs);
 
-        preferredJobRecyclerView = findViewById(R.id.recyclerView);
-        preferredJobs = new ArrayList<>();
-        jobAdapter = new PreferredJobAdapter(preferredJobs);
+        initializeUI();
+        String userId = getCurrentUserId();
 
-        preferredJobRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        preferredJobRecyclerView.setAdapter(jobAdapter);
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-
-        if (userId == null || userId.isEmpty()) {
-            Toast.makeText(this, "User ID is null or empty", Toast.LENGTH_SHORT).show();
+        if (userId == null) {
+            showToast("User ID is null or empty");
             return;
         }
 
-        userId = sanitizeEmail(userId); // Sanitize user ID for Firebase
+        userId = sanitizeEmail(userId);
+        setupFirebaseReference(userId);
+        setupDataListener();
+        setupBackButton();
+    }
 
-        preferredJobsRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("preferredJobs");
+    private void initializeUI() {
+        preferredJobRecyclerView = findViewById(R.id.recyclerView);
+        preferredJobs = new ArrayList<>();
+        jobAdapter = new PreferredJobAdapter(preferredJobs);
+        preferredJobRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        preferredJobRecyclerView.setAdapter(jobAdapter);
+    }
 
-        // Attach a listener to read data
+    private String getCurrentUserId() {
+        mAuth = FirebaseAuth.getInstance();
+        return (mAuth.getCurrentUser() != null) ? mAuth.getCurrentUser().getEmail() : null;
+    }
+
+    private void setupFirebaseReference(String userId) {
+        preferredJobsRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(userId)
+                .child("preferredJobs");
+    }
+
+    private void setupDataListener() {
         preferredJobsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                preferredJobs.clear(); // Clear the list before adding new data
+                preferredJobs.clear();
                 for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
                     if (job != null) {
@@ -69,20 +84,25 @@ public class PreferredJobsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(PreferredJobsActivity.this, "Failed to load preferred jobs.", Toast.LENGTH_SHORT).show();
+                showToast("Failed to load preferred jobs.");
             }
-        });
-
-        // Set up the back button
-        ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(PreferredJobsActivity.this, EmployeeHomepageActivity.class);
-            startActivity(intent);
-            finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
     }
 
-    // Utility function to sanitize email for Firebase path
+    private void setupBackButton() {
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> navigateToHomepage());
+    }
+
+    private void navigateToHomepage() {
+        startActivity(new Intent(this, EmployeeHomepageActivity.class));
+        finish();
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
     }
