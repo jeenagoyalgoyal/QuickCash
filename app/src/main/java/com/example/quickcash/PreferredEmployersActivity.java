@@ -49,7 +49,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
         //ID and email are gotten from intent
         Intent intentPreferredEmployers = getIntent();
-        email = intentPreferredEmployers.getStringExtra("email");
+        this.email = intentPreferredEmployers.getStringExtra("email");
 
         //listview stuff
         listView = findViewById(R.id.preferredEmployeesListView);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,6 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/jobSearchLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -15,60 +17,78 @@
             android:id="@+id/jobTypeResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            android:text="Job Type: "/>
+            android:text="Job Type: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/companyResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:text="Company: "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Company: " />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/locationResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:text="Location: "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Location: " />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/salaryResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:text="Salary: "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Salary: " />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/durationResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="2dp"
+            android:text="Duration: "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Duration: " />
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/showMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show Map"
-            android:layout_marginBottom="3dp"
-            android:layout_gravity="center_horizontal"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp">
+
+            <Button
+                android:id="@+id/showMap"
+                android:layout_width="125dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:text="Show Map"
+                app:layout_constraintEnd_toStartOf="@+id/optionsButton"
+                app:layout_constraintHorizontal_bias="0.508"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <Button
+                android:id="@+id/optionsButton"
+                android:layout_width="126dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginEnd="60dp"
+                android:text="Options"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:layout_editor_absoluteY="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

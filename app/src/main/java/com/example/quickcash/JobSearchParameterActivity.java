@@ -16,6 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,9 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     private JobSearchAdapter jobSearchAdapter;
     private List<Job> jobList;
     private DatabaseReference jobsRef;
+    private DatabaseReference preferredEmployersRef;
+    private String email;
+    private String userID;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -47,7 +51,16 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
         init();
 
+        //getting email and ID
+        Intent intentPreferredEmployers = getIntent();
+        this.email = intentPreferredEmployers.getStringExtra("email");
+        if (email!=null && !email.isEmpty()){
+            this.userID = email.replace(".", ",");
+        }
+
+        //initializing references
         jobsRef = FirebaseDatabase.getInstance().getReference("Jobs");
+        preferredEmployersRef = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("preferredEmployers");
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override

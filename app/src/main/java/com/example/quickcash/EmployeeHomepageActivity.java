@@ -83,8 +83,9 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         searchJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, JobSearchParameterActivity.class);
-                startActivity(intentProfile);
+                Intent intentJobSearchParameter = new Intent(EmployeeHomepageActivity.this, JobSearchParameterActivity.class);
+                intentJobSearchParameter.putExtra("email", email);
+                startActivity(intentJobSearchParameter);
                 finish();
             }
         });
