@@ -50,15 +50,21 @@ public class PrefEmployerUITest {
     public void testAddToPreferredEmployersButton() throws UiObjectNotFoundException {
         // Log in
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
-        emailBox.setText("testuser@test.com");
+        emailBox.setText("testingemail@test.db");
         UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
-        passwordBox.setText("password123");
+        passwordBox.setText("Test_Pass123#");
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
 
         // Navigate to the search page
-        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Jobs"));
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
         searchJobButton.clickAndWaitForNewWindow();
+
+        //enter job details
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Tester");
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.longClick();
 
         // Click on a job listing to open options
         UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
@@ -78,10 +84,6 @@ public class PrefEmployerUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
-
-        // Navigate to the employee dashboard
-        UiObject employeeButton = device.findObject(new UiSelector().text("Switch to Employee"));
-        employeeButton.clickAndWaitForNewWindow();
 
         // Check if "My Preferred Employers" button is visible
         UiObject preferredEmployersButton = device.findObject(new UiSelector().text("Preferred Employers"));
