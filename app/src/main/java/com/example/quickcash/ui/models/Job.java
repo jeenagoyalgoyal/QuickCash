@@ -1,6 +1,8 @@
 package com.example.quickcash.ui.models;
 
-public class Job {
+import com.example.quickcash.ui.interfaces.IJob;
+
+public class Job implements IJob {
     private String companyName;
     private String employerId;
     private String expectedDuration;
@@ -29,7 +31,7 @@ public class Job {
 
     public void setCompanyName(String companyName){this.companyName = companyName;}
     public void setEmployerId(String employerId) {this.employerId = employerId;}
-    public void setExpectedDuration(String expectedDuration) {this.expectedDuration = expectedDuration;}
+    public void setDuration(String expectedDuration) {this.expectedDuration = expectedDuration;}
     public void setJobId(String jobId) {this.jobId = jobId;}
     public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
     public void setJobType(String jobType) {this.jobType = jobType;}

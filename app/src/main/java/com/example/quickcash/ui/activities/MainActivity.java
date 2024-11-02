@@ -16,8 +16,12 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
 import com.example.quickcash.R;
 import com.example.quickcash.databinding.ActivityMainBinding;
+import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.models.UseRole;
+import com.example.quickcash.ui.utils.LocationHelper;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -105,5 +109,36 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void singleCallToMap(Job job) {
+        //Intent for location and details on map
+        Intent intentToMapSingleJob = new Intent(this , MapActivity.class);
+
+        //Get lat long
+        LocationHelper.LocationResult lh = LocationHelper.getCoordinates(this, job.getLocation());
+
+        //Map only reads ArrayLists of String from intent
+        ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> longitudes = new ArrayList<>();
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<Integer> salaries = new ArrayList<>();
+        ArrayList<String> durations = new ArrayList<>();
+        ArrayList<String> companies = new ArrayList<>();
+
+        latitudes.add(lh.latitude);
+        longitudes.add(lh.longitude);
+        titles.add(job.getJobTitle());
+        salaries.add(job.getSalary());
+        durations.add(job.getExpectedDuration());
+        companies.add(job.getCompanyName());
+
+        intentToMapSingleJob.putExtra("latitudes", latitudes);
+        intentToMapSingleJob.putExtra("longitudes", longitudes);
+        intentToMapSingleJob.putIntegerArrayListExtra("salaries", salaries);
+        intentToMapSingleJob.putStringArrayListExtra("titles", titles);
+        intentToMapSingleJob.putStringArrayListExtra("durations", durations);
+        intentToMapSingleJob.putStringArrayListExtra("companies", companies);
+        startActivity(intentToMapSingleJob);
     }
 }

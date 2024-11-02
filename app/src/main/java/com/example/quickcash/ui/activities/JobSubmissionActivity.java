@@ -41,7 +41,6 @@ public class JobSubmissionActivity extends AppCompatActivity {
     private TextView errorJSLocation;
     private TextView errorJSDuration;
 
-
     // Button to submit
     private Button submitButton;
 
@@ -94,7 +93,6 @@ public class JobSubmissionActivity extends AppCompatActivity {
         errorJSLocation = findViewById(R.id.errorJSLocation);
         errorJSDuration = findViewById(R.id.errorJSDuration);
 
-
         // Array list for the job type
         List<String> typeList = new ArrayList<>();
         typeList.add(0, "Select job type");
@@ -108,7 +106,6 @@ public class JobSubmissionActivity extends AppCompatActivity {
         urgencyList.add("High");
         urgencyList.add("Medium");
         urgencyList.add("Low");
-
 
         // Create ArrayAdapter for each spinner
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typeList);

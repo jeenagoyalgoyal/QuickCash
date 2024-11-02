@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.repositories;
+package com.example.quickcash.ui.utils.repositories;
 
 import androidx.annotation.NonNull;
 

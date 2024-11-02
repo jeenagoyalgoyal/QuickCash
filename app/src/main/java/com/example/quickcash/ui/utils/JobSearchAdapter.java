@@ -1,22 +1,28 @@
-package com.example.quickcash.ui.adapter;
+package com.example.quickcash.ui.utils;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Button;
+
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
+import com.example.quickcash.ui.activities.MainActivity;
 import com.example.quickcash.ui.activities.MapActivity;
 import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.LocationHelper;
+
 import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobViewHolder> {
     private List<Job> jobList;
-    private ViewGroup parent;
+    private Context context;
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {
         public TextView jobTypeResult;
@@ -37,13 +43,13 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         }
     }
 
-    public JobSearchAdapter(List<Job> jobList) {
+    public JobSearchAdapter(List<Job> jobList, Context context) {
         this.jobList = jobList;
+        this.context = context;
     }
 
     @Override
     public JobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.parent = parent;
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_search_result_view, parent, false);
         JobViewHolder vh = new JobViewHolder(v);
         return vh;
@@ -51,6 +57,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
 
     @Override
     public void onBindViewHolder(JobViewHolder holder, int position) {
+
         Job job = jobList.get(position);
         holder.jobTypeResult.setText("Job Title: " + job.getJobTitle());
         holder.companyResult.setText("Company: " + job.getCompanyName());
@@ -59,35 +66,39 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
         holder.showMapButton.setOnClickListener(view -> {
+
             //Intent for location and details on map
-            Intent intentToMapSingleJob = new Intent(parent.getContext(), MapActivity.class);
+            Intent intentToMapSingleJob = new Intent(this.context, MapActivity.class);
+
             //Get lat long
-            LocationHelper.LocationResult lh = LocationHelper.getCoordinates(parent.getContext(), job.getLocation());
+            LocationHelper.LocationResult lh = LocationHelper.getCoordinates(this.context, job.getLocation());
 
             //Map only reads ArrayLists of String from intent
             ArrayList<Double> latitudes = new ArrayList<>();
             ArrayList<Double> longitudes = new ArrayList<>();
             ArrayList<String> titles = new ArrayList<>();
-            ArrayList<String> salaries = new ArrayList<>();
+            ArrayList<Integer> salaries = new ArrayList<>();
             ArrayList<String> durations = new ArrayList<>();
             ArrayList<String> companies = new ArrayList<>();
 
             latitudes.add(lh.latitude);
             longitudes.add(lh.longitude);
             titles.add(job.getJobTitle());
-            salaries.add(String.valueOf(job.getSalary()));
+            salaries.add(job.getSalary());
             durations.add(job.getExpectedDuration());
             companies.add(job.getCompanyName());
 
             intentToMapSingleJob.putExtra("latitudes", latitudes);
             intentToMapSingleJob.putExtra("longitudes", longitudes);
+            intentToMapSingleJob.putIntegerArrayListExtra("salaries", salaries);
             intentToMapSingleJob.putStringArrayListExtra("titles", titles);
-            intentToMapSingleJob.putStringArrayListExtra("salaries", salaries);
             intentToMapSingleJob.putStringArrayListExtra("durations", durations);
             intentToMapSingleJob.putStringArrayListExtra("companies", companies);
-            parent.getContext().startActivity(intentToMapSingleJob);
+
+            context.startActivity(intentToMapSingleJob);
         });
     }
+
 
     @Override
     public int getItemCount() {

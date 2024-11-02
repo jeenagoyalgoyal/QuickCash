@@ -1,6 +1,14 @@
 package com.example.quickcash.ui.models;
 
-public class JobToMap {
+import android.content.Intent;
+
+import com.example.quickcash.ui.activities.MapActivity;
+import com.example.quickcash.ui.interfaces.IJob;
+import com.example.quickcash.ui.utils.LocationHelper;
+
+import java.util.ArrayList;
+
+public class JobToMap implements IJob {
     private String jobTitle;
     private int salary;
     private String duration;
@@ -13,7 +21,7 @@ public class JobToMap {
     public JobToMap() {}
 
     // Constructor
-    public JobToMap(String jobTitle, String companyName,int salary, String duration, String location, double latitude, double longitude) {
+    public JobToMap(String jobTitle, String companyName, int salary, String duration, String location, double latitude, double longitude) {
         this.jobTitle = jobTitle;
         this.salary = salary;
         this.duration = duration;
@@ -31,9 +39,10 @@ public class JobToMap {
     public String getCompanyName(){return companyName;}
 
     public int getSalary() { return salary; }
-    public void setSalary(int salary) { this.salary = salary; }
+    public void setSalary(int salary) {this.salary = salary; }
 
-    public String getDuration() { return duration; }
+    @Override
+    public String getExpectedDuration() {return this.duration;}
     public void setDuration(String duration) { this.duration = duration; }
 
     public String getLocation() { return location; }

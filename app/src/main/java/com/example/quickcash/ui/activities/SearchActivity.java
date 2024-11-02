@@ -12,7 +12,7 @@ import com.example.quickcash.ui.utils.JobSearchValidator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.repositories.FirebaseCRUD;
+import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -109,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
         for (JobToMap job : jobList) {
             titles.add(job.getJobTitle());
             salaries.add(String.valueOf(job.getSalary()));
-            durations.add(job.getDuration());
+            durations.add(job.getExpectedDuration());
             latitudes.add(job.getLatitude());
             longitudes.add(job.getLongitude());
         }

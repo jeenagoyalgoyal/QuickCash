@@ -3,6 +3,7 @@ package com.example.quickcash.ui.utils;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +19,13 @@ public class LocationHelper {
             this.longitude = longitude;
             this.errorMessage = errorMessage;
         }
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
 
         public boolean isSuccess() {
             return errorMessage == null;
@@ -26,7 +34,9 @@ public class LocationHelper {
 
     public static LocationResult getCoordinates(Context context, String locationString) {
         try {
+
             Geocoder geocoder = new Geocoder(context);
+
             List<Address> addresses = geocoder.getFromLocationName(locationString, 1);
 
             if (addresses != null && !addresses.isEmpty()) {

@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.quickcash.R;
+import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.models.JobToMap;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -35,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -45,12 +47,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<Double> latitudes;
     private ArrayList<Double> longitudes;
     private ArrayList<String> titles;
-    private ArrayList<String> salaries;
+    private ArrayList<Integer> salaries;
     private ArrayList<String> durations;
     private ArrayList<String> companies;
     private Map<String, Integer> markerToJobIndex;
     private Button backButton;
     private boolean useDummyData = false; // Flag to use dummy data for testing
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +73,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             if (intent != null) {
                 latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
                 longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
+                salaries = intent.getIntegerArrayListExtra("salaries");
                 titles = intent.getStringArrayListExtra("titles");
-                salaries = intent.getStringArrayListExtra("salaries");
                 durations = intent.getStringArrayListExtra("durations");
                 companies = intent.getStringArrayListExtra("companies");
             }
@@ -112,7 +115,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         longitudes.add(-63.5752);
         companies.add("Microsoft");
         titles.add("Software Developer");
-        salaries.add("75000");
+        salaries.add(75000);
         durations.add("Full-time");
 
 
@@ -121,7 +124,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         longitudes.add(-63.5667);
         companies.add("FERRY CO.");
         titles.add("Web Designer");
-        salaries.add("65000");
+        salaries.add(65000);
         durations.add("Contract - 12 months");
 
         // Job 3 - Bedford
@@ -129,7 +132,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         longitudes.add(-63.6582);
         companies.add("BUS CO.");
         titles.add("Data Analyst");
-        salaries.add("70000");
+        salaries.add(70000);
         durations.add("Part-time");
 
         // Job 4 - Halifax Shopping Centre area
@@ -137,7 +140,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         longitudes.add(-63.6088);
         companies.add("Walmart");
         titles.add("UX Researcher");
-        salaries.add("80000");
+        salaries.add(80000);
         durations.add("Full-time");
 
         // Job 5 - Dalhousie University area
@@ -145,7 +148,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         longitudes.add(-63.5917);
         companies.add("Dalhousie");
         titles.add("Teaching Assistant");
-        salaries.add("25000");
+        salaries.add(25000);
         durations.add("Part-time");
     }
 
@@ -181,9 +184,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         for (int i = 0; i < latitudes.size(); i++) {
             try {
-                double lat =latitudes.get(i);
+                double lat = latitudes.get(i);
                 double lng = longitudes.get(i);
-                double salary = Double.parseDouble(salaries.get(i));
 
                 LatLng position = new LatLng(lat, lng);
 
@@ -202,8 +204,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 builder.include(position);
                 hasValidMarkers = true;
             } catch (NumberFormatException | NullPointerException e) {
-                // Skip invalid coordinates
-                continue;
+                // Skip invalid coordinates and log error
+                Log.e("Error adding:", Objects.requireNonNull(e.getMessage()));
             }
         }
 
@@ -251,15 +253,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         titleText.setText(titles.get(jobIndex));
         companyText.setText(companies.get(jobIndex));
-        salaryText.setText(String.format("$%,d/year", Integer.parseInt(salaries.get(jobIndex))));
+        salaryText.setText(String.format("$%,d/year", salaries.get(jobIndex)));
         durationText.setText(durations.get(jobIndex));
 
         // Set dialog width to match parent with margins
         Window window = dialog.getWindow();
+
         if (window != null) {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window.setGravity(Gravity.CENTER);
         }
+
         dialog.show();
     }
 
@@ -283,7 +287,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                             LatLng currentLatLng = new LatLng(location.getLatitude(),
                                     location.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(currentLatLng, 12));
+                                    .newLatLngZoom(currentLatLng, 17));
                         }
                     });
         }
