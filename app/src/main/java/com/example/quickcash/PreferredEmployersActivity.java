@@ -69,8 +69,12 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         setupEmployerSelector();
         setupCrossButton();
         setupRecyclerView();
-
         //setting of ID and database code only executes if email is retrieved correctly
+        WhenEmailRetrievedCorrectly();
+
+    }
+
+    private void WhenEmailRetrievedCorrectly(){
         if (email!=null && !email.isEmpty()){
             this.userID = sanitizeEmail(email);
             this.initializeDatabaseRefs();
