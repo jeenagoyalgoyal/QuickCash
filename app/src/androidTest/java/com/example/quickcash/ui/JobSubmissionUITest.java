@@ -42,10 +42,6 @@ import android.view.WindowManager;
 
 import androidx.test.espresso.Root;
 
-import com.example.quickcash.ui.activities.EmployerHomepageActivity;
-import com.example.quickcash.ui.activities.JobSubmissionActivity;
-import com.example.quickcash.ui.activities.LoginActivity;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -54,7 +50,7 @@ public class JobSubmissionUITest {
 
 
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
-    public ActivityScenario<JobSubmissionActivity> jobSubmissionActivityScenario;
+    public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
     public ActivityScenario<LoginActivity> loginActivityActivityScenario;
 
 
@@ -63,7 +59,7 @@ public class JobSubmissionUITest {
     }
 
     public void setupJobSubmissionActivityScenario() {
-        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmissionActivity.class);
+        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmission.class);
     }
 
     public void setupLoginActivityActivityScenario(){

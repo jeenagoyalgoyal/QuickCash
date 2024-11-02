@@ -1,4 +1,4 @@
-package com.example.quickcash.repositories.validators;
+package com.example.quickcash.ui.utils.Validators;
 
 import java.util.regex.Pattern;
 
