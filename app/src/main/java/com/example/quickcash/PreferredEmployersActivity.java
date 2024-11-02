@@ -18,11 +18,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.adapter.JobSearchAdapter;
+import com.example.quickcash.model.Job;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -40,9 +45,13 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference preferredEmployersRef;
+    private DatabaseReference jobsRef;
 
     private Dialog dialog;
     private ImageButton crossButton;
+    private RecyclerView recyclerView;
+    private List<Job> jobList;
+    private JobSearchAdapter jobSearchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +93,53 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
         setupEmployerSelector();
         setupCrossButton();
+        setupRecyclerView();
     }
 
     protected void initializeDatabaseRefs() {
         this.preferredEmployersRef = getPreferredEmployersRef();;
+        this.jobsRef = getJobsRef();
     }
 
 
     private void setupEmployerSelector(){
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Toast.makeText(PreferredEmployersActivity.this, "You clicked: "+preferredEmployersIdList.get(position), Toast.LENGTH_LONG).show();
-            dialog.show();
+            displayJobsByEmployer(preferredEmployersIdList.get(position));
         });
+    }
+
+    private void setupRecyclerView(){
+        recyclerView = dialog.findViewById(R.id.preferredEmployerJobsRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        jobList = new ArrayList<>();
+        jobSearchAdapter = new JobSearchAdapter(jobList);
+        recyclerView.setAdapter(jobSearchAdapter);
+    }
+
+    private void displayJobsByEmployer(String employerId) {
+        jobList.clear();
+        Query query = jobsRef;
+        query = query.orderByChild("employerId").equalTo(employerId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot jobSnapshot : snapshot.getChildren()){
+                    Job job = jobSnapshot.getValue(Job.class);
+                    jobList.add(job);
+                }
+                if (jobList.isEmpty()){
+                    Toast.makeText(PreferredEmployersActivity.this, "This employer has no jobs posted!", Toast.LENGTH_LONG).show();
+                }
+                jobSearchAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        dialog.show();
     }
 
 
@@ -110,6 +154,11 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     private DatabaseReference getPreferredEmployersRef() {
             return this.database.getReference("Users").child(userID).child("preferredEmployers");
     }
+
+    private DatabaseReference getJobsRef() {
+        return this.database.getReference("Jobs");
+    }
+
 
     protected void setPreferredEmployersListView() {
         adapter.clear();
