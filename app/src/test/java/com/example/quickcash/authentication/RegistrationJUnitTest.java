@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import com.example.quickcash.ui.utils.CredentialsValidator;
+import com.example.quickcash.ui.utils.Validators.CredentialsValidator;
 
 public class RegistrationJUnitTest {
 

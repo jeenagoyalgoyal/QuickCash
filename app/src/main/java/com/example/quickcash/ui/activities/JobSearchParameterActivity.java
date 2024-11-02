@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quickcash.R;
 import com.example.quickcash.ui.interfaces.IJob;
 import com.example.quickcash.ui.models.JobToMap;
-import com.example.quickcash.ui.utils.JobSearchAdapter;
+import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
 import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.ui.utils.LocationHelper;
 import com.google.firebase.database.DataSnapshot;

@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quickcash.ui.models.JobToMap;
-import com.example.quickcash.ui.utils.JobSearchValidator;
+import com.example.quickcash.ui.utils.Validators.JobSearchValidator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
