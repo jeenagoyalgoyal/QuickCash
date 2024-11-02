@@ -28,13 +28,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif-black"
-                android:text="Job Listing for"
+                android:text="Job Listing for: "
                 android:textAlignment="center"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/DetailsHeading" />
 
             <TextView
                 android:id="@+id/company"
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -141,17 +141,17 @@
 
             <TextView
                 android:id="@+id/jobTitleText"
-                android:layout_width="236dp"
-                android:layout_height="23dp"
+                android:layout_width="235dp"
+                android:layout_height="22dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.217"
                 app:layout_constraintStart_toEndOf="@+id/jobTitle"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/DetailsHeading" />
 
             <TextView
                 android:id="@+id/Duration"
@@ -202,6 +202,23 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dateOfStartText" />
+
+            <TextView
+                android:id="@+id/DetailsHeading"
+                android:layout_width="152dp"
+                android:layout_height="41dp"
+                android:layout_marginTop="7dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:gravity="center"
+                android:text="Job Details"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

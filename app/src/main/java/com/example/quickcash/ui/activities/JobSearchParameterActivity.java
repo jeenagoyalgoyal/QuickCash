@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -65,10 +66,13 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (allEmptyFields()) {
                     errorText.setText("All Fields are empty");
+                    errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else if (checkSalaryField()) {
                     errorText.setText("Enter Valid Salary Range");
+                    errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else {
                     errorText.setText("success"); // Clear any previous error
+                    errorText.setTextColor(Color.parseColor("#0DBC00"));
                     performSearch();
                 }
             }
@@ -80,10 +84,13 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (allEmptyFields()) {
                     errorText.setText("All Fields are empty");
+                    errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else if (checkSalaryField()) {
                     errorText.setText("Enter Valid Salary Range");
+                    errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else {
                     errorText.setText("success"); // Clear any previous error
+                    errorText.setTextColor(Color.parseColor("#0DBC00"));
                     performSearchForMap();
                 }
             }
@@ -231,8 +238,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     // Additional filtering if necessary
                     if (passesAdditionalFilters(job)) {
 
-                        Log.e("Filter passed: ", String.valueOf(job));
-
                         //Adding things to intent
                         LocationHelper.LocationResult lh = LocationHelper.getCoordinates(JobSearchParameterActivity.this, job.getLocation());
 
@@ -252,6 +257,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
                 if (jobListToMap.isEmpty()) {
                     errorText.setText("No Results Found");
+                    errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else {
                     jobSearchAdapter.notifyDataSetChanged();
                     errorText.setText(""); // Clear any previous error
@@ -272,6 +278,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 errorText.setText("Failed to retrieve jobs.");
+                errorText.setTextColor(Color.parseColor("#EB0101"));
             }
         });
     }
@@ -322,6 +329,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 int maxSal = Integer.parseInt(maxSalStr);
                 int salary = job.getSalary();
                 errorText.setText(salary + " " + maxSal);
+                errorText.setTextColor(Color.parseColor("#EB0101"));
                 if (salary > maxSal) {
                     matches = false;
                 }
