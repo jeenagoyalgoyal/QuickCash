@@ -82,7 +82,6 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         //add listener to preferredEmployers
         this.preferredEmployersRef.addValueEventListener(new ValueEventListener() {
             PreferredEmployers preferredEmployers = new PreferredEmployers();
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //adding preferred employers to preferred employers object
