@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.utils.Adapter;
+package com.example.quickcash.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
