@@ -60,35 +60,29 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             return insets;
         });
 
-        //ID and email are gotten from intent
-
+        //ID is retrieved
         this.mAuth = FirebaseAuth.getInstance();
         this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
 
         setupListView();
-
-        //dialog code
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.preferred_employer_jobs_dialog_box);
-        crossButton = dialog.findViewById(R.id.crossButton);
+        setupPopupDialog();
+        setupEmployerSelector();
+        setupCrossButton();
+        setupRecyclerView();
 
         //setting of ID and database code only executes if email is retrieved correctly
         if (email!=null && !email.isEmpty()){
             this.userID = sanitizeEmail(email);
-            this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
             this.initializeDatabaseRefs();
             this.setPreferredEmployersListView();
         }
         else {
             Log.e("PreferredEmployers", "no ID initialized! (is the intent working correctly?)");
         }
-
-        setupEmployerSelector();
-        setupCrossButton();
-        setupRecyclerView();
     }
 
     protected void initializeDatabaseRefs() {
+        this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         this.preferredEmployersRef = getPreferredEmployersRef();;
         this.jobsRef = getJobsRef();
     }
@@ -105,6 +99,12 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         preferredEmployersNameList = new ArrayList<>();
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
         listView.setAdapter(adapter);
+    }
+
+    private void setupPopupDialog(){
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.preferred_employer_jobs_dialog_box);
+        crossButton = dialog.findViewById(R.id.crossButton);
     }
 
     private void setupRecyclerView(){
@@ -131,10 +131,10 @@ public class PreferredEmployersActivity extends AppCompatActivity {
                 }
                 jobSearchAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(PreferredEmployersActivity.this, "Database Connection Error!", Toast.LENGTH_LONG).show();
+                Log.e("PreferredEmployers", "Error connecting to firebase!");
             }
         });
         dialog.show();
@@ -185,11 +185,12 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PreferredEmployersActivity.this, "Connection Error!", Toast.LENGTH_LONG).show();
+                Toast.makeText(PreferredEmployersActivity.this, "Database Connection Error!", Toast.LENGTH_LONG).show();
                 Log.e("PreferredEmployers", "Error connecting to firebase!");
             }
         });
     }
+
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
     }
