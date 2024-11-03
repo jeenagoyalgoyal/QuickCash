@@ -113,7 +113,7 @@ public class MapUITest {
         closeButton.longClick();
         UiObject backButton = device.findObject(new UiSelector().text("BACK"));
         backButton.longClick();
-        showMapButton = device.findObject(new UiSelector().text("Show Map"));s
+        showMapButton = device.findObject(new UiSelector().text("Show Map"));
         assertTrue("Pressing close on dialog and back on map takes you to page with Show Map button", showMapButton.exists());
     }
 }
