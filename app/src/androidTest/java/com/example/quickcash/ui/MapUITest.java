@@ -110,9 +110,9 @@ public class MapUITest {
         assertTrue("Description dialog should contain the title Job", dialog.exists());
 
         UiObject closeButton = device.findObject(new UiSelector().text("Close"));
-        closeButton.longClick();
+        closeButton.click();
         UiObject backButton = device.findObject(new UiSelector().text("BACK"));
-        backButton.longClick();
+        backButton.click();
         showMapButton = device.findObject(new UiSelector().text("Show Map"));
         assertTrue("Pressing close on dialog and back on map takes you to page with Show Map button", showMapButton.exists());
     }
