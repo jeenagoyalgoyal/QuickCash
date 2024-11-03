@@ -1,21 +1,17 @@
-package com.example.quickcash.ui.utils.Adapter;
+package com.example.quickcash.utils.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Button;
-
+import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.quickcash.ui.activities.MapActivity;
-import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.LocationHelper;
-
-import android.content.Intent;
-
+import com.example.quickcash.models.Job;
+import com.example.quickcash.ui.activities.MapActivity;
+import com.example.quickcash.utils.LocationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,68 +46,63 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
     @Override
     public JobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_search_result_view, parent, false);
-        JobViewHolder vh = new JobViewHolder(v);
-        return vh;
+        return new JobViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(JobViewHolder holder, int position) {
-
         Job job = jobList.get(position);
+
+        // Set the job details
         holder.jobTypeResult.setText("Job Title: " + job.getJobTitle());
         holder.companyResult.setText("Company: " + job.getCompanyName());
         holder.locationResult.setText("Location: " + job.getLocation());
-        holder.salaryResult.setText("Salary: $" + job.getSalary());
+        holder.salaryResult.setText("Salary: $" + String.format("%,d", job.getSalary()));
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
+        // Set up map button click handler
         holder.showMapButton.setOnClickListener(view -> {
+            Intent mapIntent = new Intent(context, MapActivity.class);
 
-            //Intent for location and details on map
-            Intent intentToMapSingleJob = new Intent(this.context, MapActivity.class);
-
-            //Get lat long
-            LocationHelper.LocationResult lh = LocationHelper.getCoordinates(this.context, job.getLocation());
-
-            //Map only reads ArrayLists of String from intent
+            // Create lists for map data
             ArrayList<Double> latitudes = new ArrayList<>();
             ArrayList<Double> longitudes = new ArrayList<>();
             ArrayList<String> titles = new ArrayList<>();
             ArrayList<Integer> salaries = new ArrayList<>();
             ArrayList<String> durations = new ArrayList<>();
             ArrayList<String> companies = new ArrayList<>();
-            ArrayList<String> jobTypes = new ArrayList<>();
-            ArrayList<String> datesOfStart = new ArrayList<>();
-            ArrayList<String> requirements = new ArrayList<>();
 
+            // Get location coordinates
+            LocationHelper.LocationResult locationResult = LocationHelper.getCoordinates(context, job.getLocation());
 
-            latitudes.add(lh.latitude);
-            longitudes.add(lh.longitude);
+            // Add job data to lists
+            latitudes.add(locationResult.latitude);
+            longitudes.add(locationResult.longitude);
             titles.add(job.getJobTitle());
             salaries.add(job.getSalary());
             durations.add(job.getExpectedDuration());
             companies.add(job.getCompanyName());
-            datesOfStart.add(job.getStartDate());
-            requirements.add(job.getRequirements());
-            jobTypes.add(job.getJobType());
 
-            intentToMapSingleJob.putExtra("latitudes", latitudes);
-            intentToMapSingleJob.putExtra("longitudes", longitudes);
-            intentToMapSingleJob.putIntegerArrayListExtra("salaries", salaries);
-            intentToMapSingleJob.putStringArrayListExtra("titles", titles);
-            intentToMapSingleJob.putStringArrayListExtra("durations", durations);
-            intentToMapSingleJob.putStringArrayListExtra("companies", companies);
-            intentToMapSingleJob.putStringArrayListExtra("jobTypes", jobTypes);
-            intentToMapSingleJob.putStringArrayListExtra("datesOfStart", datesOfStart);
-            intentToMapSingleJob.putStringArrayListExtra("requirements", requirements);
+            // Add data to intent
+            mapIntent.putExtra("latitudes", latitudes);
+            mapIntent.putExtra("longitudes", longitudes);
+            mapIntent.putIntegerArrayListExtra("salaries", salaries);
+            mapIntent.putStringArrayListExtra("titles", titles);
+            mapIntent.putStringArrayListExtra("durations", durations);
+            mapIntent.putStringArrayListExtra("companies", companies);
 
-            context.startActivity(intentToMapSingleJob);
+            context.startActivity(mapIntent);
         });
     }
-
 
     @Override
     public int getItemCount() {
         return jobList.size();
     }
-}
 
+    public void updateJobs(List<Job> newJobs) {
+        this.jobList.clear();
+        this.jobList.addAll(newJobs);
+        notifyDataSetChanged();
+    }
+}

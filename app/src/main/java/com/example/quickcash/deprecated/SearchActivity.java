@@ -1,19 +1,20 @@
-package com.example.quickcash.ui.deprecated;
+package com.example.quickcash.deprecated;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quickcash.ui.activities.MapActivity;
-import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.models.Job;
 import com.example.quickcash.ui.utils.Validators.JobSearchValidator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
+import com.example.quickcash.repositories.FirebaseCRUD;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -90,13 +91,22 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void performJobSearch(String query) {
-        firebaseCRUD.searchJobs(query, jobs -> {
-            jobList.clear();
-            jobList.addAll(jobs);
-            if (!jobList.isEmpty()) {
-                showMapWithJobs();
-            } else {
-                Toast.makeText(this, "No jobs found for " + query, Toast.LENGTH_SHORT).show();
+        firebaseCRUD.searchJobs(query, new FirebaseCRUD.JobDataCallback() {
+
+            @Override
+            public void onCallback(List<Job> jobs) {
+                jobList.clear();
+                jobList.addAll(jobs);
+                if (!jobList.isEmpty()) {
+                    showMapWithJobs();
+                } else {
+                    Toast.makeText(SearchActivity.this, "No jobs found for " + query, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e("Error: ", error);
             }
         });
     }

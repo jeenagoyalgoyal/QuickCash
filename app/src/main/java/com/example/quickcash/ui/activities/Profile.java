@@ -10,7 +10,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.SessionManager;
+import com.example.quickcash.utils.SessionManager;
 
 public class Profile extends AppCompatActivity {
 

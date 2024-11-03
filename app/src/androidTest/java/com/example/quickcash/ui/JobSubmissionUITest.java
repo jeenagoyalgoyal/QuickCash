@@ -1,19 +1,19 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+
 //import static android.support.test.uiautomator;
 
 
@@ -42,6 +42,11 @@ import android.view.WindowManager;
 
 import androidx.test.espresso.Root;
 
+import com.example.quickcash.R;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.ui.activities.JobSubmissionActivity;
+import com.example.quickcash.ui.activities.LoginActivity;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -50,7 +55,7 @@ public class JobSubmissionUITest {
 
 
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
-    public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
+    public ActivityScenario<JobSubmissionActivity> jobSubmissionActivityScenario;
     public ActivityScenario<LoginActivity> loginActivityActivityScenario;
 
 
@@ -59,7 +64,7 @@ public class JobSubmissionUITest {
     }
 
     public void setupJobSubmissionActivityScenario() {
-        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmission.class);
+        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmissionActivity.class);
     }
 
     public void setupLoginActivityActivityScenario(){

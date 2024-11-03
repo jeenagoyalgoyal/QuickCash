@@ -4,9 +4,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
-import com.example.quickcash.ui.models.Job;
-import com.example.quickcash.ui.utils.LocationHelper;
+import com.example.quickcash.utils.adapters.JobSearchAdapter;
+import com.example.quickcash.models.Job;
+import com.example.quickcash.utils.LocationHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -92,7 +92,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void init() {

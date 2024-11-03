@@ -1,4 +1,4 @@
-package com.example.quickcash.ui.utils;
+package com.example.quickcash.utils;
 
 import android.content.Context;
 import android.location.Address;

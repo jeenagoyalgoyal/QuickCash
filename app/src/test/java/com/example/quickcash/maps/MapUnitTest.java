@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.example.quickcash.ui.deprecated.JobToMap;
+import com.example.quickcash.deprecated.JobToMap;
 
 public class MapUnitTest {
     // Tests to be checked:

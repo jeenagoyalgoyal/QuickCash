@@ -13,12 +13,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
 import com.example.quickcash.R;
 import com.example.quickcash.databinding.ActivityMainBinding;
-import com.example.quickcash.ui.models.Job;
-import com.example.quickcash.ui.models.UseRole;
-import com.example.quickcash.ui.utils.LocationHelper;
+import com.example.quickcash.models.Job;
+import com.example.quickcash.models.UseRole;
+import com.example.quickcash.utils.LocationHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;

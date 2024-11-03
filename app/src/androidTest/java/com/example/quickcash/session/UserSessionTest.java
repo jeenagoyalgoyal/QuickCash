@@ -11,7 +11,7 @@ import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.*;
 
-import com.example.quickcash.ui.utils.SessionManager;
+import com.example.quickcash.utils.SessionManager;
 
 @RunWith(JUnit4.class)
 public class UserSessionTest {
