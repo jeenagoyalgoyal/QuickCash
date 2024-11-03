@@ -18,7 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.quickcash.R;
 import com.example.quickcash.ui.utils.Validators.CredentialsValidator;
+<<<<<<< HEAD
 import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
+=======
+import com.example.quickcash.repositories.FirebaseCRUD;
+import com.example.quickcash.R;
+>>>>>>> c8452335f077f68a71191e31cd517c40ec38c3f0
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;

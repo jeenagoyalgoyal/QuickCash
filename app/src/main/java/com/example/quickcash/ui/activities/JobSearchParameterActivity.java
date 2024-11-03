@@ -1,6 +1,7 @@
 package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
+<<<<<<< HEAD
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -8,11 +9,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+=======
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+>>>>>>> c8452335f077f68a71191e31cd517c40ec38c3f0
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.R;
+<<<<<<< HEAD
 import com.example.quickcash.models.Job;
 import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
 import com.example.quickcash.ui.utils.LocationHelper;
@@ -24,360 +34,195 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+=======
+import com.example.quickcash.ui.models.Job;
+import com.example.quickcash.repositories.FirebaseCRUD;
+import com.example.quickcash.ui.adapters.JobSearchAdapter;
+import com.example.quickcash.ui.utils.LocationHelper;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+>>>>>>> c8452335f077f68a71191e31cd517c40ec38c3f0
 import java.util.List;
 
 public class JobSearchParameterActivity extends AppCompatActivity {
 
-    private EditText jobTitle;
-    private EditText companyName;
-    private EditText minSalary;
-    private EditText maxSalary;
-    private EditText duration;
-    private EditText location;
     private TextView errorText;
     private Button searchButton;
-    private Button mapButton;
     private RecyclerView recyclerView;
     private JobSearchAdapter jobSearchAdapter;
     private List<Job> jobList;
-    private List<Job> jobListToMap;
-    private DatabaseReference jobsRef;
+    private FirebaseCRUD firebaseCRUD;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private Place selectedPlace;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.job_search_parameter);
 
-        init();
+        // Initialize the Places SDK
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), getString(R.string.google_maps_api_key));
+        }
 
-        jobsRef = FirebaseDatabase.getInstance().getReference("Jobs");
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (allEmptyFields()) {
-                    errorText.setText("All Fields are empty");
-                    errorText.setTextColor(Color.parseColor("#EB0101"));
-                } else if (checkSalaryField()) {
-                    errorText.setText("Enter Valid Salary Range");
-                    errorText.setTextColor(Color.parseColor("#EB0101"));
-                } else {
-                    errorText.setText("success"); // Clear any previous error
-                    errorText.setTextColor(Color.parseColor("#0DBC00"));
-                    performSearch();
-                }
-            }
-        });
-
-        mapButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (allEmptyFields()) {
-                    errorText.setText("All Fields are empty");
-                    errorText.setTextColor(Color.parseColor("#EB0101"));
-                } else if (checkSalaryField()) {
-                    errorText.setText("Enter Valid Salary Range");
-                    errorText.setTextColor(Color.parseColor("#EB0101"));
-                } else {
-                    errorText.setText("success"); // Clear any previous error
-                    errorText.setTextColor(Color.parseColor("#0DBC00"));
-                    performSearchForMap();
-                }
-            }
-        });
-
+        initializeViews();
+        setupPlacesAutocomplete();
+        setupRecyclerView();
+        setupSearchButton();
     }
 
-    public void init() {
-        jobTitle = findViewById(R.id.jobTitle);
-        companyName = findViewById(R.id.companyName);
-        minSalary = findViewById(R.id.minSalary);
-        maxSalary = findViewById(R.id.maxSalary);
-        duration = findViewById(R.id.duration);
-        location = findViewById(R.id.location);
+    private void initializeViews() {
         errorText = findViewById(R.id.jspErrorDisplay);
         searchButton = findViewById(R.id.search_job_parameter);
-        mapButton = findViewById(R.id.showMapButton);
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize FirebaseCRUD using the default constructor
+        firebaseCRUD = new FirebaseCRUD();
 
         jobList = new ArrayList<>();
-        jobListToMap = new ArrayList<Job>();
+    }
+
+    private void setupPlacesAutocomplete() {
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return
+        autocompleteFragment.setPlaceFields(Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG));
+
+        // Set up a PlaceSelectionListener to handle the response
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                selectedPlace = place;
+                showSuccess("Selected: " + place.getAddress());
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                showError("Error: " + status.getStatusMessage());
+            }
+        });
+
+        // Set hint text
+        autocompleteFragment.setHint("Enter full address");
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         jobSearchAdapter = new JobSearchAdapter(jobList, this);
         recyclerView.setAdapter(jobSearchAdapter);
     }
 
-    private void performSearch() {
-        // Get search parameters
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
-
-        Query query = jobsRef;
-
-        // Apply filters based on non-empty inputs
-        if (isValidJobTitle(title)) {
-            query = query.orderByChild("jobTitle").equalTo(title);
-        } else if (isValidCompany(company)) {
-            query = query.orderByChild("companyName").equalTo(company);
-        } else if (isValidLocation(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
-        } else if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
-        } else if (!minSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild("salary").startAt(minSal);
-        } else if (!maxSalStr.isEmpty()) {
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").endAt(maxSal);
-        } else if (!isValidDuration(jobDuration)) {
-            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
-        }
-
-        // Clear previous search results
-        jobList.clear();
-        jobSearchAdapter.notifyDataSetChanged();
-
-        // Attach a listener to read the data
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jobList.clear(); // Clear the list before adding new items
-                for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                    Job job = jobSnapshot.getValue(Job.class);
-                    // Additional filtering if necessary
-                    if (passesAdditionalFilters(job)) {
-                        jobList.add(job);
-                    }
-                }
-
-                if (jobList.isEmpty()) {
-                    errorText.setText("No Results Found");
-                } else {
-                    errorText.setText(""); // Clear any previous error
-                }
-                jobSearchAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                errorText.setText("Failed to retrieve jobs.");
+    private void setupSearchButton() {
+        searchButton.setOnClickListener(v -> {
+            if (validateAddress()) {
+                performSearch();
             }
         });
     }
 
-    private void performSearchForMap() {
-
-        // Get search parameters
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
-
-        Query query = jobsRef;
-
-        // Apply filters based on non-empty inputs
-        if (isValidJobTitle(title)) {
-            query = query.orderByChild("jobTitle").equalTo(title);
-        } else if (isValidCompany(company)) {
-            query = query.orderByChild("companyName").equalTo(company);
-        } else if (isValidLocation(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
-        } else if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
-        } else if (!minSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild("salary").startAt(minSal);
-        } else if (!maxSalStr.isEmpty()) {
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").endAt(maxSal);
-        } else if (!isValidDuration(jobDuration)) {
-            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
-        }
-
-        // Clear previous search results
-        jobListToMap.clear();
-        jobSearchAdapter.notifyDataSetChanged();
-
-        //Map only reads ArrayLists of String from intent
-        ArrayList<Double> latitudes = new ArrayList<>();
-        ArrayList<Double> longitudes = new ArrayList<>();
-        ArrayList<String> titles = new ArrayList<>();
-        ArrayList<Integer> salaries = new ArrayList<>();
-        ArrayList<String> durations = new ArrayList<>();
-        ArrayList<String> companies = new ArrayList<>();
-
-        Intent intentToMap = new Intent(JobSearchParameterActivity.this,
-                MapActivity.class);
-        // Attach a listener to read the data
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jobListToMap.clear(); // Clear the list before adding new items
-                for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                    //Previously used JobToMap but refactored to use Job class instead
-                    Job job = jobSnapshot.getValue(Job.class);
-                    // Additional filtering if necessary
-                    if (passesAdditionalFilters(job)) {
-
-                        //Adding things to intent
-                        LocationHelper.LocationResult lh = LocationHelper.getCoordinates(JobSearchParameterActivity.this, job.getLocation());
-
-                        //Only need relevant jobs
-                        if(lh.getLatitude()!=0 && lh.getLongitude()!=0){
-                            latitudes.add(lh.latitude);
-                            longitudes.add(lh.longitude);
-                            titles.add(job.getJobTitle());
-                            salaries.add(job.getSalary());
-                            durations.add(job.getExpectedDuration());
-                            companies.add(job.getCompanyName());
-
-                            //Checking for empty jobs
-                            jobListToMap.add(job);
-                        }
-                    }
-                }
-
-                if (jobListToMap.isEmpty()) {
-                    errorText.setText("No Results Found");
-                    errorText.setTextColor(Color.parseColor("#EB0101"));
-                } else {
-                    jobSearchAdapter.notifyDataSetChanged();
-                    errorText.setText(""); // Clear any previous error
-                }
-
-                intentToMap.putExtra("latitudes",latitudes);
-                intentToMap.putExtra("longitudes",longitudes);
-                intentToMap.putIntegerArrayListExtra("salaries", salaries);
-                intentToMap.putStringArrayListExtra("durations", durations);
-                intentToMap.putStringArrayListExtra("titles", titles);
-                intentToMap.putStringArrayListExtra("companies", companies);
-
-                //Do something with list in future
-                startActivity(intentToMap);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                errorText.setText("Failed to retrieve jobs.");
-                errorText.setTextColor(Color.parseColor("#EB0101"));
-            }
-        });
-    }
-
-    private boolean passesAdditionalFilters(Job job) {
-        // Get the user input again
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
-
-        boolean matches = true;
-
-        if (job != null) {
-
-            if (isValidJobTitle(title) && !job.getJobTitle().equalsIgnoreCase(title)) {
-                matches = false;
-            }
-
-            if (isValidCompany(company) && !job.getCompanyName().equalsIgnoreCase(company)) {
-                matches = false;
-            }
-
-            if (isValidLocation(jobLocation) && !job.getLocation().equalsIgnoreCase(jobLocation)) {
-                matches = false;
-            }
-
-            if (isValidDuration(jobDuration) && !job.getExpectedDuration().equalsIgnoreCase(jobDuration)) {
-                matches = false;
-            }
-
-            if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-                int minSal = Integer.parseInt(minSalStr);
-                int maxSal = Integer.parseInt(maxSalStr);
-                int salary = job.getSalary();
-                if (salary < minSal || salary > maxSal) {
-                    matches = false;
-                }
-            } else if (!minSalStr.isEmpty()) {
-                int minSal = Integer.parseInt(minSalStr);
-                int salary = job.getSalary();
-                if (salary < minSal) {
-                    matches = false;
-                }
-            } else if (!maxSalStr.isEmpty()) {
-                int maxSal = Integer.parseInt(maxSalStr);
-                int salary = job.getSalary();
-                errorText.setText(salary + " " + maxSal);
-                errorText.setTextColor(Color.parseColor("#EB0101"));
-                if (salary > maxSal) {
-                    matches = false;
-                }
-            }
-        }
-        return matches;
-    }
-
-    // Tests the job title (can be empty)
-    public static boolean isValidJobTitle(String title) {
-        return title != null && !title.trim().isEmpty();
-    }
-
-    // Tests the job title (can be empty)
-    public static boolean isValidCompany(String company) {
-        return company != null && !company.trim().isEmpty();
-    }
-
-    // Tests salary is within boundary
-    public static boolean isValidSalary(int minSalary, int maxSalary) {
-        return minSalary >= 0 && maxSalary >= 0 && minSalary <= maxSalary;
-    }
-
-    // Tests valid duration
-    public static boolean isValidDuration(String duration) {
-        return duration != null && !duration.trim().isEmpty();
-    }
-
-    // Tests valid location
-    public static boolean isValidLocation(String location) {
-        return location != null && !location.trim().isEmpty();
-    }
-
-    public boolean allEmptyFields() {
-        return jobTitle.getText().toString().trim().isEmpty() &&
-                companyName.getText().toString().trim().isEmpty() &&
-                minSalary.getText().toString().trim().isEmpty() &&
-                maxSalary.getText().toString().trim().isEmpty() &&
-                duration.getText().toString().trim().isEmpty() &&
-                location.getText().toString().trim().isEmpty();
-    }
-
-    public boolean checkSalaryField() {
-        String minS = minSalary.getText().toString().trim();
-        String maxS = maxSalary.getText().toString().trim();
-
-        if (minS.isEmpty() || maxS.isEmpty()) {
+    private boolean validateAddress() {
+        if (selectedPlace == null || selectedPlace.getLatLng() == null) {
+            showError("Please select an address from the suggestions");
             return false;
-        } else {
-            return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
         }
+        return true;
     }
 
+    private void performSearch() {
+        if (selectedPlace == null || selectedPlace.getLatLng() == null) {
+            showError("Please select a valid address");
+            return;
+        }
+
+        String locationName = selectedPlace.getAddress();
+
+        // Use FirebaseCRUD to search for jobs in the selected location
+        firebaseCRUD.searchJobs(locationName, new FirebaseCRUD.JobDataCallback() {
+            @Override
+            public void onCallback(List<Job> jobs) {
+                if (jobs.isEmpty()) {
+                    showError("No jobs found at the selected location.");
+                    return;
+                }
+
+                // Prepare data for MapActivity
+                Intent mapIntent = new Intent(JobSearchParameterActivity.this, MapActivity.class);
+
+                ArrayList<Double> latitudes = new ArrayList<>();
+                ArrayList<Double> longitudes = new ArrayList<>();
+                ArrayList<String> titles = new ArrayList<>();
+                ArrayList<Integer> salaries = new ArrayList<>();
+                ArrayList<String> durations = new ArrayList<>();
+                ArrayList<String> companies = new ArrayList<>();
+
+                // Add search location marker
+                latitudes.add(selectedPlace.getLatLng().latitude);
+                longitudes.add(selectedPlace.getLatLng().longitude);
+                titles.add("Search Location: " + selectedPlace.getAddress());
+                salaries.add(0);
+                durations.add("");
+                companies.add("");
+
+                // Add jobs to the lists
+                for (Job job : jobs) {
+                    // Get coordinates of the job location
+                    LatLng jobLatLng = LocationHelper.getCoordinatesFromAddress(JobSearchParameterActivity.this, job.getLocation());
+                    if (jobLatLng != null) {
+                        latitudes.add(jobLatLng.latitude);
+                        longitudes.add(jobLatLng.longitude);
+                        titles.add(job.getJobTitle());
+                        salaries.add(job.getSalary());
+                        durations.add(job.getExpectedDuration()); // Corrected method name
+                        companies.add(job.getCompanyName());
+                    } else {
+                        // Handle cases where geocoding fails for a job location
+                        // Optionally, you can log or notify the user
+                        System.out.println("Failed to geocode job location: " + job.getLocation());
+                    }
+                }
+
+                // Add data to intent
+                mapIntent.putExtra("latitudes", latitudes);
+                mapIntent.putExtra("longitudes", longitudes);
+                mapIntent.putStringArrayListExtra("titles", titles);
+                mapIntent.putIntegerArrayListExtra("salaries", salaries);
+                mapIntent.putStringArrayListExtra("durations", durations);
+                mapIntent.putStringArrayListExtra("companies", companies);
+
+                // Add center coordinates
+                mapIntent.putExtra("centerLat", selectedPlace.getLatLng().latitude);
+                mapIntent.putExtra("centerLng", selectedPlace.getLatLng().longitude);
+
+                startActivity(mapIntent);
+            }
+
+            @Override
+            public void onError(String error) {
+                showError("Failed to retrieve job data: " + error);
+            }
+        });
+    }
+
+    private void showError(String message) {
+        errorText.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+        errorText.setText(message);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showSuccess(String message) {
+        errorText.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+        errorText.setText(message);
+    }
 }
