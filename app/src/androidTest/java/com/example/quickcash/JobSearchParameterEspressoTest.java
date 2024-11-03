@@ -108,6 +108,23 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withText("Software Developer")).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testNoResultsFound() {
+        // Test the filters by implementing data and seeing if it works
+        onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
+        onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Software Developer")).check(ViewAssertions.matches(ViewMatchers.withText("Software Developer")));
+        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Tech Corp")).check(ViewAssertions.matches(ViewMatchers.withText("Tech Corp")));
+        onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Mumbai, India")).check(ViewAssertions.matches(ViewMatchers.withText("Mumbai, India")));
+
+        onView(ViewMatchers.withId(R.id.search_job_parameter)).perform(ViewActions.click());
+
+        onView(ViewMatchers.withId(R.id.jspErrorDisplay)).check(ViewAssertions.matches(ViewMatchers.withText("No Results Found")));
+
+    }
+
     @After
     public void tearDown() {
         Intents.release();

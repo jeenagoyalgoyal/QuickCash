@@ -2,21 +2,16 @@ package com.example.quickcash;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.model.Job;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.concurrent.ExecutionException;
 
@@ -31,9 +26,7 @@ public class JobSubmissionDatabaseTest {
     @Before
     public void setUp() {
 
-        // Mock FirebaseDatabase
         firebaseDatabase = FirebaseDatabase.getInstance();
-        // Inject the mock into your JobCRUD or provide a way to set it
         jobCRUD = new JobCRUD(firebaseDatabase);
     }
 

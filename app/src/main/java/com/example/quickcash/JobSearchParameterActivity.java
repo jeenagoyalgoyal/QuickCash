@@ -118,7 +118,6 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
         // Apply filters based on non-empty inputs
         if (isValidJobTitle(title)) {
-            errorText.setText("1234");
             query = query.orderByChild("jobTitle").equalTo(title);
         }else if(isValidCompany(company)){
             query =query.orderByChild("companyName").equalTo(company);
@@ -154,7 +153,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
                 if (jobList != null && !jobList.isEmpty()) {
                     errorText.setText(""); // Clear any previous error
                 } else {
-                    //errorText.setText("No Results Found");
+                    errorText.setText("No Results Found");
                 }
                 jobSearchAdapter.notifyDataSetChanged();
             } else {
