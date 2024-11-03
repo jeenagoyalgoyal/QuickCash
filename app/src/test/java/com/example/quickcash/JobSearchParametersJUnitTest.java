@@ -9,6 +9,7 @@ import org.junit.Test;
 public class  JobSearchParametersJUnitTest {
 
 
+
     @Test
     public void testValidJobTitle() {
         assertTrue(JobSearchParameterActivity.isValidJobTitle("Data Analyst"));
@@ -39,4 +40,5 @@ public class  JobSearchParametersJUnitTest {
         assertFalse(JobSearchParameterActivity.isValidLocation(""));
         assertFalse(JobSearchParameterActivity.isValidLocation(null));
     }
+
 }

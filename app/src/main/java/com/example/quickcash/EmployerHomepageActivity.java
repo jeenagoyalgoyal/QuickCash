@@ -64,7 +64,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (useRole.getCurrentRole().equals("employer")) {
-                    Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmission.class);
+                    Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmissionActivity.class);
                     intentJobSub.putExtra("email", email); // Fixed
                     Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
