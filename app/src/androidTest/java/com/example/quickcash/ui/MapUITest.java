@@ -45,6 +45,7 @@ public class MapUITest {
         Intent launcherIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackageName);
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launcherIntent);
+
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
     }
 
