@@ -124,7 +124,6 @@ public class JobSearchParameterEspressoTest {
 
     @After
     public void tearDown() {
-        FirebaseDatabase.getInstance().getReference("Jobs").removeValue();
         Intents.release();
 
     }
