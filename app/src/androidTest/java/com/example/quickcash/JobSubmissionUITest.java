@@ -55,7 +55,7 @@ public class JobSubmissionUITest {
 
 
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
-    public ActivityScenario<JobSubmission> jobSubmissionActivityScenario;
+    public ActivityScenario<JobSubmissionActivity> jobSubmissionActivityScenario;
     public ActivityScenario<LoginActivity> loginActivityActivityScenario;
 
 
@@ -64,7 +64,7 @@ public class JobSubmissionUITest {
     }
 
     public void setupJobSubmissionActivityScenario() {
-        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmission.class);
+        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmissionActivity.class);
     }
 
     public void setupLoginActivityActivityScenario(){

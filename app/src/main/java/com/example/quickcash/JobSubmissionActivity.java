@@ -20,7 +20,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobSubmission extends AppCompatActivity {
+public class JobSubmissionActivity extends AppCompatActivity {
 
     // Job Submission Form title
     private TextView formText;
@@ -248,7 +248,7 @@ public class JobSubmission extends AppCompatActivity {
                         Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
                         resetForm();
 
-                        Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
+                        Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
                         intentBackToEmployerPage.putExtra("employerID", employerId);
                         intentBackToEmployerPage.putExtra("email",email);
                         startActivity(intentBackToEmployerPage);

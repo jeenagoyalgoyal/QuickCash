@@ -13,13 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="testJobResultsAreDisplayed()">
+      <SelectionState runConfigName="JobSubmissionUITest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testJobResultsAreDisplayed() (1)">
+      <SelectionState runConfigName="testJobDataMappingToBackendStructure()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="JobSearchParameterEspressoTest">
+      <SelectionState runConfigName="testAddToPreferredEmployersButton()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="JobSearchParameterActivity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Tests in 'com.example.quickcash'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
