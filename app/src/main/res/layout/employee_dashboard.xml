@@ -19,99 +19,81 @@
         android:id="@+id/searchJobButton"
         android:layout_width="304dp"
         android:layout_height="46dp"
-        android:layout_marginTop="152dp"
         android:text="Search Job"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/welcomeEmployee" />
 
     <Button
         android:id="@+id/myProfileButton"
         android:layout_width="295dp"
         android:layout_height="47dp"
-        android:layout_marginTop="204dp"
         android:text="My Profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/searchJobButton" />
 
     <Button
         android:id="@+id/workScheduleButton"
         android:layout_width="288dp"
         android:layout_height="47dp"
-        android:layout_marginTop="260dp"
         android:text="Work Schedule"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/myProfileButton" />
 
     <Button
         android:id="@+id/tasksProjectsButton"
         android:layout_width="297dp"
         android:layout_height="49dp"
-        android:layout_marginTop="316dp"
         android:text="Tasks and Projects"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/workScheduleButton" />
 
     <Button
         android:id="@+id/performanceReviewsButton"
         android:layout_width="306dp"
         android:layout_height="45dp"
-        android:layout_marginTop="372dp"
         android:text="Performance Reviews"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tasksProjectsButton" />
 
     <Button
         android:id="@+id/employeeNotifications"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="424dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/performanceReviewsButton" />
 
     <Button
         android:id="@+id/switchToEmployerButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="568dp"
         android:text="Switch to Employer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/employeeNotifications" />
 
     <Button
         android:id="@+id/preferredJobsButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="168dp"
         android:text="My Preferred Jobs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/switchToEmployerButton" />
 
     <Button
         android:id="@+id/preferredEmployersButton"
         android:layout_width="298dp"
         android:layout_height="53dp"
-        android:layout_marginTop="480dp"
         android:text="Preferred Employers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.539"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/preferredJobsButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

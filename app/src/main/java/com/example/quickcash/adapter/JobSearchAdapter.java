@@ -40,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobViewHolder> {
@@ -66,7 +67,6 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             salaryResult = itemView.findViewById(R.id.salaryResult);
             durationResult = itemView.findViewById(R.id.durationResult);
             showMapButton = itemView.findViewById(R.id.showMap);
-            addToPreferredButton = itemView.findViewById(R.id.btnAddToPreferred);
             optionsButton = itemView.findViewById(R.id.optionsButton);
             jobSearchLinearLayout = itemView.findViewById(R.id.jobSearchLinearLayout);
         }
@@ -97,11 +97,6 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             // Implement map functionality here
         });
 
-        // Pass the context from the holder's itemView
-        holder.addToPreferredButton.setOnClickListener(view -> {
-            addJobToPreferredList(job, holder.itemView.getContext());
-        });
-
 
         holder.optionsButton.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(parent.getContext(),holder.optionsButton);
@@ -116,6 +111,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                         addToPreferredEmployersList(userId,job.getEmployerId(),holder.itemView.getContext());
                     } else if (item.getTitle().equals("Add to Preferred Jobs")) {
                         //Do preferred Job calls here!
+                        addJobToPreferredList(job, holder.itemView.getContext());
                     }
                     return true;
                 }
@@ -204,9 +200,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         return FirebaseDatabase.getInstance().getReference("Users").child(userId);
     }
 
-    private String sanitizeEmail(String email) {
-        return email.replace(".", ",");
-    }
+
 
     @Override
     public int getItemCount() {
