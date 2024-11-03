@@ -189,6 +189,52 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         ArrayList<String> companies = new ArrayList<>();
         ArrayList<String> jobTypes = new ArrayList<>();
 
+        /*
+        The following block of code is logic for getting from database
+         */
+        /*
+        jobList.clear();
+        jobSearchAdapter.notifyDataSetChanged();
+        jobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
+
+                    Job job = jobSnapshot.getValue(Job.class);
+
+                    if (passesAdditionalFilters(job)) {
+
+                        jobList.add(job);
+                        LocationHelper.LocationResult lr = LocationHelper.getCoordinates(JobSearchParameterActivity.this, job.getLocation());
+
+                        latitudes.add(lr.getLatitude());
+                        longitudes.add(lr.getLongitude());
+                        titles.add(job.getJobTitle());
+                        companies.add(job.getCompanyName());
+                        jobTypes.add(job.getJobType());
+                        salaries.add(job.getSalary());
+                        durations.add(job.getExpectedDuration());
+                    }
+                }
+
+                if (jobList.isEmpty()) {
+                    errorText.setText("No Results Found");
+                } else {
+                    errorText.setText("");
+                    jobSearchAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                errorText.setText("Failed to retrieve jobs.");
+            }
+        });
+
+         */
+
+
         // Use test locations for now - will be guaranteed to show markers
         addTestLocations(latitudes, longitudes, titles, companies, jobTypes, salaries, durations);
 
