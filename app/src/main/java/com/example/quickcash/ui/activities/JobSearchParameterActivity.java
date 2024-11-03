@@ -11,10 +11,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +24,46 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class JobSearchParameterActivity extends AppCompatActivity {
+
+    private static final String TAG = "JobSearchParameter";
+
+    // Test locations around Halifax
+    private static final Object[][] HALIFAX_TEST_LOCATIONS = {
+            // Downtown Halifax
+            {44.6488, -63.5752, "Software Developer", "Tech Halifax", "Full Time", 35, "40 hours"},
+
+            // Halifax Shopping Centre
+            {44.6350, -63.5917, "Retail Manager", "Mall Corp", "Full Time", 28, "35 hours"},
+
+            // Dalhousie University
+            {44.6366, -63.5917, "Research Assistant", "Dalhousie", "Part Time", 25, "20 hours"},
+
+            // Spring Garden Road
+            {44.6427, -63.5751, "Barista", "Coffee Shop", "Part Time", 30, "25 hours"},
+
+            // Scotia Square
+            {44.6483, -63.5739, "Office Admin", "Scotia Corp", "Full Time", 32, "40 hours"},
+
+            // Halifax Central Library
+            {44.6434, -63.5766, "Librarian", "Halifax Library", "Part Time", 27, "30 hours"},
+
+            // Halifax Waterfront
+            {44.6476, -63.5683, "Tour Guide", "Harbor Tours", "Contract", 29, "35 hours"},
+
+            // Quinpool Road
+            {44.6447, -63.5895, "Chef", "Restaurant NS", "Full Time", 40, "45 hours"},
+
+            // Halifax Common
+            {44.6497, -63.5891, "Recreation Coordinator", "City Parks", "Seasonal", 26, "40 hours"},
+
+            // Point Pleasant Park
+            {44.6276, -63.5686, "Park Maintenance", "Parks & Rec", "Part Time", 24, "25 hours"}
+    };
 
     private EditText jobTitle;
     private EditText companyName;
@@ -48,9 +82,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.job_search_parameter);
 
         init();
@@ -58,7 +90,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         jobsRef = FirebaseDatabase.getInstance().getReference("Jobs");
 
         searchButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 if (allEmptyFields()) {
@@ -68,15 +99,13 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     errorText.setText("Enter Valid Salary Range");
                     errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else {
-                    errorText.setText("success"); // Clear any previous error
-                    errorText.setTextColor(Color.parseColor("#0DBC00"));
+                    errorText.setText(""); // Clear any previous error
                     performSearch();
                 }
             }
         });
 
         mapButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 if (allEmptyFields()) {
@@ -86,8 +115,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     errorText.setText("Enter Valid Salary Range");
                     errorText.setTextColor(Color.parseColor("#EB0101"));
                 } else {
-                    errorText.setText("success"); // Clear any previous error
-                    errorText.setTextColor(Color.parseColor("#0DBC00"));
+                    errorText.setText(""); // Clear any previous error
                     performSearchForMap();
                 }
             }
@@ -108,55 +136,27 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         jobList = new ArrayList<>();
-        jobListToMap = new ArrayList<Job>();
+        jobListToMap = new ArrayList<>();
         jobSearchAdapter = new JobSearchAdapter(jobList, this);
         recyclerView.setAdapter(jobSearchAdapter);
     }
 
     private void performSearch() {
-        // Get search parameters
         String title = jobTitle.getText().toString().trim();
         String company = companyName.getText().toString().trim();
         String minSalStr = minSalary.getText().toString().trim();
         String maxSalStr = maxSalary.getText().toString().trim();
         String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
+        String jobLocation = location.getText().toString().trim().toLowerCase();
 
-        Query query = jobsRef;
-
-        // Apply filters based on non-empty inputs
-        if (isValidJobTitle(title)) {
-            query = query.orderByChild("jobTitle").equalTo(title);
-        } else if (isValidCompany(company)) {
-            query = query.orderByChild("companyName").equalTo(company);
-        } else if (isValidLocation(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
-        } else if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
-        } else if (!minSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild("salary").startAt(minSal);
-        } else if (!maxSalStr.isEmpty()) {
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").endAt(maxSal);
-        } else if (!isValidDuration(jobDuration)) {
-            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
-        }
-
-        // Clear previous search results
         jobList.clear();
         jobSearchAdapter.notifyDataSetChanged();
 
-        // Attach a listener to read the data
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        jobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                jobList.clear(); // Clear the list before adding new items
                 for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
-                    // Additional filtering if necessary
                     if (passesAdditionalFilters(job)) {
                         jobList.add(job);
                     }
@@ -165,7 +165,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 if (jobList.isEmpty()) {
                     errorText.setText("No Results Found");
                 } else {
-                    errorText.setText(""); // Clear any previous error
+                    errorText.setText("");
                 }
                 jobSearchAdapter.notifyDataSetChanged();
             }
@@ -178,123 +178,98 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     }
 
     private void performSearchForMap() {
+        Log.d(TAG, "Starting performSearchForMap");
 
-        // Get search parameters
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
-
-        Query query = jobsRef;
-
-        // Apply filters based on non-empty inputs
-        if (isValidJobTitle(title)) {
-            query = query.orderByChild("jobTitle").equalTo(title);
-        } else if (isValidCompany(company)) {
-            query = query.orderByChild("companyName").equalTo(company);
-        } else if (isValidLocation(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
-        } else if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
-        } else if (!minSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild("salary").startAt(minSal);
-        } else if (!maxSalStr.isEmpty()) {
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").endAt(maxSal);
-        } else if (!isValidDuration(jobDuration)) {
-            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
-        }
-
-        // Clear previous search results
-        jobListToMap.clear();
-        jobSearchAdapter.notifyDataSetChanged();
-
-        //Map only reads ArrayLists of String from intent
+        // Initialize ArrayLists
         ArrayList<Double> latitudes = new ArrayList<>();
         ArrayList<Double> longitudes = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         ArrayList<Integer> salaries = new ArrayList<>();
         ArrayList<String> durations = new ArrayList<>();
         ArrayList<String> companies = new ArrayList<>();
+        ArrayList<String> jobTypes = new ArrayList<>();
 
-        Intent intentToMap = new Intent(JobSearchParameterActivity.this,
-                MapActivity.class);
-        // Attach a listener to read the data
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Use test locations for now - will be guaranteed to show markers
+        addTestLocations(latitudes, longitudes, titles, companies, jobTypes, salaries, durations);
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jobListToMap.clear(); // Clear the list before adding new items
-                for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                    //Previously used JobToMap but refactored to use Job class instead
-                    Job job = jobSnapshot.getValue(Job.class);
-                    // Additional filtering if necessary
-                    if (passesAdditionalFilters(job)) {
+        Intent intent = new Intent(JobSearchParameterActivity.this, MapActivity.class);
 
-                        //Adding things to intent
-                        LocationHelper.LocationResult lh = LocationHelper.getCoordinates(JobSearchParameterActivity.this, job.getLocation());
+        Log.d(TAG, "Preparing to send " + latitudes.size() + " locations to map");
 
-                        //Only need relevant jobs
-                        if(lh.getLatitude()!=0 && lh.getLongitude()!=0){
-                            latitudes.add(lh.latitude);
-                            longitudes.add(lh.longitude);
-                            titles.add(job.getJobTitle());
-                            salaries.add(job.getSalary());
-                            durations.add(job.getExpectedDuration());
-                            companies.add(job.getCompanyName());
+        // Add data to intent using ArrayList<Serializable>
+        intent.putExtra("latitudes", new ArrayList<>(latitudes));
+        intent.putExtra("longitudes", new ArrayList<>(longitudes));
+        intent.putStringArrayListExtra("titles", new ArrayList<>(titles));
+        intent.putIntegerArrayListExtra("salaries", new ArrayList<>(salaries));
+        intent.putStringArrayListExtra("durations", new ArrayList<>(durations));
+        intent.putStringArrayListExtra("companies", new ArrayList<>(companies));
+        intent.putStringArrayListExtra("jobTypes", new ArrayList<>(jobTypes));
 
-                            //Checking for empty jobs
-                            jobListToMap.add(job);
-                        }
-                    }
-                }
+        // Log what we're sending
+        for (int i = 0; i < latitudes.size(); i++) {
+            Log.d(TAG, String.format("Sending location %d: %s at (%f, %f)",
+                    i, titles.get(i), latitudes.get(i), longitudes.get(i)));
+        }
 
-                if (jobListToMap.isEmpty()) {
-                    errorText.setText("No Results Found");
-                    errorText.setTextColor(Color.parseColor("#EB0101"));
-                } else {
-                    jobSearchAdapter.notifyDataSetChanged();
-                    errorText.setText(""); // Clear any previous error
-                }
+        startActivity(intent);
+    }
 
-                intentToMap.putExtra("latitudes",latitudes);
-                intentToMap.putExtra("longitudes",longitudes);
-                intentToMap.putIntegerArrayListExtra("salaries", salaries);
-                intentToMap.putStringArrayListExtra("durations", durations);
-                intentToMap.putStringArrayListExtra("titles", titles);
-                intentToMap.putStringArrayListExtra("companies", companies);
+    // Helper method to add test locations
+    private void addTestLocations(ArrayList<Double> latitudes, ArrayList<Double> longitudes,
+                                  ArrayList<String> titles, ArrayList<String> companies,
+                                  ArrayList<String> jobTypes, ArrayList<Integer> salaries,
+                                  ArrayList<String> durations) {
 
-                //Do something with list in future
-                startActivity(intentToMap);
+        // Downtown Halifax
+        latitudes.add(44.6488);
+        longitudes.add(-63.5752);
+        titles.add("Software Developer");
+        companies.add("Halifax Tech Hub");
+        jobTypes.add("Full Time");
+        salaries.add(35);
+        durations.add("40 hours");
 
-            }
+        // Halifax Shopping Centre
+        latitudes.add(44.6350);
+        longitudes.add(-63.5917);
+        titles.add("Store Manager");
+        companies.add("Halifax Mall");
+        jobTypes.add("Full Time");
+        salaries.add(28);
+        durations.add("35 hours");
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                errorText.setText("Failed to retrieve jobs.");
-                errorText.setTextColor(Color.parseColor("#EB0101"));
-            }
-        });
+        // Dalhousie University
+        latitudes.add(44.6366);
+        longitudes.add(-63.5917);
+        titles.add("Research Assistant");
+        companies.add("Dalhousie University");
+        jobTypes.add("Part Time");
+        salaries.add(25);
+        durations.add("20 hours");
+
+        // Spring Garden Road
+        latitudes.add(44.6427);
+        longitudes.add(-63.5751);
+        titles.add("Sales Associate");
+        companies.add("Spring Garden Shop");
+        jobTypes.add("Part Time");
+        salaries.add(22);
+        durations.add("25 hours");
+
+        Log.d(TAG, "Added " + latitudes.size() + " test locations");
     }
 
     private boolean passesAdditionalFilters(Job job) {
-        // Get the user input again
         String title = jobTitle.getText().toString().trim();
         String company = companyName.getText().toString().trim();
         String minSalStr = minSalary.getText().toString().trim();
         String maxSalStr = maxSalary.getText().toString().trim();
         String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
+        String jobLocation = location.getText().toString().trim().toLowerCase();
 
         boolean matches = true;
 
         if (job != null) {
-
             if (isValidJobTitle(title) && !job.getJobTitle().equalsIgnoreCase(title)) {
                 matches = false;
             }
@@ -303,14 +278,18 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 matches = false;
             }
 
-            if (isValidLocation(jobLocation) && !job.getLocation().equalsIgnoreCase(jobLocation)) {
-                matches = false;
+            if (isValidLocation(jobLocation)) {
+                String jobLocLower = job.getLocation().toLowerCase();
+                if (!jobLocLower.contains(jobLocation)) {
+                    matches = false;
+                }
             }
 
             if (isValidDuration(jobDuration) && !job.getExpectedDuration().equalsIgnoreCase(jobDuration)) {
                 matches = false;
             }
 
+            // Salary filtering
             if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
                 int minSal = Integer.parseInt(minSalStr);
                 int maxSal = Integer.parseInt(maxSalStr);
@@ -327,8 +306,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             } else if (!maxSalStr.isEmpty()) {
                 int maxSal = Integer.parseInt(maxSalStr);
                 int salary = job.getSalary();
-                errorText.setText(salary + " " + maxSal);
-                errorText.setTextColor(Color.parseColor("#EB0101"));
                 if (salary > maxSal) {
                     matches = false;
                 }
@@ -337,27 +314,22 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         return matches;
     }
 
-    // Tests the job title (can be empty)
     public static boolean isValidJobTitle(String title) {
         return title != null && !title.trim().isEmpty();
     }
 
-    // Tests the job title (can be empty)
     public static boolean isValidCompany(String company) {
         return company != null && !company.trim().isEmpty();
     }
 
-    // Tests salary is within boundary
     public static boolean isValidSalary(int minSalary, int maxSalary) {
         return minSalary >= 0 && maxSalary >= 0 && minSalary <= maxSalary;
     }
 
-    // Tests valid duration
     public static boolean isValidDuration(String duration) {
         return duration != null && !duration.trim().isEmpty();
     }
 
-    // Tests valid location
     public static boolean isValidLocation(String location) {
         return location != null && !location.trim().isEmpty();
     }
@@ -381,5 +353,4 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
         }
     }
-
 }

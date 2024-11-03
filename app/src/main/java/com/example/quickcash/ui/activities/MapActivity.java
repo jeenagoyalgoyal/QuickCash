@@ -6,12 +6,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -29,22 +28,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-
+    private static final String TAG = "MapActivity";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
-    private Button backButton;
-    private boolean useDummyData = true; // Flag to use dummy data for testing
+    private Map<String, Integer> markerMap;
 
-    //Details
+    // Job data
     private ArrayList<Double> latitudes;
     private ArrayList<Double> longitudes;
     private ArrayList<String> titles;
@@ -52,272 +51,227 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<String> durations;
     private ArrayList<String> companies;
     private ArrayList<String> jobTypes;
-    private ArrayList<String> datesOfStart;
-    private ArrayList<String> requirements;
-
-    private Map<String, Integer> markerToJobIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // Initialize location services
+        // Initialize
+        markerMap = new HashMap<>();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        markerToJobIndex = new HashMap<>();
 
-        if (useDummyData) {
-            // Initialize dummy data for testing
-            initializeDummyData();
-        } else {
-            // Get the job data from the intent
-            Intent intent = getIntent();
-            if (intent != null) {
-                latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
-                longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
-                salaries = intent.getIntegerArrayListExtra("salaries");
-                titles = intent.getStringArrayListExtra("titles");
-                durations = intent.getStringArrayListExtra("durations");
-                companies = intent.getStringArrayListExtra("companies");
-
-            }
-        }
-
-        // Initialize back button
-        backButton = findViewById(R.id.backButton);
+        // Setup back button
+        Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
-        // Initialize map fragment
+        // Get intent data
+        retrieveAndValidateData();
+
+        // Setup map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
-        // Request location permissions if not granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
     }
 
-    private void initializeDummyData() {
-        // Create ArrayLists for dummy data
-        latitudes = new ArrayList<>();
-        longitudes = new ArrayList<>();
-        titles = new ArrayList<>();
-        salaries = new ArrayList<>();
-        durations = new ArrayList<>();
-        companies = new ArrayList<>();
-        jobTypes = new ArrayList<>();
-        datesOfStart = new ArrayList<>();
-        requirements = new ArrayList<>();
+    private void retrieveAndValidateData() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            try {
+                // Get coordinates
+                latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
+                longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
+                titles = intent.getStringArrayListExtra("titles");
+                salaries = intent.getIntegerArrayListExtra("salaries");
+                durations = intent.getStringArrayListExtra("durations");
+                companies = intent.getStringArrayListExtra("companies");
+                jobTypes = intent.getStringArrayListExtra("jobTypes");
 
-
-        // Add dummy job locations around Halifax
-        // Job 1 - Downtown Halifax
-        latitudes.add(44.6488);
-        longitudes.add(-63.5752);
-        jobTypes.add("Full-Time");
-        datesOfStart.add("29-06-2004");
-        requirements.add("random random random\n random random random");
-        companies.add("Microsoft");
-        titles.add("Software Developer");
-        salaries.add(75000);
-        durations.add("10");
-
-
-        // Job 2 - Dartmouth
-        latitudes.add(44.6667);
-        longitudes.add(-63.5667);
-        companies.add("FERRY CO.");
-        titles.add("Web Designer");
-        salaries.add(65000);
-        durations.add("1");
-        jobTypes.add("Full-Time");
-        datesOfStart.add("29-06-2004");
-        requirements.add("random random random\n random random random");
-
-        // Job 3 - Bedford
-        latitudes.add(44.7213);
-        longitudes.add(-63.6582);
-        companies.add("BUS CO.");
-        titles.add("Data Analyst");
-        salaries.add(70000);
-        durations.add("10");
-        jobTypes.add("Full-Time");
-        datesOfStart.add("29-06-2004");
-        requirements.add("random random random\n random random random");
-
-        // Job 4 - Halifax Shopping Centre area
-        latitudes.add(44.6497);
-        longitudes.add(-63.6088);
-        companies.add("Walmart");
-        titles.add("UX Researcher");
-        salaries.add(80000);
-        durations.add("25");
-        jobTypes.add("Full-Time");
-        datesOfStart.add("29-06-2004");
-        requirements.add("random random random\n random random random");
-
-        // Job 5 - Dalhousie University area
-        latitudes.add(44.6366);
-        longitudes.add(-63.5917);
-        companies.add("Dalhousie");
-        titles.add("Teaching Assistant");
-        salaries.add(25000);
-        durations.add("10");
-        jobTypes.add("Full-Time");
-        datesOfStart.add("29-06-2004");
-        requirements.add("random random random\n random random random");
+                // Debug logging
+                Log.d(TAG, "Received data in MapActivity");
+                if (latitudes != null && !latitudes.isEmpty()) {
+                    Log.d(TAG, "Received " + latitudes.size() + " locations");
+                    for (int i = 0; i < latitudes.size(); i++) {
+                        Log.d(TAG, String.format("Location %d: %s at (%f, %f)",
+                                i, titles.get(i), latitudes.get(i), longitudes.get(i)));
+                    }
+                } else {
+                    Log.e(TAG, "No locations received");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error getting intent data: " + e.getMessage());
+                showError("Error loading job data");
+            }
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMarkerClickListener(this);
-
-        // Enable the location layer if permission is granted
-        enableMyLocation();
-
-        // Add job markers and setup bounds
-        if (latitudes != null && longitudes != null && titles != null &&
-                salaries != null && durations != null && !latitudes.isEmpty()) {
-
-            addJobMarkers();
-        } else {
-            showNoJobsMessage();
-        }
 
         // Enable zoom controls and other UI settings
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(true);
 
-        // Get current location after setting up markers
-        getCurrentLocation();
+        mMap.setOnMarkerClickListener(this);
+
+        // Enable location if permitted
+        if (checkLocationPermission()) {
+            mMap.setMyLocationEnabled(true);
+        }
+
+        // Add markers to map
+        addMarkersToMap();
     }
 
-    private void addJobMarkers() {
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        try {
+            Integer index = markerMap.get(marker.getId());
+            if (index != null) {
+                showJobDetailsDialog(index);
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error handling marker click", e);
+        }
+        return false;
+    }
+
+    private void showJobDetailsDialog(int index) {
+        try {
+            Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_job_details);
+
+            // Set dialog width to 90% of screen width
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setLayout(
+                        (int)(getResources().getDisplayMetrics().widthPixels * 0.9),
+                        WindowManager.LayoutParams.WRAP_CONTENT
+                );
+                window.setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            // Set values safely with proper formatting
+            safeSetText(dialog, R.id.jobTitleText, titles, index);
+            safeSetText(dialog, R.id.companyNameText, companies, index);
+            safeSetText(dialog, R.id.jobTypeText, jobTypes, index);
+
+            // Format salary with currency
+            if (salaries != null && index < salaries.size()) {
+                TextView salaryView = dialog.findViewById(R.id.salaryText);
+                if (salaryView != null) {
+                    salaryView.setText(String.format("$%d/hr", salaries.get(index)));
+                }
+            }
+
+            // Format duration
+            safeSetText(dialog, R.id.durationText, durations, index);
+
+            // Set up close button
+            MaterialButton closeButton = dialog.findViewById(R.id.closeButton);
+            if (closeButton != null) {
+                closeButton.setOnClickListener(v -> dialog.dismiss());
+            }
+
+            dialog.show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing dialog", e);
+            showError("Error displaying job details");
+        }
+    }
+
+    private void safeSetText(Dialog dialog, int viewId, ArrayList<String> data, int index) {
+        if (dialog != null && data != null && index < data.size()) {
+            TextView view = dialog.findViewById(viewId);
+            if (view != null) {
+                String text = data.get(index);
+                if (text != null && !text.trim().isEmpty()) {
+                    view.setText(text);
+                } else {
+                    view.setText("Not specified");
+                }
+            }
+        }
+    }
+
+    private void addMarkersToMap() {
+        if (latitudes == null || longitudes == null || titles == null ||
+                latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
+            Log.e(TAG, "No location data available");
+            showError("No job locations to display");
+
+            // Center on Halifax by default
+            LatLng halifax = new LatLng(44.6488, -63.5752);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(halifax, 13f));
+            return;
+        }
+
+        Log.d(TAG, "Adding " + latitudes.size() + " markers to map");
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         boolean hasValidMarkers = false;
 
         for (int i = 0; i < latitudes.size(); i++) {
             try {
                 double lat = latitudes.get(i);
                 double lng = longitudes.get(i);
+                String title = titles.get(i);
+
+                Log.d(TAG, String.format("Processing marker %d: %s at (%f, %f)",
+                        i, title, lat, lng));
 
                 LatLng position = new LatLng(lat, lng);
-
-                // Create marker with job details
-                MarkerOptions markerOptions = new MarkerOptions()
+                Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(position)
-                        .title(titles.get(i));
+                        .title(title));
 
-                // Add marker to map and store its reference
-                Marker marker = mMap.addMarker(markerOptions);
                 if (marker != null) {
-                    markerToJobIndex.put(marker.getId(), i);
+                    markerMap.put(marker.getId(), i);
+                    boundsBuilder.include(position);
+                    hasValidMarkers = true;
+                    Log.d(TAG, "Successfully added marker for: " + title);
                 }
-
-                // Include this position in bounds calculation
-                builder.include(position);
-                hasValidMarkers = true;
-            } catch (NumberFormatException | NullPointerException e) {
-                // Skip invalid coordinates and log error
-                Log.e("Error adding:", Objects.requireNonNull(e.getMessage()));
+            } catch (Exception e) {
+                Log.e(TAG, "Error adding marker " + i + ": " + e.getMessage());
             }
         }
 
-        // If we have valid markers, set bounds with padding
         if (hasValidMarkers) {
-            final int padding = 100;
-            final LatLngBounds bounds = builder.build();
-
-            // Post to UI thread with delay to ensure map is properly initialized
-            mMap.setOnMapLoadedCallback(() ->
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
-            );
-        }
-    }
-
-    private void showNoJobsMessage() {
-        Snackbar.make(findViewById(R.id.map),
-                "No job locations available to display",
-                Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(MapActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
-        // Get the index of the job from the marker
-        Integer jobIndex = markerToJobIndex.get(marker.getId());
-        if (jobIndex != null) {
-            // Show job details
-            showJobDetailsDialog(jobIndex);
-            return true;
-        }
-        return false;
-    }
-
-    private void showJobDetailsDialog(int jobIndex) {
-
-        final Dialog dialog = new Dialog(this);
-
-        dialog.setContentView(R.layout.dialog_job_details);
-
-        TextView companyText = dialog.findViewById(R.id.companyNameText);
-        TextView durationText = dialog.findViewById(R.id.durationText);
-        TextView titleText = dialog.findViewById(R.id.jobTitleText);
-        TextView jobTypeText = dialog.findViewById(R.id.jobTypeText);
-        TextView requirementsText = dialog.findViewById(R.id.requirementsText);
-        TextView salaryText = dialog.findViewById(R.id.salaryText);
-        TextView dateOfStart = dialog.findViewById(R.id.dateOfStart);
-
-        titleText.setText(titles.get(jobIndex));
-        jobTypeText.setText(jobTypes.get(jobIndex));
-        dateOfStart.setText(datesOfStart.get(jobIndex));
-        requirementsText.setText(requirements.get(jobIndex));
-        companyText.setText(companies.get(jobIndex));
-        salaryText.setText(String.format("$%,d/year", salaries.get(jobIndex)));
-        durationText.setText(durations.get(jobIndex));
-
-        // Set dialog width to match parent with margins
-        Window window = dialog.getWindow();
-
-        if (window != null) {
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            window.setGravity(Gravity.CENTER);
-        }
-
-        dialog.show();
-    }
-
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            if (mMap != null) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            try {
+                LatLngBounds bounds = boundsBuilder.build();
+                int padding = 100;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(13f));
+                Log.d(TAG, "Successfully set map bounds and zoom");
+            } catch (Exception e) {
+                Log.e(TAG, "Error setting map bounds: " + e.getMessage());
+                // Fallback to Halifax center
+                LatLng halifax = new LatLng(44.6488, -63.5752);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(halifax, 13f));
             }
+        } else {
+            Log.e(TAG, "No valid markers were created");
+            showError("No valid locations found");
+            // Center on Halifax
+            LatLng halifax = new LatLng(44.6488, -63.5752);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(halifax, 13f));
         }
     }
 
-    private void getCurrentLocation() {
+    private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, location -> {
-                        if (location != null && (latitudes == null || latitudes.isEmpty())) {
-                            LatLng currentLatLng = new LatLng(location.getLatitude(),
-                                    location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(currentLatLng, 17));
-                        }
-                    });
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
         }
     }
 
@@ -327,13 +281,21 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableMyLocation();
-                getCurrentLocation();
+                if (mMap != null) {
+                    try {
+                        mMap.setMyLocationEnabled(true);
+                    } catch (SecurityException e) {
+                        Log.e(TAG, "Security exception: " + e.getMessage());
+                    }
+                }
             } else {
-                Snackbar.make(findViewById(R.id.map),
-                        "Location permission is required for better experience",
-                        Snackbar.LENGTH_LONG).show();
+                showError("Location permission is required for full functionality");
             }
         }
+    }
+
+    private void showError(String message) {
+        Log.e(TAG, message);
+        Snackbar.make(findViewById(R.id.map_container), message, Snackbar.LENGTH_LONG).show();
     }
 }
