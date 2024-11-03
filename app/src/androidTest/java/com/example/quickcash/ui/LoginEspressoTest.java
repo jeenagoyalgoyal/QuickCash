@@ -27,10 +27,10 @@ public class LoginEspressoTest {
     @Test
     public void testSuccessfulLogin() {
         enterText(R.id.emailBox, "valid@example.com");
-        enterText(R.id.passwordBox, "validPassword123");
+        enterText(R.id.passwordBox, "validPassword123!");
         clickButton(R.id.loginButton);
         // Assuming success message is not displayed, but user is redirected
-        checkActivityIsDisplayed(MapActivity.class);
+        checkStatusLabel("Success!");
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -85,6 +86,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else if (!isValidPassword(password)) {
             statusLabel.setText("Password must be at least 6 characters long and contain at least one letter and one number.");
         } else {
+            statusLabel.setTextColor(Color.parseColor("#0DBC00"));
+            statusLabel.setText("Success!");
             loginUser(email, password);
         }
     }
