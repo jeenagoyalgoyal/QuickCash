@@ -22,6 +22,9 @@
       <SelectionState runConfigName="checkShowMapsButton()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="checkMarkerIsPlaced()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

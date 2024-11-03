@@ -1,7 +1,6 @@
 package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quickcash.R;
 import com.example.quickcash.models.UseRole;
 import com.example.quickcash.repositories.FirebaseCRUD;
-import com.example.quickcash.R;
+import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.ui.activities.RegistrationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -86,8 +89,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else if (!isValidPassword(password)) {
             statusLabel.setText("Password must be at least 6 characters long and contain at least one letter and one number.");
         } else {
-            statusLabel.setTextColor(Color.parseColor("#0DBC00"));
-            statusLabel.setText("Logging in...");
             loginUser(email, password);
         }
     }
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         // Fetch user role
                         fetchUserRole(email);
                     } else {

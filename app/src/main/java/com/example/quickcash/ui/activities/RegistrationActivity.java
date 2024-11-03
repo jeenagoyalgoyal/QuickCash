@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quickcash.ui.activities.LoginActivity;
 import com.example.quickcash.ui.utils.Validators.CredentialsValidator;
 import com.example.quickcash.repositories.FirebaseCRUD;
 import com.example.quickcash.R;
