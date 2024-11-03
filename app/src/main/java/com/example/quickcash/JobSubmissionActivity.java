@@ -10,6 +10,7 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quickcash.model.Job;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,7 +19,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobSubmission extends AppCompatActivity {
+public class JobSubmissionActivity extends AppCompatActivity {
 
     // Job Submission Form title
     private TextView formText;
@@ -34,6 +35,9 @@ public class JobSubmission extends AppCompatActivity {
     private EditText expectedDuration;
     private Button startDate;
 
+    private TextView errorJSJobTitle;
+    private TextView errorJSCompany;
+    private TextView errorJSJobType;
     private TextView errorJSRequirement;
     private TextView errorJSSalary;
     private TextView errorJSUrgency;
@@ -86,7 +90,11 @@ public class JobSubmission extends AppCompatActivity {
         // Button to submit the job posting
         submitButton = findViewById(R.id.jobSubmissionButton);
 
-        // Errors
+
+        // Initialize error TextViews
+        errorJSJobTitle = findViewById(R.id.errorJSJobTitle);
+        errorJSCompany = findViewById(R.id.errorJSCompany);
+        errorJSJobType = findViewById(R.id.errorJSJobType);
         errorJSRequirement = findViewById(R.id.errorJSRequirement);
         errorJSSalary = findViewById(R.id.errorJSSalary);
         errorJSUrgency = findViewById(R.id.errorJSUrgency);
@@ -228,28 +236,38 @@ public class JobSubmission extends AppCompatActivity {
 
         String jobId = databaseReference.push().getKey();
 
-        Job job = new Job(jobTitleText, companyNameText, jobTypeText, requirementsText,
-                salaryValue, urgencyText, locationText, durationText, startDateText,
-                employerId, jobId);
+        // Set the job values using the Job class
+        Job job = new Job();
+        job.setJobTitle(jobTitleText);
+        job.setCompanyName(companyNameText);
+        job.setJobType(jobTypeText);
+        job.setRequirements(requirementsText);
+        job.setSalary(salaryValue);
+        job.setUrgency(urgencyText);
+        job.setLocation(locationText);
+        job.setExpectedDuration(durationText);
+        job.setStartDate(startDateText);
+        job.setEmployerId(employerId);
+        job.setJobId(jobId);
 
         if (jobId != null) {
             databaseReference.child(jobId).setValue(job)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(JobSubmission.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(JobSubmissionActivity.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
 
                             // Reset the input fields when the job is posted
                             resetForm();
 
                             // Send the user back to the homepage after submitting the job posting
-                            Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
+                            Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
                             intentBackToEmployerPage.putExtra("employerID", employerId);
                             intentBackToEmployerPage.putExtra("email",email);
                             startActivity(intentBackToEmployerPage);
                         }
                         
                         else {
-                            Toast.makeText(JobSubmission.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(JobSubmissionActivity.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -266,29 +284,6 @@ public class JobSubmission extends AppCompatActivity {
         location.setText("");
         expectedDuration.setText("");
         startDate.setText("Start Date");
-    }
-
-    // Class for the jobs
-    public static class Job {
-        public String jobTitle, companyName, jobType, requirements, urgency, location, expectedDuration, startDate, employerId, jobId;
-        public int salary;
-
-        // Job function for database activity
-        public Job(String jobTitle, String companyName, String jobType, String requirements,
-                   int salary, String urgency, String location, String expectedDuration,
-                   String startDate, String employerId, String jobId) {
-            this.jobTitle = jobTitle;
-            this.companyName = companyName;
-            this.jobType = jobType;
-            this.requirements = requirements;
-            this.salary = salary;
-            this.urgency = urgency;
-            this.location = location;
-            this.expectedDuration = expectedDuration;
-            this.startDate = startDate;
-            this.employerId = employerId;
-            this.jobId = jobId;
-        }
     }
 }
 

@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -30,6 +31,9 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import com.example.quickcash.model.Job;
+import com.google.firebase.database.FirebaseDatabase;
 
 @RunWith(AndroidJUnit4.class)
 public class JobSearchParameterEspressoTest {
@@ -81,32 +85,48 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withId(R.id.location)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
+
     @Test
-    public void testFilterInteraction() {
-        // Test the filters by implementing data and seeing if it works
+    public void testJobResultsAreDisplayed() {
+        // Create a test job with all required fields
+        Job testJob = new Job();
+        testJob.setJobTitle("Software Developer");
+        testJob.setCompanyName("Tech Corp");
+        testJob.setLocation("Halifax");
+        testJob.setSalary(70000);
+        testJob.setExpectedDuration("6 months");
+        testJob.setJobType("Full-Time");
+        testJob.setRequirements("Android Development");
+
+        // Add this job to the Firebase database for testing
+        addTestJobToDatabase(testJob);
+
         onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Data Analyst")).check(ViewAssertions.matches(ViewMatchers.withText("Data Analyst")));
-        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Ubisoft")).check(ViewAssertions.matches(ViewMatchers.withText("Ubisoft")));
-        onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("50000")).check(ViewAssertions.matches(ViewMatchers.withText("50000")));
-        onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("75000")).check(ViewAssertions.matches(ViewMatchers.withText("75000")));
-        onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("3")).check(ViewAssertions.matches(ViewMatchers.withText("3")));
-        onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Halifax")).check(ViewAssertions.matches(ViewMatchers.withText("Halifax")));
+        // Perform a search that will result in this job being displayed
+        Espresso.onView(withId(R.id.jobTitle)).perform(ViewActions.typeText("Software Developer"), closeSoftKeyboard());
+        Espresso.onView(withId(R.id.search_job_parameter)).perform(ViewActions.click());
 
-        // Will test the submission button to see if the filters worked
-        Espresso.closeSoftKeyboard();
-        onView(ViewMatchers.withId(R.id.search_job_parameter)).perform(ViewActions.click());
-        // Switches to the results
-        onView(ViewMatchers.withId(R.id.job_search_screen)).check(matches(isDisplayed()));
-        // Checks if our job title shows up
-        onView(ViewMatchers.withText("Data Analyst")).check(matches(isDisplayed()));
+        // Check that the job title is displayed
+        Espresso.onView(withText("Job Title: " + testJob.getJobTitle())).check(matches(isDisplayed()));
+        Espresso.onView(withText("Company: " + testJob.getCompanyName())).check(matches(isDisplayed()));
+        Espresso.onView(withText("Location: " + testJob.getLocation())).check(matches(isDisplayed()));
+        Espresso.onView(withText("Salary: $" + testJob.getSalary())).check(matches(isDisplayed()));
+        Espresso.onView(withText("Duration: " + testJob.getExpectedDuration())).check(matches(isDisplayed()));
     }
+
+    private void addTestJobToDatabase(Job job) {
+        // Adds job to database
+        FirebaseDatabase.getInstance().getReference("Jobs").push().setValue(job);
+    }
+
 
     @After
     public void tearDown() {
+        FirebaseDatabase.getInstance().getReference("Jobs").removeValue();
         Intents.release();
+
     }
 
 }

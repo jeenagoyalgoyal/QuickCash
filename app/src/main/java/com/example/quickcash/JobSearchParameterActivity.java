@@ -36,7 +36,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class JobSearchParameterActivity extends AppCompatActivity{
 
-    private EditText jobTitle;
+    EditText jobTitle;
     private EditText companyName;
     private EditText minSalary;
     private EditText maxSalary;
@@ -45,9 +45,9 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     private TextView errorText;
     private Button searchButton;
     private RecyclerView recyclerView;
-    private JobSearchAdapter jobSearchAdapter;
-    private List<Job> jobList;
-    private DatabaseReference jobsRef;
+    JobSearchAdapter jobSearchAdapter;
+    List<Job> jobList;
+    DatabaseReference jobsRef;
     private String email;
     public String userID;
 
@@ -102,7 +102,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     }
 
 
-    private void performSearch() {
+    void performSearch() {
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
         String company = companyName.getText().toString().trim();
