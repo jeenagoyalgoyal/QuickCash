@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.Manifest;
 import android.widget.Toast;
 
+import com.example.quickcash.EmployeeHomepageActivity;
 import com.example.quickcash.LocationHelper;
 import com.example.quickcash.LoginActivity;
 import com.example.quickcash.R;
@@ -148,7 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void moveToNextWithDelay(String manualLocation) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(MapsActivity.this, RoleActivity.class);
+            Intent intent = new Intent(MapsActivity.this, EmployeeHomepageActivity.class);
             if (manualLocation != null) {
                 intent.putExtra("manualLocation", manualLocation);
             } else {
