@@ -15,10 +15,8 @@ import com.example.quickcash.models.Job;
 import com.example.quickcash.ui.activities.MapActivity;
 import com.example.quickcash.ui.utils.LocationHelper;
 
-<<<<<<< HEAD:app/src/main/java/com/example/quickcash/ui/utils/Adapter/JobSearchAdapter.java
 import java.util.ArrayList;
-=======
->>>>>>> c8452335f077f68a71191e31cd517c40ec38c3f0:app/src/main/java/com/example/quickcash/ui/adapters/JobSearchAdapter.java
+
 import java.util.List;
 import java.util.ArrayList;
 
