@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             statusLabel.setText("Password must be at least 6 characters long and contain at least one letter and one number.");
         } else {
             statusLabel.setTextColor(Color.parseColor("#0DBC00"));
-            statusLabel.setText("Success!");
+            statusLabel.setText("Logging in...");
             loginUser(email, password);
         }
     }

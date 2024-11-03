@@ -30,7 +30,7 @@ public class LoginEspressoTest {
         enterText(R.id.passwordBox, "validPassword123!");
         clickButton(R.id.loginButton);
         // Assuming success message is not displayed, but user is redirected
-        checkStatusLabel("Success!");
+        checkStatusLabel("Logging in...");
     }
 
     @Test
