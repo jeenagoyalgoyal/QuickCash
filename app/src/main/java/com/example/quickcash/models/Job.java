@@ -1,5 +1,7 @@
 package com.example.quickcash.models;
 
+import com.google.firebase.database.Exclude;
+
 public class Job {
     private String companyName;
     private String employerId;
@@ -7,118 +9,126 @@ public class Job {
     private String jobId;
     private String jobTitle;
     private String jobType;
-    private String location;
+    private String location;  // Changed to String
     private String requirements;
     private int salary;
     private String startDate;
     private String urgency;
-    private Double longitude;
-    private Double latitude;
+    private double lat;  // Direct coordinate storage
+    private double lng;  // Direct coordinate storage
 
+    // Required empty constructor for Firebase
     public Job() {
     }
 
+    // Getters and setters
     public String getCompanyName() {
         return companyName;
-    }
-
-    public String getEmployerId() {
-        return employerId;
-    }
-
-    public String getExpectedDuration() {
-        return expectedDuration;
-    }
-
-    public String getJobId() {
-        return jobId;
-    }
-
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getJobType() {
-        return jobType;
-    }
-
-    public String getRequirements() {
-        return requirements;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public String getUrgency() {
-        return urgency;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
     }
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
+    public String getEmployerId() {
+        return employerId;
+    }
+
     public void setEmployerId(String employerId) {
         this.employerId = employerId;
     }
 
-    public void setDuration(String expectedDuration) {
+    public String getExpectedDuration() {
+        return expectedDuration;
+    }
+
+    public void setExpectedDuration(String expectedDuration) {
         this.expectedDuration = expectedDuration;
+    }
+
+    public String getJobId() {
+        return jobId;
     }
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
     }
 
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public String getJobType() {
+        return jobType;
     }
 
     public void setJobType(String jobType) {
         this.jobType = jobType;
     }
 
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setUrgency(String urgency) {
-        this.urgency = urgency;
+    public String getLocation() {
+        return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+    public String getRequirements() {
+        return requirements;
     }
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getUrgency() {
+        return urgency;
+    }
+
+    public void setUrgency(String urgency) {
+        this.urgency = urgency;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    // Helper method to get location info in a structured way
+    @Exclude
+    public JobLocation getJobLocation() {
+        return new JobLocation(lat, lng, location);
     }
 }

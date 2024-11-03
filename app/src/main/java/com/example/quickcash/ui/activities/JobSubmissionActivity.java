@@ -1,7 +1,9 @@
 package com.example.quickcash.ui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -11,13 +13,16 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
+import com.example.quickcash.models.JobLocation;
+import com.example.quickcash.utils.LocationHelper;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JobSubmissionActivity extends AppCompatActivity {
 
@@ -45,10 +50,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
     private Button submitButton;
 
     private DatabaseReference databaseReference = null;
-
     private TextView employerIdTextView;
-
-
     private String email;
 
     @Override
@@ -101,8 +103,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
         typeList.add("Internship");
 
         // Array list for the urgency
-        List <String> urgencyList = new ArrayList<>();
-        urgencyList.add(0,"Select urgency");
+        List<String> urgencyList = new ArrayList<>();
+        urgencyList.add(0, "Select urgency");
         urgencyList.add("High");
         urgencyList.add("Medium");
         urgencyList.add("Low");
@@ -117,146 +119,107 @@ public class JobSubmissionActivity extends AppCompatActivity {
         jobUrgency.setAdapter(urgencyAdapter);
 
         // Set up a date picker for the start date
-        startDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
-
-                datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-                datePicker.addOnPositiveButtonClickListener(selection -> {
-                    startDate.setText(datePicker.getHeaderText());
-                });
-            }
+        startDate.setOnClickListener(view -> {
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
+            datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+            datePicker.addOnPositiveButtonClickListener(selection -> startDate.setText(datePicker.getHeaderText()));
         });
 
         // When button for submission is clicked, we submit the job to database
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(v -> submitJobPosting());
+    }
+
+    private void submitJobPosting() {
+        if (!validateInputs()) {
+            return;
+        }
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Posting job...");
+        progressDialog.show();
+
+        // Get current location
+        LocationHelper.getCurrentLocation(this, new LocationHelper.CustomLocationCallback() {
             @Override
-            public void onClick(View v) {
-                submitJobPosting();
+            public void onLocationReceived(double latitude, double longitude) {
+                createAndSaveJob(latitude, longitude, progressDialog);
+            }
+
+            @Override
+            public void onLocationError(String error) {
+                // Fallback to geocoding the entered location
+                LocationHelper.GeocodingResult result = LocationHelper.getCoordinates(
+                        JobSubmissionActivity.this,
+                        location.getText().toString().trim()
+                );
+                createAndSaveJob(result.getLatitude(), result.getLongitude(), progressDialog);
             }
         });
-
     }
 
-    // Submitting the job to the firebase database
-    private void submitJobPosting() {
-        // Get text from form inputs
-        String jobTitleText = jobTitle.getText().toString().trim();
-        String companyNameText = companyName.getText().toString().trim();
-        String jobTypeText = jobType.getSelectedItem().toString();
-        String requirementsText = requirements.getText().toString().trim();
-        String salaryText = salary.getText().toString().trim();
-        String urgencyText = jobUrgency.getSelectedItem().toString();
-        String locationText = location.getText().toString().trim();
-        String durationText = expectedDuration.getText().toString().trim();
-        String startDateText = startDate.getText().toString().trim();
-
-        // Job Title
-        if (jobTitleText.isEmpty()) {
-            jobTitle.setError("Job Title is required.");
-            jobTitle.requestFocus();
-            return;
-        }
-
-        // Company Name
-        if (companyNameText.isEmpty()) {
-            companyName.setError("Company Name is required.");
-            companyName.requestFocus();
-            return;
-        }
-
-        // Job Type
-        if (jobTypeText.equals("Select job type")) {
-            Toast.makeText(this, "Please select a Job Type.", Toast.LENGTH_SHORT).show();
-            jobType.requestFocus();
-            return;
-        }
-
-        // Salary - Check if empty and validate as a positive integer
-        if (salaryText.isEmpty()) {
-            salary.setError("Salary is required.");
-            salary.requestFocus();
-            return;
-        }
-        int salaryValue;
+    private void createAndSaveJob(double latitude, double longitude, ProgressDialog progressDialog) {
         try {
-            salaryValue = Integer.parseInt(salaryText);
-            if (salaryValue <= 0) {
-                salary.setError("Salary must be a positive number.");
-                salary.requestFocus();
-                return;
+            // Generate unique job ID
+            String jobId = databaseReference.push().getKey();
+            if (jobId == null) {
+                throw new Exception("Failed to generate job ID");
             }
-        } catch (NumberFormatException e) {
-            salary.setError("Please enter a valid integer for Salary.");
-            salary.requestFocus();
-            return;
-        }
 
-        // Urgency
-        if (urgencyText.equals("Select urgency")) {
-            Toast.makeText(this, "Please select Urgency.", Toast.LENGTH_SHORT).show();
-            jobUrgency.requestFocus();
-            return;
-        }
+            // Create job data using a HashMap to ensure proper Firebase structure
+            Map<String, Object> jobData = new HashMap<>();
+            jobData.put("companyName", companyName.getText().toString().trim());
+            jobData.put("employerId", email.replace(".", ","));
+            jobData.put("expectedDuration", expectedDuration.getText().toString().trim());
+            jobData.put("jobId", jobId);
+            jobData.put("jobTitle", jobTitle.getText().toString().trim());
+            jobData.put("jobType", jobType.getSelectedItem().toString());
+            jobData.put("requirements", requirements.getText().toString().trim());
+            jobData.put("salary", Integer.parseInt(salary.getText().toString().trim()));
+            jobData.put("startDate", startDate.getText().toString().trim());
+            jobData.put("urgency", jobUrgency.getSelectedItem().toString());
 
-        // Location
-        if (locationText.isEmpty()) {
-            location.setError("Location is required.");
-            location.requestFocus();
-            return;
-        } else if(locationText.trim().split(" ").length<3){
-            location.setError("Location not specific enough. Pleas enter more than 3 words!");
-            location.requestFocus();
-            return;
-        }
+            // Save location data directly in the job
+            jobData.put("location", location.getText().toString().trim());
+            jobData.put("lat", latitude);
+            jobData.put("lng", longitude);
 
-        // Expected Duration
-        if (durationText.isEmpty()) {
-            expectedDuration.setError("Expected Duration is required.");
-            expectedDuration.requestFocus();
-            return;
-        }
-
-        if (startDateText.isEmpty() || startDateText.equals("Start Date")) {
-            Toast.makeText(this, "Please select a Start Date.", Toast.LENGTH_SHORT).show();
-            startDate.requestFocus();
-            return;
-        }
-
-        // EmployerID is the user email
-        String employerId = email.replace(".", ",");
-
-        String jobId = databaseReference.push().getKey();
-
-        Job job = new Job(jobTitleText, companyNameText, jobTypeText, requirementsText,
-                salaryValue, urgencyText, locationText, durationText, startDateText,
-                employerId, jobId);
-
-        if (jobId != null) {
-            databaseReference.child(jobId).setValue(job)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(JobSubmissionActivity.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
-
-                            // Reset the input fields when the job is posted
-                            resetForm();
-
-                            // Send the user back to the homepage after submitting the job posting
-                            Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
-                            intentBackToEmployerPage.putExtra("employerID", employerId);
-                            intentBackToEmployerPage.putExtra("email",email);
-                            startActivity(intentBackToEmployerPage);
-                        }
-                        
-                        else {
-                            Toast.makeText(JobSubmissionActivity.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
-                        }
+            // Save to Firebase
+            databaseReference.child(jobId).setValue(jobData)
+                    .addOnSuccessListener(aVoid -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(JobSubmissionActivity.this,
+                                "Job Posted Successfully!", Toast.LENGTH_SHORT).show();
+                        Log.d("JobSubmission", "Job saved successfully with location: " +
+                                location.getText().toString().trim() +
+                                " at coordinates: " + latitude + "," + longitude);
+                        resetForm();
+                        navigateToEmployerHomepage();
+                    })
+                    .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(JobSubmissionActivity.this,
+                                "Failed to post job: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("JobSubmission", "Failed to save job: " + e.getMessage());
                     });
+
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("JobSubmission", "Error creating job: " + e.getMessage());
         }
     }
 
-    // This is a function to clear the data input, set back to default
+    private void navigateToEmployerHomepage() {
+        Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
+        intentBackToEmployerPage.putExtra("employerID", email.replace(".", ","));
+        intentBackToEmployerPage.putExtra("email", email);
+        startActivity(intentBackToEmployerPage);
+    }
+
+    private boolean validateInputs() {
+        return true;
+    }
+
     private void resetForm() {
         jobTitle.setText("");
         companyName.setText("");
@@ -269,28 +232,25 @@ public class JobSubmissionActivity extends AppCompatActivity {
         startDate.setText("Start Date");
     }
 
-    // Class for the jobs
     public static class Job {
         public String jobTitle, companyName, jobType, requirements, urgency, location, expectedDuration, startDate, employerId, jobId;
         public int salary;
+        public JobLocation jobLocation;
 
-        // Job function for database activity
-        public Job(String jobTitle, String companyName, String jobType, String requirements,
-                   int salary, String urgency, String location, String expectedDuration,
-                   String startDate, String employerId, String jobId) {
-            this.jobTitle = jobTitle;
+        public Job(String companyName, String employerId, String expectedDuration, String jobId,
+                   String jobTitle, String jobType, JobLocation jobLocation, String requirements,
+                   int salary, String startDate, String urgency) {
             this.companyName = companyName;
+            this.employerId = employerId;
+            this.expectedDuration = expectedDuration;
+            this.jobId = jobId;
+            this.jobTitle = jobTitle;
             this.jobType = jobType;
+            this.jobLocation = jobLocation;
             this.requirements = requirements;
             this.salary = salary;
-            this.urgency = urgency;
-            this.location = location;
-            this.expectedDuration = expectedDuration;
             this.startDate = startDate;
-            this.employerId = employerId;
-            this.jobId = jobId;
+            this.urgency = urgency;
         }
     }
 }
-
-

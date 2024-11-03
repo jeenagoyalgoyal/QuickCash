@@ -1,12 +1,18 @@
 package com.example.quickcash.repositories;
 
 import androidx.annotation.NonNull;
+
+import android.util.Log;
+
 import com.example.quickcash.models.Job;
+import com.example.quickcash.models.JobLocation;
 import com.google.firebase.database.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class FirebaseCRUD {
+    private static final String TAG = "FirebaseCRUD";
     private final FirebaseDatabase database;
     private final DatabaseReference jobsRef;
 
@@ -32,9 +38,13 @@ public class FirebaseCRUD {
                 List<Job> jobList = new ArrayList<>();
 
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
-                    Job job = jobSnapshot.getValue(Job.class);
-                    if (job != null && isJobInLocation(job, searchLocation)) {
-                        jobList.add(job);
+                    try {
+                        Job job = jobSnapshot.getValue(Job.class);
+                        if (job != null && isJobInLocation(job, searchLocation)) {
+                            jobList.add(job);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error processing job: " + e.getMessage());
                     }
                 }
 
@@ -49,19 +59,28 @@ public class FirebaseCRUD {
     }
 
     private boolean isJobInLocation(Job job, String searchLocation) {
-        if (job.getLocation() == null) {
-            return false;
+        try {
+            // First try to get the location as a JobLocation object
+            JobLocation jobLocation = job.getJobLocation();
+            if (jobLocation != null && jobLocation.getAddress() != null) {
+                return jobLocation.getAddress().toLowerCase().contains(searchLocation);
+            }
+
+            // If that fails, try to get it as a string
+            Object locationObj = job.getLocation();
+            if (locationObj != null) {
+                String locationStr = locationObj.toString().toLowerCase();
+                return locationStr.contains(searchLocation);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking job location: " + e.getMessage());
         }
-
-        // Convert job location to lowercase for case-insensitive comparison
-        String jobLocation = job.getLocation().toLowerCase();
-
-        // Check if the job location contains the search term
-        return jobLocation.contains(searchLocation);
+        return false;
     }
 
     public interface JobDataCallback {
         void onCallback(List<Job> jobList);
+
         void onError(String error);
     }
 }

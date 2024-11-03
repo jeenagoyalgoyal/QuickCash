@@ -2,11 +2,10 @@ package com.example.quickcash.ui.activities;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,8 +17,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.quickcash.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,19 +25,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = "MapActivity";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final LatLng HALIFAX = new LatLng(44.6488, -63.5752);
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
     private Map<String, Integer> markerMap;
 
     // Job data
@@ -59,7 +55,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         // Initialize
         markerMap = new HashMap<>();
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Setup back button
         Button backButton = findViewById(R.id.backButton);
@@ -80,7 +75,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         Intent intent = getIntent();
         if (intent != null) {
             try {
-                // Get coordinates
                 latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
                 longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
                 titles = intent.getStringArrayListExtra("titles");
@@ -93,10 +87,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 Log.d(TAG, "Received data in MapActivity");
                 if (latitudes != null && !latitudes.isEmpty()) {
                     Log.d(TAG, "Received " + latitudes.size() + " locations");
-                    for (int i = 0; i < latitudes.size(); i++) {
-                        Log.d(TAG, String.format("Location %d: %s at (%f, %f)",
-                                i, titles.get(i), latitudes.get(i), longitudes.get(i)));
-                    }
                 } else {
                     Log.e(TAG, "No locations received");
                 }
@@ -116,19 +106,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
 
-        mMap.setOnMarkerClickListener(this);
+        // Set up marker click listener
+        mMap.setOnMarkerClickListener(this::onMarkerClick);
 
         // Enable location if permitted
         if (checkLocationPermission()) {
-            mMap.setMyLocationEnabled(true);
+            try {
+                mMap.setMyLocationEnabled(true);
+            } catch (SecurityException e) {
+                Log.e(TAG, "Error enabling location: " + e.getMessage());
+            }
         }
 
         // Add markers to map
         addMarkersToMap();
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker) {
+    private boolean onMarkerClick(Marker marker) {
         try {
             Integer index = markerMap.get(marker.getId());
             if (index != null) {
@@ -141,28 +135,77 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         return false;
     }
 
+    private void addMarkersToMap() {
+        if (latitudes == null || longitudes == null || titles == null ||
+                latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
+            Log.e(TAG, "No valid location data available");
+            centerMapOnHalifax();
+            showError("No job locations to display");
+            return;
+        }
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        boolean hasValidMarkers = false;
+
+        for (int i = 0; i < latitudes.size(); i++) {
+            try {
+                double lat = latitudes.get(i);
+                double lng = longitudes.get(i);
+                String title = titles.get(i);
+
+                LatLng position = new LatLng(lat, lng);
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(position)
+                        .title(title));
+
+                if (marker != null) {
+                    markerMap.put(marker.getId(), i);
+                    boundsBuilder.include(position);
+                    hasValidMarkers = true;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error adding marker " + i + ": " + e.getMessage());
+            }
+        }
+
+        if (hasValidMarkers) {
+            try {
+                LatLngBounds bounds = boundsBuilder.build();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+            } catch (Exception e) {
+                Log.e(TAG, "Error setting map bounds", e);
+                centerMapOnHalifax();
+            }
+        } else {
+            centerMapOnHalifax();
+        }
+    }
+
     private void showJobDetailsDialog(int index) {
         try {
             Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_job_details);
 
-            // Set dialog width to 90% of screen width
             Window window = dialog.getWindow();
             if (window != null) {
                 window.setLayout(
-                        (int)(getResources().getDisplayMetrics().widthPixels * 0.9),
+                        (int) (getResources().getDisplayMetrics().widthPixels * 0.9),
                         WindowManager.LayoutParams.WRAP_CONTENT
                 );
-                window.setBackgroundDrawableResource(android.R.color.transparent);
             }
 
-            // Set values safely with proper formatting
-            safeSetText(dialog, R.id.jobTitleText, titles, index);
-            safeSetText(dialog, R.id.companyNameText, companies, index);
-            safeSetText(dialog, R.id.jobTypeText, jobTypes, index);
+            // Set job details
+            if (titles != null && index < titles.size()) {
+                TextView titleView = dialog.findViewById(R.id.jobTitleText);
+                if (titleView != null) titleView.setText(titles.get(index));
+            }
 
-            // Format salary with currency
+            if (companies != null && index < companies.size()) {
+                TextView companyView = dialog.findViewById(R.id.companyNameText);
+                if (companyView != null) companyView.setText(companies.get(index));
+            }
+
             if (salaries != null && index < salaries.size()) {
                 TextView salaryView = dialog.findViewById(R.id.salaryText);
                 if (salaryView != null) {
@@ -170,11 +213,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 }
             }
 
-            // Format duration
-            safeSetText(dialog, R.id.durationText, durations, index);
+            if (durations != null && index < durations.size()) {
+                TextView durationView = dialog.findViewById(R.id.durationText);
+                if (durationView != null) durationView.setText(durations.get(index));
+            }
 
-            // Set up close button
-            MaterialButton closeButton = dialog.findViewById(R.id.closeButton);
+            if (jobTypes != null && index < jobTypes.size()) {
+                TextView jobTypeView = dialog.findViewById(R.id.jobTypeText);
+                if (jobTypeView != null) jobTypeView.setText(jobTypes.get(index));
+            }
+
+            Button closeButton = dialog.findViewById(R.id.closeButton);
             if (closeButton != null) {
                 closeButton.setOnClickListener(v -> dialog.dismiss());
             }
@@ -186,93 +235,19 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
     }
 
-    private void safeSetText(Dialog dialog, int viewId, ArrayList<String> data, int index) {
-        if (dialog != null && data != null && index < data.size()) {
-            TextView view = dialog.findViewById(viewId);
-            if (view != null) {
-                String text = data.get(index);
-                if (text != null && !text.trim().isEmpty()) {
-                    view.setText(text);
-                } else {
-                    view.setText("Not specified");
-                }
-            }
-        }
-    }
-
-    private void addMarkersToMap() {
-        if (latitudes == null || longitudes == null || titles == null ||
-                latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
-            Log.e(TAG, "No location data available");
-            showError("No job locations to display");
-
-            // Center on Halifax by default
-            LatLng halifax = new LatLng(44.6488, -63.5752);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(halifax, 13f));
-            return;
-        }
-
-        Log.d(TAG, "Adding " + latitudes.size() + " markers to map");
-        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-        boolean hasValidMarkers = false;
-
-        for (int i = 0; i < latitudes.size(); i++) {
-            try {
-                double lat = latitudes.get(i);
-                double lng = longitudes.get(i);
-                String title = titles.get(i);
-
-                Log.d(TAG, String.format("Processing marker %d: %s at (%f, %f)",
-                        i, title, lat, lng));
-
-                LatLng position = new LatLng(lat, lng);
-                Marker marker = mMap.addMarker(new MarkerOptions()
-                        .position(position)
-                        .title(title));
-
-                if (marker != null) {
-                    markerMap.put(marker.getId(), i);
-                    boundsBuilder.include(position);
-                    hasValidMarkers = true;
-                    Log.d(TAG, "Successfully added marker for: " + title);
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Error adding marker " + i + ": " + e.getMessage());
-            }
-        }
-
-        if (hasValidMarkers) {
-            try {
-                LatLngBounds bounds = boundsBuilder.build();
-                int padding = 100;
-                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(13f));
-                Log.d(TAG, "Successfully set map bounds and zoom");
-            } catch (Exception e) {
-                Log.e(TAG, "Error setting map bounds: " + e.getMessage());
-                // Fallback to Halifax center
-                LatLng halifax = new LatLng(44.6488, -63.5752);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(halifax, 13f));
-            }
-        } else {
-            Log.e(TAG, "No valid markers were created");
-            showError("No valid locations found");
-            // Center on Halifax
-            LatLng halifax = new LatLng(44.6488, -63.5752);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(halifax, 13f));
-        }
+    private void centerMapOnHalifax() {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(HALIFAX, 12f));
     }
 
     private boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             return true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-            return false;
         }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                LOCATION_PERMISSION_REQUEST_CODE);
+        return false;
     }
 
     @Override
@@ -288,8 +263,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                         Log.e(TAG, "Security exception: " + e.getMessage());
                     }
                 }
-            } else {
-                showError("Location permission is required for full functionality");
             }
         }
     }
