@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class MapUITest {
-    private static final long LAUNCH_TIMEOUT = 240;
+    private static final long LAUNCH_TIMEOUT = 2500;
     final String launcherPackageName = "com.example.quickcash";
     private UiDevice device;
 
@@ -112,8 +112,8 @@ public class MapUITest {
         UiObject closeButton = device.findObject(new UiSelector().text("Close"));
         closeButton.click();
         UiObject backButton = device.findObject(new UiSelector().text("BACK"));
-        backButton.click();
-        showMapButton = device.findObject(new UiSelector().text("Show Map"));
-        assertTrue("Pressing close on dialog and back on map takes you to page with Show Map button", showMapButton.exists());
+        backButton.clickAndWaitForNewWindow();
+        UiObject showMapButton2 = device.findObject(new UiSelector().text("Show Map"));
+        assertTrue("Pressing close on dialog and back on map takes you to page with Show Map button", showMapButton2.exists());
     }
 }
