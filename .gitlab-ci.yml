@@ -10,8 +10,15 @@
 # image: openjdk:8-jdk
 # image: openjdk:11
 image: openjdk:17-jdk-bullseye
+services:
+  - docker:dind
+
 
 variables:
+
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  GRADLE_OPTS: "-Xmx2048m"
 
   # ANDROID_COMPILE_SDK is the version of Android you're compiling with.
   # It should match compileSdkVersion.
@@ -32,6 +39,8 @@ variables:
 before_script:
   - apt-get --quiet update --yes
   - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+  - ./gradlew --stop
+  - rm -rf ~/.gradle/caches/
 
   # Setup path as android_home for moving/exporting the downloaded sdk into it
   - export ANDROID_HOME="${PWD}/android-home"
@@ -47,6 +56,7 @@ before_script:
   - unzip -d cmdline-tools cmdline-tools.zip
   - popd
   - export PATH=$PATH:${ANDROID_HOME}/cmdline-tools/tools/bin/
+  - echo "sdk.dir=${ANDROID_HOME}" > local.properties
 
   # Nothing fancy here, just checking sdkManager version
   - sdkmanager --version
