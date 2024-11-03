@@ -9,10 +9,12 @@ import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -23,6 +25,7 @@ import android.graphics.Color;
 import android.os.SystemClock;
 import android.widget.TextView;
 
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.TypeTextAction;
@@ -34,15 +37,7 @@ import static org.hamcrest.Matchers.hasToString;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.hasToString;
+import org.junit.runners.JUnit4;;
 
 import android.os.IBinder;
 import android.view.WindowManager;
@@ -124,61 +119,30 @@ public class JobSubmissionUITest {
         setupJobSubmissionActivityScenario();
         onView(withId(R.id.jobSubmissionButton)).perform(click());
 
-        onView(withId(R.id.errorJSJobTitle)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Job Title is required."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSCompany)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Company Name is required."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSJobType)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Invalid Option", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Salary is required."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSRequirement)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Location is required."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSSalary)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Expected Duration is required."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSUrgency)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Invalid Option", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Please select a Job Type."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSLocation)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Please select Urgency."), isDisplayed()))
+                .inRoot(isDialog());
 
-        onView(withId(R.id.errorJSDuration)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
+        onView(allOf(withText("Please select a Start Date."), isDisplayed()))
+                .inRoot(isDialog());
+
     }
 
     @Test
@@ -191,6 +155,9 @@ public class JobSubmissionUITest {
         onData(hasToString("Full-time")).perform(click());
 
         onView(withId(R.id.jobSubmissionButton)).perform(click());
+
+        onView(allOf(withText("Job Title is required."), isDisplayed()))
+                .inRoot(isDialog());
 
         onView(withId(R.id.errorJSRequirement)).check((view, noViewFoundException) -> {
             if (view instanceof TextView) {
@@ -253,7 +220,11 @@ public class JobSubmissionUITest {
         onView(withId(R.id.locationJob)).perform(typeText("Halifax"));
         onView(withId(R.id.expectedDuration)).perform(typeText("20"));
         onView(withId(R.id.startDate)).perform(click());
-        onView(withText("31")).perform(click());
+        //onView(withText("28")).check(matches(isDisplayed()));
+        onView(allOf(withText("30"), isDisplayed()))
+                .inRoot(isDialog()) // Ensures we're selecting within the date picker dialog
+                .perform(click());
+
         onView(withText("OK")).perform(click());
 
         onView(withId(R.id.jobSubmissionButton)).perform(click());

@@ -38,4 +38,20 @@ public class Job {
     public void setSalary(int salary) {this.salary = salary;}
     public void setStartDate(String startDate) {this.startDate = startDate;}
     public void setUrgency(String urgency) {this.urgency = urgency;}
+
+    public void setAllField(String jobTitle, String companyName, String jobType, String requirements,
+                            int salary, String urgency, String location, String expectedDuration,
+                            String startDate, String employerId, String jobId) {
+        this.jobTitle = jobTitle;
+        this.companyName = companyName;
+        this.jobType = jobType;
+        this.requirements = requirements;
+        this.salary = salary;
+        this.urgency = urgency;
+        this.location = location;
+        this.expectedDuration = expectedDuration;
+        this.startDate = startDate;
+        this.employerId = employerId;
+        this.jobId = jobId;
+    }
 }

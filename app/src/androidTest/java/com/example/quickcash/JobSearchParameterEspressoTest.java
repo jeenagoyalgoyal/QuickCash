@@ -88,20 +88,20 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Data Analyst")).check(ViewAssertions.matches(ViewMatchers.withText("Data Analyst")));
-        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Ubisoft")).check(ViewAssertions.matches(ViewMatchers.withText("Ubisoft")));
-        onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("50000")).check(ViewAssertions.matches(ViewMatchers.withText("50000")));
-        onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("75000")).check(ViewAssertions.matches(ViewMatchers.withText("75000")));
-        onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("3")).check(ViewAssertions.matches(ViewMatchers.withText("3")));
+        onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Software Developer")).check(ViewAssertions.matches(ViewMatchers.withText("Software Developer")));
+        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Tech Corp")).check(ViewAssertions.matches(ViewMatchers.withText("Tech Corp")));
+        onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("6000")).check(ViewAssertions.matches(ViewMatchers.withText("6000")));
+        onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("80000")).check(ViewAssertions.matches(ViewMatchers.withText("80000")));
+        onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("6 months")).check(ViewAssertions.matches(ViewMatchers.withText("6 months")));
         onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Halifax")).check(ViewAssertions.matches(ViewMatchers.withText("Halifax")));
 
         // Will test the submission button to see if the filters worked
         Espresso.closeSoftKeyboard();
         onView(ViewMatchers.withId(R.id.search_job_parameter)).perform(ViewActions.click());
         // Switches to the results
-        onView(ViewMatchers.withId(R.id.job_search_screen)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(isDisplayed()));
         // Checks if our job title shows up
-        onView(ViewMatchers.withText("Data Analyst")).check(matches(isDisplayed()));
+        onView(ViewMatchers.withText("Software Developer")).check(matches(isDisplayed()));
     }
 
     @After

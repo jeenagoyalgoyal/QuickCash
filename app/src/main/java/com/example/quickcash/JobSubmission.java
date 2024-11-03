@@ -10,6 +10,8 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quickcash.Firebase.JobCRUD;
+import com.example.quickcash.model.Job;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,10 +46,10 @@ public class JobSubmission extends AppCompatActivity {
     // Button to submit
     private Button submitButton;
 
-    private DatabaseReference databaseReference = null;
+    private FirebaseDatabase databaseReference = null;
+    private JobCRUD jobCRUD;
 
     private TextView employerIdTextView;
-
 
     private String email;
 
@@ -57,7 +59,8 @@ public class JobSubmission extends AppCompatActivity {
         setContentView(R.layout.job_submission);
 
         // Initialize Firebase database reference
-        databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
+        databaseReference = FirebaseDatabase.getInstance();
+        jobCRUD = new JobCRUD(databaseReference);
 
         // Send the email for storing as employerID
         Intent intentJobSub = getIntent();
@@ -155,104 +158,104 @@ public class JobSubmission extends AppCompatActivity {
         String durationText = expectedDuration.getText().toString().trim();
         String startDateText = startDate.getText().toString().trim();
 
+        boolean match = true;
+
         // Job Title
         if (jobTitleText.isEmpty()) {
             jobTitle.setError("Job Title is required.");
             jobTitle.requestFocus();
-            return;
+            match = false;
         }
 
         // Company Name
         if (companyNameText.isEmpty()) {
             companyName.setError("Company Name is required.");
             companyName.requestFocus();
-            return;
+            match = false;
         }
 
         // Job Type
         if (jobTypeText.equals("Select job type")) {
             Toast.makeText(this, "Please select a Job Type.", Toast.LENGTH_SHORT).show();
             jobType.requestFocus();
-            return;
+            match = false;
         }
 
         // Salary - Check if empty and validate as a positive integer
         if (salaryText.isEmpty()) {
             salary.setError("Salary is required.");
             salary.requestFocus();
-            return;
+            match = false;
         }
-        int salaryValue;
+        int salaryValue=-1;
         try {
             salaryValue = Integer.parseInt(salaryText);
             if (salaryValue <= 0) {
                 salary.setError("Salary must be a positive number.");
                 salary.requestFocus();
-                return;
+                match = false;
             }
         } catch (NumberFormatException e) {
             salary.setError("Please enter a valid integer for Salary.");
             salary.requestFocus();
-            return;
+            match = false;
         }
 
         // Urgency
         if (urgencyText.equals("Select urgency")) {
             Toast.makeText(this, "Please select Urgency.", Toast.LENGTH_SHORT).show();
             jobUrgency.requestFocus();
-            return;
+            match = false;
         }
 
         // Location
         if (locationText.isEmpty()) {
             location.setError("Location is required.");
             location.requestFocus();
-            return;
+            match = false;
         }
 
         // Expected Duration
         if (durationText.isEmpty()) {
             expectedDuration.setError("Expected Duration is required.");
             expectedDuration.requestFocus();
-            return;
+            match = false;
         }
 
         if (startDateText.isEmpty() || startDateText.equals("Start Date")) {
             Toast.makeText(this, "Please select a Start Date.", Toast.LENGTH_SHORT).show();
             startDate.requestFocus();
+            match = false;
+        }
+
+        if(!match){
             return;
         }
 
         // EmployerID is the user email
         String employerId = email.replace(".", ",");
 
-        String jobId = databaseReference.push().getKey();
+        String jobId = null;
 
-        Job job = new Job(jobTitleText, companyNameText, jobTypeText, requirementsText,
-                salaryValue, urgencyText, locationText, durationText, startDateText,
-                employerId, jobId);
+        Job job = new Job();
 
-        if (jobId != null) {
-            databaseReference.child(jobId).setValue(job)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(JobSubmission.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
+        job.setAllField(jobTitleText, companyNameText, jobTypeText, requirementsText,
+                        salaryValue, urgencyText, locationText, durationText, startDateText,
+                        employerId, jobId);
 
-                            // Reset the input fields when the job is posted
-                            resetForm();
+        jobCRUD.submitJob(job).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
+                        resetForm();
 
-                            // Send the user back to the homepage after submitting the job posting
-                            Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
-                            intentBackToEmployerPage.putExtra("employerID", employerId);
-                            intentBackToEmployerPage.putExtra("email",email);
-                            startActivity(intentBackToEmployerPage);
-                        }
-                        
-                        else {
-                            Toast.makeText(JobSubmission.this, "Failed to post job.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
+                        Intent intentBackToEmployerPage = new Intent(JobSubmission.this, EmployerHomepageActivity.class);
+                        intentBackToEmployerPage.putExtra("employerID", employerId);
+                        intentBackToEmployerPage.putExtra("email",email);
+                        startActivity(intentBackToEmployerPage);
+                    } else {
+                        Toast.makeText(this, "Failed to post job.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     // This is a function to clear the data input, set back to default
@@ -266,29 +269,6 @@ public class JobSubmission extends AppCompatActivity {
         location.setText("");
         expectedDuration.setText("");
         startDate.setText("Start Date");
-    }
-
-    // Class for the jobs
-    public static class Job {
-        public String jobTitle, companyName, jobType, requirements, urgency, location, expectedDuration, startDate, employerId, jobId;
-        public int salary;
-
-        // Job function for database activity
-        public Job(String jobTitle, String companyName, String jobType, String requirements,
-                   int salary, String urgency, String location, String expectedDuration,
-                   String startDate, String employerId, String jobId) {
-            this.jobTitle = jobTitle;
-            this.companyName = companyName;
-            this.jobType = jobType;
-            this.requirements = requirements;
-            this.salary = salary;
-            this.urgency = urgency;
-            this.location = location;
-            this.expectedDuration = expectedDuration;
-            this.startDate = startDate;
-            this.employerId = employerId;
-            this.jobId = jobId;
-        }
     }
 }
 

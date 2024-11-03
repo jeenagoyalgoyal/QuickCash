@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,7 +48,8 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private JobSearchAdapter jobSearchAdapter;
     private List<Job> jobList;
-    private DatabaseReference jobsRef;
+    private FirebaseDatabase jobsRef;
+    private JobCRUD jobCRUD;
     private String email;
     public String userID;
 
@@ -66,7 +68,8 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         }
 
         //initializing references
-        jobsRef = FirebaseDatabase.getInstance().getReference("Jobs");
+        jobsRef = FirebaseDatabase.getInstance();
+        jobCRUD = new JobCRUD(jobsRef);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,10 +114,11 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         String jobDuration = duration.getText().toString().trim();
         String jobLocation = location.getText().toString().trim();
 
-        Query query = jobsRef;
+        Query query = jobsRef.getReference("Jobs");
 
         // Apply filters based on non-empty inputs
         if (isValidJobTitle(title)) {
+            errorText.setText("1234");
             query = query.orderByChild("jobTitle").equalTo(title);
         }else if(isValidCompany(company)){
             query =query.orderByChild("companyName").equalTo(company);
@@ -138,28 +142,22 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         jobList.clear();
         jobSearchAdapter.notifyDataSetChanged();
 
-        // Attach a listener to read the data
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jobList.clear(); // Clear the list before adding new items
-                for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                    Job job = jobSnapshot.getValue(Job.class);
-                    // Additional filtering if necessary
-                    if (passesAdditionalFilters(job)) {
-                        jobList.add(job);
+        jobCRUD.getJobsByQuery(query).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Job> jobs = task.getResult();
+                jobList.clear();
+                for(Job j: jobs) {
+                    if(passesAdditionalFilters(j)) {
+                        jobList.add(j);
                     }
                 }
-                if (jobList.isEmpty()) {
-                    errorText.setText("No Results Found");
-                } else {
+                if (jobList != null && !jobList.isEmpty()) {
                     errorText.setText(""); // Clear any previous error
+                } else {
+                    //errorText.setText("No Results Found");
                 }
                 jobSearchAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            } else {
                 errorText.setText("Failed to retrieve jobs.");
             }
         });
@@ -177,20 +175,28 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
         boolean matches = true;
 
-        if (isValidJobTitle(title) && !job.getJobTitle().equalsIgnoreCase(title)) {
-            matches = false;
+        if (!title.isEmpty()){
+            if( !title.equalsIgnoreCase(job.getJobTitle())) {
+                matches = false;
+            }
         }
 
-        if (isValidCompany(company) && !job.getCompanyName().equalsIgnoreCase(company)) {
-            matches = false;
+        if (isValidCompany(company)){
+            if(!company.equalsIgnoreCase(job.getCompanyName())) {
+                matches = false;
+            }
         }
 
-        if (isValidLocation(jobLocation) && !job.getLocation().equalsIgnoreCase(jobLocation)) {
-            matches = false;
+        if (isValidLocation(jobLocation)){
+            if(!jobLocation.equalsIgnoreCase(job.getLocation())) {
+                matches = false;
+            }
         }
 
-        if (isValidDuration(jobDuration) && !job.getExpectedDuration().equalsIgnoreCase(jobDuration)) {
-            matches = false;
+        if (isValidDuration(jobDuration)){
+            if(!jobDuration.equalsIgnoreCase(job.getExpectedDuration())) {
+                matches = false;
+            }
         }
 
         if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
@@ -209,7 +215,6 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         }else if(!maxSalStr.isEmpty()) {
             int maxSal = Integer.parseInt(maxSalStr);
             int salary = job.getSalary();
-            errorText.setText(salary+" "+maxSal);
             if(salary > maxSal){
                 matches = false;
             }
