@@ -79,7 +79,7 @@ public class MapUITest {
         UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
         locationPermissionButton.longClick();
         device.wait(Until.hasObject(By.pkg(launcherPackageName+".ui.activities").depth(0)),LAUNCH_TIMEOUT);
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("Tester"));
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("Research Assistant"));
         assertTrue("Marker should exist", marker.exists());
     }
 
@@ -95,7 +95,7 @@ public class MapUITest {
         UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
         locationPermissionButton.longClick();
         device.wait(Until.hasObject(By.pkg(launcherPackageName+".ui.activities").depth(0)),LAUNCH_TIMEOUT);
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("Tester"));
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("Research Assistant"));
         marker.click();
         UiObject dialog = device.findObject(new UiSelector().text("Job"));
         assertTrue("Description dialog should contain the title Job", dialog.exists());
