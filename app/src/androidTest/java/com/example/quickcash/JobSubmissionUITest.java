@@ -20,10 +20,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.SystemClock;
 import android.widget.TextView;
 
 import static org.hamcrest.CoreMatchers.is;
+
+import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.TypeTextAction;
 import androidx.test.espresso.assertion.ViewAssertions;
@@ -32,6 +35,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasToString;
 
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -76,6 +80,13 @@ public class JobSubmissionUITest {
         loginActivityActivityScenario = ActivityScenario.launch(LoginActivity.class);
     }
 
+    @Before
+    public void grantPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand(
+                    "pm grant " + InstrumentationRegistry.getTargetContext().getPackageName() + " android.permission.ACCESS_FINE_LOCATION");
+        }
+    }
     @Test
     public void checkCreateJobButtonPresent() {
 

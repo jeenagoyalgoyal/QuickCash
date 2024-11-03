@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickCash"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCV1UHoXi03PIqKcmQLUaXyE23Cu5vIjvk" />
+
+
+        <activity
+            android:name=".ui.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -28,17 +53,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".Profile"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            </activity>
+            android:theme="@style/Theme.QuickCash"></activity>
         <activity
             android:name=".JobSearchParameterActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
+            android:theme="@style/Theme.QuickCash"></activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -49,21 +72,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".EmployeeHomepageActivity"
+        <activity
+            android:name=".EmployeeHomepageActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
-
-        <activity android:name=".EmployerHomepageActivity"
+            android:theme="@style/Theme.QuickCash"></activity>
+        <activity
+            android:name=".EmployerHomepageActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
-
-        <activity android:name=".JobSubmission"
+            android:theme="@style/Theme.QuickCash"></activity>
+        <activity
+            android:name=".JobSubmission"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
+            android:theme="@style/Theme.QuickCash"></activity>
+        <activity
+            android:name=".RoleActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
     </application>
 
 </manifest>

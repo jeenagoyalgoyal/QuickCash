@@ -32,6 +32,61 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
+
+import android.Manifest;
+import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.net.Uri;
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private FirebaseCRUD crud = null;
@@ -39,6 +94,15 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private boolean validFlag = true;
     private DatabaseReference userRef;
+
+    public static final int LOCATION_PERMISSION_REQUEST_CODE=1;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private double testLatitude = 0.0;
+    private double testLongitude = 0.0;
+    private boolean isLocationReceived = false;
+    LocationCallback locationCallback;
+    public static boolean isTesting = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +114,11 @@ public class RegistrationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        if (!isTesting) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            requestPermissions();
+        }
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -67,7 +136,153 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeDatabaseAccess() {
+    void requestPermissions() {
+        if (isTesting) return;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                shouldShowRequestPermissionRationale();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            startLocationUpdates();
+        }
+    }
+    void shouldShowRequestPermissionRationale() {
+        new AlertDialog.Builder(this)
+                .setTitle("Location Permission Required")
+                .setMessage("This app needs access to your location to display your current location.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Request permission after showing rationale
+                    ActivityCompat.requestPermissions(RegistrationActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            LOCATION_PERMISSION_REQUEST_CODE);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                    Toast.makeText(this, "Location permission is necessary to proceed", Toast.LENGTH_SHORT).show();
+                })
+                .create()
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, fetch location
+//                detectAndDisplayLocation();
+                startLocationUpdates();
+            } else {
+                // Permission denied
+                Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
+                showPermissionDialog();
+            }
+        }
+    }
+
+
+    private void showPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Enable Location Permission")
+                .setMessage("Location permission is needed to detect your location. Enable it in settings.")
+                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000) // 10 seconds interval
+                .setMinUpdateIntervalMillis(5000)
+                .setWaitForAccurateLocation(true)
+                .build();
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                    if(!isLocationReceived){
+                        Location location= locationResult.getLastLocation();
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        displayLocationInfo(latitude, longitude);
+
+                        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                        isLocationReceived=true;
+                    }
+
+                }
+            }
+        };
+        try {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    void displayLocationInfo(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.CANADA);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String addressName = address.getAddressLine(0);
+
+                String locationInfo = "Location: " + addressName +
+                        "\nLatitude: " + latitude +
+                        "\nLongitude: " + longitude;
+                Toast.makeText(this, locationInfo, Toast.LENGTH_LONG).show();
+                isLocationReceived = true;
+                testLatitude = latitude;
+                testLongitude = longitude;
+
+            } else {
+                Toast.makeText(this, "Unable to find location name", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to get location name", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean isLocationReceived() {
+        return isLocationReceived;
+    }
+
+    public double getTestLatitude() {
+        return testLatitude;
+    }
+
+    public double getTestLongitude() {
+        return testLongitude;
+    }
+    public void resetLocationFlags() {
+        isLocationReceived = false;
+        testLatitude = 0.0;
+        testLongitude = 0.0;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (fusedLocationProviderClient != null && locationCallback != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
+
+
+    void initializeDatabaseAccess() {
         database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         crud = new FirebaseCRUD(database);
 
@@ -169,21 +384,21 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                addToDatabase(name, email, password, role);
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        addToDatabase(name, email, password, role);
 
-                            } else {
-                                Exception exception = task.getException();
-                                if (exception instanceof FirebaseAuthUserCollisionException) {
-                                    Toast.makeText(RegistrationActivity.this, "Email already in use by another account.", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(RegistrationActivity.this, "Error: "+exception.getMessage(), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Exception exception = task.getException();
+                                        if (exception instanceof FirebaseAuthUserCollisionException) {
+                                            Toast.makeText(RegistrationActivity.this, "Email already in use by another account.", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(RegistrationActivity.this, "Error: "+exception.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    });
+                            });
                 }
             }
         });

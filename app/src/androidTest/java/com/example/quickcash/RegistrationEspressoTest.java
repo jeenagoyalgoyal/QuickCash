@@ -2,14 +2,14 @@ package com.example.quickcash;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
-
 import androidx.test.core.app.ActivityScenario;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,14 +38,17 @@ public class RegistrationEspressoTest {
 
     @Before
     public void setup(){
+        RegistrationActivity.isTesting = true;
         activityScenario = ActivityScenario.launch(RegistrationActivity.class);
         activityScenario.onActivity(activity -> {
             activity.setupRegisterButton();
         });
     }
 
-
-
+    @After
+    public void after() {
+        RegistrationActivity.isTesting = false;
+    }
 
     @Test
     public void emptyNameTest() {
@@ -91,16 +94,16 @@ public class RegistrationEspressoTest {
 
     @Test
     public void validPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD));
+        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validPassword)).check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
     public void validRoleTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD));
+        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validPassword)).check(matches(withText(VALID_MESSAGE)));
     }
@@ -122,24 +125,23 @@ public class RegistrationEspressoTest {
 
     @Test
     public void invalidPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(INVALID_PASSWORD));
+        onView(withId(R.id.enterPassword)).perform(typeText(INVALID_PASSWORD), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validPassword)).check(matches(withText(INVALID_MESSAGE_PASSWORD)));
     }
 
     @Test
     public void invalidPassword2Test() {
-        onView(withId(R.id.enterPassword2)).perform(typeText(INVALID_PASSWORD));
+        onView(withId(R.id.enterPassword2)).perform(typeText(INVALID_PASSWORD), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validPassword2)).check(matches(withText(INVALID_MESSAGE_PASSWORD)));
     }
 
     @Test
     public void unmatchedPasswordTest() {
-        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD));
-        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD+1));
+        onView(withId(R.id.enterPassword)).perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.enterPassword2)).perform(typeText(VALID_PASSWORD+1), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validPassword2)).check(matches(withText(UNMATCH_MESSAGE)));
-
     }
 }

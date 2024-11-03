@@ -82,7 +82,7 @@ public class JobSearchParameterEspressoTest {
     }
 
     @Test
-    public void testFilterInteraction() {
+    public void testFilterInteraction() throws InterruptedException {
         // Test the filters by implementing data and seeing if it works
         onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
