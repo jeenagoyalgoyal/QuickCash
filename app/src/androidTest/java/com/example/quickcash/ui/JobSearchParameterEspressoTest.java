@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
@@ -27,6 +27,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import com.example.quickcash.R;
 import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
 import com.example.quickcash.ui.activities.JobSearchParameterActivity;
 
