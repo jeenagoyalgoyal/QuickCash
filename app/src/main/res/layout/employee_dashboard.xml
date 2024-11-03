@@ -9,7 +9,7 @@
         android:id="@+id/welcomeEmployee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="108dp"
         android:text="Welcome Employee!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +19,7 @@
         android:id="@+id/searchJobButton"
         android:layout_width="304dp"
         android:layout_height="46dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="152dp"
         android:text="Search Job"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.532"
@@ -30,10 +30,10 @@
         android:id="@+id/myProfileButton"
         android:layout_width="295dp"
         android:layout_height="47dp"
-        android:layout_marginTop="228dp"
+        android:layout_marginTop="204dp"
         android:text="My Profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,10 +41,10 @@
         android:id="@+id/workScheduleButton"
         android:layout_width="288dp"
         android:layout_height="47dp"
-        android:layout_marginTop="296dp"
+        android:layout_marginTop="260dp"
         android:text="Work Schedule"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,9 +52,10 @@
         android:id="@+id/tasksProjectsButton"
         android:layout_width="297dp"
         android:layout_height="49dp"
-        android:layout_marginTop="364dp"
+        android:layout_marginTop="316dp"
         android:text="Tasks and Projects"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,7 +63,7 @@
         android:id="@+id/performanceReviewsButton"
         android:layout_width="306dp"
         android:layout_height="45dp"
-        android:layout_marginTop="432dp"
+        android:layout_marginTop="372dp"
         android:text="Performance Reviews"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.523"
@@ -73,10 +74,10 @@
         android:id="@+id/employeeNotifications"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="496dp"
+        android:layout_marginTop="424dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,7 +85,7 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="294dp"
         android:layout_height="44dp"
-        android:layout_marginTop="560dp"
+        android:layout_marginTop="568dp"
         android:text="Switch to Employer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -99,6 +100,17 @@
         android:text="My Preferred Jobs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/preferredEmployersButton"
+        android:layout_width="298dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="480dp"
+        android:text="Preferred Employers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.539"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
