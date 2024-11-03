@@ -1,8 +1,4 @@
-package com.example.quickcash.ui.models;
-
-import android.content.Context;
-
-import com.example.quickcash.ui.utils.LocationHelper;
+package com.example.quickcash.models;
 
 public class Job {
     private String companyName;

@@ -1,20 +1,19 @@
 package com.example.quickcash.ui.utils.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quickcash.ui.activities.MapActivity;
-import com.example.quickcash.ui.models.Job;
 import com.example.quickcash.R;
+import com.example.quickcash.models.Job;
+import com.example.quickcash.ui.activities.MapActivity;
 import com.example.quickcash.ui.utils.LocationHelper;
-
-import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;

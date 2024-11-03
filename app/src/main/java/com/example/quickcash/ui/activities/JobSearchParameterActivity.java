@@ -1,23 +1,5 @@
 package com.example.quickcash.ui.activities;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.quickcash.R;
-import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
-import com.example.quickcash.ui.models.Job;
-import com.example.quickcash.ui.utils.LocationHelper;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,8 +8,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.quickcash.R;
+import com.example.quickcash.models.Job;
+import com.example.quickcash.ui.utils.Adapter.JobSearchAdapter;
+import com.example.quickcash.ui.utils.LocationHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JobSearchParameterActivity extends AppCompatActivity {
 

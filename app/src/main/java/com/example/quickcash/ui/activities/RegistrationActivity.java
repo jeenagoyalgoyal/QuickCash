@@ -3,12 +3,6 @@ package com.example.quickcash.ui.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,9 +11,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.quickcash.R;
 import com.example.quickcash.ui.utils.Validators.CredentialsValidator;
 import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
-import com.example.quickcash.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;

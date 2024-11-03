@@ -6,13 +6,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.quickcash.ui.activities.MapActivity;
-import com.example.quickcash.ui.models.Job;
-import com.example.quickcash.ui.utils.Validators.JobSearchValidator;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
+import com.example.quickcash.models.Job;
+import com.example.quickcash.ui.activities.MapActivity;
+import com.example.quickcash.ui.utils.Validators.JobSearchValidator;
 import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
 import com.google.firebase.database.FirebaseDatabase;
 

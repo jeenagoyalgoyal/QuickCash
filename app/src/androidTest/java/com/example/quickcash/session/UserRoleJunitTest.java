@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import com.example.quickcash.ui.activities.RoleActivity;
-import com.example.quickcash.ui.models.UseRole;
+import com.example.quickcash.models.models.UseRole;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
