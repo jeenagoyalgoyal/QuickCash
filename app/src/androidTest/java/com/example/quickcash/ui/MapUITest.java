@@ -24,20 +24,7 @@ public class MapUITest {
     final String launcherPackageName = "com.example.quickcash";
     private UiDevice device;
 
-    //Method to make it easy to login
-    private void logIn() throws UiObjectNotFoundException{
-        // Log in
-        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
-        emailBox.setText("testingemail@test.db");
-        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
-        passwordBox.setText("Test_Pass123#");
-        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
-        loginButton.clickAndWaitForNewWindow();
 
-        //Go to job search by parameter page
-        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
-        searchJobButton.clickAndWaitForNewWindow();
-    }
     @Before
     public void setup() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -57,6 +44,20 @@ public class MapUITest {
         assertTrue(passwordBox.exists());
     }
 
+    //Method to make it easy to login
+    private void logIn() throws UiObjectNotFoundException{
+        // Log in
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        //Go to job search by parameter page
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+    }
 
     @Test
     public void checkIfJobSearchHasShowMapsButton() throws UiObjectNotFoundException {
@@ -68,36 +69,51 @@ public class MapUITest {
     }
 
     @Test
-    public void checkIfShowMapOpensMapWithMarker() throws UiObjectNotFoundException{
-        logIn();
-
-        //Find Tester job listing and display on map
-        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Tester");
-        UiObject showMapButton = device.findObject(new UiSelector().text("Show Map"));
-        showMapButton.longClick();
-        UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
-        locationPermissionButton.longClick();
-        device.wait(Until.hasObject(By.pkg(launcherPackageName+".ui.activities").depth(0)),LAUNCH_TIMEOUT);
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("Research Assistant"));
-        assertTrue("Marker should exist", marker.exists());
-    }
-
-    @Test
     public void checkIfClickingMarkerOpensPopUp() throws UiObjectNotFoundException{
         logIn();
 
         //Find Tester job listing and display on map
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Tester");
+        jobTitleBox.setText("Research Assistant");
         UiObject showMapButton = device.findObject(new UiSelector().text("Show Map"));
         showMapButton.longClick();
-        UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
-        locationPermissionButton.longClick();
-        device.wait(Until.hasObject(By.pkg(launcherPackageName+".ui.activities").depth(0)),LAUNCH_TIMEOUT);
+        try{
+            UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
+            locationPermissionButton.longClick();
+        } catch (UiObjectNotFoundException ignored){
+            //Do Nothing if exception is caught since Permission already granted
+        }
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Research Assistant"));
         marker.click();
         UiObject dialog = device.findObject(new UiSelector().text("Job"));
         assertTrue("Description dialog should contain the title Job", dialog.exists());
+    }
+
+    @Test
+    public void checkIfClickingCloseandBackReturnsToSearchPage() throws UiObjectNotFoundException{
+        logIn();
+
+        //Find Tester job listing and display on map
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Research Assistant");
+        UiObject showMapButton = device.findObject(new UiSelector().text("Show Map"));
+        showMapButton.clickAndWaitForNewWindow();
+        try{
+            UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
+            locationPermissionButton.longClick();
+        } catch (UiObjectNotFoundException ignored){
+            //Do Nothing if exception is caught since Permission already granted
+        }
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("Research Assistant"));
+        marker.click();
+        UiObject dialog = device.findObject(new UiSelector().text("Job"));
+        assertTrue("Description dialog should contain the title Job", dialog.exists());
+
+        UiObject closeButton = device.findObject(new UiSelector().text("Close"));
+        closeButton.longClick();
+        UiObject backButton = device.findObject(new UiSelector().text("BACK"));
+        backButton.longClick();
+        showMapButton = device.findObject(new UiSelector().text("Show Map"));s
+        assertTrue("Pressing close on dialog and back on map takes you to page with Show Map button", showMapButton.exists());
     }
 }
