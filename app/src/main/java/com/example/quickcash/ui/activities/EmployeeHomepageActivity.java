@@ -9,7 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.models.UseRole;
+import com.example.quickcash.ui.models.UseRole;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
+import com.example.quickcash.ui.activities.Profile;
 
 public class EmployeeHomepageActivity extends AppCompatActivity {
 

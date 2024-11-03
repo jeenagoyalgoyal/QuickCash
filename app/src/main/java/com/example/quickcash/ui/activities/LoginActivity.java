@@ -11,15 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-<<<<<<< HEAD
-
-=======
 import com.example.quickcash.ui.models.UseRole;
-import com.example.quickcash.repositories.FirebaseCRUD;
->>>>>>> c8452335f077f68a71191e31cd517c40ec38c3f0
-import com.example.quickcash.R;
-import com.example.quickcash.models.UseRole;
 import com.example.quickcash.ui.utils.repositories.FirebaseCRUD;
+import com.example.quickcash.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;

@@ -6,11 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.quickcash.R;
-import com.example.quickcash.models.UseRole;
+import com.example.quickcash.ui.models.UseRole;
 
 public class EmployerHomepageActivity extends AppCompatActivity {
 
