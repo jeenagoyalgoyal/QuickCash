@@ -12,47 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickCash"
         tools:targetApi="31">
-
-        <!-- Registration Activity -->
         <activity
-            android:name=".ui.activities.RegistrationActivity"
+            android:name=".RegistrationActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Preferred Employers Activity -->
         <activity
-            android:name=".ui.activities.PreferredEmployersActivity"
+            android:name=".PreferredEmployersActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Main Activity -->
-        <activity android:name=".ui.activities.MainActivity"></activity>
-
-        <!-- Profile Activity -->
+        <activity android:name=".MainActivity"></activity>
         <activity
-            android:name=".ui.activities.Profile"
+            android:name=".Profile"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             </activity>
-
-        <!-- JobSearch by Parameter Activity -->
         <activity
-            android:name=".ui.activities.JobSearchParameterActivity"
+            android:name=".JobSearchParameterActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
-
-        <!-- Login Activity as Launch Activity -->
         <activity
-            android:name=".ui.activities.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -62,26 +50,21 @@
             </intent-filter>
         </activity>
 
-        <!-- Employee Homepage Activity -->
-        <activity android:name=".ui.activities.EmployeeHomepageActivity"
+        <activity android:name=".EmployeeHomepageActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
-        <!-- Employer Homepage Activity -->
-        <activity android:name=".ui.activities.EmployerHomepageActivity"
+        <activity android:name=".EmployerHomepageActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
-        <!-- Job Submission Activity -->
-        <activity android:name=".utils.JobSubmission"
+        <activity android:name=".JobSubmissionActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
-
-        <!-- Preferred Jobs Activity-->
-        <activity android:name=".ui.activities.PreferredJobsActivity"
+        <activity android:name=".PreferredJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>

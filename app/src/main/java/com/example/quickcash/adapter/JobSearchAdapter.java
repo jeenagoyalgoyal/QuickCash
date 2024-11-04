@@ -1,7 +1,6 @@
 package com.example.quickcash.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,28 +17,43 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.Firebase.FirebaseCRUD;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
-import com.example.quickcash.model.JobLocation;
-import com.example.quickcash.ui.activities.MapActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.example.quickcash.PreferredJobsActivity;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.quickcash.model.PreferredEmployerModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class using adapter for displaying job search results in a RecyclerView
+ */
 public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobViewHolder> {
     private List<Job> jobList;
     private DatabaseReference preferredJobsRef;
     private ViewGroup parent;
 
+    /**
+     * ViewHolder for holding job item views
+     */
     public static class JobViewHolder extends RecyclerView.ViewHolder {
         public TextView jobTypeResult;
         public TextView companyResult;
@@ -51,6 +65,10 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         public Button optionsButton;
         public LinearLayout jobSearchLinearLayout;
 
+        /**
+         * Constructor for the view holder of jobs
+         * @param itemView
+         */
         public JobViewHolder(View itemView) {
             super(itemView);
             jobTypeResult = itemView.findViewById(R.id.jobTypeResult);
@@ -64,10 +82,22 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         }
     }
 
+    /**
+     * Constructor for job search adapter
+     * @param jobList
+     */
     public JobSearchAdapter(List<Job> jobList) {
         this.jobList = jobList;
     }
 
+    /**
+     * Creating the view holder
+     * @param parent The ViewGroup into which the new View will be added after it is bound to
+     *               an adapter position.
+     * @param viewType The view type of the new View.
+     *
+     * @return
+     */
     @Override
     public JobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.parent=parent;
@@ -76,6 +106,12 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         return vh;
     }
 
+    /**
+     * Shows results of job search
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(JobViewHolder holder, int position) {
         Job job = jobList.get(position);
@@ -86,63 +122,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
         holder.showMapButton.setOnClickListener(view -> {
-            JobLocation location = job.getJobLocation();
-            if (location == null || location.getLng() == 0 || location.getLat() == 0) {
-                Toast.makeText(holder.itemView.getContext(), "No location data available for this job", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Intent mapIntent = new Intent(holder.itemView.getContext(), MapActivity.class);
-
-            // Create lists for map data
-            ArrayList<Double> latitudes = new ArrayList<>();
-            ArrayList<Double> longitudes = new ArrayList<>();
-            ArrayList<String> titles = new ArrayList<>();
-            ArrayList<Integer> salaries = new ArrayList<>();
-            ArrayList<String> durations = new ArrayList<>();
-            ArrayList<String> companies = new ArrayList<>();
-            ArrayList<String> jobTypes = new ArrayList<>();
-
-            // Add job data to lists
-            latitudes.add(location.getLat());
-            longitudes.add(location.getLng());
-            titles.add(job.getJobTitle());
-            salaries.add(job.getSalary());
-            durations.add(job.getExpectedDuration());
-            companies.add(job.getCompanyName());
-            jobTypes.add(job.getJobType());
-
-            // Add data to intent
-            mapIntent.putExtra("latitudes", latitudes);
-            mapIntent.putExtra("longitudes", longitudes);
-            mapIntent.putIntegerArrayListExtra("salaries", salaries);
-            mapIntent.putStringArrayListExtra("titles", titles);
-            mapIntent.putStringArrayListExtra("durations", durations);
-            mapIntent.putStringArrayListExtra("companies", companies);
-            mapIntent.putStringArrayListExtra("jobTypes", jobTypes);
-
-            holder.itemView.getContext().startActivity(mapIntent);
-        });
-
-
-        holder.optionsButton.setOnClickListener(view -> {
-            PopupMenu popupMenu = new PopupMenu(parent.getContext(), holder.optionsButton);
-            popupMenu.getMenuInflater().inflate(R.menu.job_search_options, popupMenu.getMenu());
-            popupMenu.show();
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getTitle().equals("Add to Preferred Employers")) {
-                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-                        addToPreferredEmployersList(userId, job.getEmployerId(), holder.itemView.getContext());
-                    } else if (item.getTitle().equals("Add to Preferred Jobs")) {
-                        //Do preferred Job calls here!
-                        addJobToPreferredList(job, holder.itemView.getContext());
-                    }
-                    return true;
-                }
-            });
+            // Implement map functionality here
         });
 
 
@@ -151,6 +131,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             popupMenu.getMenuInflater().inflate(R.menu.job_search_options,popupMenu.getMenu());
             popupMenu.show();
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getTitle().equals("Add to Preferred Employers")){

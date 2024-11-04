@@ -13,8 +13,6 @@ googleGmsGoogleServices = "4.4.2"
 firebaseDatabase = "21.0.0" # Replace this with the version you need
 firebaseAuth = "23.0.0"
 uiautomator = "2.3.0"
-playServicesLocation = "21.3.0"
-playServicesMaps = "19.0.0"
 
 
 
@@ -31,8 +29,6 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
-play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
-play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 
 
