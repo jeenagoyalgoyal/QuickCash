@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quickcash.utils.repository.FirebaseCRUD;
+import com.example.quickcash.R;
+import com.example.quickcash.utils.UseRole;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;

@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotNull;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
+import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.utils.UseRole;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

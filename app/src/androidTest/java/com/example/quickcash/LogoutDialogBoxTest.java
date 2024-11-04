@@ -9,6 +9,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import com.example.quickcash.ui.activities.Profile;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.utils;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

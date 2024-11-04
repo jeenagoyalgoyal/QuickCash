@@ -10,6 +10,8 @@ import static org.junit.Assert.assertEquals;
 
 import androidx.test.core.app.ActivityScenario;
 
+import com.example.quickcash.ui.activities.RegistrationActivity;
+
 import org.junit.Before;
 import org.junit.Test;
 

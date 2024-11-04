@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.example.quickcash.ui.activities.LoginActivity;
+
 public class LoginJUnitTest {
 
     @Test

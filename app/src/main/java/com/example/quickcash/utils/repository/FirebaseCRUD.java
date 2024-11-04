@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.utils.repository;
 
 import androidx.annotation.NonNull;
 
@@ -8,8 +8,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FirebaseCRUD {
     private final FirebaseDatabase database;

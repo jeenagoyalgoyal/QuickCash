@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.R;
-import com.example.quickcash.models.Job;
-import com.example.quickcash.models.JobLocation;
-import com.example.quickcash.utils.adapter.JobSearchAdapter;
+import com.example.quickcash.model.Job;
+import com.example.quickcash.adapter.JobSearchAdapter;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;

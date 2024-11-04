@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.utils.repository;
 
 import java.util.ArrayList;
 

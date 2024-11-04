@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quickcash.utils.JobSubmission;
+import com.example.quickcash.R;
+import com.example.quickcash.utils.UseRole;
 
 public class EmployerHomepageActivity extends AppCompatActivity {
 

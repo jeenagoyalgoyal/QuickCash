@@ -5,6 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.example.quickcash.utils.validators.CredentialsValidator;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

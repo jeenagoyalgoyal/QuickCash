@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quickcash.R;
+import com.example.quickcash.utils.SessionManager;
 
 public class Profile extends AppCompatActivity {
 

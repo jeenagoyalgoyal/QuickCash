@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.utils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quickcash.R;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
