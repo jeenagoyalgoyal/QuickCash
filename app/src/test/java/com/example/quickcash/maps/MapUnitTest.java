@@ -4,9 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.example.quickcash.deprecated.JobToMap;
+import com.example.quickcash.models.Job;
 
 public class MapUnitTest {
+
     // Tests to be checked:
     // - Job title
     // - Salary
@@ -14,11 +15,11 @@ public class MapUnitTest {
     // - Location
     // - Add to perfect job
 
-    private JobToMap job;
+    private Job job;
 
     @Before
     public void setup(){
-        job = new JobToMap();
+        job = new Job();
     }
 
     @Test
@@ -56,40 +57,42 @@ public class MapUnitTest {
     @Test
     public void testValidDuration() {
 
-        job.setDuration("3 years");
+        job.setExpectedDuration("3 years");
         assertEquals("Duration should be 3 years",
-                "3 years", job.getDuration());
+                "3 years", job.getExpectedDuration());
     }
 
     @Test
     public void testInvalidDuration() {
 
-        job.setDuration("");
+        job.setExpectedDuration("");
         assertTrue("Duration shouldn't be empty",
-                job.getDuration() == null || job.getDuration().isEmpty());
+                job.getExpectedDuration() == null || job.getExpectedDuration().isEmpty());
     }
 
     @Test
     public void testValidLatitude() {
 
-        job.setLatitude(10.0);
+        job.setLat(10.0);
         assertEquals("Latitude should be 10.0",
-                10.0, job.getLatitude(), 0.0);
+                10.0, job.getLat(), 0.0);
     }
 
     @Test
     public void testInvalidLatitude() {
 
-        job.setLatitude(-91.0);
+        job.setLat(-91.0);
         assertTrue("Latitude should not be not Less than -90 or more than 90",
-                job.getLatitude()>= -90.0 || job.getLatitude() <= 90.0 );
+                job.getLat()>= -90.0 || job.getLat() <= 90.0 );
     }
 
     @Test
     public void testValidLongitude() {
 
-        job.setLongitude(10.0);
+        job.setLng(10.0);
         assertEquals("Latitude should be 10.0",
-                10.0, job.getLongitude(), 0.0);
+                10.0, job.getLng(), 0.0);
     }
+
+    //  Used to test JobToMap class  //
 }

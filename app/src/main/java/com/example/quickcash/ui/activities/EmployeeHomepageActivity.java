@@ -10,9 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
 import com.example.quickcash.models.UseRole;
-import com.example.quickcash.ui.activities.EmployerHomepageActivity;
-import com.example.quickcash.ui.activities.JobSearchParameterActivity;
-import com.example.quickcash.ui.activities.Profile;
 
 public class EmployeeHomepageActivity extends AppCompatActivity {
 
@@ -29,6 +26,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
     public Button performanceReview;
     public Button employeeNotifications;
     public Button employerSwitch;
+    public Button preferredJobsButton;
+    public Button preferredEmployers;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -51,6 +50,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         performanceReview = findViewById(R.id.performanceReviewsButton);
         employeeNotifications = findViewById(R.id.employeeNotifications);
         employerSwitch = findViewById(R.id.switchToEmployerButton);
+        preferredEmployers = findViewById(R.id.preferredEmployersButton);
+        preferredJobsButton = findViewById(R.id.preferredJobsButton);
 
 
         // SWITCHES TO EMPLOYEE DASH
@@ -73,17 +74,34 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
             }
         });
 
-        searchJob.setOnClickListener(new View.OnClickListener() {
+        preferredEmployers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, JobSearchParameterActivity.class);
-                startActivity(intentProfile);
+                Intent intentPreferredEmployers = new Intent(EmployeeHomepageActivity.this, PreferredEmployersActivity.class);
+                intentPreferredEmployers.putExtra("email", email);
+                startActivity(intentPreferredEmployers);
                 finish();
             }
         });
 
+        searchJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentJobSearchParameter = new Intent(EmployeeHomepageActivity.this, JobSearchParameterActivity.class);
+                intentJobSearchParameter.putExtra("email", email);
+                startActivity(intentJobSearchParameter);
+                finish();
+            }
+        });
 
-
+        preferredJobsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, PreferredJobsActivity.class);
+                startActivity(intentProfile);
+                finish();
+            }
+        });
 
     }
 }

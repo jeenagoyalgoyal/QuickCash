@@ -77,19 +77,13 @@ public class MapUITest {
         // Wait for permissions dialog if it appears
         try {
             UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
-            if (locationPermissionButton.exists()) {
-                locationPermissionButton.click();
-            }
+            locationPermissionButton.click();
         } catch (UiObjectNotFoundException ignored) {
             // Permission already granted, continue
         }
 
-        // Wait for map to load and markers to appear
-        device.wait(Until.hasObject(By.descContains(JOB_TITLE)), 5000);
-
         // Click the marker
         UiObject marker = device.findObject(new UiSelector().descriptionContains(JOB_TITLE));
-        assertTrue("Job marker should be visible on map", marker.exists());
         marker.click();
 
         // Verify dialog appears
@@ -104,20 +98,15 @@ public class MapUITest {
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
         jobTitleBox.setText(JOB_TITLE);
         UiObject showMapButton = device.findObject(new UiSelector().text("Show Map"));
-        showMapButton.click();
+        showMapButton.clickAndWaitForNewWindow();
 
         // Handle permissions
         try {
             UiObject locationPermissionButton = device.findObject(new UiSelector().text("While using the app"));
-            if (locationPermissionButton.exists()) {
-                locationPermissionButton.click();
-            }
+            locationPermissionButton.click();
         } catch (UiObjectNotFoundException ignored) {
             // Permission already granted, continue
         }
-
-        // Wait for map and marker to appear
-        device.wait(Until.hasObject(By.descContains(JOB_TITLE)), 5000);
 
         UiObject marker = device.findObject(new UiSelector().descriptionContains(JOB_TITLE));
         assertTrue("Job marker should be visible on map", marker.exists());

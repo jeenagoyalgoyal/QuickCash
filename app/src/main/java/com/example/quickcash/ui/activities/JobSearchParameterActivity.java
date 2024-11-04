@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quickcash.R;
 import com.example.quickcash.models.Job;
 import com.example.quickcash.models.JobLocation;
-import com.example.quickcash.utils.adapters.JobSearchAdapter;
+import com.example.quickcash.utils.adapter.JobSearchAdapter;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -60,6 +61,13 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         setContentView(R.layout.job_search_parameter);
         init();
         setupListeners();
+        // Set up the back button
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(JobSearchParameterActivity.this, EmployeeHomepageActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
+        });
     }
 
     private void init() {
@@ -81,7 +89,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
             // Setup RecyclerView
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            jobSearchAdapter = new JobSearchAdapter(jobList, this);
+            jobSearchAdapter = new JobSearchAdapter(jobList);
             recyclerView.setAdapter(jobSearchAdapter);
         } catch (Exception e) {
             Log.e(TAG, "Error initializing: " + e.getMessage());

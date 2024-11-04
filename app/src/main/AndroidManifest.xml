@@ -33,7 +33,19 @@
         </activity>
 
         <!-- Main Activity -->
-        <activity android:name=".ui.activities.MainActivity"></activity>
+        <activity
+            android:name=".ui.activities.MainActivity">
+        </activity>
+
+        <!-- Preferred Employers Activity-->
+        <activity
+            android:name=".ui.activities.PreferredEmployersActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- Profile activity -->
         <activity
@@ -41,29 +53,28 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             </activity>
-
+        <!-- Job Search by Parameter Activity-->
         <activity
             android:name=".ui.activities.JobSearchParameterActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <!-- Registration Activity -->
         <activity
             android:name=".ui.activities.RegistrationActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- Role Selection Activity -->
         <activity
             android:name=".ui.activities.RoleActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
-        <!-- Search Activity -->
-        <activity
-            android:name=".deprecated.SearchActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 
@@ -85,6 +96,12 @@
 
         <!-- JobSubmissionPage Activity -->
         <activity android:name=".ui.activities.JobSubmissionActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Preferred Jobs Activity -->
+        <activity android:name=".ui.activities.PreferredJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
