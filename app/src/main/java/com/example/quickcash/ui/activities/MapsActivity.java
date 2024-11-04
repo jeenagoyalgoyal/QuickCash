@@ -83,7 +83,7 @@
 
             LatLng sydney = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(sydney).title("Current Location"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
         }
 
         /**
