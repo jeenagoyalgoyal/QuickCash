@@ -1,7 +1,6 @@
 package com.example.quickcash;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -32,6 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity class for managing and displaying preferred employers in the QuickCash application.
+ * It interacts with Firebase to retrieve and display the list of preferred employers and
+ * their posted jobs by provides UI elements for interacting with the data.
+ */
 public class PreferredEmployersActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String email;
@@ -48,7 +52,13 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Job> jobList;
     private JobSearchAdapter jobSearchAdapter;
+    private static final String PREFERRED_EMPLOYER_TEXT = "PreferredEmployers";
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the UI elements, gets email of current user from FirebaseAuth, and calls methods that fetch preferred employers.
+     * @param savedInstanceState Bundle object containing the activity's previously saved state, if any.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,34 +80,47 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         setupCrossButton();
         setupRecyclerView();
         //setting of ID and database code only executes if email is retrieved correctly
-        WhenEmailRetrievedCorrectly();
+        whenEmailRetrievedCorrectly();
 
     }
 
-    private void WhenEmailRetrievedCorrectly(){
+    /**
+     * Sets up the activity when the email has been retrieved correctly.
+     * Initializes database references and calls methods to fetch preferred employees
+     * and display them in a listview.
+     */
+    private void whenEmailRetrievedCorrectly(){
         if (email!=null && !email.isEmpty()){
             this.userID = sanitizeEmail(email);
             this.initializeDatabaseRefs();
             this.setPreferredEmployersListView();
         }
         else {
-            Log.e("PreferredEmployers", "no ID initialized! (is the intent working correctly?)");
+            Log.e(PREFERRED_EMPLOYER_TEXT, "no ID initialized! (is the intent working correctly?)");
         }
     }
 
+    /**
+     * Initializes the Firebase database references.
+     */
     protected void initializeDatabaseRefs() {
         this.database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
-        this.preferredEmployersRef = getPreferredEmployersRef();;
+        this.preferredEmployersRef = getPreferredEmployersRef();
         this.jobsRef = getJobsRef();
     }
 
-
+    /**
+     * Calls the popup that displays jobs when an employer is clicked.
+     */
     private void setupEmployerSelector(){
         listView.setOnItemClickListener((parent, view, position, id) -> {
             displayJobsByEmployer(preferredEmployersIdList.get(position));
         });
     }
 
+    /**
+     * Sets up the ListView for displaying preferred employers.
+     */
     private void setupListView(){
         listView = findViewById(R.id.preferredEmployeesListView);
         preferredEmployersNameList = new ArrayList<>();
@@ -105,12 +128,18 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Sets up the popup dialog for displaying jobs.
+     */
     private void setupPopupDialog(){
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.preferred_employer_jobs_dialog_box);
         crossButton = dialog.findViewById(R.id.crossButton);
     }
 
+    /**
+     * Sets up the RecyclerView for displaying jobs.
+     */
     private void setupRecyclerView(){
         recyclerView = dialog.findViewById(R.id.preferredEmployerJobsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -119,6 +148,10 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         recyclerView.setAdapter(jobSearchAdapter);
     }
 
+    /**
+     * Displays jobs posted by a specific employer in a dialog.
+     * @param employerId The ID of the employer whose jobs are to be displayed.
+     */
     private void displayJobsByEmployer(String employerId) {
         jobList.clear();
         Query query = jobsRef;
@@ -138,30 +171,41 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PreferredEmployersActivity.this, "Database Connection Error!", Toast.LENGTH_LONG).show();
-                Log.e("PreferredEmployers", "Error connecting to firebase!");
+                Log.e(PREFERRED_EMPLOYER_TEXT, "Error connecting to firebase!");
             }
         });
         dialog.show();
     }
 
-
+    /**
+     * Sets up the cross button for closing the job display dialog.
+     */
     private void setupCrossButton(){
         crossButton.setOnClickListener(v -> {
             dialog.cancel();
         });
     }
 
-
-
+    /**
+     * Retrieves the database reference for preferred employers.
+     * @return A DatabaseReference pointing to the user's preferred employers.
+     */
     private DatabaseReference getPreferredEmployersRef() {
-            return this.database.getReference("Users").child(userID).child("preferredEmployers");
+        return this.database.getReference("Users").child(userID).child("preferredEmployers");
     }
 
+    /**
+     * Retrieves the database reference for jobs.
+     * @return A DatabaseReference pointing to the jobs database.
+     */
     private DatabaseReference getJobsRef() {
         return this.database.getReference("Jobs");
     }
 
 
+    /**
+     * Sets the data in the ListView for preferred employers.
+     */
     protected void setPreferredEmployersListView() {
         adapter.clear();
         //add listener to preferredEmployers
@@ -190,11 +234,17 @@ public class PreferredEmployersActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PreferredEmployersActivity.this, "Database Connection Error!", Toast.LENGTH_LONG).show();
-                Log.e("PreferredEmployers", "Error connecting to firebase!");
+                Log.e(PREFERRED_EMPLOYER_TEXT, "Error connecting to firebase!");
             }
         });
     }
 
+    /**
+     * Sanitizes an email address to be used as a Firebase id key.
+     * Replaces '.' with ',' to avoid issues with Firebase paths.
+     * @param email The email address to be sanitized.
+     * @return A sanitized version of the email address that can be used as an id.
+     */
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
     }
