@@ -22,9 +22,6 @@ import java.util.List;
 
 public class JobSubmissionActivity extends AppCompatActivity {
 
-    // Job Submission Form title
-    private TextView formText;
-
     // Inputs for the employer
     private EditText jobTitle;
     private Spinner jobType;
@@ -35,21 +32,10 @@ public class JobSubmissionActivity extends AppCompatActivity {
     private EditText location;
     private EditText expectedDuration;
     private Button startDate;
-
-    private TextView errorJSRequirement;
-    private TextView errorJSSalary;
-    private TextView errorJSUrgency;
-    private TextView errorJSLocation;
-    private TextView errorJSDuration;
-
-
-    // Button to submit
     private Button submitButton;
 
     private FirebaseDatabase databaseReference = null;
     private JobCRUD jobCRUD;
-
-    private TextView employerIdTextView;
 
     private String email;
 
@@ -58,69 +44,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.job_submission);
 
-        // Initialize Firebase database reference
-        databaseReference = FirebaseDatabase.getInstance();
-        jobCRUD = new JobCRUD(databaseReference);
-
-        // Send the email for storing as employerID
-        Intent intentJobSub = getIntent();
-        email = intentJobSub.getStringExtra("email");
-
-        // Initialize the employer ID TextView
-        employerIdTextView = findViewById(R.id.employerIdTextView);
-
-        // Display employerId on the form
-        employerIdTextView.setText("Employer ID: " + email);
-
-        // Form title
-        formText = findViewById(R.id.jobSub);
-
-        // The inputs from employer
-        jobTitle = findViewById(R.id.jobTitle);
-        companyName = findViewById(R.id.companyName);
-        jobType = findViewById(R.id.spinnerJobType);
-        requirements = findViewById(R.id.requirementText);
-        salary = findViewById(R.id.salaryText);
-        jobUrgency = findViewById(R.id.spinnerUrgency);
-        location = findViewById(R.id.locationJob);
-        expectedDuration = findViewById(R.id.expectedDuration);
-        startDate = findViewById(R.id.startDate);
-
-        // Button to submit the job posting
-        submitButton = findViewById(R.id.jobSubmissionButton);
-
-        // Errors
-        errorJSRequirement = findViewById(R.id.errorJSRequirement);
-        errorJSSalary = findViewById(R.id.errorJSSalary);
-        errorJSUrgency = findViewById(R.id.errorJSUrgency);
-        errorJSLocation = findViewById(R.id.errorJSLocation);
-        errorJSDuration = findViewById(R.id.errorJSDuration);
-
-
-        // Array list for the job type
-        List<String> typeList = new ArrayList<>();
-        typeList.add(0, "Select job type");
-        typeList.add("Full-time");
-        typeList.add("Part-time");
-        typeList.add("Internship");
-
-        // Array list for the urgency
-        List <String> urgencyList = new ArrayList<>();
-        urgencyList.add(0,"Select urgency");
-        urgencyList.add("High");
-        urgencyList.add("Medium");
-        urgencyList.add("Low");
-
-
-        // Create ArrayAdapter for each spinner
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typeList);
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        jobType.setAdapter(typeAdapter);
-
-        ArrayAdapter<String> urgencyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, urgencyList);
-        urgencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        jobUrgency.setAdapter(urgencyAdapter);
-
+        init();
+        initDropdowns();
 
         // Set up a date picker for the start date
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +70,55 @@ public class JobSubmissionActivity extends AppCompatActivity {
 
     }
 
+    public void init(){
+        // Initialize Firebase database reference
+        databaseReference = FirebaseDatabase.getInstance();
+        jobCRUD = new JobCRUD(databaseReference);
+
+        // Send the email for storing as employerID
+        Intent intentJobSub = getIntent();
+        email = intentJobSub.getStringExtra("email");
+
+        // The inputs from employer
+        jobTitle = findViewById(R.id.jobTitle);
+        companyName = findViewById(R.id.companyName);
+        jobType = findViewById(R.id.spinnerJobType);
+        requirements = findViewById(R.id.requirementText);
+        salary = findViewById(R.id.salaryText);
+        jobUrgency = findViewById(R.id.spinnerUrgency);
+        location = findViewById(R.id.locationJob);
+        expectedDuration = findViewById(R.id.expectedDuration);
+        startDate = findViewById(R.id.startDate);
+
+        // Button to submit the job posting
+        submitButton = findViewById(R.id.jobSubmissionButton);
+    }
+
+    public void initDropdowns(){
+        // Array list for the job type
+        List<String> typeList = new ArrayList<>();
+        typeList.add(0, "Select job type");
+        typeList.add("Full-time");
+        typeList.add("Part-time");
+        typeList.add("Internship");
+
+        // Array list for the urgency
+        List <String> urgencyList = new ArrayList<>();
+        urgencyList.add(0,"Select urgency");
+        urgencyList.add("High");
+        urgencyList.add("Medium");
+        urgencyList.add("Low");
+
+        // Create ArrayAdapter for each spinner
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typeList);
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        jobType.setAdapter(typeAdapter);
+
+        ArrayAdapter<String> urgencyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, urgencyList);
+        urgencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        jobUrgency.setAdapter(urgencyAdapter);
+    }
+
     // Submitting the job to the firebase database
     private void submitJobPosting() {
         // Get text from form inputs
@@ -158,6 +132,43 @@ public class JobSubmissionActivity extends AppCompatActivity {
         String durationText = expectedDuration.getText().toString().trim();
         String startDateText = startDate.getText().toString().trim();
 
+        if(!checkFields(jobTitleText, companyNameText, jobTypeText, requirementsText,
+                salaryText, urgencyText, locationText, durationText,
+                startDateText)){
+            return;
+        }
+
+        int salaryValue = Integer.parseInt(salaryText);
+
+        // EmployerID is the user email
+        String employerId = email.replace(".", ",");
+
+        String jobId = null;
+
+        Job job = new Job();
+
+        job.setAllField(jobTitleText, companyNameText, jobTypeText, requirementsText,
+                        salaryValue, urgencyText, locationText, durationText, startDateText,
+                        employerId, jobId);
+
+        jobCRUD.submitJob(job).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
+                        resetForm();
+
+                        Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
+                        intentBackToEmployerPage.putExtra("employerID", employerId);
+                        intentBackToEmployerPage.putExtra("email",email);
+                        startActivity(intentBackToEmployerPage);
+                    } else {
+                        Toast.makeText(this, "Failed to post job.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private boolean checkFields(String jobTitleText, String companyNameText, String jobTypeText, String requirementsText,
+                             String salaryText, String urgencyText, String locationText, String durationText,
+                             String startDateText){
         boolean match = true;
 
         // Job Title
@@ -181,24 +192,32 @@ public class JobSubmissionActivity extends AppCompatActivity {
             match = false;
         }
 
+        //Company Name
+        if (requirementsText.isEmpty()) {
+            requirements.setError("Enter Requirements");
+            requirements.requestFocus();
+            match = false;
+        }
+
         // Salary - Check if empty and validate as a positive integer
         if (salaryText.isEmpty()) {
             salary.setError("Salary is required.");
             salary.requestFocus();
             match = false;
-        }
-        int salaryValue=-1;
-        try {
-            salaryValue = Integer.parseInt(salaryText);
-            if (salaryValue <= 0) {
-                salary.setError("Salary must be a positive number.");
+        }else {
+            int salaryValue = Integer.parseInt(salaryText);
+            try {
+                salaryValue = Integer.parseInt(salaryText);
+                if (salaryValue <= 0) {
+                    salary.setError("Salary must be a positive number.");
+                    salary.requestFocus();
+                    match = false;
+                }
+            } catch (NumberFormatException e) {
+                salary.setError("Please enter a valid integer for Salary.");
                 salary.requestFocus();
                 match = false;
             }
-        } catch (NumberFormatException e) {
-            salary.setError("Please enter a valid integer for Salary.");
-            salary.requestFocus();
-            match = false;
         }
 
         // Urgency
@@ -228,34 +247,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
             match = false;
         }
 
-        if(!match){
-            return;
-        }
-
-        // EmployerID is the user email
-        String employerId = email.replace(".", ",");
-
-        String jobId = null;
-
-        Job job = new Job();
-
-        job.setAllField(jobTitleText, companyNameText, jobTypeText, requirementsText,
-                        salaryValue, urgencyText, locationText, durationText, startDateText,
-                        employerId, jobId);
-
-        jobCRUD.submitJob(job).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
-                        resetForm();
-
-                        Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
-                        intentBackToEmployerPage.putExtra("employerID", employerId);
-                        intentBackToEmployerPage.putExtra("email",email);
-                        startActivity(intentBackToEmployerPage);
-                    } else {
-                        Toast.makeText(this, "Failed to post job.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        return match;
     }
 
     // This is a function to clear the data input, set back to default
