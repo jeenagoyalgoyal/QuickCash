@@ -256,15 +256,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (mMap != null) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && mMap != null) {
                     try {
                         mMap.setMyLocationEnabled(true);
                     } catch (SecurityException e) {
                         Log.e(TAG, "Security exception: " + e.getMessage());
                     }
                 }
-            }
+
         }
     }
 
