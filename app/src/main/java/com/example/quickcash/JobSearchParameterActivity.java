@@ -24,6 +24,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This class is used for searching jobs via using filters to find the
+ * posted jobs in the database.
+ */
 public class JobSearchParameterActivity extends AppCompatActivity{
 
     private EditText jobTitle;
@@ -42,6 +46,10 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     private String email;
     public String userID;
 
+    /**
+     * On create, initialize the job search parameter form
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -57,6 +65,10 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         }
 
         searchButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When user clicks search button, check the filters are filled
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 if(allEmptyFields()){
@@ -71,6 +83,9 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Method initializes the job search form input variables
+     */
     public void init(){
         jobTitle = findViewById(R.id.jobTitle);
         companyName = findViewById(R.id.companyName);
@@ -93,6 +108,9 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * This method finds the results from the job search
+     */
     private void performSearch() {
 
         Query query = createQuery();
@@ -122,6 +140,10 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Creates a firebase query with the input by user
+     * @return
+     */
     private Query createQuery(){
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
@@ -159,6 +181,11 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * Filters for the user to see if it's valid
+     * @param job
+     * @return true if valid, false otherwise
+     */
     private boolean passesAdditionalFilters(Job job) {
         // Get the user input again
         String title = jobTitle.getText().toString().trim();
@@ -171,6 +198,10 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         return passesAdditionalJobFilters(job, title, company, minSalStr, maxSalStr, jobDuration, jobLocation);
     }
 
+    /**
+     * Checks if fields are all empty
+     * @return true if all empty
+     */
     public boolean allEmptyFields(){
         return jobTitle.getText().toString().trim().isEmpty() &&
                companyName.getText().toString().trim().isEmpty() &&
@@ -180,6 +211,10 @@ public class JobSearchParameterActivity extends AppCompatActivity{
                location.getText().toString().trim().isEmpty();
     }
 
+    /**
+     * Validates to see if salary is valid
+     * @return false if empty
+     */
     public boolean checkSalaryField(){
         String minS = minSalary.getText().toString().trim();
         String maxS = maxSalary.getText().toString().trim();

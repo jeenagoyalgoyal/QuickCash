@@ -15,14 +15,29 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class provides methods for creating, reading, and managing job
+ * postings in the firebase database
+ */
 public class JobCRUD {
 
     private final DatabaseReference databaseReference;
 
+
+    /**
+     * Constructs a JobCRUD instance with a reference to the "Jobs" node in the
+     * firebase database
+     * @param firebaseDatabase
+     */
     public JobCRUD(FirebaseDatabase firebaseDatabase) {
         databaseReference = firebaseDatabase.getReference("Jobs");
     }
 
+    /**
+     * Submits a job to the database, with a unique job id
+     * @param job
+     * @return returns successful
+     */
     public Task<Boolean> submitJob(Job job) {
         String jobId = databaseReference.push().getKey();
         if (jobId != null) {
@@ -33,16 +48,29 @@ public class JobCRUD {
         return null;
     }
 
+    /**
+     * Gets a job based on the id
+     * @param jobId
+     * @return job object when found
+     */
     public Task<Job> getJobById(String jobId) {
         TaskCompletionSource<Job> taskCompletionSource = new TaskCompletionSource<>();
 
         databaseReference.child(jobId).addListenerForSingleValueEvent(new ValueEventListener() {
+            /**
+             * Uses a listener
+             * @param snapshot The current data at the location
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Job job = snapshot.getValue(Job.class);
                 taskCompletionSource.setResult(job);
             }
 
+            /**
+             * Uses a listener
+             * @param error A description of the error that occurred
+             */
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 taskCompletionSource.setException(error.toException());
@@ -52,10 +80,19 @@ public class JobCRUD {
         return taskCompletionSource.getTask();
     }
 
+    /**
+     * Gets a list of jobs posted
+     * @param query
+     * @return list of jobs
+     */
     public Task<List<Job>> getJobsByQuery(Query query) {
         TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
+            /**
+             * Uses listener
+             * @param snapshot The current data at the location
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Job> jobs = new ArrayList<>();
@@ -68,6 +105,10 @@ public class JobCRUD {
                 taskCompletionSource.setResult(jobs);
             }
 
+            /**
+             * Uses listener
+             * @param error A description of the error that occurred
+             */
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 taskCompletionSource.setException(error.toException());

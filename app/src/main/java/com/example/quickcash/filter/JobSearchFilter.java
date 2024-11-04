@@ -4,16 +4,36 @@ import com.example.quickcash.model.Job;
 
 public class JobSearchFilter {
 
-    // Method to check if the job field is empty or noy (can be empty)
+    /**
+     * Checks to see if field is valid
+     * @param title
+     * @return true for valid
+     */
     public static boolean isValidField(String title) {
         return title != null && !title.trim().isEmpty();
     }
 
-    // Tests salary is within boundary
+    /**
+     * Sees if salary is in bounds
+     * @param minSalary
+     * @param maxSalary
+     * @return true if valid
+     */
     public static boolean isValidSalary(int minSalary, int maxSalary) {
         return minSalary >= 0 && maxSalary >= 0 && minSalary <= maxSalary;
     }
 
+    /**
+     * Sees if the rest of the filter input passes
+     * @param job
+     * @param title
+     * @param company
+     * @param minSalStr
+     * @param maxSalStr
+     * @param jobDuration
+     * @param jobLocation
+     * @return true if valid
+     */
     public static boolean passesAdditionalJobFilters(Job job, String title, String company, String minSalStr, String maxSalStr, String jobDuration, String jobLocation){
         boolean matches = true;
 

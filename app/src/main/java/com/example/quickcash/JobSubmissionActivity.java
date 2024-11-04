@@ -20,6 +20,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to submit jobs, posting them in the database for users
+ */
 public class JobSubmissionActivity extends AppCompatActivity {
 
     // Inputs for the employer
@@ -39,6 +42,10 @@ public class JobSubmissionActivity extends AppCompatActivity {
 
     private String email;
 
+    /**
+     * On create, initialize the job submission form
+     * @param savedInstance
+     */
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -49,6 +56,10 @@ public class JobSubmissionActivity extends AppCompatActivity {
 
         // Set up a date picker for the start date
         startDate.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Creates the date picker for the start date of the job
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().build();
@@ -70,6 +81,9 @@ public class JobSubmissionActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Initializes the input fields and database
+     */
     public void init(){
         // Initialize Firebase database reference
         databaseReference = FirebaseDatabase.getInstance();
@@ -94,6 +108,9 @@ public class JobSubmissionActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.jobSubmissionButton);
     }
 
+    /**
+     * Initializes the spinners fields
+     */
     public void initDropdowns(){
         // Array list for the job type
         List<String> typeList = new ArrayList<>();
@@ -119,7 +136,9 @@ public class JobSubmissionActivity extends AppCompatActivity {
         jobUrgency.setAdapter(urgencyAdapter);
     }
 
-    // Submitting the job to the firebase database
+    /**
+     * Method used to submit jobs to the database
+     */
     private void submitJobPosting() {
         // Get text from form inputs
         String jobTitleText = jobTitle.getText().toString().trim();
@@ -166,6 +185,19 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Checks the fields to see if any of the fields are not filled out
+     * @param jobTitleText
+     * @param companyNameText
+     * @param jobTypeText
+     * @param requirementsText
+     * @param salaryText
+     * @param urgencyText
+     * @param locationText
+     * @param durationText
+     * @param startDateText
+     * @return
+     */
     private boolean checkFields(String jobTitleText, String companyNameText, String jobTypeText, String requirementsText,
                              String salaryText, String urgencyText, String locationText, String durationText,
                              String startDateText){
@@ -250,7 +282,9 @@ public class JobSubmissionActivity extends AppCompatActivity {
         return match;
     }
 
-    // This is a function to clear the data input, set back to default
+    /**
+     * Used to reset the form, clearing all input
+     */
     private void resetForm() {
         jobTitle.setText("");
         companyName.setText("");
