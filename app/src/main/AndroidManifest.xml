@@ -83,12 +83,12 @@
         <activity
             android:name=".JobSubmission"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash"></activity>
-        <activity
-            android:name=".RoleActivity"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+        <activity android:name=".PreferredJobsActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
+            android:theme="@style/Theme.QuickCash">
+        </activity>
     </application>
 
 </manifest>
