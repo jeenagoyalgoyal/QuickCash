@@ -49,4 +49,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
+    testImplementation 'junit:junit:4.12'
 }

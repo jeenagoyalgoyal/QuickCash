@@ -64,6 +64,10 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+        <activity android:name=".PreferredJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
     </application>
 
 </manifest>

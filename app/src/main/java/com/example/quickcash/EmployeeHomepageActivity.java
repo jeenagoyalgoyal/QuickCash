@@ -24,6 +24,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
     public Button performanceReview;
     public Button employeeNotifications;
     public Button employerSwitch;
+    public Button preferredJobsButton;
     public Button preferredEmployers;
 
     @Override
@@ -48,6 +49,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         employeeNotifications = findViewById(R.id.employeeNotifications);
         employerSwitch = findViewById(R.id.switchToEmployerButton);
         preferredEmployers = findViewById(R.id.preferredEmployersButton);
+        preferredJobsButton = findViewById(R.id.preferredJobsButton);
 
 
         // SWITCHES TO EMPLOYEE DASH
@@ -90,8 +92,14 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
             }
         });
 
-
-
+        preferredJobsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, PreferredJobsActivity.class);
+                startActivity(intentProfile);
+                finish();
+            }
+        });
 
     }
 }
