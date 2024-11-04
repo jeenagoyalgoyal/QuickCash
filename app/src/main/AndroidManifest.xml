@@ -20,8 +20,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PreferredEmployersActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".Profile"></activity>
+        <activity
+            android:name=".Profile"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            </activity>
+        <activity
+            android:name=".JobSearchParameterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -33,7 +50,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RoleActivity"
+        <activity android:name=".EmployeeHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".EmployerHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".JobSubmissionActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+        <activity android:name=".PreferredJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
