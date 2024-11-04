@@ -150,6 +150,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-507443759">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-319824427">
           <value>
             <AndroidTestResultsTableState>
@@ -185,6 +198,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
