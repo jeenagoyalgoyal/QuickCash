@@ -133,7 +133,27 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             mapIntent.putStringArrayListExtra("jobTypes", jobTypes);
 
             holder.itemView.getContext().startActivity(mapIntent);
+        });
 
+
+        holder.optionsButton.setOnClickListener(view -> {
+            PopupMenu popupMenu = new PopupMenu(parent.getContext(), holder.optionsButton);
+            popupMenu.getMenuInflater().inflate(R.menu.job_search_options, popupMenu.getMenu());
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getTitle().equals("Add to Preferred Employers")) {
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+                        addToPreferredEmployersList(userId, job.getEmployerId(), holder.itemView.getContext());
+                    } else if (item.getTitle().equals("Add to Preferred Jobs")) {
+                        //Do preferred Job calls here!
+                        addJobToPreferredList(job, holder.itemView.getContext());
+                    }
+                    return true;
+                }
+            });
         });
 
 
