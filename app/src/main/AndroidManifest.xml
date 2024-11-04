@@ -63,15 +63,11 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
-
-        <!--  Maps Activity      -->
         <activity
             android:name=".ui.MapsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
-
-        <!-- Registration Activity -->
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -83,6 +79,7 @@
             </intent-filter>
         </activity>
 
+
         <activity android:name=".EmployeeHomepageActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
@@ -93,8 +90,7 @@
             android:theme="@style/Theme.QuickCash">
         </activity>
 
-        <!-- JobSubmissionPage Activity -->
-        <activity android:name=".JobSubmission"
+        <activity android:name=".JobSubmissionActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>

@@ -14,12 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.Manifest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.quickcash.Firebase.FirebaseCRUD;
 import com.example.quickcash.ui.MapsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -28,8 +28,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.model.LatLng;
-import com.example.quickcash.R;
-import com.example.quickcash.FirebaseCRUD;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -38,7 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import android.Manifest;
 import java.util.regex.Pattern;
 
 /**
@@ -153,29 +151,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginUser(email, password);
         }
     }
-
-    public static boolean isEmptyEmailAddress(String email){
-        return email.isEmpty();
-    }
-
-
-    /**
-     * Checks if the given email is valid according to the regex pattern.
-     * @param email The email to be validated.
-     * @return True if the email is valid, false otherwise.
-     */
+    public static boolean isEmptyEmailAddress(String email){return email.isEmpty();}
     public static boolean isValidEmail(String email) {
         return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
     }
-    public static boolean isEmptyPassword(String password){
-        return password.isEmpty();
-    }
-
-    /**
-     * Checks if the given password is valid according to the regex pattern.
-     * @param password The password to be validated.
-     * @return True if the password is valid, false otherwise.
-     */
+    public static boolean isEmptyPassword(String password){return password.isEmpty();}
     public static boolean isValidPassword(String password) {
         return Pattern.compile(PASSWORD_PATTERN).matcher(password).matches();
     }
