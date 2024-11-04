@@ -1,3 +1,34 @@
+/**
+ * PreferredJobsUITest is a UI test class for the QuickCash application that verifies the functionality of the
+ * Preferred Jobs feature. It uses the UI Automator framework to interact with the app's user interface and
+ * perform automated tests.
+ *
+ * <p>This class includes tests for the following functionalities:</p>
+ * <ul>
+ *     <li>Checking the presence of the "My Preferred Jobs" button on the employee dashboard.</li>
+ *     <li>Verifying the ability to view job details from the preferred jobs list.</li>
+ *     <li>Testing the addition of jobs to the preferred jobs list from the job search results.</li>
+ * </ul>
+ *
+ * <p>Key components of this test class include:</p>
+ * <ul>
+ *     <li>{@link UiDevice} - Used to interact with the device's UI elements.</li>
+ *     <li>{@link UiObject} - Represents a UI element that can be interacted with.</li>
+ *     <li>{@link UiSelector} - Used to find UI elements based on their properties.</li>
+ * </ul>
+ *
+ * <p>Test Lifecycle:</p>
+ * <ul>
+ *     <li>{@link #setup()} - Initializes the test environment by launching the QuickCash application.</li>
+ *     <li>{@link #checkForPreferredJobsButton()} - Tests the presence and functionality of the "My Preferred Jobs" button.</li>
+ *     <li>{@link #AddToPreferredJobs()} - Tests the process of adding a job to the preferred jobs list.</li>
+ * </ul>
+ *
+ * <p>Usage:</p>
+ * <p>This class should be run as part of the application's UI testing suite to ensure that the Preferred Jobs
+ * functionality works as expected.</p>
+ */
+
 package com.example.quickcash;
 
 import static org.junit.Assert.assertTrue;
