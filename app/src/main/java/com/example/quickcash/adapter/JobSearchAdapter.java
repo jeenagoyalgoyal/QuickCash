@@ -1,6 +1,7 @@
-package com.example.quickcash.adapter;
+package com.example.quickcash.utils.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quickcash.FirebaseCRUD;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
+import com.example.quickcash.models.JobLocation;
+import com.example.quickcash.ui.activities.MapActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.example.quickcash.PreferredJobsActivity;
 import com.google.firebase.database.FirebaseDatabase;
@@ -94,7 +97,43 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
         holder.showMapButton.setOnClickListener(view -> {
-            // Implement map functionality here
+            JobLocation location = job.getJobLocation();
+            if (location == null || location.getLng() == 0 || location.getLat() == 0) {
+                Toast.makeText(holder.itemView.getContext(), "No location data available for this job", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent mapIntent = new Intent(holder.itemView.getContext(), MapActivity.class);
+
+            // Create lists for map data
+            ArrayList<Double> latitudes = new ArrayList<>();
+            ArrayList<Double> longitudes = new ArrayList<>();
+            ArrayList<String> titles = new ArrayList<>();
+            ArrayList<Integer> salaries = new ArrayList<>();
+            ArrayList<String> durations = new ArrayList<>();
+            ArrayList<String> companies = new ArrayList<>();
+            ArrayList<String> jobTypes = new ArrayList<>();
+
+            // Add job data to lists
+            latitudes.add(location.getLat());
+            longitudes.add(location.getLng());
+            titles.add(job.getJobTitle());
+            salaries.add(job.getSalary());
+            durations.add(job.getExpectedDuration());
+            companies.add(job.getCompanyName());
+            jobTypes.add(job.getJobType());
+
+            // Add data to intent
+            mapIntent.putExtra("latitudes", latitudes);
+            mapIntent.putExtra("longitudes", longitudes);
+            mapIntent.putIntegerArrayListExtra("salaries", salaries);
+            mapIntent.putStringArrayListExtra("titles", titles);
+            mapIntent.putStringArrayListExtra("durations", durations);
+            mapIntent.putStringArrayListExtra("companies", companies);
+            mapIntent.putStringArrayListExtra("jobTypes", jobTypes);
+
+            holder.itemView.getContext().startActivity(mapIntent);
+
         });
 
 
