@@ -1,8 +1,13 @@
 package com.example.quickcash.ui;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -10,13 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import com.example.quickcash.R;
 import com.example.quickcash.ui.activities.LoginActivity;
-import com.example.quickcash.ui.activities.MapActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {
@@ -26,11 +26,17 @@ public class LoginEspressoTest {
 
     @Test
     public void testSuccessfulLogin() {
-        enterText(R.id.emailBox, "valid@example.com");
-        enterText(R.id.passwordBox, "validPassword123!");
+        enterText(R.id.emailBox, "testingemail@test.db");
+        enterText(R.id.passwordBox, "Test_Pass123#");
         clickButton(R.id.loginButton);
-        // Assuming success message is not displayed, but user is redirected
-        checkStatusLabel("Logging in...");
+        // Verify we get to the dashboard after successful login
+        // Need to wait a bit for the login response and redirect
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.welcomeEmployee)).check(matches(isDisplayed())); // Check for employee welcome since this account logs in as employee // Check for employer welcome since this account defaults to employer role
     }
 
     @Test
@@ -74,26 +80,21 @@ public class LoginEspressoTest {
     }
 
     private void enterText(int viewId, String text) {
-        Espresso.onView(withId(viewId))
+        onView(withId(viewId))
                 .perform(ViewActions.typeText(text), ViewActions.closeSoftKeyboard());
     }
 
     private void clearText(int viewId) {
-        Espresso.onView(withId(viewId))
+        onView(withId(viewId))
                 .perform(ViewActions.clearText(), ViewActions.closeSoftKeyboard());
     }
 
     private void clickButton(int viewId) {
-        Espresso.onView(withId(viewId)).perform(ViewActions.click());
+        onView(withId(viewId)).perform(ViewActions.click());
     }
 
     private void checkStatusLabel(String expectedText) {
-        Espresso.onView(withId(R.id.statusLabel))
+        onView(withId(R.id.statusLabel))
                 .check(matches(withText(expectedText)));
-    }
-
-    private void checkActivityIsDisplayed(Class<?> activityClass) {
-        Espresso.onView(withId(android.R.id.content))
-                .check(matches(ViewMatchers.isDisplayed()));
     }
 }

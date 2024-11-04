@@ -13,13 +13,10 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="UserRoleEspressoTest">
+      <SelectionState runConfigName="LoginEspressoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SearchResultsActivityTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="RegistrationEspressoTest">
+      <SelectionState runConfigName="testSuccessfulLogin()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
