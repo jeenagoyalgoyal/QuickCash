@@ -4,19 +4,33 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import android.widget.*;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.quickcash.repositories.FirebaseCRUD;
+import com.example.quickcash.Firebase.FirebaseCRUD;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.database.*;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -29,15 +43,12 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Enable edge-to-edge content for the window
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
+        EdgeToEdge.enable(this);
         setContentView(R.layout.user_registration);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registrationLayout), (v, insets) -> {
-            androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return WindowInsetsCompat.CONSUMED;
+            return insets;
         });
 
         mAuth = FirebaseAuth.getInstance();
@@ -47,115 +58,122 @@ public class RegistrationActivity extends AppCompatActivity {
         this.setupRegisterButton();
 
         TextView registerTextView = findViewById(R.id.textViewLogin);
-        registerTextView.setOnClickListener(v -> {
-            Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-            startActivity(intent);
+        registerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
         });
     }
 
     private void initializeDatabaseAccess() {
         database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         crud = new FirebaseCRUD(database);
+
     }
 
     protected void loadRoleSpinner() {
         ArrayList<String> roles = new ArrayList<>();
         roles.add("Employer");
         roles.add("Employee");
-        ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(
+        ArrayAdapter<String> roleAdapter = new ArrayAdapter(
                 this,
                 android.R.layout.simple_spinner_item,
                 roles);
-        roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        roleAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
         Spinner roleSpinner = findViewById(R.id.spinnerRole);
         roleSpinner.setAdapter(roleAdapter);
     }
 
-    public void setupRegisterButton(){
+    protected void setupRegisterButton(){
         Button registerButton = findViewById(R.id.buttonRegister);
-        registerButton.setOnClickListener(view -> {
-            String name = getName();
-            String email = getEmail();
-            String password = getPassword();
-            String password2 = getPassword2();
-            String role = getRole();
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = getName();
+                String email = getEmail();
+                String password = getPassword();
+                String password2 = getPassword2();
+                String role = getRole();
 
-            CredentialsValidator validator = new CredentialsValidator();
+                CredentialsValidator validator = new CredentialsValidator();
 
-            validFlag = true;
-            String errorLabel;
-            String color;
+                validFlag = true;
+                String errorLabel = new String();
+                String color = new String();
 
-            // Name validation
-            if (validator.isEmptyInput(name)) {
-                validFlag = false;
-                errorLabel = "cannot be empty!";
-                color = "#EB0101";
-            } else if (!validator.isValidName(name)) {
-                validFlag = false;
-                errorLabel = "must be longer than 2 characters and cannot contain special characters!";
-                color = "#EB0101";
-            } else {
-                errorLabel = "valid";
-                color = "#0DBC00";
-            }
-            nameSetStatusMessage(errorLabel, color);
+                if (validator.isEmptyInput(name)) {
+                    validFlag = false;
+                    errorLabel = "cannot be empty!";
+                    color = "#EB0101";
+                } else if (!validator.isValidName(name)) {
+                    validFlag = false;
+                    errorLabel = "must be longer than 2 characters and cannot contain special characters!";
+                    color = "#EB0101";
+                } else {
+                    errorLabel = "valid";
+                    color = "#0DBC00";
+                }
+                nameSetStatusMessage(errorLabel, color);
 
-            // Email validation
-            if (validator.isEmptyInput(email)) {
-                validFlag = false;
-                errorLabel = "cannot be empty!";
-                color = "#EB0101";
-            } else if (!validator.isValidEmail(email)) {
-                validFlag = false;
-                errorLabel = "invalid email, please check format!";
-                color = "#EB0101";
-            } else {
-                errorLabel = "valid";
-                color = "#0DBC00";
-            }
-            emailSetStatusMessage(errorLabel, color);
+                if (validator.isEmptyInput(email)) {
+                    validFlag = false;
+                    errorLabel = "cannot be empty!";
+                    color = "#EB0101";
+                } else if (!validator.isValidEmail(email)) {
+                    validFlag = false;
+                    errorLabel = "invalid email, please check format!";
+                    color = "#EB0101";
+                } else {
+                    errorLabel = "valid";
+                    color = "#0DBC00";
+                }
+                emailSetStatusMessage(errorLabel, color);
 
-            // Password validation
-            if (validator.isEmptyInput(password)) {
-                validFlag = false;
-                errorLabel = "cannot be empty!";
-                color = "#EB0101";
-            } else if (!validator.isValidPassword(password)) {
-                validFlag = false;
-                errorLabel = "password must be longer than 8 characters and contain at-least 1 special character!";
-                color = "#EB0101";
-            } else {
-                errorLabel = "valid";
-                color = "#0DBC00";
-            }
-            passwordSetStatusMessage(errorLabel, color);
+                if (validator.isEmptyInput(password)) {
+                    validFlag = false;
+                    errorLabel = "cannot be empty!";
+                    color = "#EB0101";
+                } else if (!validator.isValidPassword(password)) {
+                    validFlag = false;
+                    errorLabel = "password must be longer than 8 characters and contain at-least 1 special character!";
+                    color = "#EB0101";
+                } else {
+                    errorLabel = "valid";
+                    color = "#0DBC00";
+                }
+                passwordSetStatusMessage(errorLabel, color);
 
-            // Confirm password validation
-            if (validator.isEmptyInput(password2)) {
-                validFlag = false;
-                errorLabel = "cannot be empty!";
-                color = "#EB0101";
-            } else if (!validator.isValidPassword(password2)) {
-                validFlag = false;
-                errorLabel = "password must be longer than 8 characters and contain at-least 1 special character!";
-                color = "#EB0101";
-            } else if (!password.equals(password2)){
-                validFlag = false;
-                errorLabel = "passwords do not match!";
-                color = "#EB0101";
-            } else {
-                errorLabel = "valid";
-                color = "#0DBC00";
-            }
+                if (validator.isEmptyInput(password2)) {
+                    validFlag = false;
+                    errorLabel = "cannot be empty!";
+                    color = "#EB0101";
+                } else if (!validator.isValidPassword(password2)) {
+                    validFlag = false;
+                    errorLabel = "password must be longer than 8 characters and contain at-least 1 special character!";
+                    color = "#EB0101";
+                } else if (!password.equals(password2)){
+                    validFlag = false;
+                    errorLabel = "passwords do not match!";
+                    color = "#EB0101";
+                } else {
+                    errorLabel = "valid";
+                    color = "#0DBC00";
+                }
 
-            password2SetStatusMessage(errorLabel, color);
+                password2SetStatusMessage(errorLabel, color);
 
-            if (validFlag) {
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(task -> {
+                if (validFlag) {
+
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 addToDatabase(name, email, password, role);
+
                             } else {
                                 Exception exception = task.getException();
                                 if (exception instanceof FirebaseAuthUserCollisionException) {
@@ -164,28 +182,34 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Toast.makeText(RegistrationActivity.this, "Error: "+exception.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
-                        });
+                        }
+                    });
+                }
             }
         });
     }
 
     private void addToDatabase(String name, String email, String password, String role) {
         String validParentNodeName = emailToValidParentNodeName(email);
-        userRef = database.getReference("Users").child(validParentNodeName);
 
+        userRef = database.getReference("Users");
+
+        userRef = database.getReference("Users").child(validParentNodeName);
         Map<String, String> userData = new HashMap<>();
         userData.put("name", name);
         userData.put("email", email);
         userData.put("password", password);
         userData.put("role", role);
-
-        userRef.updateChildren((Map) userData).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(intent);
-                Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_LONG).show();
+        userRef.updateChildren((Map) userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(RegistrationActivity.this, "Registration Failed!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

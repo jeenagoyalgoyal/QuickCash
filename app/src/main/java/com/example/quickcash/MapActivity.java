@@ -34,6 +34,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private Map<String, Integer> markerMap;
 
     // Job data
+    private ArrayList<String> latitudesStr;
+    private ArrayList<String> longitudesStr;
     private ArrayList<Double> latitudes;
     private ArrayList<Double> longitudes;
     private ArrayList<String> titles;
@@ -66,37 +68,40 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void retrieveAndValidateData() {
+
         Intent intent = getIntent();
+
         if (intent != null) {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    latitudes = intent.getSerializableExtra("latitudes", ArrayList.class);
-                    longitudes = intent.getSerializableExtra("longitudes", ArrayList.class);
-                    titles = intent.getStringArrayListExtra("titles");
-                    salaries = intent.getIntegerArrayListExtra("salaries");
-                    durations = intent.getStringArrayListExtra("durations");
-                    companies = intent.getStringArrayListExtra("companies");
-                    jobTypes = intent.getStringArrayListExtra("jobTypes");
-                } else {
-                    latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
-                    longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
-                    titles = intent.getStringArrayListExtra("titles");
-                    salaries = intent.getIntegerArrayListExtra("salaries");
-                    durations = intent.getStringArrayListExtra("durations");
-                    companies = intent.getStringArrayListExtra("companies");
-                    jobTypes = intent.getStringArrayListExtra("jobTypes");
+                latitudesStr = intent.getStringArrayListExtra("latitudes");
+                longitudesStr = intent.getStringArrayListExtra("longitudes");
+
+                if (latitudesStr != null && longitudesStr != null) {
+                    for (String lat : latitudesStr) {
+                        latitudes.add(Double.valueOf(lat));
+                    }
+                    for (String lng : longitudesStr) {
+                        longitudes.add(Double.valueOf(lng));
+                    }
                 }
 
-                // Debug logging
-                Log.d(TAG, "Received data in MapActivity");
-                if (latitudes != null && !latitudes.isEmpty()) {
-                    Log.d(TAG, "Received " + latitudes.size() + " locations");
-                } else {
-                    Log.e(TAG, "No locations received");
-                }
+                titles = intent.getStringArrayListExtra("titles");
+                salaries = intent.getIntegerArrayListExtra("salaries");
+                durations = intent.getStringArrayListExtra("durations");
+                companies = intent.getStringArrayListExtra("companies");
+                jobTypes = intent.getStringArrayListExtra("jobTypes");
+
             } catch (Exception e) {
                 Log.e(TAG, "Error getting intent data: " + e.getMessage());
                 showError("Error loading job data");
+            }
+
+            // Debug logging
+            Log.d(TAG, "Received data in MapActivity");
+            if (latitudes != null && !latitudes.isEmpty()) {
+                Log.d(TAG, "Received " + latitudes.size() + " locations");
+            } else {
+                Log.e(TAG, "No locations received");
             }
         }
     }

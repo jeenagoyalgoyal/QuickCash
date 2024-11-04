@@ -1,13 +1,21 @@
 package com.example.quickcash;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.filter.JobSearchFilter;
+import com.example.quickcash.model.Job;
 
-import org.junit.Test;
+import java.util.ArrayList;
+import java.util.List;
 
-public class  JobSearchParametersJUnitTest {
+public class  PreferredJobsJUnitTest {
+
 
     @Test
     public void testValidJobTitle() {
@@ -39,5 +47,4 @@ public class  JobSearchParametersJUnitTest {
         assertFalse(JobSearchFilter.isValidField(""));
         assertFalse(JobSearchFilter.isValidField(null));
     }
-
 }

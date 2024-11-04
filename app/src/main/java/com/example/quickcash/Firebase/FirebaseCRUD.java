@@ -1,90 +1,126 @@
 package com.example.quickcash.Firebase;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.quickcash.model.Job;
-import com.example.quickcash.model.JobLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FirebaseCRUD {
-    private static final String TAG = "FirebaseCRUD";
     private final FirebaseDatabase database;
-    private final DatabaseReference jobsRef;
+    private DatabaseReference passwordRef;
+    private DatabaseReference emailRef;
+    private DatabaseReference nameRef;
+    private DatabaseReference preferredJobsRef;
 
-    // Default constructor
-    public FirebaseCRUD() {
-        this.database = FirebaseDatabase.getInstance();
-        this.jobsRef = database.getReference("Jobs");
-    }
+    private String extractedEmailAddress;
+    private String extractedPassword;
+    private String extractedName;
 
-    // Existing constructor (if needed elsewhere)
     public FirebaseCRUD(FirebaseDatabase database) {
         this.database = database;
-        this.jobsRef = database.getReference("Jobs");
+        this.initializeDatabaseRefs();
+        this.initializeDatabaseRefListeners();
     }
 
-    public void searchJobs(String location, final JobDataCallback callback) {
-        // Convert location to lowercase for case-insensitive search
-        final String searchLocation = location.toLowerCase();
+    protected void initializeDatabaseRefs() {
+        this.nameRef = getNameRef();
+        this.passwordRef = getPasswordRef();
+        this.emailRef = getEmailAddressRef();
+        this.preferredJobsRef = getPreferredJobsRef();
+    }
 
-        jobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    private DatabaseReference getNameRef() {
+        return this.database.getReference("Name");
+    }
+
+    protected DatabaseReference getEmailAddressRef() {
+        return this.database.getReference("emailAddress");
+    }
+
+    protected DatabaseReference getPasswordRef() {
+        return this.database.getReference("password");
+    }
+
+    protected DatabaseReference getPreferredJobsRef() {
+        String userId = extractedEmailAddress != null ? sanitizeEmail(extractedEmailAddress) : "unknown_user";
+        return this.database.getReference("Users").child(userId).child("preferredJobs");
+    }
+
+    private String sanitizeEmail(String email) {
+        return email.replace(".", ",").replace("@", "_");
+    }
+
+
+    public void addPreferredJob(String jobId, Job job) {
+        preferredJobsRef.child(jobId).setValue(job)
+                .addOnSuccessListener(aVoid -> {
+                    // Handle success, e.g., display a message
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure, e.g., display an error message
+                });
+    }
+
+    public void getPreferredJobs(ValueEventListener listener) {
+        preferredJobsRef.addValueEventListener(listener);
+    }
+
+    public void removePreferredJob(String jobId) {
+        preferredJobsRef.child(jobId).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    // Handle success
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                });
+    }
+
+    protected void initializeDatabaseRefListeners() {
+        this.setEmailListener();
+        this.setPasswordListener();
+    }
+
+    protected void setEmailListener() {
+        this.emailRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Job> jobList = new ArrayList<>();
-
-                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
-                    try {
-                        Job job = jobSnapshot.getValue(Job.class);
-                        if (job != null && isJobInLocation(job, searchLocation)) {
-                            jobList.add(job);
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error processing job: " + e.getMessage());
-                    }
-                }
-
-                callback.onCallback(jobList);
+                extractedEmailAddress = snapshot.getValue(String.class);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                callback.onError(error.getMessage());
             }
         });
     }
 
-    private boolean isJobInLocation(Job job, String searchLocation) {
-        try {
-            // First try to get the location as a JobLocation object
-            JobLocation jobLocation = job.getJobLocation();
-            if (jobLocation != null && jobLocation.getAddress() != null) {
-                return jobLocation.getAddress().toLowerCase().contains(searchLocation);
+    protected void setPasswordListener() {
+        this.passwordRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                extractedPassword = snapshot.getValue(String.class);
             }
 
-            // If that fails, try to get it as a string
-            Object locationObj = job.getLocation();
-            if (locationObj != null) {
-                String locationStr = locationObj.toString().toLowerCase();
-                return locationStr.contains(searchLocation);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Error checking job location: " + e.getMessage());
-        }
-        return false;
+        });
     }
 
-    public interface JobDataCallback {
-        void onCallback(List<Job> jobList);
+    public String getExtractedEmailAddress() {
+        return this.extractedEmailAddress;
+    }
 
-        void onError(String error);
+    public String getExtractedPassword() {
+        return this.extractedPassword;
+    }
+
+    public String getExtractedName() {
+        return this.extractedName;
     }
 }

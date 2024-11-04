@@ -33,7 +33,9 @@
         </activity>
 
         <!-- Main Activity -->
-        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".MainActivity">
+        </activity>
 
         <!-- Profile activity -->
         <activity
@@ -89,6 +91,11 @@
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <!-- Preferred Jobs Activity -->
+        <activity android:name=".PreferredJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
     </application>
 
 </manifest>

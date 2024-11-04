@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class MapUITest {
     private static final long LAUNCH_TIMEOUT = 2500;
-    private static final String JOB_TITLE = "Software Developer"; // Changed to match existing data
+    private static final String JOB_TITLE = "Cybersecurity Analyst"; // Changed to match existing data
     final String launcherPackageName = "com.example.quickcash";
     private UiDevice device;
 
@@ -52,7 +52,7 @@ public class MapUITest {
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
 
-        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        UiObject searchJobButton = device.findObject(new UiSelector().textContains("Search Job"));
         searchJobButton.clickAndWaitForNewWindow();
     }
 
