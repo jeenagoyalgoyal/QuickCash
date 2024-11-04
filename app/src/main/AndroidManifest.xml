@@ -27,7 +27,7 @@
 
         <!-- Login Activity as Launcher -->
         <activity
-            android:name=".ui.activities.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -38,12 +38,12 @@
 
         <!-- Main Activity -->
         <activity
-            android:name=".ui.activities.MainActivity">
+            android:name=".MainActivity">
         </activity>
 
         <!-- Preferred Employers Activity-->
         <activity
-            android:name=".ui.activities.PreferredEmployersActivity"
+            android:name=".PreferredEmployersActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -53,27 +53,27 @@
 
         <!-- Profile activity -->
         <activity
-            android:name=".ui.activities.Profile"
+            android:name=".Profile"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             </activity>
         <!-- Job Search by Parameter Activity-->
         <activity
-            android:name=".ui.activities.JobSearchParameterActivity"
+            android:name=".JobSearchParameterActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
         <!--  Maps Activity      -->
         <activity
-            android:name=".ui.activities.MapsActivity"
+            android:name=".ui.MapsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
         <!-- Registration Activity -->
         <activity
-            android:name=".ui.activities.RegistrationActivity"
+            android:name=".RegistrationActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
@@ -83,36 +83,24 @@
             </intent-filter>
         </activity>
 
-        <!-- Role Selection Activity -->
-        <activity
-            android:name=".ui.activities.RoleActivity"
+        <activity android:name=".EmployeeHomepageActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
+            android:theme="@style/Theme.QuickCash">
+        </activity>
 
-        <!-- Map Activity -->
-        <activity
-            android:name=".ui.activities.MapActivity"
+        <activity android:name=".EmployerHomepageActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
-        <!-- Employer Homepage Activity -->
-        <activity android:name=".ui.activities.EmployeeHomepageActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
-        <!-- Employer Homepage Activity -->
-        <activity android:name=".ui.activities.EmployerHomepageActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
+            android:theme="@style/Theme.QuickCash">
+        </activity>
 
         <!-- JobSubmissionPage Activity -->
-        <activity android:name=".ui.activities.JobSubmissionActivity"
+        <activity android:name=".JobSubmission"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
         <!-- Preferred Jobs Activity -->
-        <activity android:name=".ui.activities.PreferredJobsActivity"
+        <activity android:name=".PreferredJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>

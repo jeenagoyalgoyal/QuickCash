@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.quickcash.models.UseRole;
-import com.example.quickcash.ui.activities.Profile;
-
 public class RoleActivity extends AppCompatActivity {
 
     public TextView welcomeText;

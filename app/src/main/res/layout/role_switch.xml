@@ -4,88 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/notificationsButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="3dp"
         android:text="Notifications"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/performanceButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/performanceButton" />
 
     <Button
         android:id="@+id/jobPosting"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Search Job Posting"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/roleSwitch"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:text="Job Posting"
+        app:layout_constraintBottom_toTopOf="@+id/profileButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
     <Button
         android:id="@+id/performanceButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="3dp"
         android:text="Performance"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/taskButton"
+        app:layout_constraintBottom_toTopOf="@+id/notificationsButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/taskButton" />
 
     <Button
         android:id="@+id/scheduleButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
         android:text="Schedule"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/profileButton"
+        app:layout_constraintBottom_toTopOf="@+id/taskButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/profileButton" />
 
     <Button
         android:id="@+id/taskButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
         android:text="Tasks"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/scheduleButton"
+        app:layout_constraintBottom_toTopOf="@+id/performanceButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/scheduleButton" />
 
     <Button
         android:id="@+id/roleSwitch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Switch Role"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/welcomeText"
+        android:text="Click to Switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="163dp"
+        android:layout_marginEnd="189dp"
+        android:layout_marginBottom="290dp"
         android:text="Welcome!"
-        android:textSize="24sp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/roleSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/profileButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="My Profile"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/jobPosting"
+        android:layout_width="404dp"
+        android:layout_height="49dp"
+        android:text="Directory"
+        app:layout_constraintBottom_toTopOf="@+id/scheduleButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/jobPosting" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

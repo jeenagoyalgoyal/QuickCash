@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="welcomeText" type="id" />
+    <item name="roleSwitch" type="id" />
+    <item name="jobPosting" type="id" />
+    <item name="profileButton" type="id" />
+    <item name="scheduleButton" type="id" />
+    <item name="taskButton" type="id" />
+</resources>
