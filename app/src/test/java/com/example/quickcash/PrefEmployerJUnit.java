@@ -2,7 +2,8 @@ package com.example.quickcash;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import com.example.quickcash.repositories.PreferredEmployers;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

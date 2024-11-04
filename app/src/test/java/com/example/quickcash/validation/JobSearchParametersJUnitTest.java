@@ -1,15 +1,15 @@
-package com.example.quickcash;
+package com.example.quickcash.validation;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.example.quickcash.models.Job;
 import com.example.quickcash.ui.activities.JobSearchParameterActivity;
 
-public class  PreferredJobsJUnitTest {
+import org.junit.Test;
+
+public class  JobSearchParametersJUnitTest {
+
 
     @Test
     public void testValidJobTitle() {
