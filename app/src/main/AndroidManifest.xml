@@ -93,8 +93,7 @@
             android:theme="@style/Theme.QuickCash">
         </activity>
 
-        <!-- JobSubmissionPage Activity -->
-        <activity android:name=".JobSubmission"
+        <activity android:name=".JobSubmissionActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quickcash.FirebaseCRUD;
+import com.example.quickcash.Firebase.FirebaseCRUD;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,11 +43,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class using adapter for displaying job search results in a RecyclerView
+ */
 public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobViewHolder> {
     private List<Job> jobList;
     private DatabaseReference preferredJobsRef;
     private ViewGroup parent;
 
+    /**
+     * ViewHolder for holding job item views
+     */
     public static class JobViewHolder extends RecyclerView.ViewHolder {
         public TextView jobTypeResult;
         public TextView companyResult;
@@ -59,6 +65,10 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         public Button optionsButton;
         public LinearLayout jobSearchLinearLayout;
 
+        /**
+         * Constructor for the view holder of jobs
+         * @param itemView
+         */
         public JobViewHolder(View itemView) {
             super(itemView);
             jobTypeResult = itemView.findViewById(R.id.jobTypeResult);
@@ -72,10 +82,22 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         }
     }
 
+    /**
+     * Constructor for job search adapter
+     * @param jobList
+     */
     public JobSearchAdapter(List<Job> jobList) {
         this.jobList = jobList;
     }
 
+    /**
+     * Creating the view holder
+     * @param parent The ViewGroup into which the new View will be added after it is bound to
+     *               an adapter position.
+     * @param viewType The view type of the new View.
+     *
+     * @return
+     */
     @Override
     public JobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.parent=parent;
@@ -84,6 +106,12 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         return vh;
     }
 
+    /**
+     * Shows results of job search
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(JobViewHolder holder, int position) {
         Job job = jobList.get(position);
@@ -103,6 +131,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             popupMenu.getMenuInflater().inflate(R.menu.job_search_options,popupMenu.getMenu());
             popupMenu.show();
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getTitle().equals("Add to Preferred Employers")){
