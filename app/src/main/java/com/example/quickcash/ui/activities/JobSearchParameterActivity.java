@@ -123,24 +123,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     Log.d(TAG, "Number of jobs in database: " + dataSnapshot.getChildrenCount());
 
                     for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                        try {
-                            Job job = jobSnapshot.getValue(Job.class);
-                            Log.d(TAG, "Processing job: " + jobSnapshot.getKey());
-
-                            if (job != null) {
-                                Log.d(TAG, "Job title: " + job.getJobTitle());
-                                Log.d(TAG, "Location data: " + job.getLocation());
-
-                                if (passesFilters(job)) {
-                                    Log.d(TAG, "Job passed filters: " + job.getJobTitle());
-                                    jobList.add(job);
-                                } else {
-                                    Log.d(TAG, "Job did not pass filters: " + job.getJobTitle());
-                                }
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error processing job: " + e.getMessage());
-                        }
+                        processTheJobsFromSnapshot(jobSnapshot);
                     }
 
                     Log.d(TAG, "Found " + jobList.size() + " matching jobs");
@@ -161,6 +144,27 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 Log.e(TAG, "Database error: " + error.getMessage());
             }
         });
+    }
+
+    private void processTheJobsFromSnapshot(DataSnapshot jobSnapshot) {
+        try {
+            Job job = jobSnapshot.getValue(Job.class);
+            Log.d(TAG, "Processing job: " + jobSnapshot.getKey());
+
+            if (job != null) {
+                Log.d(TAG, "Job title: " + job.getJobTitle());
+                Log.d(TAG, "Location data: " + job.getLocation());
+
+                if (passesFilters(job)) {
+                    Log.d(TAG, "Job passed filters: " + job.getJobTitle());
+                    jobList.add(job);
+                } else {
+                    Log.d(TAG, "Job did not pass filters: " + job.getJobTitle());
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error processing job: " + e.getMessage());
+        }
     }
 
     private boolean passesFilters(Job job) {
