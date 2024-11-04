@@ -4,6 +4,7 @@ package com.example.quickcash;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -197,8 +198,8 @@ public class JobSubmissionUITest {
     public void testFormSubmitsSuccessfully() {
         setupLoginActivityActivityScenario();
 
-        onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"));
-        onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"));
+        onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
 
         try {
@@ -209,16 +210,16 @@ public class JobSubmissionUITest {
         onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
         onView(withId(R.id.createJobButton)).perform(click());
 
-        onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"));
-        onView(withId(R.id.companyName)).perform(typeText("Tech Company"));
+        onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"),closeSoftKeyboard());
+        onView(withId(R.id.companyName)).perform(typeText("Tech Company"),closeSoftKeyboard());
         onView(withId(R.id.spinnerJobType)).perform(click());
         onData(hasToString("Full-time")).perform(click());
-        onView(withId(R.id.requirementText)).perform(typeText("Plumber"));
-        onView(withId(R.id.salaryText)).perform(typeText("25"));
+        onView(withId(R.id.requirementText)).perform(typeText("Plumber"),closeSoftKeyboard());
+        onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
-        onView(withId(R.id.locationJob)).perform(typeText("Halifax"));
-        onView(withId(R.id.expectedDuration)).perform(typeText("20"));
+        onView(withId(R.id.locationJob)).perform(typeText("Halifax"),closeSoftKeyboard());
+        onView(withId(R.id.expectedDuration)).perform(typeText("20"),closeSoftKeyboard());
         onView(withId(R.id.startDate)).perform(click());
         //onView(withText("28")).check(matches(isDisplayed()));
         onView(allOf(withText("30"), isDisplayed()))
