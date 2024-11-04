@@ -72,7 +72,7 @@ public class MapUITest {
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
         jobTitleBox.setText(JOB_TITLE);
         UiObject showMapButton = device.findObject(new UiSelector().text("Show Map"));
-        showMapButton.click();
+        showMapButton.clickAndWaitForNewWindow();
 
         // Wait for permissions dialog if it appears
         try {
