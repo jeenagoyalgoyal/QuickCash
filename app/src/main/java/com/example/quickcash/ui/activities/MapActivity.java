@@ -32,6 +32,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * MapActivity is responsible for displaying a map with job locations using Google Maps.
+ * It fetches job data such as latitude, longitude, title, salary, and other job details
+ * and displays markers on the map for each job. When a marker is clicked, a dialog with
+ * detailed job information is displayed.
+ */
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = "MapActivity";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -49,6 +56,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private ArrayList<String> companies;
     private ArrayList<String> jobTypes;
 
+    /**
+     * Called when the activity is created. Initializes UI components, retrieves job data
+     * from the intent, and sets up the map fragment.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down, this Bundle contains the data it most
+     *                           recently supplied; otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +87,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    /**
+     * Retrieves job-related data from the intent and validates it. Logs errors if data
+     * retrieval fails and shows an error message if required data is missing.
+     */
     private void retrieveAndValidateData() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -98,6 +117,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    /**
+     * Callback for when the map is ready to be used. Sets up map UI controls,
+     * checks for location permissions, and adds markers for job locations on the map.
+     *
+     * @param googleMap A non-null instance of a GoogleMap.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -123,6 +148,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         addMarkersToMap();
     }
 
+    /**
+     * Handles marker click events. When a marker is clicked, displays a dialog
+     * with job details corresponding to the marker.
+     *
+     * @param marker The marker that was clicked.
+     * @return True if the click event was handled; false otherwise.
+     */
     private boolean onMarkerClick(Marker marker) {
         try {
             Integer index = markerMap.get(marker.getId());
@@ -136,6 +168,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         return false;
     }
 
+    /**
+     * Adds job location markers to the map. For each job location, a marker is created
+     * and positioned on the map. If no job locations are available, the map centers on
+     * Halifax and displays an error message.
+     */
     private void addMarkersToMap() {
         if (latitudes == null || longitudes == null || titles == null ||
                 latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
@@ -182,6 +219,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    /**
+     * Displays a dialog with job details for a specific job based on the given index.
+     * Shows information such as job title, company name, salary, duration, and job type.
+     *
+     * @param index The index of the job in the data arrays.
+     */
     private void showJobDetailsDialog(int index) {
         try {
             Dialog dialog = new Dialog(this);
@@ -236,10 +279,19 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    /**
+     * Centers the map view on Halifax with a predefined zoom level.
+     */
     private void centerMapOnHalifax() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(HALIFAX, 12f));
     }
 
+    /**
+     * Checks if the app has the necessary location permission.
+     * If permission is granted, returns true; otherwise, requests the location permission.
+     *
+     * @return True if location permission is granted, false otherwise.
+     */
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -251,6 +303,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         return false;
     }
 
+    /**
+     * Handles the result of the location permission request.
+     * If permission is granted, enables the location layer on the map.
+     *
+     * @param requestCode  The request code passed in requestPermissions.
+     * @param permissions  The requested permissions.
+     * @param grantResults The grant results for the corresponding permissions.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -267,6 +327,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    /**
+     * Displays an error message using a Snackbar.
+     *
+     * @param message The error message to display.
+     */
     private void showError(String message) {
         Log.e(TAG, message);
         Snackbar.make(findViewById(R.id.map_container), message, BaseTransientBottomBar.LENGTH_LONG).show();
