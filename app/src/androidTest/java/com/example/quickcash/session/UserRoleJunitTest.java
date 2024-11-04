@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.session;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

@@ -28,6 +28,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class JobSearchParameterEspressoTest {

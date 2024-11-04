@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.session;
 
 import android.content.Context;
 import android.content.SharedPreferences;

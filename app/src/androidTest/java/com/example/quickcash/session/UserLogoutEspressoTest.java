@@ -1,6 +1,7 @@
-package com.example.quickcash;
+package com.example.quickcash.session;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.example.quickcash.R;
 import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
 
 @RunWith(JUnit4.class)
@@ -34,7 +36,7 @@ public class UserLogoutEspressoTest {
     //Test to navigate to ProfileScreen
     @Test
     public void navigateDashboardToProfileScreen(){
-        onView(withId(R.id.myProfileButton)).perform(click());
+        onView(ViewMatchers.withId(R.id.myProfileButton)).perform(click());
         onView(withText("Profile")).check(matches(isDisplayed()));
     }
 

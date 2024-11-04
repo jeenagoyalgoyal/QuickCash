@@ -4,6 +4,8 @@ package com.example.quickcash;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
+
 import org.junit.Test;
 
 public class  JobSearchParametersJUnitTest {

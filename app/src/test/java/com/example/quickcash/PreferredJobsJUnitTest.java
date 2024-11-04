@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
