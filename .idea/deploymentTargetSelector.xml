@@ -13,16 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="PrefEmployerUITest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testAddToPreferredEmployersButton()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testPreferredEmployersButtonOnDashboard()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testMyPreferredEmployersJobsPopup()">
+      <SelectionState runConfigName="Tests in 'com.example.quickcash'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

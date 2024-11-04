@@ -47,10 +47,13 @@ dependencies {
     implementation libs.play.services.location
     testImplementation libs.junit
     testImplementation libs.espresso.core
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+
     androidTestImplementation libs.ext.junit
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
-    testImplementation 'org.mockito:mockito-core:5.4.0'
+    androidTestImplementation 'org.mockito:mockito-android:5.5.0'
+
 }
