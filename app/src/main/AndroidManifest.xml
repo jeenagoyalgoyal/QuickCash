@@ -118,6 +118,12 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
+        <!-- Application Page  Activity -->
+        <activity android:name=".ApplicationPageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
     </application>
 
 </manifest>
