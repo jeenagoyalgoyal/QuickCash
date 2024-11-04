@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -269,6 +270,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private void showError(String message) {
         Log.e(TAG, message);
-        Snackbar.make(findViewById(R.id.map_container), message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.map_container), message, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
