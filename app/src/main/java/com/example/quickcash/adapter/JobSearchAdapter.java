@@ -148,6 +148,12 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         });
     }
 
+    /**
+     * Adds an employer to the preferred employers list in the database.
+     * @param userId The user's ID.
+     * @param employerId The ID of the employer to be added.
+     * @param context The context for database operations and displaying messages.
+     */
     public void addToPreferredEmployersList(String userId, String employerId, Context context){
         if (userId == null || userId.isEmpty()){
             Log.e("PreferredEmployers", "Error with userId (is it retrieved correctly?)");
@@ -177,6 +183,19 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
 
     }
 
+    /**
+     * Adds a preferred employer to the user's preferred employers list in the database.
+     * This method first checks if the preferred employers node exists. If it doesn't exist,
+     * it initializes it. Then it checks if the employer is already present in the list, if not,
+     * it creates a new entry for the employer with the provided ID and name.
+     * A success or failure message is displayed based on the outcome of the database operation in the for of a toast.
+     *
+     * @param context The context from which this method is called, used for displaying messages
+     *                (e.g., Toast) and for accessing application-specific resources.
+     * @param userPreferredEmployersRef A reference to the user's preferred employers list in the database.
+     * @param employerId The ID of the employer to be added to the preferred list.
+     * @param employerName The name of the employer to be added to the preferred list.
+     */
     public void addPreferredEmployerToDB(Context context,DatabaseReference userPreferredEmployersRef,String employerId, String employerName){
         //check if preferredEmployers node exists
         userPreferredEmployersRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -221,10 +240,20 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         });
     }
 
+    /**
+     * Retrieves a DatabaseReference to the user's preferred employers list.
+     * @param userId The user's ID.
+     * @return A DatabaseReference to the preferred employers list.
+     */
     private DatabaseReference getUserPreferredEmployersRef(String userId){
         return FirebaseDatabase.getInstance().getReference("Users").child(userId).child("preferredEmployers");
     }
 
+    /**
+     * Retrieves a DatabaseReference to the employer's name node.
+     * @param userId The ID of the employer.
+     * @return A DatabaseReference to the employer's name.
+     */
     private DatabaseReference getPreferredEmployersNameRef(String userId){
         return FirebaseDatabase.getInstance().getReference("Users").child(userId);
     }
@@ -278,6 +307,12 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
 
 
 
+    /**
+     * Sanitizes an email address to be used as a Firebase id key.
+     * Replaces '.' with ',' to avoid issues with Firebase paths.
+     * @param email The email address to be sanitized.
+     * @return A sanitized version of the email address that can be used as an id.
+     */
     // Utility function to sanitize email for Firebase path
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
