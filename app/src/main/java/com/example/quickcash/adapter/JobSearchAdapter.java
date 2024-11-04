@@ -17,8 +17,19 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.FirebaseCRUD;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.example.quickcash.PreferredJobsActivity;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.example.quickcash.model.PreferredEmployerModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +48,7 @@ import java.util.List;
  */
 public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobViewHolder> {
     private List<Job> jobList;
+    private DatabaseReference preferredJobsRef;
     private ViewGroup parent;
 
     /**
@@ -49,6 +61,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         public TextView salaryResult;
         public TextView durationResult;
         public Button showMapButton;
+        public Button addToPreferredButton;
         public Button optionsButton;
         public LinearLayout jobSearchLinearLayout;
 
@@ -112,6 +125,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             // Implement map functionality here
         });
 
+
         holder.optionsButton.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(parent.getContext(),holder.optionsButton);
             popupMenu.getMenuInflater().inflate(R.menu.job_search_options,popupMenu.getMenu());
@@ -126,6 +140,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                         addToPreferredEmployersList(userId,job.getEmployerId(),holder.itemView.getContext());
                     } else if (item.getTitle().equals("Add to Preferred Jobs")) {
                         //Do preferred Job calls here!
+                        addJobToPreferredList(job, holder.itemView.getContext());
                     }
                     return true;
                 }
@@ -214,12 +229,58 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         return FirebaseDatabase.getInstance().getReference("Users").child(userId);
     }
 
-    private String sanitizeEmail(String email) {
-        return email.replace(".", ",");
-    }
+
 
     @Override
     public int getItemCount() {
         return jobList.size();
     }
+
+    public void addJobToPreferredList(Job job, Context context) {
+        // Ensure the userId is correctly initialized from FirebaseAuth
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+
+        if (userId == null || userId.isEmpty()) {
+            Log.e("AddJobError", "User ID is null or empty");
+            return;
+        }
+
+        userId = sanitizeEmail(userId); // Sanitize user ID if it's an email
+
+        DatabaseReference preferredJobsRef = FirebaseDatabase.getInstance()
+                .getReference("Users").child(userId).child("preferredJobs");
+
+        // Check if preferred jobs already exist
+        preferredJobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    // If the preferred jobs node doesn't exist, create an empty list
+                    preferredJobsRef.setValue(new ArrayList<Job>());
+                }
+
+                // Now, push the job to the preferred job list
+                preferredJobsRef.push().setValue(job)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("AddJobSuccess", "Job added successfully");
+                            Toast.makeText(context, "Job added to preferred list!", Toast.LENGTH_SHORT).show(); // Display toast
+                        })
+                        .addOnFailureListener(e -> Log.e("AddJobError", "Failed to add job", e));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("AddJobError", "Database error: " + databaseError.getMessage());
+            }
+        });
+    }
+
+
+
+    // Utility function to sanitize email for Firebase path
+    private String sanitizeEmail(String email) {
+        return email.replace(".", ",");
+    }
+
 }
