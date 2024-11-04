@@ -52,7 +52,7 @@ import androidx.test.espresso.Root;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.quickcash.EmployerHomepageActivity;
-import com.example.quickcash.JobSubmission;
+import com.example.quickcash.JobSubmissionActivity;
 import com.example.quickcash.LoginActivity;
 
 import org.hamcrest.Description;
