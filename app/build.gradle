@@ -74,7 +74,7 @@ dependencies {
 
     androidTestImplementation libs.ext.junit
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
     androidTestImplementation 'org.mockito:mockito-core:4.2.0'

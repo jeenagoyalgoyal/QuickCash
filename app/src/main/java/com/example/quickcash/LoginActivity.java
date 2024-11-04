@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.Manifest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -317,7 +318,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-
 
     private void navigateToEmployeeHomepage(String email) {
         Intent intentEmployee = new Intent(this, EmployeeHomepageActivity.class);
