@@ -1,3 +1,40 @@
+/**
+ * PreferredJobAdapter is a RecyclerView adapter that binds a list of preferred job objects to the RecyclerView in the
+ * PreferredJobsActivity. It is responsible for creating and managing the view holders that display job information
+ * in a list format.
+ *
+ * <p>This adapter handles the following functionalities:</p>
+ * <ul>
+ *     <li>Inflating the layout for each item in the list of preferred jobs.</li>
+ *     <li>Binding job data to the views within each item layout.</li>
+ *     <li>Managing the visibility of additional job details and buttons for each job item.</li>
+ * </ul>
+ *
+ * <p>Key components of this adapter include:</p>
+ * <ul>
+ *     <li>{@link PreferredJobViewHolder} - A static inner class that holds the views for each job item and binds the job data.</li>
+ *     <li>{@link Job} - The model class representing a job, containing details such as job title, company name, location, salary, and expected duration.</li>
+ * </ul>
+ *
+ * <p>Lifecycle:</p>
+ * <ul>
+ *     <li>onCreateViewHolder(ViewGroup parent, int viewType) - Creates a new view holder for a job item by inflating the item layout.</li>
+ *     <li>onBindViewHolder(PreferredJobViewHolder holder, int position) - Binds the job data to the views in the view holder.</li>
+ *     <li>getItemCount() - Returns the total number of job items in the list.</li>
+ * </ul>
+ *
+ * <p>View Holder:</p>
+ * <ul>
+ *     <li>{@link PreferredJobViewHolder} contains references to the TextViews and Buttons used to display job details.</li>
+ *     <li>It manages the visibility of additional job details and handles click events for showing and hiding job information.</li>
+ * </ul>
+ *
+ * <p>Usage:</p>
+ * <p>This adapter should be used in conjunction with a RecyclerView to display a list of preferred jobs. It is initialized
+ * with a list of Job objects and is responsible for rendering each job in the list.</p>
+ *
+ */
+
 package com.example.quickcash.adapter;
 
 import android.view.LayoutInflater;

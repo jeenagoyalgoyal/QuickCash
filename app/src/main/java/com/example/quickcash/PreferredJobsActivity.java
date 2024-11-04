@@ -1,3 +1,47 @@
+/**
+ * PreferredJobsActivity is an Android activity that displays a list of preferred jobs for the currently authenticated user.
+ * It retrieves the user's preferred jobs from a Firebase Realtime Database and presents them in a RecyclerView.
+ *
+ * <p>This activity is responsible for the following functionalities:</p>
+ * <ul>
+ *     <li>Initializing the user interface components, including the RecyclerView for displaying jobs.</li>
+ *     <li>Fetching the current user's ID from Firebase Authentication.</li>
+ *     <li>Setting up a reference to the Firebase database to access the preferred jobs associated with the user.</li>
+ *     <li>Listening for changes in the preferred jobs data and updating the RecyclerView accordingly.</li>
+ *     <li>Handling navigation back to the homepage when the back button is pressed.</li>
+ *     <li>Displaying toast messages for user feedback, such as errors in loading data.</li>
+ * </ul>
+ *
+ * <p>Key components of this activity include:</p>
+ * <ul>
+ *     <li>{@link RecyclerView} - Displays the list of preferred jobs using a custom adapter.</li>
+ *     <li>{@link PreferredJobAdapter} - Adapter that binds the job data to the RecyclerView.</li>
+ *     <li>{@link FirebaseAuth} - Used to authenticate the user and retrieve their email.</li>
+ *     <li>{@link DatabaseReference} - Reference to the Firebase database where the preferred jobs are stored.</li>
+ * </ul>
+ *
+ * <p>Lifecycle:</p>
+ * <ul>
+ *     <li>onCreate(Bundle savedInstanceState) - Initializes the activity, sets up the UI, and starts data retrieval.</li>
+ * </ul>
+ *
+ * <p>Note:</p>
+ * <ul>
+ *     <li>The user ID is sanitized by replacing periods with commas to ensure compatibility with Firebase database paths.</li>
+ *     <li>Data retrieval is performed asynchronously, and the UI is updated in response to data changes.</li>
+ * </ul>
+ *
+ * <p>Usage:</p>
+ * <p>This activity should be launched when the user wants to view their preferred job listings. It is typically accessed from the main application interface.</p>
+ *
+ * @see PreferredJobAdapter
+ * @see Job
+ * @see FirebaseAuth
+ * @see DatabaseReference
+ */
+
+
+
 package com.example.quickcash;
 
 import android.content.Intent;
