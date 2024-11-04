@@ -35,6 +35,7 @@
  *
  */
 
+
 package com.example.quickcash.adapter;
 
 import android.view.LayoutInflater;
@@ -49,9 +50,21 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
+/**
+ * PreferredJobAdapter is a RecyclerView adapter that binds a list of preferred job objects to the RecyclerView.
+ * It manages the display of job information and handles user interactions for each job item.
+ */
+
 public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapter.PreferredJobViewHolder> {
 
+    // List of preferred jobs to be displayed
     private final List<Job> preferredJobList;
+
+    /**
+     * Constructor for PreferredJobAdapter.
+     *
+     * @param preferredJobList List of Job objects to be displayed in the RecyclerView.
+     */
 
     public PreferredJobAdapter(List<Job> preferredJobList) {
         this.preferredJobList = preferredJobList;
@@ -59,19 +72,21 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
 
     @Override
     public PreferredJobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Inflate the layout for each job item and create a new ViewHolder
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.preferred_job_adapter, parent, false);
         return new PreferredJobViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(PreferredJobViewHolder holder, int position) {
+        // Get the job at the current position and bind it to the ViewHolder
         Job job = preferredJobList.get(position);
-
         holder.bind(job);
     }
 
     @Override
     public int getItemCount() {
+        // Return the total number of jobs in the list
         return preferredJobList.size();
     }
 
@@ -85,6 +100,11 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
         private final Button showViewButton;
         private final Button cancelButton;
 
+        /**
+         * Constructor for PreferredJobViewHolder.
+         *
+         * @param itemView The view for the job item.
+         */
         public PreferredJobViewHolder(View itemView) {
             super(itemView);
             jobTypeResult = itemView.findViewById(R.id.jobTypeResult);
@@ -99,11 +119,20 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             initializeView();
         }
 
+        /**
+         * Initializes the view by hiding additional fields and the cancel button.
+         */
         private void initializeView() {
             // Initially hide the additional fields and cancel button
             toggleDetailVisibility(View.GONE);
             cancelButton.setVisibility(View.GONE);
         }
+
+        /**
+         * Toggles the visibility of the job detail fields.
+         *
+         * @param visibility The visibility state to set (View.VISIBLE or View.GONE).
+         */
 
         private void toggleDetailVisibility(int visibility) {
             companyResult.setVisibility(visibility);
@@ -111,6 +140,12 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             salaryResult.setVisibility(visibility);
             durationResult.setVisibility(visibility);
         }
+
+        /**
+         * Binds the job data to the UI elements.
+         *
+         * @param job The Job object containing the data to display.
+         */
 
         public void bind(Job job) {
             jobTypeResult.setText("Job Title: " + job.getJobTitle());
@@ -124,6 +159,11 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             cancelButton.setOnClickListener(view -> hideJobDetails());
         }
 
+        /**
+         * Displays the job details in the UI.
+         *
+         * @param job The Job object containing the details to display.
+         */
         private void showJobDetails(Job job) {
             companyResult.setText("Company: " + job.getCompanyName());
             locationResult.setText("Location: " + job.getLocation());
@@ -135,6 +175,9 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             cancelButton.setVisibility(View.VISIBLE);
         }
 
+        /**
+         * Hides the job details from the UI.
+         */
         private void hideJobDetails() {
             toggleDetailVisibility(View.GONE);
             showViewButton.setVisibility(View.VISIBLE);
