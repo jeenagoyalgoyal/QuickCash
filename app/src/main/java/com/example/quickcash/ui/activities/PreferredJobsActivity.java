@@ -40,7 +40,7 @@
  * @see DatabaseReference
  */
 
-package com.example.quickcash;
+package com.example.quickcash.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,8 +52,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quickcash.adapter.PreferredJobAdapter;
-import com.example.quickcash.model.Job;
+import com.example.quickcash.R;
+import com.example.quickcash.utils.adapter.PreferredJobAdapter;
+import com.example.quickcash.models.Job;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

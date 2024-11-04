@@ -29,7 +29,7 @@
  * functionality works as expected.</p>
  */
 
-package com.example.quickcash;
+package com.example.quickcash.ui;
 
 import static org.junit.Assert.assertTrue;
 
@@ -78,6 +78,8 @@ public class PreferredJobsUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject registerButton = device.findObject(new UiSelector().text("Login"));
         registerButton.clickAndWaitForNewWindow();
+
+        //Look for switch to em
         //looking for 'Search Jobs' button on homepage
         UiObject searchJobButton = device.findObject(new UiSelector().text("My Preferred Jobs"));
         assertTrue("My preferred jobs button should be present on employee dashboard", searchJobButton.exists());

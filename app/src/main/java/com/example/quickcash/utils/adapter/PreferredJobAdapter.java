@@ -36,7 +36,7 @@
  */
 
 
-package com.example.quickcash.adapter;
+package com.example.quickcash.utils.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +44,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Button;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.quickcash.model.Job;
+import com.example.quickcash.models.Job;
 import com.example.quickcash.R;
 import com.google.firebase.database.DatabaseReference;
 

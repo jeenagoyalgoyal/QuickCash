@@ -8,6 +8,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
 import com.example.quickcash.ui.activities.EmployerHomepageActivity;
 import com.example.quickcash.models.UseRole;
+import com.example.quickcash.ui.activities.RoleActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
