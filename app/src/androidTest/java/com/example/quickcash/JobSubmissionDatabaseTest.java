@@ -68,7 +68,7 @@ public class JobSubmissionDatabaseTest {
         int expectedSalary = 50;
 
 
-       Task<Job> job1 = jobCRUD.getJobById("-OAnpSdl9ab852uMU6H_");
+       Task<Job> job1 = jobCRUD.getJobById("-OAp1kyUG5YHgHnSFMpM");
        Job job2 = Tasks.await(job1);
 
         // Act & Assert

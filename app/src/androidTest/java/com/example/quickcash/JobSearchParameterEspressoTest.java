@@ -84,10 +84,10 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Software Developer")).check(ViewAssertions.matches(ViewMatchers.withText("Software Developer")));
-        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Tech Corp")).check(ViewAssertions.matches(ViewMatchers.withText("Tech Corp")));
-        onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("6000")).check(ViewAssertions.matches(ViewMatchers.withText("6000")));
-        onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("80000")).check(ViewAssertions.matches(ViewMatchers.withText("80000")));
-        onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("6 months")).check(ViewAssertions.matches(ViewMatchers.withText("6 months")));
+        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Tech Company")).check(ViewAssertions.matches(ViewMatchers.withText("Tech Company")));
+        onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("20")).check(ViewAssertions.matches(ViewMatchers.withText("20")));
+        onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("27")).check(ViewAssertions.matches(ViewMatchers.withText("27")));
+        onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("20")).check(ViewAssertions.matches(ViewMatchers.withText("20")));
         onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Halifax")).check(ViewAssertions.matches(ViewMatchers.withText("Halifax")));
 
         // Will test the submission button to see if the filters worked
