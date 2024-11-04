@@ -1,3 +1,4 @@
+package com.example.quickcash.ui.activities;
 /**
  * PreferredJobsActivity is an Android activity that displays a list of preferred jobs for the currently authenticated user.
  * It retrieves the user's preferred jobs from a Firebase Realtime Database and presents them in a RecyclerView.
@@ -40,8 +41,6 @@
  * @see DatabaseReference
  */
 
-package com.example.quickcash;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
@@ -52,6 +51,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.R;
 import com.example.quickcash.adapter.PreferredJobAdapter;
 import com.example.quickcash.model.Job;
 import com.google.firebase.auth.FirebaseAuth;
