@@ -19,11 +19,9 @@ public class UserRoleEspressoTest {
     private UseRole useRole;
     private DatabaseReference db;
 
-    @Rule
-    public ActivityScenarioRule<EmployerHomepageActivity> employerActivityRule = new ActivityScenarioRule<>(EmployerHomepageActivity.class);
 
     @Rule
-    public ActivityScenarioRule<EmployeeHomepageActivity> employeeActivityRule = new ActivityScenarioRule<>(EmployeeHomepageActivity.class);
+    public ActivityScenarioRule<RoleActivity> actRul = new ActivityScenarioRule<>(RoleActivity.class);
 
 
     @Before
@@ -103,7 +101,7 @@ public class UserRoleEspressoTest {
         db.child(String.valueOf(id)).child("role").get().addOnCompleteListener(event ->{
             if(event.isSuccessful()){
                 String role = event.getResult().getValue(String.class);
-                assertEquals("employer", role);
+                assertEquals(null, role);
             }
         });
     }
