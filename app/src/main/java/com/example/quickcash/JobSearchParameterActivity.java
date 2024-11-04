@@ -1,36 +1,25 @@
 package com.example.quickcash;
 
-import androidx.annotation.NonNull;
+import static com.example.quickcash.filter.JobSearchFilter.*;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,10 +56,6 @@ public class JobSearchParameterActivity extends AppCompatActivity{
             this.userID = email.replace(".", ",");
         }
 
-        //initializing references
-        jobsRef = FirebaseDatabase.getInstance();
-        jobCRUD = new JobCRUD(jobsRef);
-
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +64,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
                 }else if(checkSalaryField()){
                     errorText.setText("Enter Valid Salary Range");
                 }else{
-                    errorText.setText("success"); // Clear any previous error
+                    errorText.setText(""); // Clear any previous error
                     performSearch();
                 }
             }
@@ -102,40 +87,15 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         jobList = new ArrayList<>();
         jobSearchAdapter = new JobSearchAdapter(jobList);
         recyclerView.setAdapter(jobSearchAdapter);
+
+        jobsRef = FirebaseDatabase.getInstance();
+        jobCRUD = new JobCRUD(jobsRef);
     }
 
 
     private void performSearch() {
-        // Get search parameters
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
 
-        Query query = jobsRef.getReference("Jobs");
-
-        // Apply filters based on non-empty inputs
-        if (isValidJobTitle(title)) {
-            query = query.orderByChild("jobTitle").equalTo(title);
-        }else if(isValidCompany(company)){
-            query =query.orderByChild("companyName").equalTo(company);
-        }else if (isValidLocation(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
-        }else if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
-        }else if(!minSalStr.isEmpty()){
-            int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild("salary").startAt(minSal);
-        }else if(!maxSalStr.isEmpty()){
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").endAt(maxSal);
-        }else if (!isValidDuration(jobDuration)) {
-            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
-        }
+        Query query = createQuery();
 
         // Clear previous search results
         jobList.clear();
@@ -162,6 +122,42 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         });
     }
 
+    private Query createQuery(){
+        // Get search parameters
+        String title = jobTitle.getText().toString().trim();
+        String company = companyName.getText().toString().trim();
+        String minSalStr = minSalary.getText().toString().trim();
+        String maxSalStr = maxSalary.getText().toString().trim();
+        String jobDuration = duration.getText().toString().trim();
+        String jobLocation = location.getText().toString().trim();
+        String salary = "salary";
+
+        Query query = jobsRef.getReference("Jobs");
+
+        // Apply filters based on non-empty inputs
+        if (isValidField(title)) {
+            query = query.orderByChild("jobTitle").equalTo(title);
+        }else if(isValidField(company)){
+            query =query.orderByChild("companyName").equalTo(company);
+        }else if (isValidField(jobLocation)) {
+            query = query.orderByChild("location").equalTo(jobLocation);
+        }else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
+            int minSal = Integer.parseInt(minSalStr);
+            int maxSal = Integer.parseInt(maxSalStr);
+            query = query.orderByChild(salary).startAt(minSal).endAt(maxSal);
+        }else if(isValidField(minSalStr)){
+            int minSal = Integer.parseInt(minSalStr);
+            query = query.orderByChild(salary).startAt(minSal);
+        }else if(isValidField(maxSalStr)){
+            int maxSal = Integer.parseInt(maxSalStr);
+            query = query.orderByChild(salary).endAt(maxSal);
+        }else if (isValidField(jobDuration)) {
+            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
+        }
+
+        return query;
+    }
+
 
     private boolean passesAdditionalFilters(Job job) {
         // Get the user input again
@@ -172,80 +168,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         String jobDuration = duration.getText().toString().trim();
         String jobLocation = location.getText().toString().trim();
 
-        boolean matches = true;
-
-        if (!title.isEmpty()){
-            if( !title.equalsIgnoreCase(job.getJobTitle())) {
-                matches = false;
-            }
-        }
-
-        if (isValidCompany(company)){
-            if(!company.equalsIgnoreCase(job.getCompanyName())) {
-                matches = false;
-            }
-        }
-
-        if (isValidLocation(jobLocation)){
-            if(!jobLocation.equalsIgnoreCase(job.getLocation())) {
-                matches = false;
-            }
-        }
-
-        if (isValidDuration(jobDuration)){
-            if(!jobDuration.equalsIgnoreCase(job.getExpectedDuration())) {
-                matches = false;
-            }
-        }
-
-        if (!minSalStr.isEmpty() && !maxSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            int salary = job.getSalary();
-            if (salary < minSal || salary > maxSal) {
-                matches = false;
-            }
-        }else if(!minSalStr.isEmpty()) {
-            int minSal = Integer.parseInt(minSalStr);
-            int salary = job.getSalary();
-            if (salary < minSal){
-                matches = false;
-            }
-        }else if(!maxSalStr.isEmpty()) {
-            int maxSal = Integer.parseInt(maxSalStr);
-            int salary = job.getSalary();
-            if(salary > maxSal){
-                matches = false;
-            }
-        }
-
-        return matches;
-    }
-
-
-    // Tests the job title (can be empty)
-    public static boolean isValidJobTitle(String title) {
-        return title != null && !title.trim().isEmpty();
-    }
-
-    // Tests the job title (can be empty)
-    public static boolean isValidCompany(String company) {
-        return company != null && !company.trim().isEmpty();
-    }
-
-    // Tests salary is within boundary
-    public static boolean isValidSalary(int minSalary, int maxSalary) {
-        return minSalary >= 0 && maxSalary >= 0 && minSalary <= maxSalary;
-    }
-
-    // Tests valid duration
-    public static boolean isValidDuration(String duration) {
-        return duration != null && !duration.trim().isEmpty();
-    }
-
-    // Tests valid location
-    public static boolean isValidLocation(String location) {
-        return location != null && !location.trim().isEmpty();
+        return passesAdditionalJobFilters(job, title, company, minSalStr, maxSalStr, jobDuration, jobLocation);
     }
 
     public boolean allEmptyFields(){

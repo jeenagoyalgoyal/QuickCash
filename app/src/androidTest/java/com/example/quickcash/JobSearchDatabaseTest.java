@@ -7,8 +7,6 @@ import android.app.DownloadManager;
 
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.model.Job;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -18,7 +16,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class JobSearchDatabaseTest {
 
