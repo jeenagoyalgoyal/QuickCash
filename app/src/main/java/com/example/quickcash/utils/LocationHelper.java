@@ -68,29 +68,36 @@ public class LocationHelper {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                 Geocoder.GeocodeListener listener = new Geocoder.GeocodeListener() {
                     @Override
-                    public void onGeocode(List<Address> addresses) {
-                        // Handle asynchronous geocoding result
+                    public void onGeocode(@NonNull List<Address> addresses) {
+                        if (!addresses.isEmpty()) {
+                            Address address = addresses.get(0);
+                            double latitude = address.getLatitude();
+                            double longitude = address.getLongitude();
+                            Log.d(TAG, String.format("Asynchronous geocoding result: (%.6f, %.6f)", latitude, longitude));
+                            CITY_COORDINATES.put(locationName, new GeocodingResult(latitude, longitude));
+                        } else {
+                            Log.e(TAG, "Asynchronous geocoding returned no results");
+                        }
                     }
                 };
                 geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180, listener);
-            }
-
-            addresses = geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180);
-
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-                double latitude = address.getLatitude();
-                double longitude = address.getLongitude();
-
-                Log.d(TAG, String.format("Found coordinates for %s: (%.6f, %.6f)",
-                        locationName, latitude, longitude));
-
-                // Cache the result for future use
-                CITY_COORDINATES.put(normalizedLocation, new GeocodingResult(latitude, longitude));
-
-                return new GeocodingResult(latitude, longitude);
             } else {
-                Log.e(TAG, "No coordinates found for location: " + locationName);
+                addresses = geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    double latitude = address.getLatitude();
+                    double longitude = address.getLongitude();
+
+                    Log.d(TAG, String.format("Found coordinates for %s: (%.6f, %.6f)",
+                            locationName, latitude, longitude));
+
+                    // Cache the result for future use
+                    CITY_COORDINATES.put(normalizedLocation, new GeocodingResult(latitude, longitude));
+
+                    return new GeocodingResult(latitude, longitude);
+                } else {
+                    Log.e(TAG, "No coordinates found for location: " + locationName);
+                }
             }
         } catch (IOException e) {
             Log.e(TAG, "Error getting coordinates for " + locationName, e);
@@ -141,7 +148,6 @@ public class LocationHelper {
         FusedLocationProviderClient fusedLocationClient =
                 LocationServices.getFusedLocationProviderClient(context);
 
-        // Check if location services are enabled
         LocationManager locationManager =
                 (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -149,11 +155,9 @@ public class LocationHelper {
             return;
         }
 
-        // Create location request
-        LocationRequest locationRequest = LocationRequest.create()
-                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL);
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, UPDATE_INTERVAL)
+                .setMinUpdateIntervalMillis(FASTEST_INTERVAL)
+                .build();
 
         LocationCallback locationCallback = new LocationCallback() {
             @Override
@@ -175,7 +179,6 @@ public class LocationHelper {
                     Looper.getMainLooper()
             );
 
-            // Also try to get last location
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(location -> {
                         if (location != null) {

@@ -1,16 +1,15 @@
 package com.example.quickcash.ui.activities;
 
-import static android.content.Intent.getIntent;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.*;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -54,6 +53,9 @@ public class JobSubmissionActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = null;
     private TextView employerIdTextView;
     private String email;
+
+    // ProgressDialog
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -136,8 +138,10 @@ public class JobSubmissionActivity extends AppCompatActivity {
             return;
         }
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
+        // Initialize and show the ProgressDialog
+        progressDialog = new ProgressDialog(JobSubmissionActivity.this);
         progressDialog.setMessage("Posting job...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         // Get current location
