@@ -1,4 +1,4 @@
-package com.example.quickcash;
+package com.example.quickcash.Firebase;
 
 import androidx.annotation.NonNull;
 
