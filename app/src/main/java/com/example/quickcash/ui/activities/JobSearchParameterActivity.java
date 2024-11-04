@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,8 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.R;
-import com.example.quickcash.model.Job;
-import com.example.quickcash.adapter.JobSearchAdapter;
+import com.example.quickcash.models.Job;
+import com.example.quickcash.models.JobLocation;
+import com.example.quickcash.utils.adapters.JobSearchAdapter;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -60,13 +60,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         setContentView(R.layout.job_search_parameter);
         init();
         setupListeners();
-        // Set up the back button
-        ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(JobSearchParameterActivity.this, EmployeeHomepageActivity.class);
-            startActivity(intent);
-            finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
-        });
     }
 
     private void init() {
@@ -88,7 +81,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
             // Setup RecyclerView
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            jobSearchAdapter = new JobSearchAdapter(jobList);
+            jobSearchAdapter = new JobSearchAdapter(jobList, this);
             recyclerView.setAdapter(jobSearchAdapter);
         } catch (Exception e) {
             Log.e(TAG, "Error initializing: " + e.getMessage());
@@ -122,7 +115,24 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     Log.d(TAG, "Number of jobs in database: " + dataSnapshot.getChildrenCount());
 
                     for (DataSnapshot jobSnapshot : dataSnapshot.getChildren()) {
-                        processTheJobsFromSnapshot(jobSnapshot);
+                        try {
+                            Job job = jobSnapshot.getValue(Job.class);
+                            Log.d(TAG, "Processing job: " + jobSnapshot.getKey());
+
+                            if (job != null) {
+                                Log.d(TAG, "Job title: " + job.getJobTitle());
+                                Log.d(TAG, "Location data: " + job.getLocation());
+
+                                if (passesFilters(job)) {
+                                    Log.d(TAG, "Job passed filters: " + job.getJobTitle());
+                                    jobList.add(job);
+                                } else {
+                                    Log.d(TAG, "Job did not pass filters: " + job.getJobTitle());
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error processing job: " + e.getMessage());
+                        }
                     }
 
                     Log.d(TAG, "Found " + jobList.size() + " matching jobs");
@@ -143,35 +153,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 Log.e(TAG, "Database error: " + error.getMessage());
             }
         });
-    }
-
-    /**
-     * Processes a job entry from a Firebase DataSnapshot, extracts the job information,
-     * and applies filtering criteria to determine if it should be added to a list of jobs.
-     * Logs details about the job being processed, including any errors encountered.
-     *
-     * @param jobSnapshot the DataSnapshot object containing job data retrieved from Firebase.
-     *                    It is expected to map to a {@code Job} object.
-     */
-    private void processTheJobsFromSnapshot(DataSnapshot jobSnapshot) {
-        try {
-            Job job = jobSnapshot.getValue(Job.class);
-            Log.d(TAG, "Processing job: " + jobSnapshot.getKey());
-
-            if (job != null) {
-                Log.d(TAG, "Job title: " + job.getJobTitle());
-                Log.d(TAG, "Location data: " + job.getLocation());
-
-                if (passesFilters(job)) {
-                    Log.d(TAG, "Job passed filters: " + job.getJobTitle());
-                    jobList.add(job);
-                } else {
-                    Log.d(TAG, "Job did not pass filters: " + job.getJobTitle());
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error processing job: " + e.getMessage());
-        }
     }
 
     private boolean passesFilters(Job job) {
@@ -243,16 +224,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Initiates a job search with a salary range validation for map-based results.
-     *
-     * <p>This method first checks if the salary field contains a valid range using {@code checkSalaryField()}.
-     * If the salary range is invalid, it sets an error message on {@code jspErrorDisplay} and stops further processing.
-     * If the salary is valid, it clears any error message and proceeds with the search by calling {@code queryJobsForMap()}.
-     *
-     * @see #checkSalaryField()
-     * @see #queryJobsForMap()
-     */
     private void performSearchForMap() {
         if (checkSalaryField()) {
             jspErrorDisplay.setText("Enter Valid Salary Range");
@@ -262,21 +233,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         queryJobsForMap();
     }
 
-    /**
-     * Queries job data for map-based results and processes each job to extract relevant information.
-     *
-     * <p>This method initiates a one-time read operation on a Firebase reference {@code jobsRef} to retrieve
-     * job postings. For each job that meets specified filters, it extracts details like latitude, longitude,
-     * title, salary, duration, company, and job type. The method defaults to Halifax coordinates for unspecified
-     * locations and custom coordinates for Montreal; additional cities can be added as needed.
-     *
-     * <p>If jobs are found, this information is passed to {@code launchMapActivity()} to display results on a map.
-     * If no jobs match the criteria, a "No Results Found" message is displayed. In case of errors, appropriate
-     * messages are logged and displayed on {@code jspErrorDisplay}.
-     *
-     * @see #passesFilters(Job)
-     * @see #launchMapActivity(ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList)
-     */
     private void queryJobsForMap() {
         Log.d(TAG, "Starting map search");
         ArrayList<Double> latitudes = new ArrayList<>();
@@ -353,22 +309,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Launches the {@code MapActivity} to display job listings on a map.
-     *
-     * <p>This method creates an {@code Intent} to start {@code MapActivity} and attaches job-related
-     * data as extras, including latitude and longitude coordinates, job titles, salaries, durations,
-     * company names, and job types. The data is passed as {@code ArrayList} objects, allowing
-     * {@code MapActivity} to access and display multiple job listings simultaneously.
-     *
-     * @param latitudes an {@code ArrayList<Double>} containing latitude coordinates for the jobs.
-     * @param longitudes an {@code ArrayList<Double>} containing longitude coordinates for the jobs.
-     * @param titles an {@code ArrayList<String>} of job titles to be displayed on the map.
-     * @param salaries an {@code ArrayList<Integer>} of salaries associated with the jobs.
-     * @param durations an {@code ArrayList<String>} of job durations.
-     * @param companies an {@code ArrayList<String>} of company names for the jobs.
-     * @param jobTypes an {@code ArrayList<String>} of job types (e.g., full-time, part-time).
-     */
     private void launchMapActivity(ArrayList<Double> latitudes, ArrayList<Double> longitudes,
                                    ArrayList<String> titles, ArrayList<Integer> salaries,
                                    ArrayList<String> durations, ArrayList<String> companies,
@@ -384,19 +324,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * Validates the salary range entered by the user.
-     *
-     * <p>This method retrieves and trims text from the minimum and maximum salary input fields.
-     * If either field is empty, the method returns {@code false}, indicating that the salary range
-     * is valid by default (or that no salary range was specified). It then attempts to parse both
-     * values as integers and checks whether the minimum salary is greater than the maximum salary,
-     * indicating an invalid range. If parsing fails due to non-numeric input, the method returns {@code true}
-     * to signify an invalid salary range.
-     *
-     * @return {@code true} if the salary range is invalid (either non-numeric input or minimum greater than maximum);
-     *         {@code false} if the salary range is valid or not specified.
-     */
     public boolean checkSalaryField() {
         String minS = minSalary.getText().toString().trim();
         String maxS = maxSalary.getText().toString().trim();

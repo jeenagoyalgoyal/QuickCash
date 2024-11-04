@@ -1,9 +1,12 @@
 package com.example.quickcash.ui.activities;
 
+import static android.content.Intent.getIntent;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Spinner;
@@ -12,7 +15,7 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.model.JobLocation;
+import com.example.quickcash.models.JobLocation;
 import com.example.quickcash.utils.LocationHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.database.DatabaseReference;
@@ -78,7 +81,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         companyName = findViewById(R.id.companyName);
         jobType = findViewById(R.id.spinnerJobType);
         requirements = findViewById(R.id.requirementText);
-        salary = findViewById(R.id.salaryText);
+        salary = findViewById(R.id.jobTitleText);
         jobUrgency = findViewById(R.id.spinnerUrgency);
         location = findViewById(R.id.locationJob);
         expectedDuration = findViewById(R.id.expectedDuration);

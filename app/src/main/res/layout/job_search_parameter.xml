@@ -4,66 +4,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".JobSearchParameterActivity">
+    tools:context=".ui.activities.JobSearchParameterActivity">
 
     <LinearLayout
         android:id="@+id/job_search_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Back Button -->
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back"
-            android:contentDescription="back button"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_margin="16dp" />
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search Job"
-            android:textColor="@color/black"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
             android:paddingBottom="10dp"
-            android:layout_gravity="center_horizontal" />
+            android:text="Search Job"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
             android:text="Job Title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_marginStart="13dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <EditText
             android:id="@+id/jobTitle"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:hint="Enter Job Title"
-            android:inputType="text"
+            android:layout_marginStart="13dp"
             android:width="300dp"
-            android:layout_marginStart="13dp"/>
+            android:hint="Enter Job Title"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
             android:text="Company Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_marginStart="13dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <EditText
             android:id="@+id/companyName"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:hint="Enter Company name"
-            android:inputType="text"
+            android:layout_marginStart="13dp"
             android:width="300dp"
-            android:layout_marginStart="13dp"/>
+            android:hint="Enter Company name"
+            android:inputType="text" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -89,21 +83,21 @@
                     android:orientation="horizontal">
 
 
-                <EditText
-                    android:id="@+id/minSalary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:hint="Min Salary"
-                    android:inputType="number"
-                    android:width="100dp"/>
+                    <EditText
+                        android:id="@+id/minSalary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:width="100dp"
+                        android:hint="Min Salary"
+                        android:inputType="number" />
 
-                <EditText
-                    android:id="@+id/maxSalary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:hint="Max Salary"
-                    android:inputType="number"
-                    android:width="100dp"/>
+                    <EditText
+                        android:id="@+id/maxSalary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:width="100dp"
+                        android:hint="Max Salary"
+                        android:inputType="number" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -114,6 +108,7 @@
                 android:orientation="vertical"
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,50 +119,73 @@
                     android:id="@+id/duration"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
+                    android:width="150dp"
                     android:hint="Enter Duration"
-                    android:inputType="text"
-                    android:width="150dp"/>
+                    android:inputType="text" />
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
             android:text="Location"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_marginStart="13dp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <EditText
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:hint="Enter Preferred location"
-            android:inputType="text"
+            android:layout_marginStart="13dp"
             android:width="300dp"
-            android:layout_marginStart="13dp"/>
+            android:hint="Enter Preferred location"
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/jspErrorDisplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text=""
-            android:textColor="#FF0000"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:layout_marginStart="13dp"/>
+            android:textColor="#FF0000" />
 
-        <Button
-            android:id="@+id/search_job_parameter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            android:layout_gravity="center_horizontal"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/search_job_parameter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="50dp"
+                android:text="Search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/showMapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Show Map"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/search_job_parameter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
-            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/darker_gray"/>
+            android:layout_marginTop="0dp"
+            android:background="@android:color/darker_gray" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -175,7 +193,7 @@
             android:layout_height="wrap_content"
             android:outlineAmbientShadowColor="@color/cardview_dark_background"
             tools:itemCount="2"
-            tools:listitem="@layout/job_search_result_view"/>
+            tools:listitem="@layout/job_search_result_view" />
 
     </LinearLayout>
 

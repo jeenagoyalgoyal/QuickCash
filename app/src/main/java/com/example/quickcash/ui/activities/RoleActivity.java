@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
-import com.example.quickcash.model.UseRole;
+import com.example.quickcash.models.UseRole;
 
 public class RoleActivity extends AppCompatActivity {
 

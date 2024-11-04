@@ -12,9 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.quickcash.utils.repository.FirebaseCRUD;
 import com.example.quickcash.R;
-import com.example.quickcash.utils.UseRole;
+import com.example.quickcash.models.UseRole;
+import com.example.quickcash.repositories.FirebaseCRUD;
+import com.example.quickcash.ui.activities.EmployeeHomepageActivity;
+import com.example.quickcash.ui.activities.EmployerHomepageActivity;
+import com.example.quickcash.ui.activities.RegistrationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;

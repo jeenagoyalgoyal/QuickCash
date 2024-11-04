@@ -63,7 +63,19 @@ public class LocationHelper {
 
         try {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+            List<Address> addresses;
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                Geocoder.GeocodeListener listener = new Geocoder.GeocodeListener() {
+                    @Override
+                    public void onGeocode(List<Address> addresses) {
+                        // Handle asynchronous geocoding result
+                    }
+                };
+                geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180, listener);
+            }
+
+            addresses = geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180);
 
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
@@ -138,10 +150,10 @@ public class LocationHelper {
         }
 
         // Create location request
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY)
-                .setIntervalMillis(UPDATE_INTERVAL)
-                .setMinUpdateIntervalMillis(FASTEST_INTERVAL)
-                .build();
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL);
 
         LocationCallback locationCallback = new LocationCallback() {
             @Override
