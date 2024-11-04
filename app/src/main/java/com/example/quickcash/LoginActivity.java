@@ -39,6 +39,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Pattern;
 
+/**
+ * LoginActivity handles user login functionality, including form validation,
+ * Firebase authentication, and location permission handling.
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseCRUD crud = null;
@@ -62,6 +66,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.*)(+@#$%&!?><{}/\\]\\[]).{6,}$"; // At least 6 characters, at least one letter, one number and one special character
 
+
+    /**
+     * Called when the activity is first created. Initializes UI components and sets up event listeners.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +107,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    /**
+     * Handles manual location input from the user and updates the intent.
+     */
     private void handleManualLocationInput() {
         manualLocation = location.getText().toString().trim();
 
@@ -106,22 +119,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             manualLocationDetect = true;
             Toast.makeText(this, "Manual Location set to: " + manualLocation, Toast.LENGTH_SHORT).show();
             intent.putExtra("manualLocation", manualLocation);
-//            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-//                intent.putExtra("manualLocation", manualLocation);
-//                startActivity(intent);
-//                moveToNextWithDelay(null);
-//            }, 3000);
         }
     }
 
 
+    /**
+     * Initializes Firebase database access.
+     */
     private void initializeDatabaseAccess() {
         database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
         crud = new FirebaseCRUD(database);
 
     }
 
+    /**
+     * Handles the click event for the login button. Validates input and initiates login if valid.
+     * @param view The view that was clicked.
+     */
     @Override
     public void onClick(View view) {
         String email = emailBox.getText().toString().toLowerCase().trim();
@@ -137,29 +151,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginUser(email, password);
         }
     }
-    public static boolean isEmptyEmailAddress(String email){return email.isEmpty();}
+
+    public static boolean isEmptyEmailAddress(String email){
+        return email.isEmpty();
+    }
+
+
+    /**
+     * Checks if the given email is valid according to the regex pattern.
+     * @param email The email to be validated.
+     * @return True if the email is valid, false otherwise.
+     */
     public static boolean isValidEmail(String email) {
         return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
     }
-    public static boolean isEmptyPassword(String password){return password.isEmpty();}
+    public static boolean isEmptyPassword(String password){
+        return password.isEmpty();
+    }
+
+    /**
+     * Checks if the given password is valid according to the regex pattern.
+     * @param password The password to be validated.
+     * @return True if the password is valid, false otherwise.
+     */
     public static boolean isValidPassword(String password) {
         return Pattern.compile(PASSWORD_PATTERN).matcher(password).matches();
     }
 
+    /**
+     * Logs in the user by checking credentials against Firebase Realtime Database.
+     * @param email The user's email.
+     * @param password The user's password.
+     */
     private void loginUser(String email, String password) {
-        // Convert the email to Firebase-friendly format by replacing '.' with ','
         String emailKey = email.replace(".", ",");
 
-        // Fetch user details from Firebase Realtime Database
         databaseReference.child(emailKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Retrieve user data and authenticate
                     String storedPassword = dataSnapshot.child("password").getValue(String.class);
 
                     if (storedPassword != null && storedPassword.equals(password)) {
-                        // If password matches, proceed with Firebase Authentication
                         authenticateUser(email, password);
                     } else {
                         statusLabel.setText("Invalid password.");
@@ -177,6 +210,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+
+    /**
+     * Authenticates the user using Firebase Authentication.
+     * @param email The user's email.
+     * @param password The user's password.
+     */
     private void authenticateUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
@@ -190,6 +229,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    /**
+     * Navigates to the appropriate activity based on whether the user has set a manual location.
+     */
     private void navigateActivity() {
         if (manualLocation != null ) {
             Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
@@ -202,6 +244,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Handles login errors and displays appropriate messages to the user.
+     * @param e The exception that occurred during login.
+     */
     private void handleLoginError(Exception e) {
         if (e instanceof FirebaseAuthInvalidUserException) {
             statusLabel.setText("No account found with this email.");
@@ -211,11 +257,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             statusLabel.setText("Login failed. Please try again.");
         }
     }
+
+    /**
+     * Requests location permission from the user.
+     */
     void requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
+
+    /**
+     * Gets the current location of the user and updates the intent.
+     */
     void getCurrentLocation() {
         if(manualLocationDetect){
             return;
@@ -243,6 +297,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
         }
     }
+
+    /**
+     * Moves to the next activity after a delay and passes location data via intent.
+     * @param manualLocation The manually entered location, if any.
+     */
     private void moveToNextWithDelay( String manualLocation) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(LoginActivity.this, RoleActivity.class);
