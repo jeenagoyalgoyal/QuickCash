@@ -1,12 +1,16 @@
-package com.example.quickcash.repositories;
-
-import androidx.annotation.NonNull;
+package com.example.quickcash.Firebase;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.quickcash.model.Job;
 import com.example.quickcash.model.JobLocation;
-import com.google.firebase.database.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
