@@ -1,7 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.google.gms.google.services)
-    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -14,7 +13,6 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,8 +23,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding true
@@ -34,7 +32,29 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
+    // Navigation dependencies
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
+
+    // Google Maps SDK dependency
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // Firebase dependencies
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.2.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation libs.uiautomator
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
@@ -51,10 +71,13 @@ dependencies {
 
     androidTestImplementation libs.ext.junit
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'
     androidTestImplementation 'androidx.test:runner:1.6.1'
     androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation libs.junit.junit
     androidTestImplementation 'org.mockito:mockito-android:5.5.0'
 
     testImplementation 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

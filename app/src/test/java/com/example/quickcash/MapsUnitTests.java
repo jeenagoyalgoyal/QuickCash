@@ -2,6 +2,8 @@ package com.example.quickcash;
 
 import static androidx.test.core.app.ActivityScenario.launch;
 
+import com.example.quickcash.ui.activities.LoginActivity;
+
 import org.junit.Before;
 
 public class MapsUnitTests {
