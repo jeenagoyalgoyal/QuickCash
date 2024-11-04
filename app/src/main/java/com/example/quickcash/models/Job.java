@@ -126,6 +126,14 @@ public class Job {
         this.lng = lng;
     }
 
+    public double getLatitude() {
+        return lat;
+    }
+
+    public double getLongitude() {
+        return lng;
+    }
+
     // Helper method to get location info in a structured way
     @Exclude
     public JobLocation getJobLocation() {
