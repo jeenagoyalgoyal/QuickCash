@@ -1,13 +1,15 @@
 package com.example.quickcash.ui;
 
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.quickcash.R;
-import com.example.quickcash.deprecated.SearchActivity;
+import com.example.quickcash.ui.activities.JobSearchParameterActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,13 +19,13 @@ import org.junit.runner.RunWith;
 public class SearchResultsActivityTest {
 
     @Rule
-    public ActivityScenarioRule<SearchActivity> activityRule =
-            new ActivityScenarioRule<>(SearchActivity.class);
+    public ActivityScenarioRule<JobSearchParameterActivity> activityRule =
+            new ActivityScenarioRule<>(JobSearchParameterActivity.class);
 
     @Test
     public void testShowMapButtonIsVisible() {
-        // Verify that the "Show Map" button is visible on the search results page
-        Espresso.onView(ViewMatchers.withId(R.id.showMapButton))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        // Verify that the "Show Map" button is visible on the search page
+        onView(withId(R.id.showMapButton))
+                .check(matches(isDisplayed()));
     }
 }

@@ -38,6 +38,22 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     private List<Job> jobList;
     private DatabaseReference jobsRef;
 
+    public static boolean isValidJobTitle(String title) {
+        return title != null && !title.trim().isEmpty();
+    }
+
+    public static boolean isValidSalary(int min, int max) {
+        return min >= 0 && max >= 0 && max >= min;
+    }
+
+    public static boolean isValidDuration(String duration) {
+        return duration != null && !duration.trim().isEmpty();
+    }
+
+    public static boolean isValidLocation(String location) {
+        return location != null && !location.trim().isEmpty();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
