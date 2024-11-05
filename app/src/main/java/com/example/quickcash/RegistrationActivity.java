@@ -31,7 +31,32 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import android.Manifest;
 
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.net.Uri;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * RegistrationActivity handles user registration, including form validation, database interaction,
+ * and location permission management for displaying the user's current location.
+ */
 public class RegistrationActivity extends AppCompatActivity {
 
     private FirebaseCRUD crud = null;
@@ -40,9 +65,27 @@ public class RegistrationActivity extends AppCompatActivity {
     private boolean validFlag = true;
     private DatabaseReference userRef;
 
+    public static final int LOCATION_PERMISSION_REQUEST_CODE=1;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private double testLatitude = 0.0;
+    private double testLongitude = 0.0;
+    private boolean isLocationReceived = false;
+    public LocationCallback locationCallback;
+    public static boolean isTesting = false;
+
+    /**
+     * Initializes the activity, sets up UI components, and handles location permission requests.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Enable edge-to-edge content for the window
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         EdgeToEdge.enable(this);
         setContentView(R.layout.user_registration);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registrationLayout), (v, insets) -> {
@@ -50,6 +93,11 @@ public class RegistrationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        if (!isTesting) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            requestPermissions();
+        }
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -67,12 +115,184 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeDatabaseAccess() {
-        database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
-        crud = new FirebaseCRUD(database);
+    /**
+     * Requests location permissions from the user.
+     * If permission is granted, starts location updates; otherwise, shows a rationale or dialog.
+     */
 
+    void requestPermissions() {
+        if (isTesting) return;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                shouldShowRequestPermissionRationale();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            startLocationUpdates();
+        }
     }
 
+    /**
+     * Shows a rationale for location permission and requests permission again.
+     */
+    void shouldShowRequestPermissionRationale() {
+        new AlertDialog.Builder(this)
+                .setTitle("Location Permission Required")
+                .setMessage("This app needs access to your location to display your current location.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    ActivityCompat.requestPermissions(RegistrationActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            LOCATION_PERMISSION_REQUEST_CODE);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                    Toast.makeText(this, "Location permission is necessary to proceed", Toast.LENGTH_SHORT).show();
+                })
+                .create()
+                .show();
+    }
+
+    /**
+     * Handles the result of location permission requests.
+     * @param requestCode The request code passed in requestPermissions.
+     * @param permissions The requested permissions.
+     * @param grantResults The grant results for the requested permissions.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates();
+            } else {
+                Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show();
+                showPermissionDialog();
+            }
+        }
+    }
+
+    /**
+     * Displays a dialog to the user to enable location permission in settings.
+     */
+    private void showPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Enable Location Permission")
+                .setMessage("Location permission is needed to detect your location. Enable it in settings.")
+                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+
+    /**
+     * Starts location updates to fetch the user's current location.
+     */
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000) // 10 seconds interval
+                .setMinUpdateIntervalMillis(5000)
+                .setWaitForAccurateLocation(true)
+                .build();
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                    if(!isLocationReceived){
+                        Location location= locationResult.getLastLocation();
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        displayLocationInfo(latitude, longitude);
+
+                        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                        isLocationReceived=true;
+                    }
+
+                }
+            }
+        };
+        try {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Displays location information, including address, latitude, and longitude.
+     * @param latitude The latitude of the user's location.
+     * @param longitude The longitude of the user's location.
+     */
+    public void displayLocationInfo(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.CANADA);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String addressName = address.getAddressLine(0);
+
+                String locationInfo = "Location: " + addressName +
+                        "\nLatitude: " + latitude +
+                        "\nLongitude: " + longitude;
+                Toast.makeText(this, locationInfo, Toast.LENGTH_LONG).show();
+                isLocationReceived = true;
+                testLatitude = latitude;
+                testLongitude = longitude;
+
+            } else {
+                Toast.makeText(this, "Unable to find location name", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to get location name", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean isLocationReceived() {
+        return isLocationReceived;
+    }
+
+    public double getTestLatitude() {
+        return testLatitude;
+    }
+
+    public double getTestLongitude() {
+        return testLongitude;
+    }
+    public void resetLocationFlags() {
+        isLocationReceived = false;
+        testLatitude = 0.0;
+        testLongitude = 0.0;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (fusedLocationProviderClient != null && locationCallback != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
+
+
+    /**
+     * Initializes database access using Firebase.
+     */
+    public void initializeDatabaseAccess() {
+        database = FirebaseDatabase.getInstance("https://quickcash-8f278-default-rtdb.firebaseio.com/");
+        crud = new FirebaseCRUD(database);
+    }
+
+    /**
+     * Loads role options into a Spinner component for user selection.
+     */
     protected void loadRoleSpinner() {
         ArrayList<String> roles = new ArrayList<>();
         roles.add("Employer");
@@ -87,7 +307,10 @@ public class RegistrationActivity extends AppCompatActivity {
         roleSpinner.setAdapter(roleAdapter);
     }
 
-    protected void setupRegisterButton(){
+    /**
+     * Sets up the Register button with input validation and database interaction logic.
+     */
+    public void setupRegisterButton(){
         Button registerButton = findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +327,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 String errorLabel = new String();
                 String color = new String();
 
+                // Name validation
                 if (validator.isEmptyInput(name)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
@@ -118,6 +342,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
                 nameSetStatusMessage(errorLabel, color);
 
+                // Email validation
                 if (validator.isEmptyInput(email)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
@@ -132,6 +357,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
                 emailSetStatusMessage(errorLabel, color);
 
+                // Password validation
                 if (validator.isEmptyInput(password)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
@@ -146,6 +372,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
                 passwordSetStatusMessage(errorLabel, color);
 
+                // Confirm password validation
                 if (validator.isEmptyInput(password2)) {
                     validFlag = false;
                     errorLabel = "cannot be empty!";
@@ -169,21 +396,21 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                addToDatabase(name, email, password, role);
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        addToDatabase(name, email, password, role);
 
-                            } else {
-                                Exception exception = task.getException();
-                                if (exception instanceof FirebaseAuthUserCollisionException) {
-                                    Toast.makeText(RegistrationActivity.this, "Email already in use by another account.", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(RegistrationActivity.this, "Error: "+exception.getMessage(), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Exception exception = task.getException();
+                                        if (exception instanceof FirebaseAuthUserCollisionException) {
+                                            Toast.makeText(RegistrationActivity.this, "Email already in use by another account.", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(RegistrationActivity.this, "Error: "+exception.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    });
+                            });
                 }
             }
         });
@@ -195,6 +422,7 @@ public class RegistrationActivity extends AppCompatActivity {
         userRef = database.getReference("Users");
 
         userRef = database.getReference("Users").child(validParentNodeName);
+
         Map<String, String> userData = new HashMap<>();
         userData.put("name", name);
         userData.put("email", email);
@@ -214,6 +442,11 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
+
+
+    /**
+     * Getters and Setters
+     */
     public static String emailToValidParentNodeName(String email) {
         return email.replace(".", ",");
     }
