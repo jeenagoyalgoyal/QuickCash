@@ -224,17 +224,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-    /**
-     * Navigates to the appropriate activity based on whether the user has set a manual location.
-     */
-    private void navigateActivity(String email) {
-
-            Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-            intent.putExtra("email", email);
-            startActivity(intent);
-            finish();
-            fetchUserRole(email);
-    }
 
 
 

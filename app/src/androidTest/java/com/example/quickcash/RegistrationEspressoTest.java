@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -86,14 +87,14 @@ public class RegistrationEspressoTest {
 
     @Test
     public void validNameTest() {
-        onView(withId(R.id.enterName)).perform(typeText(VALID_NAME));
+        onView(withId(R.id.enterName)).perform(typeText(VALID_NAME), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validName)).check(matches(withText(VALID_MESSAGE)));
     }
 
     @Test
-    public void validEmailTest() {
-        onView(withId(R.id.enterEmail)).perform(typeText(VALID_EMAIL));
+    public void validEmailTest(){
+        onView(withId(R.id.enterEmail)).perform(typeText(VALID_EMAIL), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validEmail)).check(matches(withText(VALID_MESSAGE)));
     }
@@ -117,14 +118,14 @@ public class RegistrationEspressoTest {
 
     @Test
     public void invalidNameTest() {
-        onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME));
+        onView(withId(R.id.enterName)).perform(typeText(INVALID_NAME), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validName)).check(matches(withText(INVALID_MESSAGE_NAME)));
     }
 
     @Test
     public void invalidEmailTest() {
-        onView(withId(R.id.enterEmail)).perform(typeText(INVALID_EMAIL));
+        onView(withId(R.id.enterEmail)).perform(typeText(INVALID_EMAIL), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withId(R.id.validEmail)).check(matches(withText(INVALID_MESSAGE_EMAIL)));
     }

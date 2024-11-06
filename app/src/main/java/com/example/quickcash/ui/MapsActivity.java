@@ -166,26 +166,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }, 3000);
     }
 
-
-//    /**
-//     * Navigates to the EmployeeHomepageActivity after a short delay.
-//     * Passes either the manual location or the latitude and longitude as extras in the intent.
-//     * @param manualLocation The manually entered location, if any.
-//     */
-//    private void moveToNextWithDelay(String manualLocation) {
-//        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//            Intent intent = new Intent(MapsActivity.this, EmployeeHomepageActivity.class);
-//            if (manualLocation != null) {
-//                intent.putExtra("manualLocation", manualLocation);
-//            } else {
-//                intent.putExtra("latitude", latitude);
-//                intent.putExtra("longitude", longitude);
-//            }
-//            startActivity(intent);
-//            finish();
-//        }, 3000);
-//    }
-
     /**
      * Handles the result of location permission requests.
      * @param requestCode The request code passed in requestPermissions.

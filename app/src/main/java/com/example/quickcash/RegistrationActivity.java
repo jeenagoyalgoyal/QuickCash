@@ -351,7 +351,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     validFlag = false;
                     errorLabel = "invalid email, please check format!";
                     color = "#EB0101";
-                } else {
+                } else if (validator.isValidEmail(email)){
                     errorLabel = "valid";
                     color = "#0DBC00";
                 }
