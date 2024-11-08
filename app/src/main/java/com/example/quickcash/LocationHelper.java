@@ -42,7 +42,6 @@ public class LocationHelper {
         CITY_COORDINATES.put("ottawa", new GeocodingResult(45.4215, -75.6972));
         CITY_COORDINATES.put("calgary", new GeocodingResult(51.0447, -114.0719));
         CITY_COORDINATES.put("edmonton", new GeocodingResult(53.5461, -113.4938));
-        // Add more Canadian cities as needed
     }
 
     public static GeocodingResult getCoordinates(Context context, String locationName) {
@@ -53,9 +52,10 @@ public class LocationHelper {
 
         String normalizedLocation = locationName.trim().toLowerCase();
 
-        // First check our cached city coordinates
+        // First check our cached city coordinates with partial matching
         for (Map.Entry<String, GeocodingResult> entry : CITY_COORDINATES.entrySet()) {
-            if (normalizedLocation.contains(entry.getKey())) {
+            if (normalizedLocation.contains(entry.getKey()) ||
+                    entry.getKey().contains(normalizedLocation)) {
                 Log.d(TAG, "Found cached coordinates for " + locationName);
                 return entry.getValue();
             }
@@ -66,21 +66,37 @@ public class LocationHelper {
             List<Address> addresses;
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                Geocoder.GeocodeListener listener = new Geocoder.GeocodeListener() {
-                    @Override
-                    public void onGeocode(@NonNull List<Address> addresses) {
-                        if (!addresses.isEmpty()) {
-                            Address address = addresses.get(0);
-                            double latitude = address.getLatitude();
-                            double longitude = address.getLongitude();
-                            Log.d(TAG, String.format("Asynchronous geocoding result: (%.6f, %.6f)", latitude, longitude));
-                            CITY_COORDINATES.put(locationName, new GeocodingResult(latitude, longitude));
-                        } else {
-                            Log.e(TAG, "Asynchronous geocoding returned no results");
-                        }
-                    }
-                };
-                geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180, listener);
+                final GeocodingResult[] result = new GeocodingResult[1];
+
+                geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180,
+                        new Geocoder.GeocodeListener() {
+                            @Override
+                            public void onGeocode(@NonNull List<Address> addresses) {
+                                if (!addresses.isEmpty()) {
+                                    Address address = addresses.get(0);
+                                    double latitude = address.getLatitude();
+                                    double longitude = address.getLongitude();
+
+                                    // Cache all components of the address
+                                    if (address.getLocality() != null) {
+                                        CITY_COORDINATES.put(address.getLocality().toLowerCase(),
+                                                new GeocodingResult(latitude, longitude));
+                                    }
+                                    if (address.getAdminArea() != null) {
+                                        CITY_COORDINATES.put(address.getAdminArea().toLowerCase(),
+                                                new GeocodingResult(latitude, longitude));
+                                    }
+
+                                    result[0] = new GeocodingResult(latitude, longitude);
+                                    Log.d(TAG, String.format("Geocoding result: (%.6f, %.6f)",
+                                            latitude, longitude));
+                                }
+                            }
+                        });
+
+                if (result[0] != null) {
+                    return result[0];
+                }
             } else {
                 addresses = geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180);
                 if (addresses != null && !addresses.isEmpty()) {
@@ -88,15 +104,20 @@ public class LocationHelper {
                     double latitude = address.getLatitude();
                     double longitude = address.getLongitude();
 
+                    // Cache all components of the address
+                    if (address.getLocality() != null) {
+                        CITY_COORDINATES.put(address.getLocality().toLowerCase(),
+                                new GeocodingResult(latitude, longitude));
+                    }
+                    if (address.getAdminArea() != null) {
+                        CITY_COORDINATES.put(address.getAdminArea().toLowerCase(),
+                                new GeocodingResult(latitude, longitude));
+                    }
+
                     Log.d(TAG, String.format("Found coordinates for %s: (%.6f, %.6f)",
                             locationName, latitude, longitude));
 
-                    // Cache the result for future use
-                    CITY_COORDINATES.put(normalizedLocation, new GeocodingResult(latitude, longitude));
-
                     return new GeocodingResult(latitude, longitude);
-                } else {
-                    Log.e(TAG, "No coordinates found for location: " + locationName);
                 }
             }
         } catch (IOException e) {
@@ -110,7 +131,6 @@ public class LocationHelper {
 
     public interface CustomLocationCallback {
         void onLocationReceived(double latitude, double longitude);
-
         void onLocationError(String error);
     }
 

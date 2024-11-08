@@ -1,5 +1,7 @@
 package com.example.quickcash;
 
+import static android.content.Intent.getIntent;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
@@ -43,6 +45,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private ArrayList<String> durations;
     private ArrayList<String> companies;
     private ArrayList<String> jobTypes;
+    private ArrayList<String> locations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,22 +71,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void retrieveAndValidateData() {
-
         Intent intent = getIntent();
 
         if (intent != null) {
             try {
-                latitudesStr = intent.getStringArrayListExtra("latitudes");
-                longitudesStr = intent.getStringArrayListExtra("longitudes");
+                Log.d(TAG, "Starting to retrieve data from intent");
 
-                if (latitudesStr != null && longitudesStr != null) {
-                    for (String lat : latitudesStr) {
-                        latitudes.add(Double.valueOf(lat));
-                    }
-                    for (String lng : longitudesStr) {
-                        longitudes.add(Double.valueOf(lng));
-                    }
-                }
+                latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
+                longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
+                locations = intent.getStringArrayListExtra("locations");  // Add this line
+
+                Log.d(TAG, "Retrieved coordinates - Latitudes: " +
+                        (latitudes != null ? latitudes.size() : "null") + ", Longitudes: " +
+                        (longitudes != null ? longitudes.size() : "null") +
+                        ", Locations: " + (locations != null ? locations.size() : "null"));
 
                 titles = intent.getStringArrayListExtra("titles");
                 salaries = intent.getIntegerArrayListExtra("salaries");
@@ -92,17 +93,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 jobTypes = intent.getStringArrayListExtra("jobTypes");
 
             } catch (Exception e) {
-                Log.e(TAG, "Error getting intent data: " + e.getMessage());
+                Log.e(TAG, "Error getting intent data: " + e.getMessage(), e);
                 showError("Error loading job data");
             }
-
-            // Debug logging
-            Log.d(TAG, "Received data in MapActivity");
-            if (latitudes != null && !latitudes.isEmpty()) {
-                Log.d(TAG, "Received " + latitudes.size() + " locations");
-            } else {
-                Log.e(TAG, "No locations received");
-            }
+        } else {
+            Log.e(TAG, "Received null intent");
         }
     }
 
@@ -148,10 +143,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         if (latitudes == null || longitudes == null || titles == null ||
                 latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
             Log.e(TAG, "No valid location data available");
+            Log.e(TAG, "Latitudes null/empty: " + (latitudes == null || latitudes.isEmpty()));
+            Log.e(TAG, "Longitudes null/empty: " + (longitudes == null || longitudes.isEmpty()));
+            Log.e(TAG, "Titles null/empty: " + (titles == null || titles.isEmpty()));
             centerMapOnHalifax();
             showError("No job locations to display");
             return;
         }
+
+        Log.d(TAG, "Number of locations to display: " + latitudes.size());
 
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         boolean hasValidMarkers = false;
@@ -162,30 +162,56 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 double lng = longitudes.get(i);
                 String title = titles.get(i);
 
+                Log.d(TAG, String.format("Adding marker %d: %s at (%.6f, %.6f)",
+                        i, title, lat, lng));
+
                 LatLng position = new LatLng(lat, lng);
-                Marker marker = mMap.addMarker(new MarkerOptions()
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(position)
-                        .title(title));
+                        .title(title);
+
+                // Add additional info to marker snippet if available
+                StringBuilder snippet = new StringBuilder();
+                if (companies != null && i < companies.size()) {
+                    snippet.append(companies.get(i));
+                }
+                if (salaries != null && i < salaries.size()) {
+                    snippet.append("\nSalary: $").append(salaries.get(i)).append("/hr");
+                }
+                if (durations != null && i < durations.size()) {
+                    snippet.append("\nDuration: ").append(durations.get(i));
+                }
+                if (snippet.length() > 0) {
+                    markerOptions.snippet(snippet.toString());
+                }
+
+                Marker marker = mMap.addMarker(markerOptions);
 
                 if (marker != null) {
                     markerMap.put(marker.getId(), i);
                     boundsBuilder.include(position);
                     hasValidMarkers = true;
+                    Log.d(TAG, "Successfully added marker " + i);
+                } else {
+                    Log.e(TAG, "Failed to add marker " + i);
                 }
             } catch (Exception e) {
-                Log.e(TAG, "Error adding marker " + i + ": " + e.getMessage());
+                Log.e(TAG, "Error adding marker " + i + ": " + e.getMessage(), e);
             }
         }
 
         if (hasValidMarkers) {
             try {
                 LatLngBounds bounds = boundsBuilder.build();
-                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                int padding = 100; // offset from edges of the map in pixels
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+                Log.d(TAG, "Successfully set map bounds");
             } catch (Exception e) {
                 Log.e(TAG, "Error setting map bounds", e);
                 centerMapOnHalifax();
             }
         } else {
+            Log.e(TAG, "No valid markers were added");
             centerMapOnHalifax();
         }
     }
@@ -215,6 +241,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 if (companyView != null) companyView.setText(companies.get(index));
             }
 
+            // Add location field
+            if (locations != null && index < locations.size()) {
+                TextView locationView = dialog.findViewById(R.id.locationText);
+                if (locationView != null) locationView.setText(locations.get(index));
+            }
+
             if (salaries != null && index < salaries.size()) {
                 TextView salaryView = dialog.findViewById(R.id.salaryText);
                 if (salaryView != null) {
@@ -222,14 +254,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 }
             }
 
-            if (durations != null && index < durations.size()) {
-                TextView durationView = dialog.findViewById(R.id.durationText);
-                if (durationView != null) durationView.setText(durations.get(index));
-            }
-
             if (jobTypes != null && index < jobTypes.size()) {
                 TextView jobTypeView = dialog.findViewById(R.id.jobTypeText);
                 if (jobTypeView != null) jobTypeView.setText(jobTypes.get(index));
+            }
+
+            if (durations != null && index < durations.size()) {
+                TextView durationView = dialog.findViewById(R.id.durationText);
+                if (durationView != null) durationView.setText(durations.get(index));
             }
 
             Button closeButton = dialog.findViewById(R.id.closeButton);

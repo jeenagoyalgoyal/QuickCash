@@ -148,6 +148,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
         jobUrgency.setAdapter(urgencyAdapter);
     }
 
+// In JobSubmissionActivity.java, modify the submitJobPosting method:
+
     private void submitJobPosting() {
         // Get text from form inputs
         String jobTitleText = jobTitle.getText().toString().trim();
@@ -161,42 +163,54 @@ public class JobSubmissionActivity extends AppCompatActivity {
         String startDateText = startDate.getText().toString().trim();
 
         if (!checkFields(jobTitleText, companyNameText, jobTypeText, requirementsText,
-                salaryText, urgencyText, locationText, durationText,
-                startDateText)) {
+                salaryText, urgencyText, locationText, durationText, startDateText)) {
             return;
         }
 
         int salaryValue = Integer.parseInt(salaryText);
-
-        // EmployerID is the user email
         String employerId = email.replace(".", ",");
-
         String jobId = null;
-
         Job job = new Job();
 
+        // Get coordinates for the location
         LocationHelper.GeocodingResult result = LocationHelper.getCoordinates(
                 JobSubmissionActivity.this,
                 locationText
         );
 
-        Double lat = result.getLatitude();
-        Double lng = result.getLongitude();
+        // Add debug logging
+        Log.d("JobSubmission", "Location entered: " + locationText);
+        Log.d("JobSubmission", "Geocoding result - Latitude: " + result.getLatitude() +
+                ", Longitude: " + result.getLongitude());
 
+        // Set the job location details
+        JobLocation jobLocation = new JobLocation(result.getLatitude(), result.getLongitude(), locationText);
+        job.setJobLocation(jobLocation);
+
+        // Add more debug logging
+        Log.d("JobSubmission", "Job Location set - Lat: " + job.getJobLocation().getLat() +
+                ", Lng: " + job.getJobLocation().getLng() +
+                ", Address: " + job.getJobLocation().getAddress());
+
+        // Set all other job fields (make sure we're passing the coordinates)
         job.setAllField(jobTitleText, companyNameText, jobTypeText, requirementsText,
                 salaryValue, urgencyText, locationText, durationText, startDateText,
-                employerId, jobId, lat, lng);
+                employerId, jobId, result.getLatitude(), result.getLongitude());
 
+        // Submit to Firebase
         jobCRUD.submitJob(job).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                Log.d("JobSubmission", "Job successfully submitted to Firebase");
                 Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
                 resetForm();
 
-                Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this, EmployerHomepageActivity.class);
+                Intent intentBackToEmployerPage = new Intent(JobSubmissionActivity.this,
+                        EmployerHomepageActivity.class);
                 intentBackToEmployerPage.putExtra("employerID", employerId);
                 intentBackToEmployerPage.putExtra("email", email);
                 startActivity(intentBackToEmployerPage);
             } else {
+                Log.e("JobSubmission", "Failed to submit job", task.getException());
                 Toast.makeText(this, "Failed to post job.", Toast.LENGTH_SHORT).show();
             }
         });

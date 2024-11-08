@@ -1,5 +1,6 @@
 package com.example.quickcash;
 
+import static android.content.Intent.getIntent;
 import static com.example.quickcash.filter.JobSearchFilter.*;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * This class is used for searching jobs via using filters to find the
  * posted jobs in the database.
  */
-public class JobSearchParameterActivity extends AppCompatActivity{
+public class JobSearchParameterActivity extends AppCompatActivity {
 
     private static final String TAG = "JobSearchParameter";
     private EditText jobTitle;
@@ -64,10 +65,11 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     /**
      * On create, initialize the job search parameter form
+     *
      * @param savedInstanceState
      */
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_search_parameter);
 
@@ -76,22 +78,17 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         //getting email and ID
         Intent intentPreferredEmployers = getIntent();
         this.email = intentPreferredEmployers.getStringExtra("email");
-        if (email!=null && !email.isEmpty()){
+        if (email != null && !email.isEmpty()) {
             this.userID = email.replace(".", ",");
         }
 
         searchButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * When user clicks search button, check the filters are filled
-             * @param view
-             */
             @Override
             public void onClick(View view) {
-                if(allEmptyFields()){
-                    errorText.setText("All Fields are empty");
-                }else if(checkSalaryField()){
+                // Remove the check for all empty fields since we want to show all results in that case
+                if (checkSalaryField()) {
                     errorText.setText("Enter Valid Salary Range");
-                }else{
+                } else {
                     errorText.setText(""); // Clear any previous error
                     performSearch();
                 }
@@ -101,11 +98,11 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allEmptyFields()){
+                if (allEmptyFields()) {
                     errorText.setText("All Fields are empty");
-                }else if(checkSalaryField()){
+                } else if (checkSalaryField()) {
                     errorText.setText("Enter Valid Salary Range");
-                }else{
+                } else {
                     errorText.setText(""); // Clear any previous error
                     performSearch();
                     queryJobsForMap();
@@ -117,7 +114,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     /**
      * Method initializes the job search form input variables
      */
-    public void init(){
+    public void init() {
         jobTitle = findViewById(R.id.jobTitle);
         companyName = findViewById(R.id.companyName);
         minSalary = findViewById(R.id.minSalary);
@@ -164,7 +161,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         Log.e(TAG, "Starting map search");
 
 
-        for(Job j: jobList){
+        for (Job j : jobList) {
 
             // Add job data to lists
 
@@ -190,7 +187,6 @@ public class JobSearchParameterActivity extends AppCompatActivity{
      * data as extras, including latitude and longitude coordinates, job titles, salaries, durations,
      * company names, and job types. The data is passed as {@code ArrayList} objects, allowing
      * {@code MapActivity} to access and display multiple job listings simultaneously.
-     *
      */
     private void launchMapActivity() {
         Intent intent = new Intent(this, MapActivity.class);
@@ -218,8 +214,8 @@ public class JobSearchParameterActivity extends AppCompatActivity{
             if (task.isSuccessful()) {
                 List<Job> jobs = task.getResult();
                 jobList.clear();
-                for(Job j: jobs) {
-                    if(passesAdditionalFilters(j)) {
+                for (Job j : jobs) {
+                    if (passesAdditionalFilters(j)) {
                         jobList.add(j);
                     }
                 }
@@ -237,10 +233,10 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     /**
      * Creates a firebase query with the input by user
+     *
      * @return
      */
-    private Query createQuery(){
-
+    private Query createQuery() {
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
         String company = companyName.getText().toString().trim();
@@ -249,37 +245,36 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         String jobDuration = duration.getText().toString().trim();
         String jobLocation = location.getText().toString().trim();
 
-        String salary = "salary";
-
         Query query = jobsRef.getReference("Jobs");
 
-        // Apply filters based on non-empty inputs
+        // Apply filters only if they are not empty
         if (isValidField(title)) {
             query = query.orderByChild("jobTitle").equalTo(title);
-        }else if(isValidField(company)){
-            query =query.orderByChild("companyName").equalTo(company);
-        }else if (isValidField(jobLocation)) {
+        } else if (isValidField(company)) {
+            query = query.orderByChild("companyName").equalTo(company);
+        } else if (isValidField(jobLocation)) {
             query = query.orderByChild("location").equalTo(jobLocation);
-        }else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
+        } else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
             int minSal = Integer.parseInt(minSalStr);
             int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild(salary).startAt(minSal).endAt(maxSal);
-        }else if(isValidField(minSalStr)){
+            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
+        } else if (isValidField(minSalStr)) {
             int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild(salary).startAt(minSal);
-        }else if(isValidField(maxSalStr)){
+            query = query.orderByChild("salary").startAt(minSal);
+        } else if (isValidField(maxSalStr)) {
             int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild(salary).endAt(maxSal);
-        }else if (isValidField(jobDuration)) {
+            query = query.orderByChild("salary").endAt(maxSal);
+        } else if (isValidField(jobDuration)) {
             query = query.orderByChild("expectedDuration").equalTo(jobDuration);
         }
-
+        // If no filters are applied, return all jobs
         return query;
     }
 
 
     /**
      * Filters for the user to see if it's valid
+     *
      * @param job
      * @return true if valid, false otherwise
      */
@@ -297,28 +292,30 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     /**
      * Checks if fields are all empty
+     *
      * @return true if all empty
      */
-    public boolean allEmptyFields(){
+    public boolean allEmptyFields() {
         return jobTitle.getText().toString().trim().isEmpty() &&
-               companyName.getText().toString().trim().isEmpty() &&
-               minSalary.getText().toString().trim().isEmpty() &&
-               maxSalary.getText().toString().trim().isEmpty() &&
-               duration.getText().toString().trim().isEmpty() &&
-               location.getText().toString().trim().isEmpty();
+                companyName.getText().toString().trim().isEmpty() &&
+                minSalary.getText().toString().trim().isEmpty() &&
+                maxSalary.getText().toString().trim().isEmpty() &&
+                duration.getText().toString().trim().isEmpty() &&
+                location.getText().toString().trim().isEmpty();
     }
 
     /**
      * Validates to see if salary is valid
+     *
      * @return false if empty
      */
-    public boolean checkSalaryField(){
+    public boolean checkSalaryField() {
         String minS = minSalary.getText().toString().trim();
         String maxS = maxSalary.getText().toString().trim();
 
-        if(minS.isEmpty() || maxS.isEmpty()){
+        if (minS.isEmpty() || maxS.isEmpty()) {
             return false;
-        }else{
+        } else {
             return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
         }
     }
