@@ -148,8 +148,6 @@ public class JobSubmissionActivity extends AppCompatActivity {
         jobUrgency.setAdapter(urgencyAdapter);
     }
 
-// In JobSubmissionActivity.java, modify the submitJobPosting method:
-
     private void submitJobPosting() {
         // Get text from form inputs
         String jobTitleText = jobTitle.getText().toString().trim();
@@ -170,7 +168,11 @@ public class JobSubmissionActivity extends AppCompatActivity {
         int salaryValue = Integer.parseInt(salaryText);
         String employerId = email.replace(".", ",");
         String jobId = null;
-        Job job = new Job();
+
+        // Show progress dialog
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Submitting job posting...");
+        progressDialog.show();
 
         // Get coordinates for the location
         LocationHelper.GeocodingResult result = LocationHelper.getCoordinates(
@@ -178,27 +180,49 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 locationText
         );
 
-        // Add debug logging
-        Log.d("JobSubmission", "Location entered: " + locationText);
-        Log.d("JobSubmission", "Geocoding result - Latitude: " + result.getLatitude() +
-                ", Longitude: " + result.getLongitude());
+        if (result == null) {
+            progressDialog.dismiss();
+            location.setError("Could not find this location. Please check the address.");
+            location.requestFocus();
+            return;
+        }
 
-        // Set the job location details
-        JobLocation jobLocation = new JobLocation(result.getLatitude(), result.getLongitude(), locationText);
+        // Add debug logging
+        Log.d("JobSubmission", "Address entered: " + locationText);
+        Log.d("JobSubmission", "Geocoding result - Latitude: " + result.getLatitude() +
+                ", Longitude: " + result.getLongitude() +
+                ", Formatted Address: " + result.getFormattedAddress());
+
+        Job job = new Job();
+
+        // Set the job location details using the geocoded result
+        JobLocation jobLocation = new JobLocation(
+                result.getLatitude(),
+                result.getLongitude(),
+                result.getFormattedAddress() // Use the formatted address from geocoding
+        );
         job.setJobLocation(jobLocation);
 
-        // Add more debug logging
-        Log.d("JobSubmission", "Job Location set - Lat: " + job.getJobLocation().getLat() +
-                ", Lng: " + job.getJobLocation().getLng() +
-                ", Address: " + job.getJobLocation().getAddress());
-
-        // Set all other job fields (make sure we're passing the coordinates)
-        job.setAllField(jobTitleText, companyNameText, jobTypeText, requirementsText,
-                salaryValue, urgencyText, locationText, durationText, startDateText,
-                employerId, jobId, result.getLatitude(), result.getLongitude());
+        // Set all other job fields
+        job.setAllField(
+                jobTitleText,
+                companyNameText,
+                jobTypeText,
+                requirementsText,
+                salaryValue,
+                urgencyText,
+                result.getFormattedAddress(), // Use formatted address here too
+                durationText,
+                startDateText,
+                employerId,
+                jobId,
+                result.getLatitude(),
+                result.getLongitude()
+        );
 
         // Submit to Firebase
         jobCRUD.submitJob(job).addOnCompleteListener(task -> {
+            progressDialog.dismiss();
             if (task.isSuccessful()) {
                 Log.d("JobSubmission", "Job successfully submitted to Firebase");
                 Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
@@ -209,30 +233,32 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 intentBackToEmployerPage.putExtra("employerID", employerId);
                 intentBackToEmployerPage.putExtra("email", email);
                 startActivity(intentBackToEmployerPage);
+                finish();
             } else {
                 Log.e("JobSubmission", "Failed to submit job", task.getException());
-                Toast.makeText(this, "Failed to post job.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to post job: " +
+                        task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     /**
-     * Checks the fields to see if any of the fields are not filled out
+     * Checks the fields to see if any of the mandatory fields are not filled out
      *
-     * @param jobTitleText
-     * @param companyNameText
-     * @param jobTypeText
-     * @param requirementsText
-     * @param salaryText
-     * @param urgencyText
-     * @param locationText
-     * @param durationText
-     * @param startDateText
-     * @return
+     * @param jobTitleText     Title of the job
+     * @param companyNameText  Name of the company
+     * @param jobTypeText      Type of job
+     * @param requirementsText Job requirements (optional)
+     * @param salaryText       Job salary
+     * @param urgencyText      Job urgency
+     * @param locationText     Job location
+     * @param durationText     Job duration
+     * @param startDateText    Job start date
+     * @return true if all mandatory fields are valid
      */
-    private boolean checkFields(String jobTitleText, String companyNameText, String jobTypeText, String requirementsText,
-                                String salaryText, String urgencyText, String locationText, String durationText,
-                                String startDateText) {
+    private boolean checkFields(String jobTitleText, String companyNameText, String jobTypeText,
+                                String requirementsText, String salaryText, String urgencyText,
+                                String locationText, String durationText, String startDateText) {
         boolean match = true;
 
         // Job Title
@@ -256,12 +282,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
             match = false;
         }
 
-        //Company Name
-        if (requirementsText.isEmpty()) {
-            requirements.setError("Enter Requirements");
-            requirements.requestFocus();
-            match = false;
-        }
+        // Requirements field is now optional - removed validation
 
         // Salary - Check if empty and validate as a positive integer
         if (salaryText.isEmpty()) {
@@ -269,9 +290,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
             salary.requestFocus();
             match = false;
         } else {
-            int salaryValue = Integer.parseInt(salaryText);
             try {
-                salaryValue = Integer.parseInt(salaryText);
+                int salaryValue = Integer.parseInt(salaryText);
                 if (salaryValue <= 0) {
                     salary.setError("Salary must be a positive number.");
                     salary.requestFocus();
@@ -305,6 +325,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
             match = false;
         }
 
+        // Start Date
         if (startDateText.isEmpty() || startDateText.equals("Start Date")) {
             Toast.makeText(this, "Please select a Start Date.", Toast.LENGTH_SHORT).show();
             startDate.requestFocus();

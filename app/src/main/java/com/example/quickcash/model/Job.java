@@ -12,7 +12,7 @@ public class Job {
     private String startDate;
     private String employerId;
     private String jobId;
-    private JobLocation jobLocation;  // Add this field
+    private JobLocation jobLocation;
 
     // Default constructor required for Firebase
     public Job() {
@@ -26,7 +26,7 @@ public class Job {
         this.jobTitle = jobTitle;
         this.companyName = companyName;
         this.jobType = jobType;
-        this.requirements = requirements;
+        this.requirements = requirements != null ? requirements : ""; // Handle null requirements
         this.salary = salary;
         this.urgency = urgency;
         this.location = location;
