@@ -20,127 +20,139 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class LocationHelper {
     private static final String TAG = "LocationHelper";
     private static final long UPDATE_INTERVAL = 10000;  // 10 seconds
     private static final long FASTEST_INTERVAL = 5000;  // 5 seconds
 
-    // Cache for common city coordinates
-    private static final Map<String, GeocodingResult> CITY_COORDINATES = new HashMap<>();
-
-    static {
-        CITY_COORDINATES.put("halifax", new GeocodingResult(44.6488, -63.5752));
-        CITY_COORDINATES.put("montreal", new GeocodingResult(45.5017, -73.5673));
-        CITY_COORDINATES.put("toronto", new GeocodingResult(43.6532, -79.3832));
-        CITY_COORDINATES.put("vancouver", new GeocodingResult(49.2827, -123.1207));
-        CITY_COORDINATES.put("ottawa", new GeocodingResult(45.4215, -75.6972));
-        CITY_COORDINATES.put("calgary", new GeocodingResult(51.0447, -114.0719));
-        CITY_COORDINATES.put("edmonton", new GeocodingResult(53.5461, -113.4938));
-    }
-
+    /**
+     * Gets coordinates for any address worldwide
+     * @param context The application context
+     * @param locationName The address to geocode
+     * @return GeocodingResult containing the coordinates
+     */
     public static GeocodingResult getCoordinates(Context context, String locationName) {
         if (locationName == null || locationName.trim().isEmpty()) {
             Log.e(TAG, "Location name is null or empty");
-            return CITY_COORDINATES.get("halifax"); // Default to Halifax
+            return null;
         }
 
-        String normalizedLocation = locationName.trim().toLowerCase();
-
-        // First check our cached city coordinates with partial matching
-        for (Map.Entry<String, GeocodingResult> entry : CITY_COORDINATES.entrySet()) {
-            if (normalizedLocation.contains(entry.getKey()) ||
-                    entry.getKey().contains(normalizedLocation)) {
-                Log.d(TAG, "Found cached coordinates for " + locationName);
-                return entry.getValue();
-            }
-        }
+        String searchLocation = locationName.trim();
+        Log.d(TAG, "Attempting to geocode address: " + searchLocation);
 
         try {
+            // Use the system's default locale for better regional address handling
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            List<Address> addresses;
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                final GeocodingResult[] result = new GeocodingResult[1];
-
-                geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180,
-                        new Geocoder.GeocodeListener() {
-                            @Override
-                            public void onGeocode(@NonNull List<Address> addresses) {
-                                if (!addresses.isEmpty()) {
-                                    Address address = addresses.get(0);
-                                    double latitude = address.getLatitude();
-                                    double longitude = address.getLongitude();
-
-                                    // Cache all components of the address
-                                    if (address.getLocality() != null) {
-                                        CITY_COORDINATES.put(address.getLocality().toLowerCase(),
-                                                new GeocodingResult(latitude, longitude));
-                                    }
-                                    if (address.getAdminArea() != null) {
-                                        CITY_COORDINATES.put(address.getAdminArea().toLowerCase(),
-                                                new GeocodingResult(latitude, longitude));
-                                    }
-
-                                    result[0] = new GeocodingResult(latitude, longitude);
-                                    Log.d(TAG, String.format("Geocoding result: (%.6f, %.6f)",
-                                            latitude, longitude));
-                                }
-                            }
-                        });
-
-                if (result[0] != null) {
-                    return result[0];
-                }
+                return geocodeAddressModernApi(geocoder, searchLocation);
             } else {
-                addresses = geocoder.getFromLocationName(locationName, 1, -90, -180, 90, 180);
-                if (addresses != null && !addresses.isEmpty()) {
-                    Address address = addresses.get(0);
-                    double latitude = address.getLatitude();
-                    double longitude = address.getLongitude();
-
-                    // Cache all components of the address
-                    if (address.getLocality() != null) {
-                        CITY_COORDINATES.put(address.getLocality().toLowerCase(),
-                                new GeocodingResult(latitude, longitude));
-                    }
-                    if (address.getAdminArea() != null) {
-                        CITY_COORDINATES.put(address.getAdminArea().toLowerCase(),
-                                new GeocodingResult(latitude, longitude));
-                    }
-
-                    Log.d(TAG, String.format("Found coordinates for %s: (%.6f, %.6f)",
-                            locationName, latitude, longitude));
-
-                    return new GeocodingResult(latitude, longitude);
-                }
+                return geocodeAddressLegacyApi(geocoder, searchLocation);
             }
-        } catch (IOException e) {
-            Log.e(TAG, "Error getting coordinates for " + locationName, e);
+        } catch (Exception e) {
+            Log.e(TAG, "Error geocoding location: " + searchLocation, e);
+            return handleGeocodingError(searchLocation);
         }
-
-        // Default to Halifax coordinates if everything fails
-        Log.w(TAG, "Defaulting to Halifax coordinates for: " + locationName);
-        return CITY_COORDINATES.get("halifax");
     }
 
-    public interface CustomLocationCallback {
-        void onLocationReceived(double latitude, double longitude);
-        void onLocationError(String error);
+    /**
+     * Geocodes address using modern Android API (Tiramisu and above)
+     */
+    private static GeocodingResult geocodeAddressModernApi(Geocoder geocoder, String searchLocation) {
+        try {
+            final GeocodingResult[] result = new GeocodingResult[1];
+
+            geocoder.getFromLocationName(searchLocation, 1, new Geocoder.GeocodeListener() {
+                @Override
+                public void onGeocode(@NonNull List<Address> addresses) {
+                    if (!addresses.isEmpty()) {
+                        result[0] = processAddress(addresses.get(0), searchLocation);
+                    }
+                }
+            });
+
+            // Wait briefly for the result
+            int attempts = 0;
+            while (result[0] == null && attempts < 5) {
+                Thread.sleep(100);
+                attempts++;
+            }
+
+            if (result[0] != null) {
+                return result[0];
+            }
+
+            Log.w(TAG, "Could not geocode address using modern API: " + searchLocation);
+            return handleGeocodingError(searchLocation);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error in modern geocoding: " + e.getMessage());
+            return handleGeocodingError(searchLocation);
+        }
+    }
+
+    /**
+     * Geocodes address using legacy Android API (pre-Tiramisu)
+     */
+    private static GeocodingResult geocodeAddressLegacyApi(Geocoder geocoder, String searchLocation) {
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(searchLocation, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                return processAddress(addresses.get(0), searchLocation);
+            }
+
+            Log.w(TAG, "Could not geocode address using legacy API: " + searchLocation);
+            return handleGeocodingError(searchLocation);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error in legacy geocoding: " + e.getMessage());
+            return handleGeocodingError(searchLocation);
+        }
+    }
+
+    /**
+     * Processes a geocoded address and creates a GeocodingResult
+     */
+    private static GeocodingResult processAddress(Address address, String originalLocation) {
+        double latitude = address.getLatitude();
+        double longitude = address.getLongitude();
+
+        // Log the full address details for debugging
+        StringBuilder addressDetails = new StringBuilder();
+        for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+            addressDetails.append(address.getAddressLine(i));
+            if (i < address.getMaxAddressLineIndex()) {
+                addressDetails.append(", ");
+            }
+        }
+
+        Log.d(TAG, String.format("Successfully geocoded '%s' to: (%.6f, %.6f)",
+                originalLocation, latitude, longitude));
+        Log.d(TAG, "Full address details: " + addressDetails.toString());
+
+        return new GeocodingResult(latitude, longitude, addressDetails.toString());
+    }
+
+    /**
+     * Handles geocoding errors
+     */
+    private static GeocodingResult handleGeocodingError(String location) {
+        Log.e(TAG, "Could not geocode location: " + location);
+        return null;
     }
 
     public static class GeocodingResult {
         private final double latitude;
         private final double longitude;
+        private final String formattedAddress;
 
-        public GeocodingResult(double latitude, double longitude) {
+        public GeocodingResult(double latitude, double longitude, String formattedAddress) {
             this.latitude = latitude;
             this.longitude = longitude;
+            this.formattedAddress = formattedAddress;
         }
 
         public double getLatitude() {
@@ -150,8 +162,28 @@ public class LocationHelper {
         public double getLongitude() {
             return longitude;
         }
+
+        public String getFormattedAddress() {
+            return formattedAddress;
+        }
     }
 
+    /**
+     * Validates if coordinates are within valid ranges
+     */
+    public static boolean areValidCoordinates(double latitude, double longitude) {
+        return latitude >= -90 && latitude <= 90 &&
+                longitude >= -180 && longitude <= 180;
+    }
+
+    public interface CustomLocationCallback {
+        void onLocationReceived(double latitude, double longitude);
+        void onLocationError(String error);
+    }
+
+    /**
+     * Gets the current device location
+     */
     public static void getCurrentLocation(Context context, CustomLocationCallback callback) {
         // Check for location permissions
         if (ActivityCompat.checkSelfPermission(context,
