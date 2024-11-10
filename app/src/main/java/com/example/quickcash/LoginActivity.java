@@ -4,6 +4,8 @@ import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQ
 import com.google.android.gms.location.LocationRequest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +38,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import android.Manifest;
 
@@ -59,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText location;
     private Button LocButton;
     private String manualLocation=null;
+    private boolean locationPermissionDenied = false;
 
 
     // Regex patterns for email and password validation
@@ -113,11 +119,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (manualLocation.isEmpty()) {
             Toast.makeText(this, "Location field cannot be empty", Toast.LENGTH_SHORT).show();
-        } else {
-            manualLocationDetect = true;
-            Toast.makeText(this, "Manual Location set to: " + manualLocation, Toast.LENGTH_SHORT).show();
-            intent.putExtra("manualLocation", manualLocation);
+        } Geocoder geocoder = new Geocoder(this, Locale.CANADA);
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(manualLocation, 5);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                double latitude = address.getLatitude();
+                double longitude = address.getLongitude();
+
+                // Store latitude and longitude as the manual location
+                manualLocation = latitude + "," + longitude;
+                manualLocationDetect = true;
+                locationPermissionDenied = true;
+
+                Toast.makeText(this, "Manual Location set to: " + manualLocation , Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Unable to find location. Please try a different name.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(this, "Geocoder service not available", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
+    }
+    private void navigateToMapsActivity() {
+        intent.putExtra("manualLocation", manualLocation); // Pass manual location
+        startActivity(intent);
     }
 
 
@@ -211,18 +237,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    /**
+     * Fetches the user's role and navigates to MapsActivity.
+     * @param email The user's email.
+     */
     private void fetchUserRoleAndNavigate(String email) {
         UseRole useRole = UseRole.getInstance();
         useRole.fetchUserRole(email, role -> {
             if (role != null) {
-                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-                intent.putExtra("email", email);
-                startActivity(intent);
-                finish();
+                navigateToMapsActivity(email, role);
             } else {
                 Toast.makeText(LoginActivity.this, "Role not found. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * Navigates to MapsActivity with the manual location if set, or the current location if permission is granted.
+     */
+    private void navigateToMapsActivity(String email, String role) {
+        Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("role", role);
+
+        // Pass manual location to MapsActivity if set
+        if (manualLocationDetect) {
+            intent.putExtra("manualLocation", manualLocation);
+        } else {
+            getCurrentLocation(intent);
+        }
+
+        startActivity(intent);
+        finish();
     }
 
 
@@ -247,23 +293,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     void requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }else {
+            getCurrentLocation(intent);
         }
     }
 
     /**
      * Gets the current location of the user and updates the intent.
      */
-    void getCurrentLocation() {
+    void getCurrentLocation(Intent intent) {
         if(manualLocationDetect){
             return;
         }
-//        LocationRequest locationRequest = null;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY)
-//                    .setMinUpdateIntervalMillis(5000)
-//                    .build();
-//        }
-
         LocationRequest locationRequest = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY) // 10 seconds interval
@@ -290,31 +331,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
-
-    private void fetchUserRole(String email) {
-        UseRole useRole = UseRole.getInstance();
-        useRole.fetchUserRole(email, new UseRole.OnRoleFetchedListener() {
-            @Override
-            public void onRoleFetched(String role) {
-                if (role != null) {
-                    // Set the current role in UseRole
-                    useRole.setCurrentRole(role);
-                    // Navigate to the appropriate homepage
-                    if (role.equalsIgnoreCase("employee")) {
-                        navigateToEmployeeHomepage(email);
-                    } else if (role.equalsIgnoreCase("employer")) {
-                        navigateToEmployerHomepage(email);
-                    } else {
-                        statusLabel.setText("Role not recognized.");
-                    }
-                } else {
-                    statusLabel.setText("Role not found.");
-                }
-            }
-        });
-    }
-
     /**
      * Moves to the next activity after a delay and passes location data via intent.
      * @param manualLocation The manually entered location, if any.
@@ -334,21 +350,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void navigateToEmployeeHomepage(String email) {
-        Intent intentEmployee = new Intent(this, EmployeeHomepageActivity.class);
-        intentEmployee.putExtra("email", email);
-        startActivity(intentEmployee);
+    /**
+     * Handles location permission request results.
+     * @param requestCode The request code passed in requestPermissions.
+     * @param permissions The requested permissions.
+     * @param grantResults The grant results for the requested permissions.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation(intent);
+            } else {
+                locationPermissionDenied = true; // Set flag when permission is denied
+                if (manualLocation != null) {
+                    // Use manual location if available
+                    navigateToMapsActivity();
+                } else {
+                    Toast.makeText(this, "Location permission is required or provide a manual location.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
-
-    private void navigateToEmployerHomepage(String email) {
-        Intent intentEmployer = new Intent(this, EmployerHomepageActivity.class);
-        intentEmployer.putExtra("email", email);
-        startActivity(intentEmployer);
-    }
-    private void moveToWelcomePage() {
-        // Intent to move to the welcome page
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
-
 }
