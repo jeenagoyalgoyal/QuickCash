@@ -4,6 +4,8 @@ import static com.example.quickcash.R.id.jobsRecycler;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +27,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class EmployeeHomepageActivity extends AppCompatActivity implements LocationHelper.LocationResultListener {
 
@@ -58,6 +62,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         id = intentEmployeeDash.getIntExtra("userID", -1);
 
         String email = intentEmployeeDash.getStringExtra("email");
+        String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
+
 
         useRole = UseRole.getInstance();
 
@@ -80,6 +86,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         // Set up RecyclerView for displaying jobs
         jobRecyclerView = findViewById(R.id.jobsRecycler);
         jobRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        jobRecyclerView.setNestedScrollingEnabled(true);
 
 
         // SWITCHES TO EMPLOYEE DASH
@@ -131,8 +138,26 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
             }
         });
 
-        getUserLocation();
+        if (manualLocation != null && !manualLocation.isEmpty()) {
+            String[] latLng = manualLocation.split(",");
+            loadJobsByLocation(getCityFromLatLng(Double.parseDouble(latLng[0]), Double.parseDouble(latLng[1])));
+        } else {
+            loadJobsByLocation("Halifax");
+        }
 
+    }
+
+    private String getCityFromLatLng(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                return addresses.get(0).getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Halifax";
     }
 
     @Override

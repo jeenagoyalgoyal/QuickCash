@@ -1,12 +1,9 @@
 package com.example.quickcash.ui;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,23 +13,13 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quickcash.EmployerHomepageActivity;
-import com.example.quickcash.Firebase.JobCRUD;
-import com.example.quickcash.JobDialog;
 import com.example.quickcash.UseRole;
 import com.example.quickcash.EmployeeHomepageActivity;
 import com.example.quickcash.R;
-import com.example.quickcash.adapter.JobSearchAdapter;
-import com.example.quickcash.model.Job;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,7 +28,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.quickcash.databinding.ActivityMapsBinding;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.List;
@@ -209,16 +195,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
         }
-    }
-
-    private void showDialogBasedOnRole( String email) {
-        Intent dialogIntent = new Intent(MapsActivity.this, JobDialog.class);
-        dialogIntent.putExtra("role", "employee");
-        dialogIntent.putExtra("email", email);
-        dialogIntent.putExtra("latitude", latitude);
-        dialogIntent.putExtra("longitude", longitude);
-        startActivity(dialogIntent);
-        finish();
     }
 
 

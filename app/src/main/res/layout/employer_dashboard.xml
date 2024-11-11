@@ -9,7 +9,7 @@
         android:id="@+id/welcomeEmployer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="Welcome Employer!"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +78,24 @@
 
     <Button
         android:id="@+id/switchToEmployeeButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="580dp"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="412dp"
         android:text="Switch to Employee"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workersRecyclerView"
+        android:layout_width="260dp"
+        android:layout_height="167dp"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employerNotificationsButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
