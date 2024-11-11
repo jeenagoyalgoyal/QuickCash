@@ -84,7 +84,7 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="488dp"
+        android:layout_marginTop="484dp"
 
         android:text="Switch to Employer"
         android:textColorLink="#7C7C7C"
@@ -124,6 +124,6 @@
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/preferredEmployersButton"
-        app:layout_constraintVertical_bias="0.949" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
