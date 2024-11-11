@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+import com.google.android.gms.maps.GoogleMap;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,9 +31,18 @@ public class LocationHelper {
     private final Context context;
     private final LocationCallback locationCallback;
     private LocationResultListener locationResultListener;
+    private PermissionListener permissionListener;
+
 
     public interface LocationResultListener {
-        void onLocationRetrieved(double latitude, double longitude, String address);
+        void onLocationRetrieved(double latitude, double longitude, String address, String city);
+
+        void onMapReady(GoogleMap googleMap);
+    }
+
+    public interface PermissionListener {
+        void onPermissionDenied();
+        void onPermissionGranted();
     }
 
     public LocationHelper(Context context, LocationResultListener listener) {
@@ -47,12 +58,13 @@ public class LocationHelper {
                     double latitude = locationResult.getLastLocation().getLatitude();
                     double longitude = locationResult.getLastLocation().getLongitude();
 
-                    // Use Geocoder to get the address
+                    // Use Geocoder to get the address and city
                     String address = getAddressFromCoordinates(latitude, longitude);
+                    String city = getCityFromAddress(address);
 
                     // Pass the location data to the listener
                     if (locationResultListener != null) {
-                        locationResultListener.onLocationRetrieved(latitude, longitude, address);
+                        locationResultListener.onLocationRetrieved(latitude, longitude, address, city);
                     }
 
                     // Stop location updates to conserve battery
@@ -61,15 +73,26 @@ public class LocationHelper {
             }
         };
     }
+    public void setPermissionListener(PermissionListener listener) {
+        this.permissionListener = listener;
+    }
 
+    public boolean isLocationPermissionGranted() {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @SuppressLint("MissingPermission")
     public void getCurrentLocation() {
         // Check for location permissions
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (!isLocationPermissionGranted()) {
             // Request permissions if not granted
             if (context instanceof Activity) {
                 ActivityCompat.requestPermissions((Activity) context,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+            }
+            if (permissionListener != null) {
+                permissionListener.onPermissionDenied();
             }
             return;
         }
@@ -101,5 +124,14 @@ public class LocationHelper {
             e.printStackTrace();
         }
         return "Address not found";
+    }
+    private String getCityFromAddress(String address) {
+        if (address != null && !address.isEmpty()) {
+            String[] addressParts = address.split(",");
+            if (addressParts.length > 1) {
+                return addressParts[1].trim();
+            }
+        }
+        return "Unknown";
     }
 }

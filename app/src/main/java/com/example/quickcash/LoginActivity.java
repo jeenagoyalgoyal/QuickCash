@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQUEST_CODE;
 import com.google.android.gms.location.LocationRequest;
+import com.example.quickcash.R;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (manualLocation.isEmpty()) {
             Toast.makeText(this, "Location field cannot be empty", Toast.LENGTH_SHORT).show();
-        } Geocoder geocoder = new Geocoder(this, Locale.CANADA);
+        } Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocationName(manualLocation, 5);
             if (addresses != null && !addresses.isEmpty()) {
@@ -134,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Toast.makeText(this, "Manual Location set to: " + manualLocation , Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Unable to find location. Please try a different name.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Current location.", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             Toast.makeText(this, "Geocoder service not available", Toast.LENGTH_SHORT).show();
