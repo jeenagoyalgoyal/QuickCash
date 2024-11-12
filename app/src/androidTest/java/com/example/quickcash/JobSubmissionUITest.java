@@ -36,15 +36,22 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasToString;
 
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;;
+import org.junit.runners.JUnit4;
 
 import android.os.IBinder;
 import android.view.WindowManager;
 
 import androidx.test.espresso.Root;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -58,7 +65,6 @@ public class JobSubmissionUITest {
     public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
     public ActivityScenario<JobSubmissionActivity> jobSubmissionActivityScenario;
     public ActivityScenario<LoginActivity> loginActivityActivityScenario;
-
 
     public void setupRoleActivity() {
         employerActivityScenario = ActivityScenario.launch(EmployerHomepageActivity.class);
@@ -195,18 +201,19 @@ public class JobSubmissionUITest {
     }
 
     @Test
-    public void testFormSubmitsSuccessfully() {
+    public void testFormSubmitsSuccessfully() throws UiObjectNotFoundException, InterruptedException {
         setupLoginActivityActivityScenario();
+        UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
 
         onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        Thread.sleep(6000);
         onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
         onView(withId(R.id.createJobButton)).perform(click());
 
