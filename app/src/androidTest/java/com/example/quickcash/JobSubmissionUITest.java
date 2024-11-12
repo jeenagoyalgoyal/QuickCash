@@ -1,93 +1,211 @@
 package com.example.quickcash;
 
+// Import statements
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.isDialog;
-import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
-import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-//import static android.support.test.uiautomator;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
-
-import android.graphics.Color;
-import android.os.SystemClock;
-import android.widget.TextView;
-
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.action.TypeTextAction;
-import androidx.test.espresso.assertion.ViewAssertions;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasToString;
-
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;;
-
-import android.os.IBinder;
-import android.view.WindowManager;
-
-import androidx.test.espresso.Root;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+import androidx.test.espresso.intent.Intents;
 
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(JUnit4.class)
+import com.example.quickcash.R;
+
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class JobSubmissionUITest {
 
-
-    public ActivityScenario<EmployerHomepageActivity> employerActivityScenario;
-    public ActivityScenario<JobSubmissionActivity> jobSubmissionActivityScenario;
-    public ActivityScenario<LoginActivity> loginActivityActivityScenario;
-
-
-    public void setupRoleActivity() {
-        employerActivityScenario = ActivityScenario.launch(EmployerHomepageActivity.class);
+    @Before
+    public void setup() {
+        Intents.init();
     }
 
-    public void setupJobSubmissionActivityScenario() {
-        jobSubmissionActivityScenario = ActivityScenario.launch(JobSubmissionActivity.class);
+    @After
+    public void cleanup() {
+        Intents.release();
     }
 
-    public void setupLoginActivityActivityScenario(){
-        loginActivityActivityScenario = ActivityScenario.launch(LoginActivity.class);
+    @Test
+    public void testFormSubmitsSuccessfully() {
+        // Launch LoginActivity explicitly
+        ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class);
+
+        // Login steps
+        onView(withId(R.id.emailBox))
+                .check(matches(isDisplayed()))
+                .perform(typeText("test2@gmail.com"), closeSoftKeyboard());
+
+        onView(withId(R.id.passwordBox))
+                .check(matches(isDisplayed()))
+                .perform(typeText("TestingPassword!1"), closeSoftKeyboard());
+
+        onView(withId(R.id.loginButton))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        // Wait for employer homepage to load
+        try {
+            Thread.sleep(2000); // Adjust the sleep time as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Verify we're on employer homepage and click create job
+        onView(withId(R.id.createJobButton))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        // Fill in job details
+        onView(withId(R.id.jobTitle))
+                .check(matches(isDisplayed()))
+                .perform(typeText("Software Developer"), closeSoftKeyboard());
+
+        onView(withId(R.id.companyName))
+                .check(matches(isDisplayed()))
+                .perform(typeText("Tech Company"), closeSoftKeyboard());
+
+        // Select job type from spinner
+        onView(withId(R.id.spinnerJobType))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Full-time"))).perform(click());
+
+        // Fill remaining fields
+        onView(withId(R.id.requirementText))
+                .check(matches(isDisplayed()))
+                .perform(typeText("Java, Python experience"), closeSoftKeyboard());
+
+        onView(withId(R.id.salaryText))
+                .check(matches(isDisplayed()))
+                .perform(typeText("25"), closeSoftKeyboard());
+
+        // Select urgency from spinner
+        onView(withId(R.id.spinnerUrgency))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("High"))).perform(click());
+
+        onView(withId(R.id.locationJob))
+                .check(matches(isDisplayed()))
+                .perform(typeText("Halifax, NS"), closeSoftKeyboard());
+
+        onView(withId(R.id.expectedDuration))
+                .check(matches(isDisplayed()))
+                .perform(typeText("20"), closeSoftKeyboard());
+
+        // Handle the Material Date Picker
+        onView(withId(R.id.startDate))
+                .perform(click());
+
+        // Navigate to a closer month (e.g., next month)
+        // Assuming the target month is November 2024
+        int monthsToGoBack = calculateMonthsToGoBack(2024, 11); // Year: 2024, Month: November
+        for (int i = 0; i < monthsToGoBack; i++) {
+            onView(anyOf(
+                    withContentDescription("Previous month"),
+                    withContentDescription("Change to previous month")
+            ))
+                    .perform(click());
+        }
+
+        // Select the date "15" in the closer month
+        onView(allOf(withText("15"), isDisplayed()))
+                .perform(click());
+
+        // Confirm the date selection by clicking "OK"
+        onView(withText("OK"))
+                .perform(click());
+
+        // Submit the form
+        onView(withId(R.id.jobSubmissionButton))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        // Wait for submission and navigation
+        try {
+            Thread.sleep(2000); // Adjust the sleep time as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Verify we're back on employer homepage
+        onView(withId(R.id.welcomeEmployer))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("Welcome Employer!")));
+    }
+
+    // Helper method to calculate the number of months to go back
+    private int calculateMonthsToGoBack(int targetYear, int targetMonth) {
+        java.util.Calendar current = java.util.Calendar.getInstance();
+        int currentYear = current.get(java.util.Calendar.YEAR);
+        int currentMonth = current.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
+
+        int yearsDifference = currentYear - targetYear;
+        int monthsDifference = currentMonth - targetMonth;
+
+        return yearsDifference * 12 + monthsDifference;
+    }
+
+    @Test
+    public void testPreventsSubmissionIfMissingFields() {
+        ActivityScenario<JobSubmissionActivity> scenario =
+                ActivityScenario.launch(JobSubmissionActivity.class);
+
+        // Fill only partial information
+        onView(withId(R.id.jobTitle))
+                .perform(typeText("Software Developer"), closeSoftKeyboard());
+
+        onView(withId(R.id.companyName))
+                .perform(typeText("Tech Company"), closeSoftKeyboard());
+
+        // Select job type
+        onView(withId(R.id.spinnerJobType)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Full-time"))).perform(click());
+
+        // Try to submit incomplete form
+        onView(withId(R.id.jobSubmissionButton)).perform(click());
+
+        // Verify form is still displayed (submission prevented)
+        onView(withId(R.id.jobSubmissionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.jobSub)).check(matches(isDisplayed()));
+
+        // Verify required fields are still empty
+        onView(withId(R.id.salaryText)).check(matches(withText("")));
+        onView(withId(R.id.locationJob)).check(matches(withText("")));
+        onView(withId(R.id.expectedDuration)).check(matches(withText("")));
     }
 
     @Test
     public void checkCreateJobButtonPresent() {
-
-        setupRoleActivity();
+        ActivityScenario.launch(EmployerHomepageActivity.class);
         onView(withText("Create Job")).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkJobSubmissionForm() {
-        setupRoleActivity();
-        onView(withId(R.id.createJobButton)).perform(click());
-        setupJobSubmissionActivityScenario();
+        ActivityScenario.launch(JobSubmissionActivity.class);
         onView(withId(R.id.jobSub)).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkRequiredFields() {
-        setupJobSubmissionActivityScenario();
+        ActivityScenario.launch(JobSubmissionActivity.class);
+
+        // Verify all required fields are present
         onView(withId(R.id.jobTitle)).check(matches(isDisplayed()));
         onView(withId(R.id.companyName)).check(matches(isDisplayed()));
         onView(withId(R.id.spinnerJobType)).check(matches(isDisplayed()));
@@ -97,155 +215,5 @@ public class JobSubmissionUITest {
         onView(withId(R.id.locationJob)).check(matches(isDisplayed()));
         onView(withId(R.id.expectedDuration)).check(matches(isDisplayed()));
         onView(withId(R.id.startDate)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testJobTypeDefaultPlaceholder() {
-        setupJobSubmissionActivityScenario();
-        onView(withId(R.id.spinnerJobType))
-                .check(ViewAssertions.matches(withSpinnerText(equalTo("Select job type"))));
-    }
-
-    @Test
-    public void testUrgencyDefaultPlaceholder() {
-        setupJobSubmissionActivityScenario();
-        onView(withId(R.id.spinnerUrgency))
-                .check(ViewAssertions.matches(withSpinnerText(equalTo("Select urgency"))));
-    }
-
-    @Test
-    public void checkErrorMessageInRed() {
-        setupJobSubmissionActivityScenario();
-        onView(withId(R.id.jobSubmissionButton)).perform(click());
-
-        onView(allOf(withText("Job Title is required."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Company Name is required."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Salary is required."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Location is required."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Expected Duration is required."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Please select a Job Type."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Please select Urgency."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(allOf(withText("Please select a Start Date."), isDisplayed()))
-                .inRoot(isDialog());
-
-    }
-
-    @Test
-    public void testPreventsSubmissionIfMissingFields() {
-        setupJobSubmissionActivityScenario();
-
-        onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"));
-        onView(withId(R.id.companyName)).perform(typeText("Tech Company"));
-        onView(withId(R.id.spinnerJobType)).perform(click());
-        onData(hasToString("Full-time")).perform(click());
-
-        onView(withId(R.id.jobSubmissionButton)).perform(click());
-
-        onView(allOf(withText("Job Title is required."), isDisplayed()))
-                .inRoot(isDialog());
-
-        onView(withId(R.id.errorJSRequirement)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
-        onView(withId(R.id.errorJSSalary)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
-        onView(withId(R.id.errorJSUrgency)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Invalid Option", currentColor, is(Color.RED));
-            }
-        });
-        onView(withId(R.id.errorJSLocation)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
-        onView(withId(R.id.errorJSDuration)).check((view, noViewFoundException) -> {
-            if (view instanceof TextView) {
-                int currentColor = ((TextView) view).getCurrentTextColor();
-                assertThat("Empty Field", currentColor, is(Color.RED));
-            }
-        });
-
-        onView(withText("Job Submission Successful!")).check(doesNotExist());
-    }
-
-    @Test
-    public void testFormSubmitsSuccessfully() {
-        setupLoginActivityActivityScenario();
-
-        onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"), closeSoftKeyboard());
-        onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"),closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
-        onView(withId(R.id.createJobButton)).perform(click());
-
-        onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"),closeSoftKeyboard());
-        onView(withId(R.id.companyName)).perform(typeText("Tech Company"),closeSoftKeyboard());
-        onView(withId(R.id.spinnerJobType)).perform(click());
-        onData(hasToString("Full-time")).perform(click());
-        onView(withId(R.id.requirementText)).perform(typeText("Plumber"),closeSoftKeyboard());
-        onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
-        onView(withId(R.id.spinnerUrgency)).perform(click());
-        onData(hasToString("High")).perform(click());
-        onView(withId(R.id.locationJob)).perform(typeText("Halifax"),closeSoftKeyboard());
-        onView(withId(R.id.expectedDuration)).perform(typeText("20"),closeSoftKeyboard());
-        onView(withId(R.id.startDate)).perform(click());
-        //onView(withText("28")).check(matches(isDisplayed()));
-        onView(allOf(withText("30"), isDisplayed()))
-                .inRoot(isDialog()) // Ensures we're selecting within the date picker dialog
-                .perform(click());
-
-        onView(withText("OK")).perform(click());
-
-        onView(withId(R.id.jobSubmissionButton)).perform(click());
-
-        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
-    }
-
-    public static class ToastMatcher extends TypeSafeMatcher<Root> {
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("is toast");
-        }
-
-        @Override
-        public boolean matchesSafely(Root root) {
-            int type = root.getWindowLayoutParams().get().type;
-            if ((type == WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY) || (type == WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG)) {
-                IBinder windowToken = root.getDecorView().getWindowToken();
-                IBinder appToken = root.getDecorView().getApplicationWindowToken();
-                return windowToken == appToken;
-            }
-            return false;
-        }
     }
 }

@@ -79,7 +79,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
                 latitudes = (ArrayList<Double>) intent.getSerializableExtra("latitudes");
                 longitudes = (ArrayList<Double>) intent.getSerializableExtra("longitudes");
-                locations = intent.getStringArrayListExtra("locations");  // Add this line
+                locations = intent.getStringArrayListExtra("locations");
 
                 Log.d(TAG, "Retrieved coordinates - Latitudes: " +
                         (latitudes != null ? latitudes.size() : "null") + ", Longitudes: " +
@@ -140,14 +140,28 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void addMarkersToMap() {
-        if (latitudes == null || longitudes == null || titles == null ||
-                latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
-            Log.e(TAG, "No valid location data available");
-            Log.e(TAG, "Latitudes null/empty: " + (latitudes == null || latitudes.isEmpty()));
-            Log.e(TAG, "Longitudes null/empty: " + (longitudes == null || longitudes.isEmpty()));
-            Log.e(TAG, "Titles null/empty: " + (titles == null || titles.isEmpty()));
+        if (latitudes == null || longitudes == null || titles == null) {
+            Log.e(TAG, "Location data arrays are null");
+            centerMapOnHalifax();
+            showError("Error loading job locations");
+            return;
+        }
+
+        if (latitudes.isEmpty() || longitudes.isEmpty() || titles.isEmpty()) {
+            Log.e(TAG, "Location data arrays are empty");
+            Log.d(TAG, String.format("Array sizes - Latitudes: %d, Longitudes: %d, Titles: %d",
+                    latitudes.size(), longitudes.size(), titles.size()));
             centerMapOnHalifax();
             showError("No job locations to display");
+            return;
+        }
+
+        // Validate that arrays have matching sizes
+        if (latitudes.size() != longitudes.size() || latitudes.size() != titles.size()) {
+            Log.e(TAG, String.format("Mismatched array sizes - Latitudes: %d, Longitudes: %d, Titles: %d",
+                    latitudes.size(), longitudes.size(), titles.size()));
+            centerMapOnHalifax();
+            showError("Error with job location data");
             return;
         }
 
@@ -241,10 +255,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 if (companyView != null) companyView.setText(companies.get(index));
             }
 
-            // Add location field
             if (locations != null && index < locations.size()) {
                 TextView locationView = dialog.findViewById(R.id.locationText);
-                if (locationView != null) locationView.setText(locations.get(index));
+                if (locationView != null) {
+                    String locationText = locations.get(index);
+                    if (locationText != null && !locationText.trim().isEmpty()) {
+                        locationView.setText(locationText);
+                    } else {
+                        // Fallback to coordinate-based location if address is not available
+                        locationView.setText(String.format("Location: (%.6f, %.6f)",
+                                latitudes.get(index), longitudes.get(index)));
+                    }
+                }
             }
 
             if (salaries != null && index < salaries.size()) {

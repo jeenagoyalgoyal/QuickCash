@@ -1,36 +1,27 @@
 package com.example.quickcash;
 
-import static android.content.Intent.getIntent;
-import static com.example.quickcash.filter.JobSearchFilter.*;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class is used for searching jobs via filters to find the
- * posted jobs in the database.
- */
 public class JobSearchParameterActivity extends AppCompatActivity {
 
     private static final String TAG = "JobSearchParameter";
@@ -58,12 +49,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     private ArrayList<String> durations = new ArrayList<>();
     private ArrayList<String> companies = new ArrayList<>();
     private ArrayList<String> jobTypes = new ArrayList<>();
+    private ArrayList<String> locations = new ArrayList<>();
 
-    /**
-     * Initializes the job search parameter form.
-     *
-     * @param savedInstanceState Saved instance state bundle.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +81,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Initializes the job search form input variables.
-     */
     public void init() {
         jobTitle = findViewById(R.id.jobTitle);
         companyName = findViewById(R.id.companyName);
@@ -119,28 +103,85 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         jobCRUD = new JobCRUD(jobsRef);
     }
 
-    /**
-     * Queries job data for map-based results and processes each job.
-     */
     private void queryJobsForMap() {
-        Log.e(TAG, "Starting map search");
+        Log.d(TAG, "Starting map search");
 
-        for (Job job : jobList) {
-            latitudes.add(job.getJobLocation().getLat());
-            longitudes.add(job.getJobLocation().getLng());
-            titles.add(job.getJobTitle());
-            salaries.add(job.getSalary());
-            durations.add(job.getExpectedDuration());
-            companies.add(job.getCompanyName());
-            jobTypes.add(job.getJobType());
+        // If no search has been performed yet or jobList is empty, fetch all jobs
+        if (jobList.isEmpty()) {
+            Query query = jobsRef.getReference("Jobs");
+            jobCRUD.getJobsByQuery(query).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    jobList.addAll(task.getResult());
+                    processJobsForMap();
+                } else {
+                    Log.e(TAG, "Failed to fetch jobs", task.getException());
+                    errorText.setText("Failed to load job locations");
+                }
+            });
+        } else {
+            // Use existing filtered results
+            processJobsForMap();
         }
-
-        launchMapActivity();
     }
 
-    /**
-     * Launches the MapActivity to display job listings on a map.
-     */
+    private void processJobsForMap() {
+        // Clear previous map data
+        latitudes.clear();
+        longitudes.clear();
+        titles.clear();
+        salaries.clear();
+        durations.clear();
+        companies.clear();
+        jobTypes.clear();
+        locations.clear();
+
+        Log.d(TAG, "Processing " + jobList.size() + " jobs for map");
+
+        for (Job job : jobList) {
+            if (job.getJobLocation() != null) {
+                double lat = job.getJobLocation().getLat();
+                double lng = job.getJobLocation().getLng();
+
+                // Add location if coordinates are present
+                if (lat != 0 || lng != 0) {  // Changed validation to be less strict
+                    latitudes.add(lat);
+                    longitudes.add(lng);
+                    titles.add(job.getJobTitle());
+                    salaries.add(job.getSalary());
+                    durations.add(job.getExpectedDuration());
+                    companies.add(job.getCompanyName());
+                    jobTypes.add(job.getJobType());
+
+                    // Get location string - try all possible sources
+                    String locationStr = null;
+                    if (job.getJobLocation() != null && job.getJobLocation().getAddress() != null
+                            && !job.getJobLocation().getAddress().trim().isEmpty()) {
+                        locationStr = job.getJobLocation().getAddress();
+                    } else if (job.getLocation() != null && !job.getLocation().trim().isEmpty()) {
+                        locationStr = job.getLocation();
+                    }
+
+                    if (locationStr != null) {
+                        locations.add(locationStr);
+                        Log.d(TAG, "Added location for job " + job.getJobTitle() + ": " + locationStr);
+                    } else {
+                        locations.add(String.format("(%.6f, %.6f)", lat, lng));
+                        Log.d(TAG, String.format("No location string found for job %s, using coordinates",
+                                job.getJobTitle()));
+                    }
+                }
+            }
+        }
+
+        if (!latitudes.isEmpty()) {
+            Log.d(TAG, "Launching map with " + latitudes.size() + " locations");
+            launchMapActivity();
+        } else {
+            Log.e(TAG, "No valid locations found in " + jobList.size() + " jobs");
+            errorText.setText("No jobs with location data found");
+        }
+    }
+
     private void launchMapActivity() {
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("latitudes", latitudes);
@@ -150,25 +191,39 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         intent.putStringArrayListExtra("durations", durations);
         intent.putStringArrayListExtra("companies", companies);
         intent.putStringArrayListExtra("jobTypes", jobTypes);
+        intent.putStringArrayListExtra("locations", locations);
         startActivity(intent);
     }
 
-    /**
-     * Retrieves job search results based on input parameters.
-     */
     private void performSearch() {
-        Query query = createQuery();
+        // Collect user input
+        String title = jobTitle.getText().toString().trim();
+        String company = companyName.getText().toString().trim();
+        String minSalStr = minSalary.getText().toString().trim();
+        String maxSalStr = maxSalary.getText().toString().trim();
+        String jobDuration = duration.getText().toString().trim();
+        String partialAddress = location.getText().toString().trim().toLowerCase();
+
+        // Create a query to get all jobs if no filters are applied
+        Query query = jobsRef.getReference("Jobs");
+
+        // Only apply title filter if specified
+        if (isValidField(title)) {
+            query = query.orderByChild("jobTitle").equalTo(title);
+        }
 
         jobList.clear();
         jobSearchAdapter.notifyDataSetChanged();
 
+        Log.d(TAG, "Performing search with filters - Title: '" + title +
+                "', Company: '" + company + "', Location: '" + partialAddress + "'");
+
         jobCRUD.getJobsByQuery(query).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<Job> jobs = task.getResult();
-                jobList.clear();
 
                 for (Job job : jobs) {
-                    if (passesAdditionalFilters(job)) {
+                    if (passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
                         jobList.add(job);
                     }
                 }
@@ -186,59 +241,117 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Creates a Firebase query with the input provided by the user.
-     */
-    private Query createQuery() {
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
-
-        Query query = jobsRef.getReference("Jobs");
-
-        if (isValidField(title)) {
-            query = query.orderByChild("jobTitle").equalTo(title);
-        } else if (isValidField(company)) {
-            query = query.orderByChild("companyName").equalTo(company);
-        } else if (isValidField(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
-        } else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
-            int minSal = Integer.parseInt(minSalStr);
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").startAt(minSal).endAt(maxSal);
-        } else if (isValidField(minSalStr)) {
-            int minSal = Integer.parseInt(minSalStr);
-            query = query.orderByChild("salary").startAt(minSal);
-        } else if (isValidField(maxSalStr)) {
-            int maxSal = Integer.parseInt(maxSalStr);
-            query = query.orderByChild("salary").endAt(maxSal);
-        } else if (isValidField(jobDuration)) {
-            query = query.orderByChild("expectedDuration").equalTo(jobDuration);
+    private boolean passesAdditionalFilters(Job job, String searchAddress, String company,
+                                            String minSalStr, String maxSalStr, String jobDuration) {
+        // Check company name
+        if (isValidField(company)) {
+            if (!job.getCompanyName().equalsIgnoreCase(company)) {
+                return false;
+            }
         }
 
-        return query;
+        // Check salary range
+        int jobSalary = job.getSalary();
+        if (isValidField(minSalStr)) {
+            try {
+                int minSal = Integer.parseInt(minSalStr);
+                if (jobSalary < minSal) {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Error parsing minimum salary: " + e.getMessage());
+                return false;
+            }
+        }
+        if (isValidField(maxSalStr)) {
+            try {
+                int maxSal = Integer.parseInt(maxSalStr);
+                if (jobSalary > maxSal) {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Error parsing maximum salary: " + e.getMessage());
+                return false;
+            }
+        }
+
+        // Check job duration
+        if (isValidField(jobDuration)) {
+            if (!job.getExpectedDuration().equalsIgnoreCase(jobDuration)) {
+                return false;
+            }
+        }
+
+        // Enhanced location matching
+        if (isValidField(searchAddress)) {
+            boolean locationMatches = false;
+            String normalizedSearch = normalizeLocationString(searchAddress);
+
+            // Check main location field
+            String jobMainLocation = job.getLocation() != null ? normalizeLocationString(job.getLocation()) : "";
+            if (jobMainLocation.contains(normalizedSearch)) {
+                locationMatches = true;
+            }
+
+            // Check JobLocation object if available
+            if (!locationMatches && job.getJobLocation() != null) {
+                String jobLocationAddress = job.getJobLocation().getAddress() != null ?
+                        normalizeLocationString(job.getJobLocation().getAddress()) : "";
+                if (jobLocationAddress.contains(normalizedSearch)) {
+                    locationMatches = true;
+                }
+
+                // If search term looks like coordinates, check lat/lng
+                if (!locationMatches && isCoordinateSearch(normalizedSearch)) {
+                    double searchLat = job.getJobLocation().getLat();
+                    double searchLng = job.getJobLocation().getLng();
+                    locationMatches = isNearbyCoordinate(searchLat, searchLng, normalizedSearch);
+                }
+            }
+
+            if (!locationMatches) {
+                return false;
+            }
+        }
+
+        // Job passes all filters
+        return true;
     }
 
-    /**
-     * Checks if a job passes additional user-defined filters.
-     */
-    private boolean passesAdditionalFilters(Job job) {
-        String title = jobTitle.getText().toString().trim();
-        String company = companyName.getText().toString().trim();
-        String minSalStr = minSalary.getText().toString().trim();
-        String maxSalStr = maxSalary.getText().toString().trim();
-        String jobDuration = duration.getText().toString().trim();
-        String jobLocation = location.getText().toString().trim();
-
-        return passesAdditionalJobFilters(job, title, company, minSalStr, maxSalStr, jobDuration, jobLocation);
+    private String normalizeLocationString(String location) {
+        if (location == null) return "";
+        // Remove special characters and extra spaces, convert to lowercase
+        return location.replaceAll("[^a-zA-Z0-9\\s]", " ")
+                .replaceAll("\\s+", " ")
+                .trim()
+                .toLowerCase();
     }
 
-    /**
-     * Validates salary fields.
-     */
+    private boolean isCoordinateSearch(String search) {
+        // Check if the search string matches coordinate format (lat,lng)
+        return search.matches("^-?\\d+\\.?\\d*,-?\\d+\\.?\\d*$");
+    }
+
+    private boolean isNearbyCoordinate(double jobLat, double jobLng, String searchCoords) {
+        try {
+            String[] parts = searchCoords.split(",");
+            double searchLat = Double.parseDouble(parts[0]);
+            double searchLng = Double.parseDouble(parts[1]);
+
+            // Calculate rough distance (this is an approximation)
+            double distance = Math.sqrt(
+                    Math.pow(jobLat - searchLat, 2) +
+                            Math.pow(jobLng - searchLng, 2)
+            );
+
+            // Consider locations within ~5km as nearby (rough approximation)
+            return distance < 0.05;
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing coordinates: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean checkSalaryField() {
         String minS = minSalary.getText().toString().trim();
         String maxS = maxSalary.getText().toString().trim();
@@ -247,6 +360,17 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             return false;
         }
 
-        return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
+        try {
+            int minSal = Integer.parseInt(minS);
+            int maxSal = Integer.parseInt(maxS);
+
+            return minSal > maxSal;
+        } catch (NumberFormatException e) {
+            return true; // Invalid number format
+        }
+    }
+
+    private boolean isValidField(String field) {
+        return field != null && !field.isEmpty();
     }
 }
