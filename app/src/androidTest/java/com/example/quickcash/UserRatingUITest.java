@@ -150,4 +150,47 @@ public class UserRatingUITest {
         UiObject2 commentField = device.findObject(By.res(launcherPackageName,"commentField")); //id is taken to be commentField
         assertTrue("comment field should be clickable", commentField.isClickable());
     }
+
+    //test checks that 'Add Comment' button is enabled only if rating and comment is provided, it should be disabled otherwise
+    @Test
+    public void testAddCommentButtonEnabledCheck() throws UiObjectNotFoundException {
+        // Log in to employee account
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        // Navigate to the search page
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+
+        // Enter job details
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Software Developer");
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.longClick();
+
+        // Click on a job listing to open options
+        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
+        jobListingOptions.click();
+
+        // Click on the 'View Job Details' button
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        viewJobDetailsButton.clickAndWaitForNewWindow();
+
+        // 'Add Comment' button should now be disabled
+        UiObject addCommentButton = device.findObject(new UiSelector().text("Add Comment"));
+        assertFalse("'Add Comment' button should not be enabled with no rating and comment provided", addCommentButton.isEnabled());
+
+        // Star rating component and comment field are given values through interaction
+        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName, "starRatingComponent")); //id is taken to be starRatingComponent
+        starRatingComponent.click();
+        UiObject2 commentField = device.findObject(By.res(launcherPackageName, "commentField")); //id is taken to be commentField
+        commentField.setText("test comment");
+
+        // 'Add Comment' button should now be enabled
+        assertTrue("'Add Comment' button should be enabled with rating and comment set", addCommentButton.isEnabled());
+    }
 }
