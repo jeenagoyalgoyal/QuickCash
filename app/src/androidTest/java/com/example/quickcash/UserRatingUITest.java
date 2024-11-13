@@ -46,4 +46,37 @@ public class UserRatingUITest {
         UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
         assertTrue(passwordBox.exists());
     }
+
+    //test has been made to include 'View Job Details' in the popup menu instead of directly on the job
+    //as the current plan is to change the current 'show map' button to the 'apply' button and include
+    //'show map' button and any other options instead of apply in the options popup menu instead to decrease
+    //clutter. Please contact if any issue is there!
+    @Test
+    public void testViewJobDetailsButtonIsVisible() throws UiObjectNotFoundException {
+        // Log in to employee account
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        // Navigate to the search page
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+
+        // Enter job details
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Software Developer");
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.longClick();
+
+        // Click on a job listing to open options
+        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
+        jobListingOptions.click();
+
+        // Check if "View Job Details" button is visible in the popup
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        assertTrue("View Job Details button should be visible in the popup", viewJobDetailsButton.exists());
+    }
 }
