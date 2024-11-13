@@ -115,9 +115,7 @@ public class UserRatingUITest {
         assertTrue("'Job Details' title should be present on the top of the Job Details page", jobDetailsTitleBox.exists());
     }
 
-    //test checks for labels of star rating component and comment field
-    //instead of star rating component and comment field directly to give freedom
-    //in how the component and field are implemented
+    //test checks if star rating component and comment field exists by checking if they are clickable
     @Test
     public void testRatingAndCommentAreVisible() throws UiObjectNotFoundException {
         // Log in to employee account
@@ -146,10 +144,10 @@ public class UserRatingUITest {
         UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
-        // Check if label of star rating component contains 'Rating:' and comment input field label is visible
-        UiObject ratingLabel = device.findObject(new UiSelector().text("Rating:"));
-        assertTrue("label of the star rating component should include 'Rating:'", ratingLabel.exists());
-        UiObject commentFieldLabel = device.findObject(new UiSelector().text("Comment:"));
-        assertTrue("label of the star comment field should include 'Comment:'", commentFieldLabel.exists());
+        // Star rating component and comment field are checked to be clickable to see if they exist
+        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName,"starRatingComponent")); //id is taken to be starRatingComponent
+        assertTrue("star rating component should be clickable", starRatingComponent.isClickable());
+        UiObject2 commentField = device.findObject(By.res(launcherPackageName,"commentField")); //id is taken to be commentField
+        assertTrue("comment field should be clickable", commentField.isClickable());
     }
 }
