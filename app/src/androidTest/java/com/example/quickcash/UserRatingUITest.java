@@ -13,6 +13,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
@@ -112,5 +113,43 @@ public class UserRatingUITest {
         // Check if redirected to the 'Job Details' page by checking for title displayed on the page.
         UiObject jobDetailsTitleBox = device.findObject(new UiSelector().text("Job Details"));
         assertTrue("'Job Details' title should be present on the top of the Job Details page", jobDetailsTitleBox.exists());
+    }
+
+    //test checks for labels of star rating component and comment field
+    //instead of star rating component and comment field directly to give freedom
+    //in how the component and field are implemented
+    @Test
+    public void testRatingAndCommentAreVisible() throws UiObjectNotFoundException {
+        // Log in to employee account
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        // Navigate to the search page
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+
+        // Enter job details
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Software Developer");
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.longClick();
+
+        // Click on a job listing to open options
+        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
+        jobListingOptions.click();
+
+        // Click on the 'View Job Details' button
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        viewJobDetailsButton.clickAndWaitForNewWindow();
+
+        // Check if label of star rating component contains 'Rating:' and comment input field label is visible
+        UiObject ratingLabel = device.findObject(new UiSelector().text("Rating:"));
+        assertTrue("label of the star rating component should include 'Rating:'", ratingLabel.exists());
+        UiObject commentFieldLabel = device.findObject(new UiSelector().text("Comment:"));
+        assertTrue("label of the star comment field should include 'Comment:'", commentFieldLabel.exists());
     }
 }
