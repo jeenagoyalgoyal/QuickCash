@@ -79,4 +79,38 @@ public class UserRatingUITest {
         UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
         assertTrue("View Job Details button should be visible in the popup", viewJobDetailsButton.exists());
     }
+
+    //test checks for title that is assumed to be present at the top of the Job Details page
+    @Test
+    public void testRedirectToJobDetailsPage() throws UiObjectNotFoundException {
+        // Log in to employee account
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        // Navigate to the search page
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+
+        // Enter job details
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Software Developer");
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.longClick();
+
+        // Click on a job listing to open options
+        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
+        jobListingOptions.click();
+
+        // Click on the 'View Job Details' button
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        viewJobDetailsButton.clickAndWaitForNewWindow();
+
+        // Check if redirected to the 'Job Details' page by checking for title displayed on the page.
+        UiObject jobDetailsTitleBox = device.findObject(new UiSelector().text("Job Details"));
+        assertTrue("'Job Details' title should be present on the top of the Job Details page", jobDetailsTitleBox.exists());
+    }
 }
