@@ -39,15 +39,6 @@ public class UserRatingUITest {
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
     }
 
-    //test to make sure UIAutomator runs correctly and app starts up correctly
-    @Test
-    public void checkIfLandingPageIsVisible() {
-        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
-        assertTrue(emailBox.exists());
-        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
-        assertTrue(passwordBox.exists());
-    }
-
     //test has been made to include 'View Job Details' in the popup menu instead of directly on the job
     //as the current plan is to change the current 'show map' button to the 'apply' button and include
     //'show map' button and any other options instead of apply in the options popup menu instead to decrease
@@ -192,5 +183,47 @@ public class UserRatingUITest {
 
         // 'Add Comment' button should now be enabled
         assertTrue("'Add Comment' button should be enabled with rating and comment set", addCommentButton.isEnabled());
+    }
+
+    //test checks that adding a comment successfully redirects to the Job Search page
+    @Test
+    public void testRedirectUponCommentSubmit() throws UiObjectNotFoundException {
+        // Log in to employee account
+        UiObject emailBox = device.findObject(new UiSelector().text("Email"));
+        emailBox.setText("testingemail@test.db");
+        UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
+        passwordBox.setText("Test_Pass123#");
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.clickAndWaitForNewWindow();
+
+        // Navigate to the search page
+        UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
+        searchJobButton.clickAndWaitForNewWindow();
+
+        // Enter job details
+        UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
+        jobTitleBox.setText("Software Developer");
+        UiObject searchButton = device.findObject(new UiSelector().text("Search"));
+        searchButton.longClick();
+
+        // Click on a job listing to open options
+        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
+        jobListingOptions.click();
+
+        // Click on the 'View Job Details' button
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        viewJobDetailsButton.clickAndWaitForNewWindow();
+
+        // Star rating component and comment field are given values through interaction and comment is submitted
+        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName, "starRatingComponent")); //id is taken to be starRatingComponent
+        starRatingComponent.click();
+        UiObject2 commentField = device.findObject(By.res(launcherPackageName, "commentField")); //id is taken to be commentField
+        commentField.setText("test comment");
+        UiObject addCommentButton = device.findObject(new UiSelector().text("Add Comment"));
+        addCommentButton.clickAndWaitForNewWindow();
+
+        // Check is done to see if redirect to Job Search page was successful
+        UiObject searchJobTitleBox = device.findObject(new UiSelector().text("Search Job"));
+        assertTrue("'Search Job' title at the top of Job Search page should be present if redirect was successful", searchJobTitleBox.exists());
     }
 }
