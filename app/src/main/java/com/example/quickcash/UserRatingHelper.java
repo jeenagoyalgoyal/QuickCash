@@ -10,4 +10,8 @@ public interface UserRatingHelper {
     void setComment(String testing);
 
     boolean addCommentButtonIsEnabled();
+
+    boolean formatIsValid();
+
+    void formatForFirebase();
 }

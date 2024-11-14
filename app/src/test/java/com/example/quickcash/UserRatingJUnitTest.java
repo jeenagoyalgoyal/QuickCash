@@ -35,7 +35,6 @@ public class UserRatingJUnitTest {
         Mockito.when(userRatingHelper.getRating()).thenReturn((float) 0);
 
         userRatingHelper.setRating(RATING);
-
         assertEquals("After rating is set to 5.0, getRating should return 5.0",RATING,userRatingHelper.getRating(),0);
     }
 
@@ -45,7 +44,6 @@ public class UserRatingJUnitTest {
         Mockito.when(userRatingHelper.getComment()).thenReturn("");
 
         userRatingHelper.setComment(COMMENT);
-
         assertEquals("After comment is set, getComment should return the set comment",COMMENT,userRatingHelper.getComment());
     }
 
@@ -55,11 +53,19 @@ public class UserRatingJUnitTest {
         Mockito.when(userRatingHelper.addCommentButtonIsEnabled()).thenReturn(true);
 
         assertEquals("Before rating and comment are set, button should be disabled",false,userRatingHelper.addCommentButtonIsEnabled());
-
         userRatingHelper.setRating(RATING);
         userRatingHelper.setComment(COMMENT);
-
         assertEquals("After rating and comment are set, button should be enabled",true,userRatingHelper.addCommentButtonIsEnabled());
     }
 
+    @Test
+    public void userRatingFormatCheck() {
+        //mocked method returns
+        Mockito.when(userRatingHelper.formatIsValid()).thenReturn(false);
+
+        userRatingHelper.setRating(RATING);
+        userRatingHelper.setComment(COMMENT);
+        userRatingHelper.formatForFirebase();
+        assertEquals("The rating and comment should have been formatted correctly for firebase",true,userRatingHelper.formatIsValid());
+    }
 }
