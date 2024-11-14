@@ -1,6 +1,6 @@
 package com.example.quickcash;
 
-public interface UserRatingHelper {
+public interface UserRatingSubmissionHelper {
     float getRating();
 
     void setRating(float i);
