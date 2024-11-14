@@ -8,4 +8,6 @@ public interface UserRatingHelper {
     String getComment();
 
     void setComment(String testing);
+
+    boolean addCommentButtonIsEnabled();
 }

@@ -14,7 +14,11 @@ import android.widget.*;
 
 public class UserRatingJUnitTest {
 
-    //currently class is mocked using an interface and Mockito
+    protected final float RATING = 5F;
+    protected final String COMMENT = "test comment";
+
+    //tests are made with surface level knowledge of UserRating feature, rework tests as needed to fit your implementation
+    //it is assumed that a helper class delegate will be used to handle the backend logic of the rating page
     @Mock
     UserRatingHelper userRatingHelper;
 
@@ -24,15 +28,15 @@ public class UserRatingJUnitTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    //it is assumed that a helper class is used to handle RatingBar and EditText on the comment page.
+
     @Test
     public void starRatingComponentTest() {
         //mocked method returns
         Mockito.when(userRatingHelper.getRating()).thenReturn((float) 0);
 
-        userRatingHelper.setRating(5F);
+        userRatingHelper.setRating(RATING);
 
-        assertEquals("After rating is set to 5.0, getRating should return 5.0",5F,userRatingHelper.getRating(),0);
+        assertEquals("After rating is set to 5.0, getRating should return 5.0",RATING,userRatingHelper.getRating(),0);
     }
 
     @Test
@@ -40,8 +44,22 @@ public class UserRatingJUnitTest {
         //mocked method returns
         Mockito.when(userRatingHelper.getComment()).thenReturn("");
 
-        userRatingHelper.setComment("testing");
+        userRatingHelper.setComment(COMMENT);
 
-        assertEquals("After comment is set, getComment should return the set comment","testing",userRatingHelper.getComment());
+        assertEquals("After comment is set, getComment should return the set comment",COMMENT,userRatingHelper.getComment());
     }
+
+    @Test
+    public void addCommentButtonDisabledTest() {
+        //mocked method returns
+        Mockito.when(userRatingHelper.addCommentButtonIsEnabled()).thenReturn(true);
+
+        assertEquals("Before rating and comment are set, button should be disabled",false,userRatingHelper.addCommentButtonIsEnabled());
+
+        userRatingHelper.setRating(RATING);
+        userRatingHelper.setComment(COMMENT);
+
+        assertEquals("After rating and comment are set, button should be enabled",true,userRatingHelper.addCommentButtonIsEnabled());
+    }
+
 }
