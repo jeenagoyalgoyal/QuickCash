@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.TypeTextAction;
 import androidx.test.espresso.assertion.ViewAssertions;
@@ -65,8 +66,18 @@ public class OnlinePaymentUITest {
     }
 
     @Test
-    public void checkPayEmployeeButton(){
+    public void checkPayEmployeeButton() {
         setupEmployer();
         onView(withText("Pay Employee")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkFields() {
+        setupEmployer();
+        onView(withText("Pay Employee")).perform(click());
+        onView(withText("Enter Amount")).check(matches(isDisplayed()));
+        onView(withText("Select Employee")).check(matches(isDisplayed()));
+        onView(withText("Pay")).check(matches(isDisplayed()));
+        onView(withText("Cancel")).check(matches(isDisplayed()));
     }
 }
