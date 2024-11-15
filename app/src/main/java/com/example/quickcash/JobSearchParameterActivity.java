@@ -57,8 +57,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_search_parameter);
 
-        jobList = new ArrayList<>();
-
         init();
 
         // Getting email and user ID
@@ -107,6 +105,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         jobSearchAdapter = new JobSearchAdapter(jobList);
         recyclerView.setAdapter(jobSearchAdapter);
 
+        jobList = new ArrayList<>();
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);
     }
