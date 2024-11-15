@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class MapUITest {
     private static final String TAG = "MapUITest";
     private static final int LAUNCH_TIMEOUT = 5000;
-    private static final String JOB_TITLE = "Software Developer"; // Use an existing job title
+    private static final String JOB_TITLE = "ABCDMAP"; // Use an existing job title
     final String launcherPackageName = "com.example.quickcash";
     private UiDevice device;
 

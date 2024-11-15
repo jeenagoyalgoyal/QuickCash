@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
+import com.example.quickcash.model.JobLocation;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
@@ -56,6 +57,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_search_parameter);
 
+        jobList = new ArrayList<>();
+
         init();
 
         // Getting email and user ID
@@ -76,8 +79,14 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         mapButton.setOnClickListener(view -> {
             errorText.setText(""); // Clear any previous error
-            performSearch();
-            queryJobsForMap();
+            if (checkSalaryField()) {
+                errorText.setText("Enter Valid Salary Range");
+            } else {
+                errorText.setText(""); // Clear any previous error
+                Log.d(TAG, "Starting map search");
+
+                queryJobsForMap();
+            }
         });
     }
 
@@ -95,7 +104,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        jobList = new ArrayList<>();
         jobSearchAdapter = new JobSearchAdapter(jobList);
         recyclerView.setAdapter(jobSearchAdapter);
 
@@ -104,27 +112,44 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     }
 
     private void queryJobsForMap() {
-        Log.d(TAG, "Starting map search");
+        //Search for jobs
+        String title = jobTitle.getText().toString().trim();
+        String company = companyName.getText().toString().trim();
+        String minSalStr = minSalary.getText().toString().trim();
+        String maxSalStr = maxSalary.getText().toString().trim();
+        String jobDuration = duration.getText().toString().trim();
+        String partialAddress = location.getText().toString().trim().toLowerCase();
 
-        // If no search has been performed yet or jobList is empty, fetch all jobs
-        if (jobList.isEmpty()) {
-            Query query = jobsRef.getReference("Jobs");
-            jobCRUD.getJobsByQuery(query).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    jobList.addAll(task.getResult());
-                    processJobsForMap();
-                } else {
-                    Log.e(TAG, "Failed to fetch jobs", task.getException());
-                    errorText.setText("Failed to load job locations");
-                }
-            });
-        } else {
-            // Use existing filtered results
-            processJobsForMap();
+        // Create a query to get all jobs if no filters are applied
+        Query query = jobsRef.getReference("Jobs");
+        // Only apply title filter if specified
+        if (isValidField(title)) {
+            query = query.orderByChild("jobTitle").equalTo(title);
         }
-    }
 
-    private void processJobsForMap() {
+        Log.d(TAG, "Performing search with filters - Title: '" + title +
+                "', Company: '" + company + "', Location: '" + partialAddress + "'");
+
+        jobCRUD.getJobsByQuery(query).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Job> jobs = task.getResult();
+
+                for (Job job : jobs) {
+                    if(passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)){
+                        jobList.add(job);
+                    }
+                }
+
+                if (!jobList.isEmpty()) {
+                    errorText.setText(""); // Clear any previous error
+                } else {
+                    errorText.setText("No Results Found");
+                }
+            } else {
+                errorText.setText("Failed to retrieve jobs.");
+            }
+        });
+
         // Clear previous map data
         latitudes.clear();
         longitudes.clear();
@@ -135,15 +160,26 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         jobTypes.clear();
         locations.clear();
 
+        // Use existing filtered results
+        processJobsForMap();
+    }
+
+    private void processJobsForMap() {
+
         Log.d(TAG, "Processing " + jobList.size() + " jobs for map");
 
-        for (Job job : jobList) {
-            if (job.getJobLocation() != null) {
-                double lat = job.getJobLocation().getLat();
-                double lng = job.getJobLocation().getLng();
 
+        Log.d(TAG, "Started processJobsForMaps()");
+        for (Job job : jobList) {
+            Log.d(TAG, "Location was not null");
+            JobLocation location = job.getJobLocation();
+            if (location != null) {
+                double lat = location.getLat();
+                double lng = location.getLng();
+                Log.d(TAG, "Location was not null");
                 // Add location if coordinates are present
                 if (lat != 0 || lng != 0) {  // Changed validation to be less strict
+                    Log.d(TAG, "Location was not 0, 0");
                     latitudes.add(lat);
                     longitudes.add(lng);
                     titles.add(job.getJobTitle());
@@ -151,6 +187,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     durations.add(job.getExpectedDuration());
                     companies.add(job.getCompanyName());
                     jobTypes.add(job.getJobType());
+                    locations.add(location.getAddress());
 
                     // Get location string - try all possible sources
                     String locationStr = null;
