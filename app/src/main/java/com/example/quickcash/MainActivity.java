@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void singleCallToMap(Job job) {
-        Intent intentToMapSingleJob = new Intent(this, MapActivity.class);
+        Intent intentToMapSingleJob = new Intent(this, GoogleSearchMapActivity.class);
 
         // Get location using the helper method from Job class
         JobLocation jobLocation = job.getJobLocation();

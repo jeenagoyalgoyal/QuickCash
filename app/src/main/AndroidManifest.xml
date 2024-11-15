@@ -46,12 +46,14 @@
             android:theme="@style/Theme.QuickCash">
             </activity>
 
+        <!-- Job Search by Parameter Activity -->
         <activity
             android:name=".JobSearchParameterActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <!-- Registration Activity -->
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -65,15 +67,9 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 
-        <!-- Search Activity -->
-        <activity
-            android:name=".deprecated.SearchActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
         <!-- Map Activity -->
         <activity
-            android:name=".MapActivity"
+            android:name=".GoogleSearchMapActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash" />
 

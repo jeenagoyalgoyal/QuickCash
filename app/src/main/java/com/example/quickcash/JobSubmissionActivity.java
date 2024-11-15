@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Spinner;
-import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,15 +18,10 @@ import com.example.quickcash.model.JobLocation;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.model.Job;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is used to submit jobs, posting them in the database for users
@@ -175,7 +168,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         progressDialog.show();
 
         // Get coordinates for the location
-        LocationHelper.GeocodingResult result = LocationHelper.getCoordinates(
+        LocationHelperForGoogleSearch.GeocodingResult result = LocationHelperForGoogleSearch.getCoordinates(
                 JobSubmissionActivity.this,
                 locationText
         );

@@ -23,8 +23,8 @@ import com.google.android.gms.location.Priority;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationHelper {
-    private static final String TAG = "LocationHelper";
+public class LocationHelperForGoogleSearch {
+    private static final String TAG = "LocationHelperForGoogleSearch";
     private static final long UPDATE_INTERVAL = 10000;  // 10 seconds
     private static final long FASTEST_INTERVAL = 5000;  // 5 seconds
 

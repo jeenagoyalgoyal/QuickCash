@@ -1,12 +1,9 @@
 package com.example.quickcash;
 
-import static android.content.Intent.getIntent;
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -27,8 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
-    private static final String TAG = "MapActivity";
+public class GoogleSearchMapActivity extends FragmentActivity implements OnMapReadyCallback {
+    private static final String TAG = "GoogleSearchMapActivity";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final LatLng HALIFAX = new LatLng(44.6488, -63.5752);
 

@@ -18,30 +18,19 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quickcash.Firebase.FirebaseCRUD;
-import com.example.quickcash.MapActivity;
+import com.example.quickcash.GoogleSearchMapActivity;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
 import com.example.quickcash.model.JobLocation;
 import com.google.firebase.auth.FirebaseAuth;
-import com.example.quickcash.PreferredJobsActivity;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.quickcash.model.PreferredEmployerModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +141,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                     ", Lng: " + location.getLng() +
                     ", Address: " + location.getAddress());
 
-            Intent mapIntent = new Intent(parent.getContext(), MapActivity.class);
+            Intent mapIntent = new Intent(parent.getContext(), GoogleSearchMapActivity.class);
 
             // Create lists for map data
             ArrayList<Double> latitudes = new ArrayList<>();
@@ -184,7 +173,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             mapIntent.putStringArrayListExtra("companies", companies);
             mapIntent.putStringArrayListExtra("jobTypes", jobTypes);
 
-            Log.d("JobSearchAdapter", "Sending to MapActivity - " +
+            Log.d("JobSearchAdapter", "Sending to GoogleSearchMapActivity - " +
                     "Latitudes: " + latitudes + ", " +
                     "Longitudes: " + longitudes + ", " +
                     "Locations: " + locations + ", " +
