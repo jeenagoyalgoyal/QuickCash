@@ -203,7 +203,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         } else if (isValidField(company)) {
             query = query.orderByChild("companyName").equalTo(company);
         } else if (isValidField(jobLocation)) {
-            query = query.orderByChild("location").equalTo(jobLocation);
+            String locationKey = normalizeLocationString(jobLocation);
+            query = query.orderByChild("location").startAt(locationKey).endAt(locationKey + "\uf8ff");
         } else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
             int minSal = Integer.parseInt(minSalStr);
             int maxSal = Integer.parseInt(maxSalStr);

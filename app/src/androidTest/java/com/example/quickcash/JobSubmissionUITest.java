@@ -202,7 +202,7 @@ public class JobSubmissionUITest {
 
     @Test
     public void testFormSubmitsSuccessfully() throws UiObjectNotFoundException, InterruptedException {
-        setupJobSubmissionActivityScenario();
+        setupLoginActivityActivityScenario();
         UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         try{
             UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
@@ -213,7 +213,7 @@ public class JobSubmissionUITest {
             //Continue
         }
 
-        onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.emailBox)).perform(typeText("test2@gmail.com "),closeSoftKeyboard());
         onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"),closeSoftKeyboard());
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.exists();
