@@ -2,69 +2,91 @@ package com.example.quickcash;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.example.quickcash.model.UseRole;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class UserRoleJunitTest {
+
     private UseRole useRole;
+    private DatabaseReference db;
 
     @Rule
-    public ActivityScenarioRule<RoleActivity> actRul = new ActivityScenarioRule<>(RoleActivity.class);
+    public ActivityScenarioRule<EmployerHomepageActivity> employerActivityRule = new ActivityScenarioRule<>(EmployerHomepageActivity.class);
+
+    @Rule
+    public ActivityScenarioRule<EmployeeHomepageActivity> employeeActivityRule = new ActivityScenarioRule<>(EmployeeHomepageActivity.class);
 
     @Before
-    public void setUseRole() {
-        useRole = UseRole.getInstance();
-        useRole.setCurrentRole(123, "employee");
-    }
+    public void setUseRole(){
+        db = FirebaseDatabase.getInstance().getReference("Users");
+        int id = 123;
+        useRole =UseRole.getInstance();
+        useRole.setCurrentRole(id,"employee");
 
+    }
     @Test
-    public void testInitialRole() {
+    public void testInitialRole(){
         assertEquals("employee", useRole.getCurrentRole());
     }
 
     @Test
-    public void testSwitchRole() {
-        useRole.switchRole(123);
+    public void testSwitchRole(){
+        int id = 123;
+        useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
     }
 
     @Test
-    public void testSwitchBackRole() {
-        useRole.switchRole(123);
-        useRole.switchRole(123);
+    public void testSwitchBackRole(){
+        int id = 123;
+        useRole.switchRole(id);
+        useRole.switchRole(id);
         assertEquals("employee", useRole.getCurrentRole());
     }
 
     @Test
-    public void testMultipleSwitch() {
-        useRole.switchRole(123);
+    public void testMultipleSwitch(){
+        int id = 123;
+        useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
-        useRole.switchRole(123);
+
+        useRole.switchRole(id);
         assertEquals("employee", useRole.getCurrentRole());
-        useRole.switchRole(123);
+
+        useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
     }
 
     @Test
-    public void testSingleInstance() {
+    public void testSingleInstance(){
         UseRole other = UseRole.getInstance();
-        assertNotNull("UseRole instance should not be null", other);
-        assertEquals("Both instances should be the same", useRole, other);
+        assertEquals(useRole,other);
     }
 
     @Test
-    public void testForNotNull() {
+    public void testForNotNull(){
         assertNotNull("UseRole should not be null", useRole);
-        assertNotNull("Current Role should not be null", useRole.getCurrentRole());
+        assertNotNull("Current Role is not null", useRole.getCurrentRole());
     }
 
     @Test
-    public void testRoleUpdateInDatabase() {
-        useRole.switchRole(123);
-        assertEquals("employer", useRole.getCurrentRole());
+    public void testRoleUpdateInDatabase(){
+        int id = 123;
+        useRole.switchRole(id);
+
+        db.child(String.valueOf(id)).child("role").get().addOnCompleteListener(event ->{
+            if(event.isSuccessful()){
+                String role = event.getResult().getValue(String.class);
+                assertEquals("employer", role);
+            }
+        });
     }
+
 }

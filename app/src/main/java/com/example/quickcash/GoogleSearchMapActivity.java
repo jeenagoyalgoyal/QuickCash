@@ -47,7 +47,7 @@ public class GoogleSearchMapActivity extends FragmentActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.search_activity_map);
 
         // Initialize
         markerMap = new HashMap<>();

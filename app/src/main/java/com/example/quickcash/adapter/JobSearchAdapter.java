@@ -52,7 +52,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         public TextView locationResult;
         public TextView salaryResult;
         public TextView durationResult;
-        public Button showMapButton;
+        public Button applyButton;
         public Button addToPreferredButton;
         public Button optionsButton;
         public LinearLayout jobSearchLinearLayout;
@@ -69,9 +69,10 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             locationResult = itemView.findViewById(R.id.locationResult);
             salaryResult = itemView.findViewById(R.id.salaryResult);
             durationResult = itemView.findViewById(R.id.durationResult);
-            showMapButton = itemView.findViewById(R.id.showMap);
+            applyButton = itemView.findViewById(R.id.Apply);
             optionsButton = itemView.findViewById(R.id.optionsButton);
             jobSearchLinearLayout = itemView.findViewById(R.id.jobSearchLinearLayout);
+            addToPreferredButton = itemView.findViewById(R.id.add_to_preferred_employers);
         }
     }
 
@@ -126,62 +127,6 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.salaryResult.setText("Salary: $" + String.format("%,d", job.getSalary()));
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
-        // Set up map button click handler
-
-        holder.showMapButton.setOnClickListener(view -> {
-            JobLocation location = job.getJobLocation();
-            if (location == null) {
-                Log.e("JobSearchAdapter", "No location data available for job: " + job.getJobTitle());
-                Toast.makeText(parent.getContext(), "No location data available for this job", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Log.d("JobSearchAdapter", "Creating map intent for job: " + job.getJobTitle());
-            Log.d("JobSearchAdapter", "Location data - Lat: " + location.getLat() +
-                    ", Lng: " + location.getLng() +
-                    ", Address: " + location.getAddress());
-
-            Intent mapIntent = new Intent(parent.getContext(), GoogleSearchMapActivity.class);
-
-            // Create lists for map data
-            ArrayList<Double> latitudes = new ArrayList<>();
-            ArrayList<Double> longitudes = new ArrayList<>();
-            ArrayList<String> locations = new ArrayList<>();  // Add this
-            ArrayList<String> titles = new ArrayList<>();
-            ArrayList<Integer> salaries = new ArrayList<>();
-            ArrayList<String> durations = new ArrayList<>();
-            ArrayList<String> companies = new ArrayList<>();
-            ArrayList<String> jobTypes = new ArrayList<>();
-
-            // Add job data to lists
-            latitudes.add(location.getLat());
-            longitudes.add(location.getLng());
-            locations.add(location.getAddress());  // Add this
-            titles.add(job.getJobTitle());
-            salaries.add(job.getSalary());
-            durations.add(job.getExpectedDuration());
-            companies.add(job.getCompanyName());
-            jobTypes.add(job.getJobType());
-
-            // Pass all data in the intent
-            mapIntent.putExtra("latitudes", latitudes);
-            mapIntent.putExtra("longitudes", longitudes);
-            mapIntent.putStringArrayListExtra("locations", locations);  // Add this
-            mapIntent.putStringArrayListExtra("titles", titles);
-            mapIntent.putIntegerArrayListExtra("salaries", salaries);
-            mapIntent.putStringArrayListExtra("durations", durations);
-            mapIntent.putStringArrayListExtra("companies", companies);
-            mapIntent.putStringArrayListExtra("jobTypes", jobTypes);
-
-            Log.d("JobSearchAdapter", "Sending to GoogleSearchMapActivity - " +
-                    "Latitudes: " + latitudes + ", " +
-                    "Longitudes: " + longitudes + ", " +
-                    "Locations: " + locations + ", " +
-                    "Titles: " + titles);
-
-            parent.getContext().startActivity(mapIntent);
-        });
-
         holder.optionsButton.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(parent.getContext(), holder.optionsButton);
             popupMenu.getMenuInflater().inflate(R.menu.job_search_options, popupMenu.getMenu());
@@ -197,11 +142,73 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                     } else if (item.getTitle().equals("Add to Preferred Jobs")) {
                         //Do preferred Job calls here!
                         addJobToPreferredList(job, holder.itemView.getContext());
+                    } else if (item.getTitle().equals("Show on Map")){
+                        showOnMap(job);
                     }
                     return true;
                 }
             });
         });
+    }
+
+    /**
+     * Displays a job's location on a map by creating an intent for GoogleSearchMapActivity.
+     * If location data is unavailable for the job, a toast message is shown, and the method returns.
+     *
+     * @param job the {@link Job} object containing details about the job whose location is to be shown.
+     */
+    private void showOnMap(Job job) {
+        JobLocation location = job.getJobLocation();
+        if (location == null) {
+            Log.e("JobSearchAdapter", "No location data available for job: " + job.getJobTitle());
+            Toast.makeText(parent.getContext(), "No location data available for this job", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d("JobSearchAdapter", "Creating map intent for job: " + job.getJobTitle());
+        Log.d("JobSearchAdapter", "Location data - Lat: " + location.getLat() +
+                ", Lng: " + location.getLng() +
+                ", Address: " + location.getAddress());
+
+        Intent mapIntent = new Intent(parent.getContext(), GoogleSearchMapActivity.class);
+
+        // Create lists for map data
+        ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> longitudes = new ArrayList<>();
+        ArrayList<String> locations = new ArrayList<>();  // Add this
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<Integer> salaries = new ArrayList<>();
+        ArrayList<String> durations = new ArrayList<>();
+        ArrayList<String> companies = new ArrayList<>();
+        ArrayList<String> jobTypes = new ArrayList<>();
+
+        // Add job data to lists
+        latitudes.add(location.getLat());
+        longitudes.add(location.getLng());
+        locations.add(location.getAddress());  // Add this
+        titles.add(job.getJobTitle());
+        salaries.add(job.getSalary());
+        durations.add(job.getExpectedDuration());
+        companies.add(job.getCompanyName());
+        jobTypes.add(job.getJobType());
+
+        // Pass all data in the intent
+        mapIntent.putExtra("latitudes", latitudes);
+        mapIntent.putExtra("longitudes", longitudes);
+        mapIntent.putStringArrayListExtra("locations", locations);  // Add this
+        mapIntent.putStringArrayListExtra("titles", titles);
+        mapIntent.putIntegerArrayListExtra("salaries", salaries);
+        mapIntent.putStringArrayListExtra("durations", durations);
+        mapIntent.putStringArrayListExtra("companies", companies);
+        mapIntent.putStringArrayListExtra("jobTypes", jobTypes);
+
+        Log.d("JobSearchAdapter", "Sending to GoogleSearchMapActivity - " +
+                "Latitudes: " + latitudes + ", " +
+                "Longitudes: " + longitudes + ", " +
+                "Locations: " + locations + ", " +
+                "Titles: " + titles);
+
+        parent.getContext().startActivity(mapIntent);
     }
 
     /**

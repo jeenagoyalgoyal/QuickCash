@@ -148,7 +148,7 @@ public class MapUITest {
     }
 
     @Test
-    public void checkIfClickingCloseandBackReturnsToSearchPage() throws UiObjectNotFoundException {
+    public void checkIfClickingBackReturnsToSearchPage() throws UiObjectNotFoundException {
         // Login and navigate
         logIn();
 
