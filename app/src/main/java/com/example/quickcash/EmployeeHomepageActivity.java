@@ -1,5 +1,4 @@
 package com.example.quickcash;
-import static com.example.quickcash.R.id.jobsRecycler;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,13 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
@@ -26,13 +23,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * The EmployeeHomepageActivity class provides the user interface and functionality
+ * for the employee's homepage in the QuickCash application. It allows employees
+ * to search for jobs, view preferred employers, switch to employer mode, and interact
+ * with job listings by location.
+ */
 public class EmployeeHomepageActivity extends AppCompatActivity implements LocationHelper.LocationResultListener {
-
+    // Instance variables for role management, UI components, and location services
     private String currentRole = "employee";
     private UseRole useRole;
     private int id;
@@ -40,6 +42,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
     private JobCRUD jobCrud;
     private GoogleMap mMap;
 
+    // UI components
     public TextView welcomeEmployee;
     public Button searchJob;
     public Button myProfile;
@@ -53,11 +56,17 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
     private RecyclerView jobRecyclerView; // RecyclerView for displaying jobs
     private JobSearchAdapter jobAdapter;
 
+    /**
+     * Initializes the activity, sets up UI components, and handles role-based navigation.
+     *
+     * @param savedInstance The saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.employee_dashboard);
 
+        // Retrieve user details and location from intent
         Intent intentEmployeeDash = getIntent();
         id = intentEmployeeDash.getIntExtra("userID", -1);
 
@@ -72,7 +81,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         // Initialize LocationHelper with this activity as the listener
         locationHelper = new LocationHelper(this, this);
         welcomeEmployee = findViewById(R.id.welcomeEmployee);
-        // Role-specific buttons
+        // Initialize UI components
         searchJob = findViewById(R.id.searchJobButton);
         myProfile = findViewById(R.id.myProfileButton);
         workSchedule = findViewById(R.id.workScheduleButton);
@@ -147,6 +156,13 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
 
     }
 
+    /**
+     * Retrieves the city name from latitude and longitude using Geocoder.
+     *
+     * @param latitude  The latitude of the location.
+     * @param longitude The longitude of the location.
+     * @return The city name or "Halifax" if unavailable.
+     */
     private String getCityFromLatLng(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
@@ -160,6 +176,15 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         return "Halifax";
     }
 
+    /**
+     * Callback when a location is retrieved.
+     * Updates the map to display the user's location and loads jobs in the detected city.
+     *
+     * @param latitude  The latitude of the location.
+     * @param longitude The longitude of the location.
+     * @param address   The full address string.
+     * @param city      The city name.
+     */
     @Override
     public void onLocationRetrieved(double latitude, double longitude, String address, String city) {
         if (mMap != null) {
@@ -173,6 +198,9 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         loadJobsByLocation(city);
     }
 
+    /**
+     * Requests the user's current location or prompts for location permission if not granted.
+     */
     private void getUserLocation() {
         if (locationHelper.isLocationPermissionGranted()) {
             locationHelper.getCurrentLocation();
@@ -180,6 +208,12 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
     }
+
+    /**
+     * Loads job listings for a specific city using the JobCRUD instance.
+     *
+     * @param city The city for which to load jobs.
+     */
     private void loadJobsByLocation(String city) {
         jobCrud.getJobsByLocation(city).addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
@@ -192,6 +226,11 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         });
     }
 
+    /**
+     * Displays a list of jobs in the RecyclerView using a JobSearchAdapter.
+     *
+     * @param jobs The list of job objects to display.
+     */
     private void displayJobs(List<Job> jobs) {
         // Initialize the adapter with the retrieved job listings
         jobAdapter = new JobSearchAdapter(jobs);
@@ -199,15 +238,28 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         jobAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Displays a message to the user when no jobs are found for their location.
+     */
     private void showNoJobsFoundMessage() {
         Toast.makeText(this, "No jobs found for this location.", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Prompts the user to manually enter their location if location data is unavailable.
+     */
     private void promptForManualLocationEntry() {
         // Show a dialog to allow the user to manually enter their location
         // You could add an EditText dialog here for manual input
     }
-    // Handle the result of permission request
+
+    /**
+     * Handles the result of a location permission request.
+     *
+     * @param requestCode  The request code for the permission request.
+     * @param permissions  The requested permissions.
+     * @param grantResults The results for the permission requests.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -218,6 +270,12 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    /**
+     * Initializes the GoogleMap instance when the map is ready.
+     *
+     * @param googleMap The GoogleMap instance to initialize.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

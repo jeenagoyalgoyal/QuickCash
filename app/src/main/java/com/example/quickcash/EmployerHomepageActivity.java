@@ -9,6 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * The EmployerHomepageActivity class provides the user interface and functionality
+ * for the employer's homepage in the QuickCash application. Employers can:
+ * - Create job listings
+ * - View employee directory
+ * - Access analytics reports and tasks
+ * - Schedule meetings and manage notifications
+ * - Switch to the employee role
+ * This activity manages the employer-specific navigation and role-based actions.
+ */
 public class EmployerHomepageActivity extends AppCompatActivity {
 
     private String currentRole = "employer";
@@ -25,11 +35,16 @@ public class EmployerHomepageActivity extends AppCompatActivity {
     public Button notificationSettings;
     public Button employeeSwitch;
 
+    /**
+     * Initializes the activity, sets up UI components, and handles employer-specific actions.
+     *
+     * @param savedInstance The saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.employer_dashboard);
-
+        // Retrieve user details from the intent
         Intent intentEmployerDash = getIntent();
         id = intentEmployerDash.getIntExtra("userID", -1);
 
