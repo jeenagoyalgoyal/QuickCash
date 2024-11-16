@@ -89,7 +89,7 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("20")).check(ViewAssertions.matches(ViewMatchers.withText("20")));
         onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("27")).check(ViewAssertions.matches(ViewMatchers.withText("27")));
         onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("20")).check(ViewAssertions.matches(ViewMatchers.withText("20")));
-        onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Halifax")).check(ViewAssertions.matches(ViewMatchers.withText("Halifax")));
+        onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("IRVING SHIPBUILDING INC")).check(ViewAssertions.matches(ViewMatchers.withText("IRVING SHIPBUILDING INC")));
 
         // Will test the submission button to see if the filters worked
         Espresso.closeSoftKeyboard();

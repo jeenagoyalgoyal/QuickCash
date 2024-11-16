@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.model.Job;
+import com.example.quickcash.model.JobLocation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +39,7 @@ public class JobSubmissionDatabaseTest {
         job.setCompanyName("Tech Company");
         job.setExpectedDuration("20");
         job.setEmployerId("test@gmail.com");
-        job.setLocation("Montreal");
+        job.setLocation("Halifax, NS B3H 4P7");
         job.setRequirements("Linux, Java");
         job.setSalary(50);
         job.setJobType("Full-time");
@@ -61,14 +62,14 @@ public class JobSubmissionDatabaseTest {
         String expectedType = "Full-time";
         String expectedDuration = "20";
         String expectedEmployerId = "test@gmail.com";
-        String expectedLocation = "Montreal";
+        String expectedLocation = "Halifax, NS B3H 4P7";
         String expectedRequirements = "Linux, Java";
         String expectedStartDate = "Nov 20, 2024";
         String expectedUrgency = "High";
         int expectedSalary = 50;
 
 
-       Task<Job> job1 = jobCRUD.getJobById("-OBJ4YBgzYcYczYqqXqq");
+       Task<Job> job1 = jobCRUD.getJobById("-OBmr8wmfFYluJOywEYP");
        Job job2 = Tasks.await(job1);
 
         // Act & Assert

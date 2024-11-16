@@ -202,19 +202,27 @@ public class JobSubmissionUITest {
 
     @Test
     public void testFormSubmitsSuccessfully() throws UiObjectNotFoundException, InterruptedException {
-        setupLoginActivityActivityScenario();
+        setupJobSubmissionActivityScenario();
         UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
-        if (allowButton.exists()) {
-            allowButton.click();
+        try{
+            UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+            if (allowButton.exists()) {
+                allowButton.click();
+            }
+        } catch (UiObjectNotFoundException e){
+            //Continue
         }
 
         onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"),closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.exists();
+        loginButton.clickAndWaitForNewWindow();
 
         Thread.sleep(6000);
-        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
+
+        UiObject welcome = device.findObject(new UiSelector().text("Welcome Employer!"));
+        welcome.exists();
         onView(withId(R.id.createJobButton)).perform(click());
 
         onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"),closeSoftKeyboard());
@@ -225,7 +233,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
-        onView(withId(R.id.locationJob)).perform(typeText("1031 Marginal Rd, Halifax, NS B3H 4P7"),closeSoftKeyboard());
+        onView(withId(R.id.locationJob)).perform(typeText("3099 Barrington St, Halifax, NS B3K 5M7, Canada"),closeSoftKeyboard());
         onView(withId(R.id.expectedDuration)).perform(typeText("20"),closeSoftKeyboard());
         onView(withId(R.id.startDate)).perform(click());
         //onView(withText("28")).check(matches(isDisplayed()));

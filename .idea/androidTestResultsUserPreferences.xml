@@ -81,6 +81,7 @@
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Pixel_7_API_35" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -109,6 +110,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_34" value="120" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_8_Pro_API_35" value="120" />
                   <entry key="Tests" value="360" />
@@ -170,6 +172,7 @@
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -382,6 +385,7 @@
                 <map>
                   <entry key="Duration" value="203" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_34" value="120" />
                   <entry key="Pixel_2_API_35" value="233" />
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Pixel_7_API_35" value="120" />
@@ -412,6 +416,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_34" value="120" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Pixel_7_API_35" value="120" />
@@ -521,9 +526,11 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Pixel_2_API_34" value="120" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -726,6 +733,7 @@
                 <map>
                   <entry key="Duration" value="206" />
                   <entry key="Medium_Phone_API_35" value="120" />
+                  <entry key="Pixel_2_API_34" value="120" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_5_API_30" value="236" />
                   <entry key="Pixel_7_API_35" value="120" />
@@ -796,6 +804,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Pixel_2_API_34" value="120" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Tests" value="360" />
@@ -983,6 +992,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

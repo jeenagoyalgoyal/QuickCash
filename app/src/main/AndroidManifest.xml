@@ -90,12 +90,6 @@
 
         </activity>
 
-        <!-- Role Selection Activity -->
-        <activity
-            android:name=".RoleActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" />
-
         <!-- Google Map Search Activity -->
         <activity
             android:name=".GoogleSearchMapActivity"

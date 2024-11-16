@@ -14,6 +14,7 @@ import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * This class is used for searching jobs via using filters to find the
  * posted jobs in the database.
  */
-public class JobSearchParameterActivity extends AppCompatActivity{
+public class JobSearchParameterActivity extends AppCompatActivity {
 
     private static final String TAG = "JobSearchParameter";
 
@@ -60,6 +61,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     /**
      * On create, initialize the job search parameter form
+     *
      * @param savedInstanceState
      */
     @Override
@@ -83,11 +85,11 @@ public class JobSearchParameterActivity extends AppCompatActivity{
              */
             @Override
             public void onClick(View view) {
-                if(allEmptyFields()){
+                if (allEmptyFields()) {
                     errorText.setText("All Fields are empty");
-                }else if(checkSalaryField()){
+                } else if (checkSalaryField()) {
                     errorText.setText("Enter Valid Salary Range");
-                }else{
+                } else {
                     errorText.setText(""); // Clear any previous error
                     performSearch();
                 }
@@ -100,9 +102,9 @@ public class JobSearchParameterActivity extends AppCompatActivity{
          */
         mapButton.setOnClickListener(view -> {
             errorText.setText(""); // Clear any previous error
-            if(allEmptyFields()){
+            if (allEmptyFields()) {
                 errorText.setText("All Fields are empty");
-            }else if (checkSalaryField()) {
+            } else if (checkSalaryField()) {
                 errorText.setText("Enter Valid Salary Range");
             } else {
                 errorText.setText(""); // Clear any previous error
@@ -123,7 +125,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     /**
      * Method initializes the job search form input variables
      */
-    public void init(){
+    public void init() {
         jobTitle = findViewById(R.id.jobTitle);
         companyName = findViewById(R.id.companyName);
         minSalary = findViewById(R.id.minSalary);
@@ -160,8 +162,8 @@ public class JobSearchParameterActivity extends AppCompatActivity{
             if (task.isSuccessful()) {
                 List<Job> jobs = task.getResult();
                 jobList.clear();
-                for(Job j: jobs) {
-                    if(passesAdditionalFilters(j)) {
+                for (Job j : jobs) {
+                    if (passesAdditionalFilters(j)) {
                         jobList.add(j);
                     }
                 }
@@ -178,13 +180,12 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     }
 
 
-
-
     /**
      * Creates a firebase query with the input by user
+     *
      * @return query
      */
-    private Query createQuery(){
+    private Query createQuery() {
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
         String company = companyName.getText().toString().trim();
@@ -199,21 +200,21 @@ public class JobSearchParameterActivity extends AppCompatActivity{
         // Apply filters based on non-empty inputs
         if (isValidField(title)) {
             query = query.orderByChild("jobTitle").equalTo(title);
-        }else if(isValidField(company)){
-            query =query.orderByChild("companyName").equalTo(company);
-        }else if (isValidField(jobLocation)) {
+        } else if (isValidField(company)) {
+            query = query.orderByChild("companyName").equalTo(company);
+        } else if (isValidField(jobLocation)) {
             query = query.orderByChild("location").equalTo(jobLocation);
-        }else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
+        } else if (isValidField(minSalStr) && isValidField(maxSalStr)) {
             int minSal = Integer.parseInt(minSalStr);
             int maxSal = Integer.parseInt(maxSalStr);
             query = query.orderByChild(salary).startAt(minSal).endAt(maxSal);
-        }else if(isValidField(minSalStr)){
+        } else if (isValidField(minSalStr)) {
             int minSal = Integer.parseInt(minSalStr);
             query = query.orderByChild(salary).startAt(minSal);
-        }else if(isValidField(maxSalStr)){
+        } else if (isValidField(maxSalStr)) {
             int maxSal = Integer.parseInt(maxSalStr);
             query = query.orderByChild(salary).endAt(maxSal);
-        }else if (isValidField(jobDuration)) {
+        } else if (isValidField(jobDuration)) {
             query = query.orderByChild("expectedDuration").equalTo(jobDuration);
         }
 
@@ -244,7 +245,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
                 List<Job> jobs = task.getResult();
 
                 for (Job job : jobs) {
-                    if(passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)){
+                    if (passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
                         jobList.add(job);
                     }
                 }
@@ -277,18 +278,13 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
         Log.d(TAG, "Processing " + jobList.size() + " jobs for map");
 
-
-        Log.d(TAG, "Started processJobsForMaps()");
         for (Job job : jobList) {
-            Log.d(TAG, "Location was not null");
             JobLocation location = job.getJobLocation();
             if (location != null) {
                 double lat = location.getLat();
                 double lng = location.getLng();
-                Log.d(TAG, "Location was not null");
                 // Add location if coordinates are present
                 if (lat != 0 || lng != 0) {  // Changed validation to be less strict
-                    Log.d(TAG, "Location was not 0, 0");
                     latitudes.add(lat);
                     longitudes.add(lng);
                     titles.add(job.getJobTitle());
@@ -343,6 +339,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     /**
      * Filters for the user to see if it's valid
+     *
      * @param job
      * @return true if valid, false otherwise
      */
@@ -463,28 +460,30 @@ public class JobSearchParameterActivity extends AppCompatActivity{
 
     /**
      * Checks if fields are all empty
+     *
      * @return true if all empty
      */
-    public boolean allEmptyFields(){
+    public boolean allEmptyFields() {
         return jobTitle.getText().toString().trim().isEmpty() &&
-               companyName.getText().toString().trim().isEmpty() &&
-               minSalary.getText().toString().trim().isEmpty() &&
-               maxSalary.getText().toString().trim().isEmpty() &&
-               duration.getText().toString().trim().isEmpty() &&
-               location.getText().toString().trim().isEmpty();
+                companyName.getText().toString().trim().isEmpty() &&
+                minSalary.getText().toString().trim().isEmpty() &&
+                maxSalary.getText().toString().trim().isEmpty() &&
+                duration.getText().toString().trim().isEmpty() &&
+                location.getText().toString().trim().isEmpty();
     }
 
     /**
      * Validates to see if salary is valid
+     *
      * @return false if empty
      */
-    public boolean checkSalaryField(){
+    public boolean checkSalaryField() {
         String minS = minSalary.getText().toString().trim();
         String maxS = maxSalary.getText().toString().trim();
 
-        if(minS.isEmpty() || maxS.isEmpty()){
+        if (minS.isEmpty() || maxS.isEmpty()) {
             return false;
-        }else{
+        } else {
             return !isValidSalary(Integer.parseInt(minS), Integer.parseInt(maxS));
         }
     }
