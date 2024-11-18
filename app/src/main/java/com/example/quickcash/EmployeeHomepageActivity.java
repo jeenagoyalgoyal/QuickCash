@@ -1,20 +1,44 @@
 package com.example.quickcash;
+import static com.example.quickcash.R.id.jobsRecycler;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class EmployeeHomepageActivity extends AppCompatActivity {
+import com.example.quickcash.Firebase.JobCRUD;
+import com.example.quickcash.adapter.JobSearchAdapter;
+import com.example.quickcash.model.Job;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+public class EmployeeHomepageActivity extends AppCompatActivity implements LocationHelper.LocationResultListener {
 
     private String currentRole = "employee";
     private UseRole useRole;
     private int id;
-
+    private LocationHelper locationHelper;
+    private JobCRUD jobCrud;
+    private GoogleMap mMap;
 
     public TextView welcomeEmployee;
     public Button searchJob;
@@ -26,6 +50,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
     public Button employerSwitch;
     public Button preferredJobsButton;
     public Button preferredEmployers;
+    private RecyclerView jobRecyclerView; // RecyclerView for displaying jobs
+    private JobSearchAdapter jobAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -36,9 +62,15 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         id = intentEmployeeDash.getIntExtra("userID", -1);
 
         String email = intentEmployeeDash.getStringExtra("email");
+        String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
+
 
         useRole = UseRole.getInstance();
 
+        jobCrud = new JobCRUD(FirebaseDatabase.getInstance());
+
+        // Initialize LocationHelper with this activity as the listener
+        locationHelper = new LocationHelper(this, this);
         welcomeEmployee = findViewById(R.id.welcomeEmployee);
         // Role-specific buttons
         searchJob = findViewById(R.id.searchJobButton);
@@ -50,6 +82,11 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
         employerSwitch = findViewById(R.id.switchToEmployerButton);
         preferredEmployers = findViewById(R.id.preferredEmployersButton);
         preferredJobsButton = findViewById(R.id.preferredJobsButton);
+
+        // Set up RecyclerView for displaying jobs
+        jobRecyclerView = findViewById(R.id.jobsRecycler);
+        jobRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        jobRecyclerView.setNestedScrollingEnabled(true);
 
 
         // SWITCHES TO EMPLOYEE DASH
@@ -101,5 +138,88 @@ public class EmployeeHomepageActivity extends AppCompatActivity {
             }
         });
 
+        if (manualLocation != null && !manualLocation.isEmpty()) {
+            String[] latLng = manualLocation.split(",");
+            loadJobsByLocation(getCityFromLatLng(Double.parseDouble(latLng[0]), Double.parseDouble(latLng[1])));
+        } else {
+            loadJobsByLocation("Halifax");
+        }
+
+    }
+
+    private String getCityFromLatLng(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                return addresses.get(0).getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Halifax";
+    }
+
+    @Override
+    public void onLocationRetrieved(double latitude, double longitude, String address, String city) {
+        if (mMap != null) {
+            // Center the map on the user's location
+            LatLng userLocation = new LatLng(latitude, longitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
+            mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
+        }
+
+        // Load jobs in this location
+        loadJobsByLocation(city);
+    }
+
+    private void getUserLocation() {
+        if (locationHelper.isLocationPermissionGranted()) {
+            locationHelper.getCurrentLocation();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+        }
+    }
+    private void loadJobsByLocation(String city) {
+        jobCrud.getJobsByLocation(city).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
+                List<Job> jobs = task.getResult();
+                displayJobs(jobs);
+            } else {
+                showNoJobsFoundMessage();
+                promptForManualLocationEntry();
+            }
+        });
+    }
+
+    private void displayJobs(List<Job> jobs) {
+        // Initialize the adapter with the retrieved job listings
+        jobAdapter = new JobSearchAdapter(jobs);
+        jobRecyclerView.setAdapter(jobAdapter);
+        jobAdapter.notifyDataSetChanged();
+    }
+
+    private void showNoJobsFoundMessage() {
+        Toast.makeText(this, "No jobs found for this location.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void promptForManualLocationEntry() {
+        // Show a dialog to allow the user to manually enter their location
+        // You could add an EditText dialog here for manual input
+    }
+    // Handle the result of permission request
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            locationHelper.getCurrentLocation();
+        } else {
+            showNoJobsFoundMessage();
+            promptForManualLocationEntry();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
     }
 }

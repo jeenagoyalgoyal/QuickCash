@@ -75,7 +75,12 @@ public class PrefEmployerUITest {
     }
 
     @Test
-    public void testPreferredEmployersButtonOnDashboard() throws UiObjectNotFoundException {
+    public void testPreferredEmployersButtonOnDashboard() throws UiObjectNotFoundException, InterruptedException {
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
+
         // Log in
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
         emailBox.setText("testingemail@test.db");
@@ -83,6 +88,7 @@ public class PrefEmployerUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
+        Thread.sleep(4000);
 
         // Check if "My Preferred Employers" button is visible
         UiObject preferredEmployersButton = device.findObject(new UiSelector().text("Preferred Employers"));
