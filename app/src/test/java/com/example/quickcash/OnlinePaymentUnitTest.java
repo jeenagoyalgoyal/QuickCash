@@ -3,13 +3,10 @@ package com.example.quickcash;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
-import android.content.Intent;
-import android.os.Bundle;
-
+import com.example.quickcash.Firebase.OnlinePaymentCRUD;
+import com.example.quickcash.model.PaymentTransactionModel;
 import com.example.quickcash.paypal.PayPalPaymentProcessor;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
-import com.paypal.android.sdk.payments.PayPalService;
-import com.paypal.android.sdk.payments.PaymentActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,5 +74,30 @@ public class OnlinePaymentUnitTest{
         paymentProcessor.handlePaymentConfirmation(mockPaymentConfirmation);
 
         assertEquals("Payment pending\n with payment id is PAYID-PENDING789", paymentProcessor.paymentStatusTV.getText().toString());
+    }
+
+    @Test
+    public void testFirebaseTransactionPushPull() {
+        //setup
+        final String JOB_ID = "test_job_id";
+        boolean status;
+        OnlinePaymentCRUD onlinePaymentCRUD = new OnlinePaymentCRUD();
+        PaymentTransactionModel transaction = new PaymentTransactionModel();
+        PaymentTransactionModel retrievedTransaction = new PaymentTransactionModel();
+
+        transaction.setEmployeeId("testingemail@test,db");
+        transaction.setEmployerId("test2@gmail,com");
+        transaction.setJobId("test_job_id");
+        transaction.setPaymentAmount(400);
+        transaction.setTransactionStatus("successful");
+        status = onlinePaymentCRUD.pushTransaction(transaction);
+        assertTrue("Pushing of payment pushTransaction record to firebase should be successful",status);
+        retrievedTransaction = onlinePaymentCRUD.getTransactionByJobId(JOB_ID);
+        assertEquals("Retrieved transaction record should match the one pushed",JOB_ID,retrievedTransaction.getJobId());
+
+        //teardown
+        status = false;
+        status = onlinePaymentCRUD.deleteTransactionByJobId(JOB_ID);
+        assertTrue("Deletion of the record after test completion must take place to prevent duplication",status);
     }
 }
