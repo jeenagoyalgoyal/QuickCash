@@ -80,4 +80,6 @@ public class OnlinePaymentUITest {
         onView(withText("Pay")).check(matches(isDisplayed()));
         onView(withText("Cancel")).check(matches(isDisplayed()));
     }
+
+
 }
