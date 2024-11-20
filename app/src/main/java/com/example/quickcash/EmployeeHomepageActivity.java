@@ -19,14 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
+import com.example.quickcash.model.JobLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * The EmployeeHomepageActivity class provides the user interface and functionality
@@ -42,7 +47,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
     private LocationHelper locationHelper;
     private JobCRUD jobCrud;
     private GoogleMap mMap;
-
+    private FirebaseDatabase jobsRef;
     // UI components
     public TextView welcomeEmployee;
     public Button searchJob;
@@ -73,15 +78,16 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
 
         String email = intentEmployeeDash.getStringExtra("email");
         String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
-        Log.d("Email recieved at dashboard: ", email);
 
         useRole = UseRole.getInstance();
 
         jobCrud = new JobCRUD(FirebaseDatabase.getInstance());
+        jobsRef = FirebaseDatabase.getInstance();
 
         // Initialize LocationHelper with this activity as the listener
         locationHelper = new LocationHelper(this, this);
         welcomeEmployee = findViewById(R.id.welcomeEmployee);
+
         // Initialize UI components
         searchJob = findViewById(R.id.searchJobButton);
         myProfile = findViewById(R.id.myProfileButton);
@@ -216,10 +222,24 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
      * @param city The city for which to load jobs.
      */
     private void loadJobsByLocation(String city) {
-        jobCrud.getJobsByLocation(city).addOnCompleteListener(task -> {
+        Log.d("Employee Homepage","Recieved city: "+city);
+        Query query = jobsRef.getReference("Jobs");
+
+        jobCrud.getJobsByQuery(query).addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
                 List<Job> jobs = task.getResult();
-                displayJobs(jobs);
+
+                // Filter jobs locally using .contains() on location
+                List<Job> filteredJobs = new ArrayList<>();
+                for (Job job : jobs) {
+                    JobLocation jobLocation = job.getJobLocation(); //Make sure location is not null
+                    if (jobLocation != null && jobLocation.getAddress().toLowerCase().contains(city.toLowerCase())) {
+                        filteredJobs.add(job);
+                    }
+                }
+
+                // Display filtered jobs
+                displayJobs(filteredJobs);
             } else {
                 showNoJobsFoundMessage();
                 promptForManualLocationEntry();

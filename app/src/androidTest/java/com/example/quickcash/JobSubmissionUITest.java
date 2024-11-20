@@ -86,10 +86,13 @@ public class JobSubmissionUITest {
     }
 
     @Test
-    public void checkJobSubmissionForm() {
+    public void checkJobSubmissionForm() throws UiObjectNotFoundException {
         setupRoleActivity();
-        onView(withId(R.id.createJobButton)).perform(click());
-        setupJobSubmissionActivityScenario();
+        UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject createJobButton = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/createJobButton"));
+        if(createJobButton.exists()){
+            createJobButton.clickAndWaitForNewWindow();
+        }
         onView(withId(R.id.jobSub)).check(matches(isDisplayed()));
     }
 

@@ -69,7 +69,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_search_parameter);
 
-        jobList = new ArrayList<>();
         init();
 
         // Getting email and user ID
@@ -129,6 +128,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
      * Method initializes the job search form input variables
      */
     public void init() {
+        jobList = new ArrayList<>();
+
         jobTitle = findViewById(R.id.jobTitle);
         companyName = findViewById(R.id.companyName);
         minSalary = findViewById(R.id.minSalary);
@@ -147,6 +148,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);
     }
+
 
 
     /**
@@ -248,6 +250,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 List<Job> jobs = task.getResult();
 
                 for (Job job : jobs) {
+                    //JobLocation jobLocation = job.getJobLocation();
+                    // && jobLocation!=null
                     if (passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
                         jobList.add(job);
                     }
@@ -523,5 +527,22 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             Log.e(TAG, "Error parsing coordinates: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Called when the activity is resumed after being paused or restarted.
+     * This method clears the job list and updates the adapter to prevent duplicate
+     * entries in the RecyclerView. It also resets the error message text, if any.
+     *
+     * This ensures the displayed data is refreshed and consistent when returning
+     * to this activity from another activity (e.g., the map activity).
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Clear the list and notify the adapter
+        jobList.clear();
+        performSearch();
+        errorText.setText(""); // Clear any error messages
     }
 }

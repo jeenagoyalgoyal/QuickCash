@@ -98,7 +98,6 @@ public class JobSubmissionActivity extends AppCompatActivity {
         // Send the email for storing as employerID
         Intent intentJobSub = getIntent();
         email = intentJobSub.getStringExtra("email");
-        Log.d(TAG, email);
 
         // The inputs from employer
         jobTitle = findViewById(R.id.jobTitle);
@@ -175,6 +174,11 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 locationText
         );
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            //continue
+        }
         if (result == null) {
             progressDialog.dismiss();
             location.setError("Could not find this location. Please check the address.");

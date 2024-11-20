@@ -50,7 +50,6 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         id = intentEmployerDash.getIntExtra("userID", -1);
 
         String email = intentEmployerDash.getStringExtra("email");
-        Log.d("Email recieved at dashboard: ", email);
 
         useRole = UseRole.getInstance();
 
@@ -84,7 +83,6 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                 if (useRole.getCurrentRole().equals("employer")) {
                     Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmissionActivity.class);
                     intentJobSub.putExtra("email", email); // Fixed
-                    Log.d("Passing email to Job Sub: ", email);
                     Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
                 }
