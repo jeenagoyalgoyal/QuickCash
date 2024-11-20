@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -72,7 +73,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
 
         String email = intentEmployeeDash.getStringExtra("email");
         String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
-
+        Log.d("Email recieved at dashboard: ", email);
 
         useRole = UseRole.getInstance();
 

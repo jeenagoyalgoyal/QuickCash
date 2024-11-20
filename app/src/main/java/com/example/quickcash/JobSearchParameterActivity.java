@@ -47,7 +47,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     private JobCRUD jobCRUD;
 
     // User info
-    private String email, userID;
+    private String email, userID, manualLocation;
 
     // Map data
     private ArrayList<Double> latitudes = new ArrayList<>();
@@ -74,6 +74,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         // Getting email and user ID
         Intent intentPreferredEmployers = getIntent();
+        this.manualLocation = intentPreferredEmployers.getStringExtra("manualLocation");
         this.email = intentPreferredEmployers.getStringExtra("email");
         if (email != null && !email.isEmpty()) {
             this.userID = email.replace(".", ",");
@@ -117,6 +118,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(JobSearchParameterActivity.this, EmployeeHomepageActivity.class);
+            intent.putExtra("email",email);
+            intent.putExtra("manualLocation", manualLocation);
             startActivity(intent);
             finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
@@ -141,7 +144,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         jobSearchAdapter = new JobSearchAdapter(jobList);
         recyclerView.setAdapter(jobSearchAdapter);
-
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);
     }

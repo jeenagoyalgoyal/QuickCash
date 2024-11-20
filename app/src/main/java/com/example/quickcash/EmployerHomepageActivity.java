@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         id = intentEmployerDash.getIntExtra("userID", -1);
 
         String email = intentEmployerDash.getStringExtra("email");
+        Log.d("Email recieved at dashboard: ", email);
 
         useRole = UseRole.getInstance();
 
@@ -70,6 +72,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                 useRole.switchRole(id);
                 Intent intentSwitchToEmployee = new Intent(EmployerHomepageActivity.this, EmployeeHomepageActivity.class);
                 intentSwitchToEmployee.putExtra("email",email);
+
                 startActivity(intentSwitchToEmployee);
             }
         });
@@ -81,6 +84,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                 if (useRole.getCurrentRole().equals("employer")) {
                     Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmissionActivity.class);
                     intentJobSub.putExtra("email", email); // Fixed
+                    Log.d("Passing email to Job Sub: ", email);
                     Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
                 }

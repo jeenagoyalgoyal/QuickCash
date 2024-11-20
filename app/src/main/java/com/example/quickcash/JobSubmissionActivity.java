@@ -27,6 +27,7 @@ import java.util.List;
  * This class is used to submit jobs, posting them in the database for users
  */
 public class JobSubmissionActivity extends AppCompatActivity {
+    private static final String TAG = "Job Submission";
 
     // Job Submission Form title
     private TextView formText;
@@ -97,6 +98,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         // Send the email for storing as employerID
         Intent intentJobSub = getIntent();
         email = intentJobSub.getStringExtra("email");
+        Log.d(TAG, email);
 
         // The inputs from employer
         jobTitle = findViewById(R.id.jobTitle);
