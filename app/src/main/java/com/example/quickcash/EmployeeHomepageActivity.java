@@ -40,6 +40,7 @@ import java.util.Objects;
  * with job listings by location.
  */
 public class EmployeeHomepageActivity extends AppCompatActivity implements LocationHelper.LocationResultListener {
+    public static final String EMAIL = "email";
     // Instance variables for role management, UI components, and location services
     private String currentRole = "employee";
     private UseRole useRole;
@@ -76,7 +77,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         Intent intentEmployeeDash = getIntent();
         id = intentEmployeeDash.getIntExtra("userID", -1);
 
-        String email = intentEmployeeDash.getStringExtra("email");
+        String email = intentEmployeeDash.getStringExtra(EMAIL);
         String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
 
         useRole = UseRole.getInstance();
@@ -111,7 +112,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
             public void onClick(View view) {
                 useRole.switchRole(id);
                 Intent intentSwitchToEmployer = new Intent(EmployeeHomepageActivity.this, EmployerHomepageActivity.class);
-                intentSwitchToEmployer.putExtra("email", email);
+                intentSwitchToEmployer.putExtra(EMAIL, email);
                 startActivity(intentSwitchToEmployer);
             }
         });
@@ -129,7 +130,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
             @Override
             public void onClick(View view) {
                 Intent intentPreferredEmployers = new Intent(EmployeeHomepageActivity.this, PreferredEmployersActivity.class);
-                intentPreferredEmployers.putExtra("email", email);
+                intentPreferredEmployers.putExtra(EMAIL, email);
                 startActivity(intentPreferredEmployers);
                 finish();
             }
@@ -139,7 +140,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
             @Override
             public void onClick(View view) {
                 Intent intentJobSearchParameter = new Intent(EmployeeHomepageActivity.this, JobSearchParameterActivity.class);
-                intentJobSearchParameter.putExtra("email", email);
+                intentJobSearchParameter.putExtra(EMAIL, email);
                 startActivity(intentJobSearchParameter);
                 finish();
             }

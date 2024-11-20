@@ -187,8 +187,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
         }
 
         // Add debug logging
-        Log.d("JobSubmission", "Address entered: " + locationText);
-        Log.d("JobSubmission", "Geocoding result - Latitude: " + result.getLatitude() +
+        Log.d(TAG, "Address entered: " + locationText);
+        Log.d(TAG, "Geocoding result - Latitude: " + result.getLatitude() +
                 ", Longitude: " + result.getLongitude() +
                 ", Formatted Address: " + result.getFormattedAddress());
 
@@ -223,7 +223,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         jobCRUD.submitJob(job).addOnCompleteListener(task -> {
             progressDialog.dismiss();
             if (task.isSuccessful()) {
-                Log.d("JobSubmission", "Job successfully submitted to Firebase");
+                Log.d(TAG, "Job successfully submitted to Firebase");
                 Toast.makeText(this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
                 resetForm();
 
@@ -234,7 +234,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 startActivity(intentBackToEmployerPage);
                 finish();
             } else {
-                Log.e("JobSubmission", "Failed to submit job", task.getException());
+                Log.e(TAG, "Failed to submit job", task.getException());
                 Toast.makeText(this, "Failed to post job: " +
                         task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }

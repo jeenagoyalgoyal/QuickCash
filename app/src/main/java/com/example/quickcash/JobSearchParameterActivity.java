@@ -250,6 +250,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 List<Job> jobs = task.getResult();
 
                 for (Job job : jobs) {
+                    //The following lines can be added to prevent showing jobs with no proper location
                     //JobLocation jobLocation = job.getJobLocation();
                     // && jobLocation!=null
                     if (passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {

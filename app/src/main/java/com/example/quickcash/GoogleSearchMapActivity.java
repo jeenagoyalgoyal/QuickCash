@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -329,6 +330,6 @@ public class GoogleSearchMapActivity extends FragmentActivity implements OnMapRe
 
     private void showError(String message) {
         Log.e(TAG, message);
-        Snackbar.make(findViewById(R.id.map_container), message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.map_container), message, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }
