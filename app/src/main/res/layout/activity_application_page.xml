@@ -14,6 +14,16 @@
         android:textSize="24sp"
         android:layout_margin="16dp" />
 
+    <TextView
+        android:id="@+id/textViewJobDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"/>
+
+
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
@@ -44,13 +54,6 @@
         android:text="Apply"
         android:layout_marginTop="16dp"/>
 
-    <!-- TextView to display application details -->
-    <TextView
-        android:id="@+id/textViewJobDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp"/>
 
 
 </LinearLayout>

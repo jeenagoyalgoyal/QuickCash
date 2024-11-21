@@ -33,8 +33,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         // Retrieve job details from the intent
         String jobId = getIntent().getStringExtra("jobId");
         String jobTitle = getIntent().getStringExtra("jobTitle");
-
-
+        String companyName = getIntent().getStringExtra("companyName");
 
         // Initialize UI components
         editTextName = findViewById(R.id.editTextName);
@@ -42,6 +41,13 @@ public class ApplicationPageActivity extends AppCompatActivity {
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonApply = findViewById(R.id.buttonApply);
         textViewJobDetails = findViewById(R.id.textViewJobDetails);
+
+        // Set the job title and company name in the TextView
+        if (jobTitle != null && companyName != null) {
+            textViewJobDetails.setText(String.format("Applying for: %s at %s", jobTitle, companyName));
+        } else {
+            textViewJobDetails.setText("Job details not available");
+        }
 
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("Jobs").child(jobId).child("applications");
