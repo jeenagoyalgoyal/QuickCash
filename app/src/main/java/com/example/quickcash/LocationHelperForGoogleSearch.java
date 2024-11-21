@@ -30,7 +30,8 @@ public class LocationHelperForGoogleSearch {
 
     /**
      * Gets coordinates for any address worldwide
-     * @param context The application context
+     *
+     * @param context      The application context
      * @param locationName The address to geocode
      * @return GeocodingResult containing the coordinates
      */
@@ -77,7 +78,7 @@ public class LocationHelperForGoogleSearch {
             // Wait briefly for the result
             int attempts = 0;
             while (result[0] == null && attempts < 5) {
-                Thread.sleep(100);
+                Thread.sleep(FASTEST_INTERVAL);
                 attempts++;
             }
 
@@ -178,6 +179,7 @@ public class LocationHelperForGoogleSearch {
 
     public interface CustomLocationCallback {
         void onLocationReceived(double latitude, double longitude);
+
         void onLocationError(String error);
     }
 

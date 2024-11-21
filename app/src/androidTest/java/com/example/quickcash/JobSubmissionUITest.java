@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -222,7 +223,7 @@ public class JobSubmissionUITest {
         loginButton.exists();
         loginButton.clickAndWaitForNewWindow();
 
-        Thread.sleep(6000);
+        Thread.sleep(5000);
 
         UiObject welcome = device.findObject(new UiSelector().text("Welcome Employer!"));
         welcome.exists();
@@ -236,7 +237,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
-        onView(withId(R.id.locationJob)).perform(typeText("3099 Barrington St, Halifax, NS B3K 5M7, Canada"),closeSoftKeyboard());
+        onView(withId(R.id.locationJob)).perform(typeText("Dalplex, 6260 South St, Halifax, NS B3H 4R2"),closeSoftKeyboard());
         onView(withId(R.id.expectedDuration)).perform(typeText("20"),closeSoftKeyboard());
         onView(withId(R.id.startDate)).perform(click());
         //onView(withText("28")).check(matches(isDisplayed()));
@@ -245,8 +246,8 @@ public class JobSubmissionUITest {
                 .perform(click());
 
         onView(withText("OK")).perform(click());
-
-        onView(withId(R.id.jobSubmissionButton)).perform(click());
+        UiObject submitJob = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/jobSubmissionButton"));
+        submitJob.click();
 
         onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
     }

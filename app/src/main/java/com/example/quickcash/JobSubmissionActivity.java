@@ -3,6 +3,7 @@ package com.example.quickcash;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -168,18 +169,9 @@ public class JobSubmissionActivity extends AppCompatActivity {
         progressDialog.setMessage("Submitting job posting...");
         progressDialog.show();
 
-        // Get coordinates for the location
-        LocationHelperForGoogleSearch.GeocodingResult result = LocationHelperForGoogleSearch.getCoordinates(
-                JobSubmissionActivity.this,
-                locationText
-        );
+        LocationHelperForGoogleSearch.GeocodingResult geoLocal = getGeoLocation(locationText);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            //continue
-        }
-        if (result == null) {
+        if (geoLocal == null) {
             progressDialog.dismiss();
             location.setError("Could not find this location. Please check the address.");
             location.requestFocus();
@@ -188,17 +180,17 @@ public class JobSubmissionActivity extends AppCompatActivity {
 
         // Add debug logging
         Log.d(TAG, "Address entered: " + locationText);
-        Log.d(TAG, "Geocoding result - Latitude: " + result.getLatitude() +
-                ", Longitude: " + result.getLongitude() +
-                ", Formatted Address: " + result.getFormattedAddress());
+        Log.d(TAG, "Geocoding result - Latitude: " + geoLocal.getLatitude() +
+                ", Longitude: " + geoLocal.getLongitude() +
+                ", Formatted Address: " + geoLocal.getFormattedAddress());
 
         Job job = new Job();
 
         // Set the job location details using the geocoded result
         JobLocation jobLocation = new JobLocation(
-                result.getLatitude(),
-                result.getLongitude(),
-                result.getFormattedAddress() // Use the formatted address from geocoding
+                geoLocal.getLatitude(),
+                geoLocal.getLongitude(),
+                geoLocal.getFormattedAddress() // Use the formatted address from geocoding
         );
         job.setJobLocation(jobLocation);
 
@@ -210,13 +202,13 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 requirementsText,
                 salaryValue,
                 urgencyText,
-                result.getFormattedAddress(), // Use formatted address here too
+                geoLocal.getFormattedAddress(), // Use formatted address here too
                 durationText,
                 startDateText,
                 employerId,
                 jobId,
-                result.getLatitude(),
-                result.getLongitude()
+                geoLocal.getLatitude(),
+                geoLocal.getLongitude()
         );
 
         // Submit to Firebase
@@ -239,6 +231,16 @@ public class JobSubmissionActivity extends AppCompatActivity {
                         task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private LocationHelperForGoogleSearch.GeocodingResult getGeoLocation(String locationText) {
+        // Get coordinates for the location
+        LocationHelperForGoogleSearch.GeocodingResult result = LocationHelperForGoogleSearch.getCoordinates(
+                JobSubmissionActivity.this,
+                locationText
+        );
+
+        return result;
     }
 
     /**
