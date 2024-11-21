@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.quickcash.EmployerHomepageActivity;
@@ -180,7 +181,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void fetchUserRoleAndNavigate() {
         Intent intent = getIntent();
+
         String email = intent != null ? intent.getStringExtra("email") : null;
+        Log.d("Moving to dashboard with Email: ", email);
 
         if (email != null) {
             UseRole useRole = UseRole.getInstance();

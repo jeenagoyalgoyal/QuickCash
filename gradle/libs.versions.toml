@@ -16,6 +16,8 @@ uiautomator = "2.3.0"
 playServicesLocation = "21.3.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 playServicesMaps = "19.0.0"
+espressoContrib = "3.6.1"
+places = "4.0.0"
 
 
 
@@ -34,6 +36,8 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espressoContrib" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 
 
 

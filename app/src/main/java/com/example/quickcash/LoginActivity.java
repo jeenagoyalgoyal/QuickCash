@@ -258,7 +258,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void navigateToMapsActivity(String email, String role) {
         Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+        Log.d("Logging in with email: ", email);
         intent.putExtra("email", email);
+        Log.d("Logging in with role: ", role);
         intent.putExtra("role", role);
 
         // Pass manual location to MapsActivity if set

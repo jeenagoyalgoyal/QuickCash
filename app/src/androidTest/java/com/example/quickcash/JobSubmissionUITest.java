@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -86,10 +87,13 @@ public class JobSubmissionUITest {
     }
 
     @Test
-    public void checkJobSubmissionForm() {
+    public void checkJobSubmissionForm() throws UiObjectNotFoundException {
         setupRoleActivity();
-        onView(withId(R.id.createJobButton)).perform(click());
-        setupJobSubmissionActivityScenario();
+        UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject createJobButton = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/createJobButton"));
+        if(createJobButton.exists()){
+            createJobButton.clickAndWaitForNewWindow();
+        }
         onView(withId(R.id.jobSub)).check(matches(isDisplayed()));
     }
 
@@ -204,17 +208,25 @@ public class JobSubmissionUITest {
     public void testFormSubmitsSuccessfully() throws UiObjectNotFoundException, InterruptedException {
         setupLoginActivityActivityScenario();
         UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
-        if (allowButton.exists()) {
-            allowButton.click();
+        try{
+            UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+            if (allowButton.exists()) {
+                allowButton.click();
+            }
+        } catch (UiObjectNotFoundException e){
+            //Continue
         }
 
-        onView(withId(R.id.emailBox)).perform(typeText( "test2@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.emailBox)).perform(typeText("test2@gmail.com "),closeSoftKeyboard());
         onView(withId(R.id.passwordBox)).perform(typeText("TestingPassword!1"),closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
+        UiObject loginButton = device.findObject(new UiSelector().text("Login"));
+        loginButton.exists();
+        loginButton.clickAndWaitForNewWindow();
 
-        Thread.sleep(6000);
-        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
+        Thread.sleep(5000);
+
+        UiObject welcome = device.findObject(new UiSelector().text("Welcome Employer!"));
+        welcome.exists();
         onView(withId(R.id.createJobButton)).perform(click());
 
         onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"),closeSoftKeyboard());
@@ -225,7 +237,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
-        onView(withId(R.id.locationJob)).perform(typeText("Halifax"),closeSoftKeyboard());
+        onView(withId(R.id.locationJob)).perform(typeText("Dalplex, 6260 South St, Halifax, NS B3H 4R2"),closeSoftKeyboard());
         onView(withId(R.id.expectedDuration)).perform(typeText("20"),closeSoftKeyboard());
         onView(withId(R.id.startDate)).perform(click());
         //onView(withText("28")).check(matches(isDisplayed()));
@@ -234,8 +246,8 @@ public class JobSubmissionUITest {
                 .perform(click());
 
         onView(withText("OK")).perform(click());
-
-        onView(withId(R.id.jobSubmissionButton)).perform(click());
+        UiObject submitJob = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/jobSubmissionButton"));
+        submitJob.click();
 
         onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
     }

@@ -28,13 +28,17 @@ public class PrefEmployerUITest {
     private UiDevice device;
 
     @Before
-    public void setup() {
+    public void setup() throws UiObjectNotFoundException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         Context context = ApplicationProvider.getApplicationContext();
         Intent launcherIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackageName);
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launcherIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
     }
 
     @Test
