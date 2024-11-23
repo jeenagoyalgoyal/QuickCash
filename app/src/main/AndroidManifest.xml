@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickCash"
-        tools:targetApi="31" >
+        tools:targetApi="34">
 
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -31,22 +31,29 @@
              project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
              "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
         -->
+
+        <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCV1UHoXi03PIqKcmQLUaXyE23Cu5vIjvk" />
+            android:value="@string/google_maps_api_key" />
 
+        <!-- Dynamic Location Map Activity -->
         <activity
             android:name=".ui.MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:exported="false"/>
+
+        <!-- Login Activity as Launcher -->
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
+            android:theme="@style/Theme.QuickCash">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Preferred Employers Activity -->
         <activity
             android:name=".PreferredEmployersActivity"
             android:exported="true"
@@ -55,46 +62,61 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity">
+        </activity>
+
+        <!-- Profile activity -->
         <activity
             android:name=".Profile"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
-        </activity>
+            android:theme="@style/Theme.QuickCash">
+            </activity>
+
+        <!-- Job Search by Parameter Activity -->
         <activity
             android:name=".JobSearchParameterActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
+            android:theme="@style/Theme.QuickCash">
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!-- Registration Activity -->
         <activity
-            android:name=".EmployeeHomepageActivity"
+            android:name=".RegistrationActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
+            android:theme="@style/Theme.QuickCash">
+
         </activity>
+
+        <!-- Google Map Search Activity -->
         <activity
-            android:name=".EmployerHomepageActivity"
+            android:name=".GoogleSearchMapActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Employer Homepage Activity -->
+        <activity android:name=".EmployeeHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Employer Homepage Activity -->
+        <activity android:name=".EmployerHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
         </activity>
-        <activity
-            android:name=".JobSubmissionActivity"
+
+        <!-- Job Submission Activity -->
+        <activity android:name=".JobSubmissionActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
+            android:theme="@style/Theme.QuickCash">
         </activity>
-        <activity
-            android:name=".PreferredJobsActivity"
+
+        <!-- Preferred Jobs Activity -->
+        <activity android:name=".PreferredJobsActivity"
             android:exported="true"
-            android:theme="@style/Theme.QuickCash" >
+            android:theme="@style/Theme.QuickCash">
         </activity>
     </application>
 
