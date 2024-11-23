@@ -63,12 +63,8 @@ public class UserRatingUITest {
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
-        // Click on a job listing to open options
-        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
-        jobListingOptions.click();
-
         // Check if "View Job Details" button is visible in the popup
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
         assertTrue("View Job Details button should be visible in the popup", viewJobDetailsButton.exists());
     }
 
@@ -93,12 +89,8 @@ public class UserRatingUITest {
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
-        // Click on a job listing to open options
-        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
-        jobListingOptions.click();
-
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Check if redirected to the 'Job Details' page by checking for title displayed on the page.
@@ -127,12 +119,8 @@ public class UserRatingUITest {
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
-        // Click on a job listing to open options
-        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
-        jobListingOptions.click();
-
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Star rating component and comment field are checked to be clickable to see if they exist
@@ -163,12 +151,8 @@ public class UserRatingUITest {
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
-        // Click on a job listing to open options
-        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
-        jobListingOptions.click();
-
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // 'Add Comment' button should now be disabled
@@ -206,12 +190,8 @@ public class UserRatingUITest {
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
-        // Click on a job listing to open options
-        UiObject jobListingOptions = device.findObject(new UiSelector().text("Options"));
-        jobListingOptions.click();
-
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("View Job Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Star rating component and comment field are given values through interaction and comment is submitted
