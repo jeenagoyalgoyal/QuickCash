@@ -1,5 +1,7 @@
 package com.example.quickcash.adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -133,11 +135,22 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.salaryResult.setText("Salary: $" + String.format("%,d", job.getSalary()));
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
-
         holder.jobDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(context, JobDetails.class);
-            intent.putExtra("JOB_ID", job.getJobId()); // Pass the job ID to the details page
-            context.startActivity(intent);
+            if (job.getJobId() != null && !job.getJobId().isEmpty()) {
+                Intent intent = new Intent(context, JobDetails.class);
+
+                // Pass the job ID and additional data to the details activity
+                intent.putExtra("JOB_ID", job.getJobId());
+                intent.putExtra("jobTitle", job.getJobTitle());
+                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("location", job.getJobLocation() != null ? job.getJobLocation().getAddress() : "Not specified");
+                intent.putExtra("salary", job.getSalary());
+                intent.putExtra("duration", job.getExpectedDuration());
+
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "Error: Job ID is missing!", Toast.LENGTH_SHORT).show();
+            }
         });
 
         holder.optionsButton.setOnClickListener(view -> {

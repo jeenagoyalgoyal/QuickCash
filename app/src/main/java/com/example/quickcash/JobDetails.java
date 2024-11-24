@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -10,8 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.R;
 import com.example.quickcash.model.Job;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class JobDetails extends AppCompatActivity {
 
@@ -76,24 +80,28 @@ public class JobDetails extends AppCompatActivity {
     }
 
     private void loadJobDetails() {
-        // This method retrieves the job details from Firebase or the intent extras
-        // and sets them into the respective TextViews.
+        jobRef.child(jobId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Job job = snapshot.getValue(Job.class);
 
-        // Example:
-        jobRef.child(jobId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists()) {
-                Job job = task.getResult().getValue(Job.class);
-
-                if (job != null) {
-                    jobTitleText.setText(job.getJobTitle());
-                    companyNameText.setText(job.getCompanyName());
-                    locationText.setText(job.getLocation());
-                    jobTypeText.setText(job.getJobType());
-                    salaryText.setText(String.valueOf(job.getSalary()));
-                    durationText.setText(job.getExpectedDuration());
+                    if (job != null) {
+                        jobTitleText.setText(job.getJobTitle() != null ? job.getJobTitle() : "Not available");
+                        companyNameText.setText(job.getCompanyName() != null ? job.getCompanyName() : "Not available");
+                        locationText.setText(job.getLocation() != null ? job.getLocation() : "Not specified");
+                        jobTypeText.setText(job.getJobType() != null ? job.getJobType() : "Not available");
+                        salaryText.setText(job.getSalary() > 0 ? "$" + job.getSalary() : "Not specified");
+                        durationText.setText(job.getExpectedDuration() != null ? job.getExpectedDuration() : "Not specified");
+                    }
+                } else {
+                    Toast.makeText(JobDetails.this, "Job not found!", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(this, "Failed to load job details!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(JobDetails.this, "Failed to load data! " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
