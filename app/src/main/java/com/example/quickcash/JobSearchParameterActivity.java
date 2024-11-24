@@ -114,6 +114,9 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         });
 
+        jobSearchAdapter = new JobSearchAdapter(this, jobList); // Pass 'this' as the context
+        recyclerView.setAdapter(jobSearchAdapter);
+
         // Set up the back button
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
@@ -146,7 +149,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        jobSearchAdapter = new JobSearchAdapter(jobList);
+        jobSearchAdapter = new JobSearchAdapter(this,jobList);
         recyclerView.setAdapter(jobSearchAdapter);
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);

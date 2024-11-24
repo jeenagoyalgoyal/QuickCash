@@ -28,12 +28,20 @@ public class JobDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_job_details);
 
+
+
         // Initialize Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         jobRef = database.getReference("Jobs");
 
         // Retrieve Job ID (Passed from previous activity)
         jobId = getIntent().getStringExtra("JOB_ID");
+
+        if (jobId == null || jobId.isEmpty()) {
+            Toast.makeText(this, "No job ID provided!", Toast.LENGTH_SHORT).show();
+            finish(); // Close the activity if no job ID is provided
+            return;
+        }
 
         // Bind Views
         jobTitleText = findViewById(R.id.jobTitleText);

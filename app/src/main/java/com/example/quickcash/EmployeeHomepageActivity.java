@@ -255,7 +255,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
      */
     private void displayJobs(List<Job> jobs) {
         // Initialize the adapter with the retrieved job listings
-        jobAdapter = new JobSearchAdapter(jobs);
+        jobAdapter = new JobSearchAdapter(this,jobs);
         jobRecyclerView.setAdapter(jobAdapter);
         jobAdapter.notifyDataSetChanged();
     }

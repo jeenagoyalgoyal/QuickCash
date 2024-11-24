@@ -144,7 +144,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         recyclerView = dialog.findViewById(R.id.preferredEmployerJobsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         jobList = new ArrayList<>();
-        jobSearchAdapter = new JobSearchAdapter(jobList);
+        jobSearchAdapter = new JobSearchAdapter(this,jobList);
         recyclerView.setAdapter(jobSearchAdapter);
     }
 

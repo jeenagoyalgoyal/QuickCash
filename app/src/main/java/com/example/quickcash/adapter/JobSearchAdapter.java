@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.GoogleSearchMapActivity;
+import com.example.quickcash.JobDetails;
+import com.example.quickcash.JobSearchParameterActivity;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
 import com.example.quickcash.model.JobLocation;
@@ -42,6 +44,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
     private List<Job> jobList;
     private DatabaseReference preferredJobsRef;
     private ViewGroup parent;
+    private Context context;
 
     /**
      * ViewHolder for holding job item views
@@ -54,6 +57,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         public TextView durationResult;
         public Button applyButton;
         public Button addToPreferredButton;
+        public Button jobDetails;
         public Button optionsButton;
         public LinearLayout jobSearchLinearLayout;
 
@@ -71,6 +75,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             durationResult = itemView.findViewById(R.id.durationResult);
             applyButton = itemView.findViewById(R.id.Apply);
             optionsButton = itemView.findViewById(R.id.optionsButton);
+            jobDetails= itemView.findViewById(R.id.jobDetails);
             jobSearchLinearLayout = itemView.findViewById(R.id.jobSearchLinearLayout);
             addToPreferredButton = itemView.findViewById(R.id.add_to_preferred_employers);
         }
@@ -81,7 +86,8 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
      *
      * @param jobList
      */
-    public JobSearchAdapter(List<Job> jobList) {
+    public JobSearchAdapter(Context context,List<Job> jobList) {
+        this.context= context;
         this.jobList = jobList;
     }
 
@@ -127,6 +133,12 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.salaryResult.setText("Salary: $" + String.format("%,d", job.getSalary()));
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
+
+        holder.jobDetails.setOnClickListener(v -> {
+            Intent intent = new Intent(context, JobDetails.class);
+            intent.putExtra("JOB_ID", job.getJobId()); // Pass the job ID to the details page
+            context.startActivity(intent);
+        });
 
         holder.optionsButton.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(parent.getContext(), holder.optionsButton);
