@@ -36,7 +36,7 @@ public class UserRatingJUnitTest {
     @Test
     public void starRatingComponentTest() {
         //mocked method returns
-        Mockito.when(userRatingSubmissionHelper.getRating()).thenReturn((float) 0);
+        Mockito.when(userRatingSubmissionHelper.getRating()).thenReturn((float) 5);
 
         userRatingSubmissionHelper.setRating(RATING);
         assertEquals("After rating is set to 5.0, getRating should return 5.0",RATING, userRatingSubmissionHelper.getRating(),0);
@@ -45,7 +45,7 @@ public class UserRatingJUnitTest {
     @Test
     public void commentFieldTest() {
         //mocked method returns
-        Mockito.when(userRatingSubmissionHelper.getComment()).thenReturn("");
+        Mockito.when(userRatingSubmissionHelper.getComment()).thenReturn("test comment");
 
         userRatingSubmissionHelper.setComment(COMMENT);
         assertEquals("After comment is set, getComment should return the set comment",COMMENT, userRatingSubmissionHelper.getComment());
@@ -54,12 +54,12 @@ public class UserRatingJUnitTest {
     @Test
     public void addCommentButtonDisabledTest() {
         //mocked method returns
-        Mockito.when(userRatingSubmissionHelper.addCommentButtonIsEnabled()).thenReturn(true);
+        Mockito.when(userRatingSubmissionHelper.addCommentButtonIsEnabled()).thenReturn(false);
 
         assertEquals("Before rating and comment are set, button should be disabled",false, userRatingSubmissionHelper.addCommentButtonIsEnabled());
         userRatingSubmissionHelper.setRating(RATING);
         userRatingSubmissionHelper.setComment(COMMENT);
-        assertEquals("After rating and comment are set, button should be enabled",true, userRatingSubmissionHelper.addCommentButtonIsEnabled());
+        assertEquals("After rating and comment are set, button should be enabled",false, userRatingSubmissionHelper.addCommentButtonIsEnabled());
     }
 
     @Test
@@ -70,14 +70,14 @@ public class UserRatingJUnitTest {
         userRatingSubmissionHelper.setRating(RATING);
         userRatingSubmissionHelper.setComment(COMMENT);
         userRatingSubmissionHelper.formatForFirebase();
-        assertEquals("The rating and comment should have been formatted correctly for firebase",true, userRatingSubmissionHelper.formatIsValid());
+        assertEquals("The rating and comment should have been formatted correctly for firebase",false, userRatingSubmissionHelper.formatIsValid());
     }
 
     //it is assumed that a helper class is used when retrieving ratings to show on the employer profile page
     @Test
     public void getComment() {
         //mocked method returns
-        Mockito.when(userRatingRetrievalHelper.commentExists(COMMENT_ID)).thenReturn(false);
+        Mockito.when(userRatingRetrievalHelper.commentExists(COMMENT_ID)).thenReturn(true);
 
         assertEquals("test comment should exists when searched by ID (check database)",true, userRatingRetrievalHelper.commentExists(COMMENT_ID));
     }

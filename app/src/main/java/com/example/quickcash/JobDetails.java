@@ -1,6 +1,8 @@
 package com.example.quickcash;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,8 @@ public class JobDetails extends AppCompatActivity {
     private RatingBar jobRatingBar;
     private EditText commentInput;
     private Button addCommentButton, closeButton;
+    private UserRatingSubmissionHelp userRatingSubmissionHelper;
+
 
     private DatabaseReference jobRef;
     private String jobId;
@@ -32,7 +36,7 @@ public class JobDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_job_details);
 
-
+        userRatingSubmissionHelper = new UserRatingSubmissionHelp();
 
         // Initialize Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -58,6 +62,27 @@ public class JobDetails extends AppCompatActivity {
         commentInput = findViewById(R.id.commentInput);
         addCommentButton = findViewById(R.id.addCommentButton);
         closeButton = findViewById(R.id.closeButton);
+        addCommentButton.setEnabled(false);
+
+        // Add listeners to validate comment and rating
+        jobRatingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            userRatingSubmissionHelper.setRating(rating);
+            updateAddCommentButtonState();
+        });
+
+        commentInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                userRatingSubmissionHelper.setComment(s.toString());
+                updateAddCommentButtonState();
+            }
+        });
 
         // Fetch and Display Job Details
         loadJobDetails();
@@ -77,6 +102,18 @@ public class JobDetails extends AppCompatActivity {
 
         // Handle Close Button
         closeButton.setOnClickListener(v -> finish());
+    }
+
+    private void validateCommentAndRating() {
+        String comment = commentInput.getText().toString().trim();
+        float rating = jobRatingBar.getRating();
+
+        // Enable the button only if both a rating and a comment are provided
+        addCommentButton.setEnabled(!comment.isEmpty() && rating > 0);
+    }
+
+    private void updateAddCommentButtonState() {
+        addCommentButton.setEnabled(userRatingSubmissionHelper.addCommentButtonIsEnabled());
     }
 
     private void loadJobDetails() {
@@ -118,6 +155,9 @@ public class JobDetails extends AppCompatActivity {
                             Toast.makeText(this, "Comment and rating added successfully!", Toast.LENGTH_SHORT).show();
                             commentInput.setText("");  // Clear input
                             jobRatingBar.setRating(0); // Reset rating bar
+                            userRatingSubmissionHelper.setRating(0);
+                            userRatingSubmissionHelper.setComment("");
+                            updateAddCommentButtonState();
                         } else {
                             Toast.makeText(this, "Failed to add comment and rating!", Toast.LENGTH_SHORT).show();
                         }

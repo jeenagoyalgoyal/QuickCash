@@ -124,9 +124,9 @@ public class UserRatingUITest {
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Star rating component and comment field are checked to be clickable to see if they exist
-        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName,"starRatingComponent")); //id is taken to be starRatingComponent
+        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName,"jobRatingBar")); //id is taken to be starRatingComponent
         assertTrue("star rating component should be clickable", starRatingComponent.isClickable());
-        UiObject2 commentField = device.findObject(By.res(launcherPackageName,"commentField")); //id is taken to be commentField
+        UiObject2 commentField = device.findObject(By.res(launcherPackageName,"commentInput")); //id is taken to be commentField
         assertTrue("comment field should be clickable", commentField.isClickable());
     }
 
@@ -160,9 +160,9 @@ public class UserRatingUITest {
         assertFalse("'Add Comment' button should not be enabled with no rating and comment provided", addCommentButton.isEnabled());
 
         // Star rating component and comment field are given values through interaction
-        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName, "jobRatingBar")); //id is taken to be starRatingComponent
+        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName, "jobRatingBar"));
         starRatingComponent.click();
-        UiObject2 commentField = device.findObject(By.res(launcherPackageName, "commentInput")); //id is taken to be commentField
+        UiObject2 commentField = device.findObject(By.res(launcherPackageName, "commentInput"));
         commentField.setText("test comment");
 
         // 'Add Comment' button should now be enabled
@@ -195,12 +195,15 @@ public class UserRatingUITest {
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Star rating component and comment field are given values through interaction and comment is submitted
-        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName, "starRatingComponent")); //id is taken to be starRatingComponent
+        UiObject2 starRatingComponent = device.findObject(By.res(launcherPackageName, "jobRatingBar")); //id is taken to be starRatingComponent
         starRatingComponent.click();
-        UiObject2 commentField = device.findObject(By.res(launcherPackageName, "commentField")); //id is taken to be commentField
+        UiObject2 commentField = device.findObject(By.res(launcherPackageName, "commentInput")); //id is taken to be commentField
         commentField.setText("test comment");
         UiObject addCommentButton = device.findObject(new UiSelector().text("Add Comment"));
-        addCommentButton.clickAndWaitForNewWindow();
+        addCommentButton.click();
+
+        UiObject closeButton = device.findObject(new UiSelector().text("Close"));
+        closeButton.click();
 
         // Check is done to see if redirect to Job Search page was successful
         UiObject searchJobTitleBox = device.findObject(new UiSelector().text("Search Job"));

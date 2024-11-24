@@ -16,10 +16,13 @@
       <SelectionState runConfigName="RegistrationActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testViewJobDetailsButtonIsVisible()">
+      <SelectionState runConfigName="testAddCommentButtonEnabledCheck()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testRedirectToJobDetailsPage()">
+      <SelectionState runConfigName="testRatingAndCommentAreVisible()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testRedirectUponCommentSubmit()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
