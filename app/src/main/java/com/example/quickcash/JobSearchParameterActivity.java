@@ -37,7 +37,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     // UI components
     private EditText jobTitle, companyName, minSalary, maxSalary, duration, location;
     private TextView errorText;
-    private Button searchButton, mapButton;
+    private Button searchButton, mapButton, jobDetails;
     private RecyclerView recyclerView;
 
     // Adapter and Data
@@ -96,6 +96,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         });
 
+
         /**
          * When user clicks show map button, check the filters are filled
          * @param view
@@ -122,6 +123,8 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             startActivity(intent);
             finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
+
+
     }
 
     /**

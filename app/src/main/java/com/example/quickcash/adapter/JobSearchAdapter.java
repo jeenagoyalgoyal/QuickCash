@@ -127,6 +127,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.salaryResult.setText("Salary: $" + String.format("%,d", job.getSalary()));
         holder.durationResult.setText("Duration: " + job.getExpectedDuration());
 
+
         holder.optionsButton.setOnClickListener(view -> {
             PopupMenu popupMenu = new PopupMenu(parent.getContext(), holder.optionsButton);
             popupMenu.getMenuInflater().inflate(R.menu.job_search_options, popupMenu.getMenu());
