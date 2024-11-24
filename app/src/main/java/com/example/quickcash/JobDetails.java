@@ -165,6 +165,8 @@ public class JobDetails extends AppCompatActivity {
         }
     }
 
+
+
     // Comment Model Class (Inner Class for simplicity)
     public static class Comment {
         public String commentText;

@@ -53,6 +53,8 @@ public class Profile extends AppCompatActivity {
                 .show();
     }
 
+
+
     // Method to perform the logout
     public boolean performLogout(Boolean choice){
         if (choice) {
