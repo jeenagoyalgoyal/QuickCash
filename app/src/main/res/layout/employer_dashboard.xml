@@ -27,11 +27,11 @@
         app:layout_constraintTop_toBottomOf="@+id/welcomeEmployer" />
 
     <Button
-        android:id="@+id/employeeDirectoryButton"
+        android:id="@+id/applicationSubmissions"
         android:layout_width="286dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
-        android:text="Employee Directory"
+        android:text="Applications"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createJobButton" />
@@ -44,7 +44,7 @@
         android:text="Analytics and Reports"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeDirectoryButton" />
+        app:layout_constraintTop_toBottomOf="@+id/applicationSubmissions" />
 
     <Button
         android:id="@+id/tasksAssignmentsButton"

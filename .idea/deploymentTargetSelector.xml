@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="ApplicationPageActivity">
+      <SelectionState runConfigName="testApplyButtonExists()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

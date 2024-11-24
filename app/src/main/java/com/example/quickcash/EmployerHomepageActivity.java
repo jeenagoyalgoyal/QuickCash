@@ -30,7 +30,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
 
     public TextView welcomeEmployer;
     public Button createJob;
-    public Button employeeDirectory;
+    public Button applicationsButton;
     public Button analyticsReports;
     public Button tasksAssignments;
     public Button scheduleMeetings;
@@ -57,7 +57,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         welcomeEmployer = findViewById(R.id.welcomeEmployer);
         // Role-specific buttons
         createJob = findViewById(R.id.createJobButton);
-        employeeDirectory = findViewById(R.id.employeeDirectoryButton);
+        applicationsButton = findViewById(R.id.applicationSubmissions);
         analyticsReports = findViewById(R.id.analyticsReportButton);
         tasksAssignments = findViewById(R.id.tasksAssignmentsButton);
         scheduleMeetings = findViewById(R.id.scheduleMeetingsButton);
@@ -87,6 +87,15 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                     Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
                 }
+            }
+        });
+
+
+        applicationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(EmployerHomepageActivity.this, ApplicationsSubmittedActivity.class);
+                startActivity(intent);
             }
         });
     }
