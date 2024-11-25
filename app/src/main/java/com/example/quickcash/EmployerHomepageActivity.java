@@ -93,9 +93,13 @@ public class EmployerHomepageActivity extends AppCompatActivity {
 
         applicationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Intent intent = new Intent(EmployerHomepageActivity.this, ApplicationsSubmittedActivity.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                if (useRole.getCurrentRole().equals("employer")) {
+                    Intent intentApplications = new Intent(EmployerHomepageActivity.this, ApplicationsSubmittedActivity.class);
+                    intentApplications.putExtra(EMAIL, email); // Fixed
+                    Toast.makeText(EmployerHomepageActivity.this, "Viewing applications!", Toast.LENGTH_SHORT).show();
+                    startActivity(intentApplications);
+                }
             }
         });
     }

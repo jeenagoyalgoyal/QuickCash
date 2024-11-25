@@ -96,10 +96,12 @@ public class ApplicationPageActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(ApplicationPageActivity.this, "Application submitted successfully", Toast.LENGTH_SHORT).show();
-                            // Clear input fields
+                            //RESET FORM
                             editTextName.setText("");
                             editTextEmail.setText("");
                             editTextMessage.setText("");
+                            //Go back
+                            finish();
                         } else {
                             Toast.makeText(ApplicationPageActivity.this, "Failed to submit application", Toast.LENGTH_SHORT).show();
                         }
