@@ -24,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
@@ -59,6 +60,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
     public Button employeeNotifications;
     public Button employerSwitch;
     public Button preferredJobsButton;
+    public Button appliedJobsButton;
     public Button preferredEmployers;
     private RecyclerView jobRecyclerView; // RecyclerView for displaying jobs
     private JobSearchAdapter jobAdapter;
@@ -99,6 +101,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         employerSwitch = findViewById(R.id.switchToEmployerButton);
         preferredEmployers = findViewById(R.id.preferredEmployersButton);
         preferredJobsButton = findViewById(R.id.preferredJobsButton);
+        appliedJobsButton = findViewById(R.id.appliedJobsButton);
 
         // Set up RecyclerView for displaying jobs
         jobRecyclerView = findViewById(R.id.jobsRecycler);
@@ -154,6 +157,17 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
                 finish();
             }
         });
+
+        appliedJobsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail(); // Get the email of the current user
+                Intent intent = new Intent(EmployeeHomepageActivity.this, AppliedJobsActivity.class);
+                intent.putExtra("userEmail", userEmail);
+                startActivity(intent);
+            }
+        });
+
 
         if (manualLocation != null && !manualLocation.isEmpty()) {
             String[] latLng = manualLocation.split(",");

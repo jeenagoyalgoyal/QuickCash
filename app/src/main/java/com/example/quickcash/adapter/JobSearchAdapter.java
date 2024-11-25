@@ -132,11 +132,14 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         holder.applyButton.setOnClickListener(view -> {
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, ApplicationPageActivity.class);
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
 
             // Pass job details to the Application Page
             intent.putExtra("jobId", job.getJobId());
             intent.putExtra("jobTitle", job.getJobTitle());
             intent.putExtra("companyName", job.getCompanyName());
+            intent.putExtra("userEmail", userId); // Add the user's email
 
             context.startActivity(intent);
         });
