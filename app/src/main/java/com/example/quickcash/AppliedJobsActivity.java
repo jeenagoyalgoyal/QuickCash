@@ -75,10 +75,18 @@ public class AppliedJobsActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                         // Fetch job details using the correct keys
+                        // Fetch job details using the correct keys
                         String jobTitle = jobSnapshot.child("jobTitle").getValue(String.class);
                         String companyName = jobSnapshot.child("companyName").getValue(String.class);
+                        String status = jobSnapshot.child("Status").getValue(String.class);
+
                         if (jobTitle != null && companyName != null) {
-                            jobList.add(jobTitle + " at " + companyName);
+                            // Format the string to include job title, company name, and status on separate lines
+                            String jobDetails = jobTitle + "\n" + companyName; // Job title and company name on separate lines
+                            if (status != null) {
+                                jobDetails += "\nStatus: " + status; // Add status on a new line
+                            }
+                            jobList.add(jobDetails);
                         }
                     }
                     adapter.notifyDataSetChanged();

@@ -93,6 +93,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         applicationData.put("Applicant Name", name);
         applicationData.put("Applicant Email", email);
         applicationData.put("Cover Letter", message);
+        applicationData.put("Status", "applied"); // Add the status variable
 
         // Save the application data in the database
         databaseReference.push().setValue(applicationData)
@@ -129,24 +130,30 @@ public class ApplicationPageActivity extends AppCompatActivity {
         DatabaseReference userReference = FirebaseDatabase.getInstance()
                 .getReference("Users").child(userId).child("appliedJobs");
 
-        // Sanitize the company name to be a valid Firebase key
-        String sanitizedCompanyName = companyName.replace(".", ",").replace("#", "").replace("$", "").replace("[", "").replace("]", "");
+        // Generate a unique key for each application under the user
+        String uniqueApplicationKey = userReference.push().getKey();
 
         // Create a map for the job details
         Map<String, Object> jobData = new HashMap<>();
         jobData.put("jobTitle", jobTitle);
         jobData.put("companyName", companyName);
+        jobData.put("Status", "Applied");
 
-        // Use the sanitized company name as the ID
-        userReference.child(sanitizedCompanyName).setValue(jobData)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.i("ApplicationPageActivity", "Job successfully added to applied jobs");
-                    } else {
-                        Log.e("ApplicationPageActivity", "Failed to add job to applied jobs");
-                    }
-                });
+        if (uniqueApplicationKey != null) {
+            // Save the job application under the unique key
+            userReference.child(uniqueApplicationKey).setValue(jobData)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.i("ApplicationPageActivity", "Job successfully added to applied jobs");
+                        } else {
+                            Log.e("ApplicationPageActivity", "Failed to add job to applied jobs");
+                        }
+                    });
+        } else {
+            Log.e("ApplicationPageActivity", "Failed to generate unique key for job application");
+        }
     }
+
 
     private boolean isValidEmail(String email) {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
