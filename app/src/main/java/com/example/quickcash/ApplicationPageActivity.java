@@ -79,6 +79,10 @@ public class ApplicationPageActivity extends AppCompatActivity {
             editTextEmail.setError("Email is required");
             return;
         }
+        if (!isValidEmail(email)) {
+            editTextEmail.setError("Invalid email format");
+            return;
+        }
         if (TextUtils.isEmpty(message)) {
             editTextMessage.setError("Message is required");
             return;
@@ -143,6 +147,12 @@ public class ApplicationPageActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private boolean isValidEmail(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        return email.matches(emailPattern);
+    }
+
 
 
 }
