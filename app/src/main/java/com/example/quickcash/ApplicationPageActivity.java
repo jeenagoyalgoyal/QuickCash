@@ -37,10 +37,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         String companyName = getIntent().getStringExtra("companyName");
         String userId = getIntent().getStringExtra("userEmail");
 
-        // Use this userId wherever required
-        if (userId != null) {
-            userId = userId.replace(".", ","); // Sanitize email for Firebase if necessary
-        }
+
 
         // Initialize UI components
         editTextName = findViewById(R.id.editTextName);
@@ -115,7 +112,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
                         }
 
                         // Navigate back to EmployeeHomepageActivity
-                        Intent intent = new Intent(ApplicationPageActivity.this, EmployeeHomepageActivity.class);
+                        Intent intent = new Intent(ApplicationPageActivity.this, JobSearchParameterActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
