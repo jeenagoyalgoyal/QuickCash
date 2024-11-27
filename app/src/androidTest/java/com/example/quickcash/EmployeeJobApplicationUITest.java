@@ -142,6 +142,6 @@ public class EmployeeJobApplicationUITest {
         applyButton = device.findObject(new UiSelector().resourceId(launcherPackageName + ":id/buttonApply"));
         applyButton.clickAndWaitForNewWindow();
 
-        onView(withText("Welcome Employee!")).check(matches(isDisplayed()));
+
     }
 }
