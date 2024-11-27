@@ -1,7 +1,5 @@
 package com.example.quickcash.adapter;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -22,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.GoogleSearchMapActivity;
 import com.example.quickcash.JobDetails;
-import com.example.quickcash.JobSearchParameterActivity;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
 import com.example.quickcash.model.JobLocation;
@@ -88,9 +85,10 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
      *
      * @param jobList
      */
-    public JobSearchAdapter(Context context,List<Job> jobList) {
+    public JobSearchAdapter(Context context, List<Job> jobList) {
         this.context= context;
         this.jobList = jobList;
+
     }
 
     /**
@@ -409,4 +407,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
         return email.replace(".", ",");
     }
 
+    public static abstract class OnJobClickListener {
+        public abstract void onJobClick(String jobId);
+    }
 }

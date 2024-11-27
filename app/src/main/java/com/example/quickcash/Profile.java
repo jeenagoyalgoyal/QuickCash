@@ -7,12 +7,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.quickcash.adapter.FeedbackAdapter;
+import com.example.quickcash.model.FeedbackModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Profile extends AppCompatActivity {
 
     SessionManager sessionManager;
+    private RecyclerView feedbackRecyclerView;
+    private FeedbackAdapter feedbackAdapter;
+    private List<FeedbackModel> feedbackList;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -20,6 +30,15 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.profile);
         this.onCreateLogoutDialogue();
         sessionManager =new SessionManager(this);
+
+        // Set up RecyclerView
+        feedbackRecyclerView = findViewById(R.id.feedbackRecyclerView);
+        feedbackRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        feedbackList = new ArrayList<>();
+        feedbackAdapter = new FeedbackAdapter(feedbackList);
+        feedbackRecyclerView.setAdapter(feedbackAdapter);
+
     }
 
     //Method to set up the Logout Dialog button
