@@ -80,6 +80,33 @@ public class JobCRUD {
         return taskCompletionSource.getTask();
     }
 
+    public Task<List<Job>> getCompletedJob(String emailID){
+        TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
+
+        Query query = databaseReference.orderByChild("employerId").equalTo(emailID);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Job> jobs = new ArrayList<>();
+                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
+                    Job job = jobSnapshot.getValue(Job.class);
+                    if (job != null && job.getStatus().equals("completed")) {
+                        jobs.add(job);
+                    }
+                }
+                taskCompletionSource.setResult(jobs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                taskCompletionSource.setException(error.toException());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
+
     /**
      * Gets a list of jobs posted
      * @param query
@@ -117,7 +144,4 @@ public class JobCRUD {
 
         return taskCompletionSource.getTask();
     }
-
-
-
 }

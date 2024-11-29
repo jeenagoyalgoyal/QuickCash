@@ -1,11 +1,16 @@
 package com.example.quickcash.model;
 
 public class PaymentTransactionModel {
+    private String transactionId;
     private String employeeId;
     private String employerId;
     private String jobId;
     private float paymentAmount;
     private String transactionStatus;
+
+    public void setTransactionID(String transactionID) {this.transactionId = transactionID;}
+
+    public String getTransactionID(){return transactionId;}
 
     public String getEmployeeId() {
         return employeeId;

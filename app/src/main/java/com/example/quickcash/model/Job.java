@@ -15,6 +15,7 @@ public class Job {
     private int salary;
     private String startDate;
     private String urgency;
+    public String status;
 
     /**
      * Constructor for the job
@@ -88,6 +89,12 @@ public class Job {
     public String getUrgency() {return urgency;}
 
     /**
+     * Get job status
+     * @return status
+     */
+    public String getStatus() {return status;}
+
+    /**
      * Set the company name
      * @param companyName
      */
@@ -152,6 +159,12 @@ public class Job {
      * @param urgency
      */
     public void setUrgency(String urgency) {this.urgency = urgency;}
+
+    /**
+     * sets job status
+     * @param status
+     */
+    public void setStatus(String status){this.status =status;}
 
     /**
      * Set all the required fields for the form
