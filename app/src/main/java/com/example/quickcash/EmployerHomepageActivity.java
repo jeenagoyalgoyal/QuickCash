@@ -18,6 +18,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
 
     public TextView welcomeEmployer;
     public Button createJob;
+    public Button payEmployee;
     public Button employeeDirectory;
     public Button analyticsReports;
     public Button tasksAssignments;
@@ -40,6 +41,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         welcomeEmployer = findViewById(R.id.welcomeEmployer);
         // Role-specific buttons
         createJob = findViewById(R.id.createJobButton);
+        payEmployee = findViewById(R.id.payEmployeeButton);
         employeeDirectory = findViewById(R.id.employeeDirectoryButton);
         analyticsReports = findViewById(R.id.analyticsReportButton);
         tasksAssignments = findViewById(R.id.tasksAssignmentsButton);
@@ -69,6 +71,16 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                     Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
                 }
+            }
+        });
+
+        //switches to online payment activity
+        payEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentOnlinePayment = new Intent(EmployerHomepageActivity.this, OnlinePaymentActivity.class);
+                startActivity(intentOnlinePayment);
+                finish();
             }
         });
     }
