@@ -75,7 +75,6 @@ public class AppliedJobsActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                         // Fetch job details using the correct keys
-                        // Fetch job details using the correct keys
                         String jobTitle = jobSnapshot.child("jobTitle").getValue(String.class);
                         String companyName = jobSnapshot.child("companyName").getValue(String.class);
                         String status = jobSnapshot.child("Status").getValue(String.class);

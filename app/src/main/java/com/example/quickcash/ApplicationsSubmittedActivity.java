@@ -1,82 +1,72 @@
 package com.example.quickcash;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.quickcash.adapter.ApplicationsAdapter;
+import com.example.quickcash.model.Application;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ApplicationsSubmittedActivity extends AppCompatActivity {
-    private final static String TAG = "Employer Applications";
-    private DatabaseReference databaseReference;
-    private FirebaseAuth mAuth;
-    private String email;
-    private String emailKey;
-    private ImageButton backButton;
+import java.util.ArrayList;
+import java.util.List;
 
-    //TODO: Implement page functionality
+public class ApplicationsSubmittedActivity extends AppCompatActivity {
+
+    private RecyclerView applicationsRecyclerView;
+    private ApplicationsAdapter applicationsAdapter;
+    private List<Application> applicationList;
+    private DatabaseReference databaseReference;
+    private String jobId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.job_application_submissions);
+        setContentView(R.layout.employee_posted_jobs);
 
-        // Retrieve Employer details
+        // Get jobId passed from previous activity
+        jobId = getIntent().getStringExtra("jobId");
 
-        this.mAuth = FirebaseAuth.getInstance();
-        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-        this.emailKey = email.replace(".", ",");
+        // Initialize Firebase database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        if (email != null && !email.isEmpty()) {
-            databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
-                        String employerID = jobSnapshot.child("employerID").getValue(String.class);
-                        if (emailKey.equals(employerID)) {
-                            // Match found: Fetch applications for this job
-                            DataSnapshot applicationsSnapshot = jobSnapshot.child("applications");
-                            for (DataSnapshot application : applicationsSnapshot.getChildren()) {
-                                // Process each application
-                                String applicationDetails = application.getValue(String.class);
-                                Log.d("Application", "Details: " + applicationDetails);
-                            }
-                        }
-                    }
-                }
+        // Set up RecyclerView
+        //applicationsRecyclerView = findViewById(R.id.applicationsRecyclerView);
+        applicationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        applicationList = new ArrayList<>();
+        applicationsAdapter = new ApplicationsAdapter(applicationList);
+        applicationsRecyclerView.setAdapter(applicationsAdapter);
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(ApplicationsSubmittedActivity.this, "Job Submission Successful!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            init();
-
-            backButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-
-        } else {
-            Toast.makeText(ApplicationsSubmittedActivity.this, "Email not found for user. Sign in first.", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        // Fetch applications from Firebase for the given jobId
+        fetchApplicationsForJob(jobId);
     }
 
-    public void init() {
-        backButton = findViewById(R.id.backButton);
+    private void fetchApplicationsForJob(String jobId) {
+        DatabaseReference applicationsRef = databaseReference.child("Jobs").child(jobId).child("Applications");
+        applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                applicationList.clear();
+                for (DataSnapshot applicationSnapshot : snapshot.getChildren()) {
+                    Application application = applicationSnapshot.getValue(Application.class);
+                    if (application != null) {
+                        applicationList.add(application);
+                    }
+                }
+                applicationsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                //Toast.makeText(ApplicationsSubmittedActivity.this, "Failed to load applications", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

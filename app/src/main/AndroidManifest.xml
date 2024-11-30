@@ -130,11 +130,21 @@
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
         <!-- Application Page  Activity -->
         <activity android:name=".AppliedJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
+        <!-- Jobs posted by employer activity -->
+        <activity android:name=".EmployerJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Applicants for each job activity -->
+
     </application>
 
 </manifest>

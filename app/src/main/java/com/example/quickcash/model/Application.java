@@ -3,15 +3,20 @@ package com.example.quickcash.model;
 public class Application {
     private String applicantName;
     private String applicantEmail;
-    private String message;
+    private String applicantMessage;
+    private String status;
 
-    public Application(String applicantName, String applicantEmail, String message) {
-        this.applicantName = applicantName;
-        this.applicantEmail = applicantEmail;
-        this.message = message;
+    public Application() {
+        // Default constructor required for Firebase
     }
 
-    // Getters and setters for applicant details
+    public Application(String applicantName, String applicantEmail, String applicantMessage, String status) {
+        this.applicantName = applicantName;
+        this.applicantEmail = applicantEmail;
+        this.applicantMessage = applicantMessage;
+        this.status = status;
+    }
+
     public String getApplicantName() {
         return applicantName;
     }
@@ -28,11 +33,19 @@ public class Application {
         this.applicantEmail = applicantEmail;
     }
 
-    public String getMessage() {
-        return message;
+    public String getApplicantMessage() {
+        return applicantMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setApplicantMessage(String applicantMessage) {
+        this.applicantMessage = applicantMessage;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
