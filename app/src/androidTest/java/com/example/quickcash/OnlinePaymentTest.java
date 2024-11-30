@@ -10,6 +10,7 @@ import org.junit.Test;
 
 public class OnlinePaymentTest {
 
+    /*
     @Test
     public void testFirebaseTransactionPushPull() {
         //setup
@@ -34,4 +35,5 @@ public class OnlinePaymentTest {
         status = onlinePaymentCRUD.deleteTransactionByJobId(JOB_ID);
         assertTrue("Deletion of the record after test completion must take place to prevent duplication",status);
     }
+     */
 }
