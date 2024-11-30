@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EmployerJobsActivity extends AppCompatActivity {
@@ -36,8 +37,8 @@ public class EmployerJobsActivity extends AppCompatActivity {
         this.mAuth = FirebaseAuth.getInstance();
         this.emailID = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
 
-        if(emailID!=null){
-            this.userID = emailID.replace(".",",");
+        if (emailID != null) {
+            this.userID = emailID.replace(".", ",");
         } else {
             Toast.makeText(this, "Please login to the app before continuing", Toast.LENGTH_LONG).show();
         }
@@ -58,30 +59,44 @@ public class EmployerJobsActivity extends AppCompatActivity {
     }
 
     private void fetchJobPostings() {
+
         databaseReference.child("Jobs").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Clear any existing data in the list
                 jobList.clear();
+                HashMap<String, Integer> applicationCounts = new HashMap<>();
 
-                // Loop through each job in the snapshot
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
                     if (job != null) {
-                        job.setJobId(jobSnapshot.getKey()); // Set the job ID
-                        if(job.getEmployerId().equals(userID)){
+                        String jobId = jobSnapshot.getKey();
+                        if (job.getEmployerId().equals(userID)) {
+                            job.setJobId(jobId);
                             jobList.add(job);
+
+                            // Fetch number of applications for this job
+                            DatabaseReference applicationsRef = jobSnapshot.child("Applications").getRef();
+                            applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot applicationsSnapshot) {
+                                    applicationCounts.put(jobId, (int) applicationsSnapshot.getChildrenCount());
+                                    adapter.setApplicationCounts(applicationCounts); // Pass updated counts to the adapter
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Toast.makeText(EmployerJobsActivity.this, "Failed to load applications", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 }
 
-                // Notify the adapter that the data has changed
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle errors
                 Toast.makeText(EmployerJobsActivity.this, "Failed to load job postings", Toast.LENGTH_SHORT).show();
             }
         });

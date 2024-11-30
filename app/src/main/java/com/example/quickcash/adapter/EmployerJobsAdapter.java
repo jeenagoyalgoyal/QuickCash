@@ -6,13 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.ApplicationsSubmittedActivity;
-import com.example.quickcash.EmployerJobsActivity;
 import com.example.quickcash.R;
 import com.example.quickcash.model.Job;
 import com.google.firebase.database.DataSnapshot;
@@ -20,12 +18,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapter.JobViewHolder> {
-
     private final List<Job> jobList;
     private final DatabaseReference databaseReference;
+    private HashMap<String, Integer> applicationCounts = new HashMap<>();
 
     /**
      * Constructor for EmployerJobsAdapter.
@@ -48,7 +47,13 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         Job job = jobList.get(position);
-        holder.bind(job, databaseReference);
+        int applicationCount = applicationCounts.getOrDefault(job.getJobId(), 0); // Get count from map
+        holder.bind(job, databaseReference, applicationCount);
+    }
+
+    public void setApplicationCounts(HashMap<String, Integer> applicationCounts) {
+        this.applicationCounts = applicationCounts;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -63,7 +68,6 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
         private final TextView noOfApplicationsTextView;
         private final Button viewApplicationsButton;
 
-
         public JobViewHolder(@NonNull View itemView) {
             super(itemView);
             jobTitleTextView = itemView.findViewById(R.id.jobTitleTextView);
@@ -71,6 +75,7 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
             urgencyTextView = itemView.findViewById(R.id.urgencyTextView);
             noOfApplicationsTextView = itemView.findViewById(R.id.noOfApplicationsTextView);
             viewApplicationsButton = itemView.findViewById(R.id.viewApplicationsButton);
+
         }
 
         /**
@@ -79,10 +84,11 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
          * @param job               The Job object containing the data.
          * @param databaseReference Reference to the Firebase Realtime Database.
          */
-        public void bind(Job job, DatabaseReference databaseReference) {
+        public void bind(Job job, DatabaseReference databaseReference, int applicationCount) {
             jobTitleTextView.setText(job.getJobTitle());
             startDateTextView.setText("Start Date: " + job.getStartDate());
             urgencyTextView.setText("Urgency: " + job.getUrgency());
+            noOfApplicationsTextView.setText("Applications: " + applicationCount);
 
             // Fetch and display the number of applications
             DatabaseReference applicationsRef = databaseReference.child("Jobs").child(job.getJobId()).child("Applications");
@@ -101,7 +107,7 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
 
             // Handle "View Applications" button click
             viewApplicationsButton.setOnClickListener(view -> {
-                Intent intent = new Intent(itemView.getContext(), EmployerJobsActivity.class);
+                Intent intent = new Intent(itemView.getContext(), ApplicationsSubmittedActivity.class);
                 intent.putExtra("jobId", job.getJobId());
                 intent.putExtra("jobTitle", job.getJobTitle());
                 itemView.getContext().startActivity(intent);

@@ -5,16 +5,18 @@ public class Application {
     private String applicantEmail;
     private String applicantMessage;
     private String status;
+    private String applicationId;
 
     public Application() {
         // Default constructor required for Firebase
     }
 
-    public Application(String applicantName, String applicantEmail, String applicantMessage, String status) {
+    public Application(String applicantName, String applicantEmail, String applicantMessage, String status, String applicationId) {
         this.applicantName = applicantName;
         this.applicantEmail = applicantEmail;
         this.applicantMessage = applicantMessage;
         this.status = status;
+        this.applicationId = applicationId;
     }
 
     public String getApplicantName() {
@@ -47,5 +49,13 @@ public class Application {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 }

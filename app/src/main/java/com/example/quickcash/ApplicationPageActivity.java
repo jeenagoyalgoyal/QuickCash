@@ -93,7 +93,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         applicationData.put("Applicant Name", name);
         applicationData.put("Applicant Email", email);
         applicationData.put("Cover Letter", message);
-        applicationData.put("Status", "applied"); // Add the status variable
+        applicationData.put("Status", "Applied"); // Add the status variable
 
         // Save the application data in the database
         databaseReference.push().setValue(applicationData)

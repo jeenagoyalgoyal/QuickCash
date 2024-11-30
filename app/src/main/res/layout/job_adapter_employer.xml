@@ -6,19 +6,22 @@
     android:layout_height="match_parent">
 
     <!-- Back Button -->
+
+    <!-- Title Text -->
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="71dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Back Button"
         android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toTopOf="@+id/employerJobPostingsRecyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Title Text -->
     <TextView
         android:id="@+id/postedJobsText"
         android:layout_width="wrap_content"
@@ -49,10 +52,10 @@
         android:id="@+id/employerJobPostingsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postedJobsText"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postedJobsText"
         tools:itemCount="5"
         tools:listitem="@layout/employee_posted_jobs" />
 
