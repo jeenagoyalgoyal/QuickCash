@@ -12,7 +12,7 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 public class PayPalPaymentProcessor {
     public TextView paymentStatusTV;
-    final String CLIENT_ID ="AZbKJXg9hDT9r33XQ7otACaJz2-Fd3qerezqy_XAvRiC__600MnBzorKCAona2aYvFjsdxtLYs5OST-T";
+    final String CLIENT_ID ="AQ_sPzHwhMPN45cpAi9qL0dSg_l-8ikS9DaZFsChJj0qR4iVeNV3YxvXQcPbRDp3mRXnqX8osc5st0RZ"; //note: QuickCash app ID, not default app ID
     PayPalConfiguration payPalConfiguration;
 
     public PayPalPaymentProcessor(){
