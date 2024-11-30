@@ -29,7 +29,7 @@ public class UseRole {
         return currentRole;
     }
 
-    public void switchRole(int id) {
+    public void switchRole(String id) {
         if (currentRole.equals("employee")) {
             currentRole = "employer";
         } else {
@@ -38,13 +38,13 @@ public class UseRole {
         updateDatabase(id, currentRole);
     }
 
-    private void updateDatabase(int id, String role) {
-        db.child(String.valueOf(id)).child("role").setValue(role)
+    private void updateDatabase(String id, String role) {
+        db.child(id).child("role").setValue(role)
                 .addOnSuccessListener(y -> {})
                 .addOnFailureListener(e -> {});
     }
 
-    public void setCurrentRole(int id, String currentRole) {
+    public void setCurrentRole(String id, String currentRole) {
         this.currentRole = currentRole;
         updateDatabase(id, currentRole);
     }

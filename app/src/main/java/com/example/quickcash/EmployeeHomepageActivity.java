@@ -64,6 +64,8 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
     public Button preferredEmployers;
     private RecyclerView jobRecyclerView; // RecyclerView for displaying jobs
     private JobSearchAdapter jobAdapter;
+    private String email;
+    FirebaseAuth mAuth;
 
     /**
      * Initializes the activity, sets up UI components, and handles role-based navigation.
@@ -75,11 +77,14 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         super.onCreate(savedInstance);
         setContentView(R.layout.employee_dashboard);
 
+        //ID is retrieved
+        this.mAuth = FirebaseAuth.getInstance();
+        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+        this.email = this.email.replace(".", ",");
+
         // Retrieve user details and location from intent
         Intent intentEmployeeDash = getIntent();
         id = intentEmployeeDash.getIntExtra("userID", -1);
-
-        String email = intentEmployeeDash.getStringExtra(EMAIL);
         String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
 
         useRole = UseRole.getInstance();
@@ -111,9 +116,10 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
 
         // SWITCHES TO EMPLOYEE DASH
         employerSwitch.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                useRole.switchRole(id);
+                useRole.switchRole(email);
                 Intent intentSwitchToEmployer = new Intent(EmployeeHomepageActivity.this, EmployerHomepageActivity.class);
                 intentSwitchToEmployer.putExtra(EMAIL, email);
                 startActivity(intentSwitchToEmployer);

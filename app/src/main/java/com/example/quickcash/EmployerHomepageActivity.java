@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * The EmployerHomepageActivity class provides the user interface and functionality
  * for the employer's homepage in the QuickCash application. Employers can:
@@ -25,8 +27,8 @@ public class EmployerHomepageActivity extends AppCompatActivity {
     public static final String EMAIL = "email";
     private String currentRole = "employer";
     private UseRole useRole;
-    private int id;
-
+    private String email;
+    FirebaseAuth mAuth;
 
     public TextView welcomeEmployer;
     public Button createJob;
@@ -46,11 +48,11 @@ public class EmployerHomepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.employer_dashboard);
-        // Retrieve user details from the intent
-        Intent intentEmployerDash = getIntent();
-        id = intentEmployerDash.getIntExtra("userID", -1);
 
-        String email = intentEmployerDash.getStringExtra(EMAIL);
+        //ID is retrieved
+        this.mAuth = FirebaseAuth.getInstance();
+        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+        this.email = this.email.replace(".", ",");
 
         useRole = UseRole.getInstance();
 
@@ -69,7 +71,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         employeeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                useRole.switchRole(id);
+                useRole.switchRole(email);
                 Intent intentSwitchToEmployee = new Intent(EmployerHomepageActivity.this, EmployeeHomepageActivity.class);
                 intentSwitchToEmployee.putExtra(EMAIL, email);
 

@@ -16,6 +16,7 @@ public class UserRoleJunitTest {
 
     private UseRole useRole;
     private DatabaseReference db;
+    private String id = "employer";
 
     @Rule
     public ActivityScenarioRule<EmployerHomepageActivity> employerActivityRule = new ActivityScenarioRule<>(EmployerHomepageActivity.class);
@@ -26,7 +27,7 @@ public class UserRoleJunitTest {
     @Before
     public void setUseRole(){
         db = FirebaseDatabase.getInstance().getReference("Users");
-        int id = 123;
+
         useRole =UseRole.getInstance();
         useRole.setCurrentRole(id,"employee");
 
@@ -38,14 +39,14 @@ public class UserRoleJunitTest {
 
     @Test
     public void testSwitchRole(){
-        int id = 123;
+
         useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
     }
 
     @Test
     public void testSwitchBackRole(){
-        int id = 123;
+
         useRole.switchRole(id);
         useRole.switchRole(id);
         assertEquals("employee", useRole.getCurrentRole());
@@ -53,7 +54,7 @@ public class UserRoleJunitTest {
 
     @Test
     public void testMultipleSwitch(){
-        int id = 123;
+
         useRole.switchRole(id);
         assertEquals("employer", useRole.getCurrentRole());
 
@@ -78,7 +79,7 @@ public class UserRoleJunitTest {
 
     @Test
     public void testRoleUpdateInDatabase(){
-        int id = 123;
+
         useRole.switchRole(id);
 
         db.child(String.valueOf(id)).child("role").get().addOnCompleteListener(event ->{
