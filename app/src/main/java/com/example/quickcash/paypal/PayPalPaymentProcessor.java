@@ -11,8 +11,15 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 public class PayPalPaymentProcessor {
-
     public TextView paymentStatusTV;
+    final String CLIENT_ID ="AZbKJXg9hDT9r33XQ7otACaJz2-Fd3qerezqy_XAvRiC__600MnBzorKCAona2aYvFjsdxtLYs5OST-T";
+    PayPalConfiguration payPalConfiguration;
+
+    public PayPalPaymentProcessor(){
+        payPalConfiguration = new PayPalConfiguration()
+                .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+                .clientId(CLIENT_ID);
+    }
 
 
     public void handlePaymentConfirmation(PaymentConfirmation confirmation){

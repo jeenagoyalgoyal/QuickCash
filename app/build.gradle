@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
@@ -45,7 +44,7 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.espresso.core
     androidTestImplementation libs.ext.junit
-    implementation 'com.paypal.sdk:paypal-android-sdk:2.15.3'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'
