@@ -17,9 +17,7 @@ import com.example.quickcash.model.Application;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.List;
-
-public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapter.ApplicationViewHolder> {
+import java.util.List;public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapter.ApplicationViewHolder> {
 
     private final List<Application> applicationList;
     private final String jobID;
@@ -41,7 +39,39 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
     @Override
     public void onBindViewHolder(@NonNull ApplicationViewHolder holder, int position) {
         Application application = applicationList.get(position);
-        holder.bind(application, jobID, context);
+
+        // Set the text of the views to the application data
+        holder.nameTextView.setText(application.getApplicantName());
+        holder.emailTextView.setText(application.getApplicantEmail());
+        holder.coverLetterTextView.setText(application.getApplicantMessage());
+        holder.statusTextView.setText(application.getStatus());
+
+        // Set up the accept/reject buttons
+        holder.acceptButton.setOnClickListener(view -> {
+            updateApplicationStatus(application, "Accepted", holder);
+        });
+
+        holder.rejectButton.setOnClickListener(view -> {
+            updateApplicationStatus(application, "Rejected", holder);
+        });
+    }
+
+    private void updateApplicationStatus(Application application, String status, ApplicationViewHolder holder) {
+        Toast.makeText(this.context, "Updating application status...", Toast.LENGTH_LONG).show();
+        DatabaseReference applicationRef = FirebaseDatabase.getInstance()
+                .getReference("Jobs")
+                .child(jobID)
+                .child("applications")
+                .child(application.getApplicationId());
+
+        applicationRef.child("Status").setValue(status)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Application " + status, Toast.LENGTH_SHORT).show();
+                    holder.statusTextView.setText(status); // Update the UI status
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error updating status", Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override
@@ -51,62 +81,21 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
     public static class ApplicationViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView applicantName;
-        private final TextView applicantEmail;
-        private final TextView applicantMessage;
+        private final TextView nameTextView;
+        private final TextView emailTextView;
+        private final TextView coverLetterTextView;
+        private final TextView statusTextView;
         private final Button acceptButton;
         private final Button rejectButton;
 
         public ApplicationViewHolder(@NonNull View itemView) {
             super(itemView);
-            applicantName = itemView.findViewById(R.id.applicantName);
-            applicantEmail = itemView.findViewById(R.id.applicantEmail);
-            applicantMessage = itemView.findViewById(R.id.applicantMessage);
+            nameTextView = itemView.findViewById(R.id.applicantName);
+            emailTextView = itemView.findViewById(R.id.applicantEmail);
+            coverLetterTextView = itemView.findViewById(R.id.applicantMessage);
+            statusTextView = itemView.findViewById(R.id.statusTextView); // Ensure this TextView exists
             acceptButton = itemView.findViewById(R.id.acceptButton);
             rejectButton = itemView.findViewById(R.id.rejectButton);
-        }
-
-        public void bind(Application application, String jobID, Context context) {
-            applicantName.setText("Name: " + application.getApplicantName());
-            applicantEmail.setText("Email: " + application.getApplicantEmail());
-            applicantMessage.setText("Message: " + application.getApplicantMessage());
-
-            // Get a reference to the application in the database
-            DatabaseReference applicationRef = FirebaseDatabase.getInstance()
-                    .getReference("Jobs")
-                    .child(jobID)
-                    .child("Applications")
-                    .child(application.getApplicationId());
-
-            // Handle accept button click
-            acceptButton.setOnClickListener(view -> {
-                applicationRef.child("status").setValue("Accepted");
-                handleJobListing();
-                notifyEmployerAndEmployee(true, context);
-            });
-
-            // Handle reject button click
-            rejectButton.setOnClickListener(view -> {
-                applicationRef.child("status").setValue("Rejected");
-                notifyEmployerAndEmployee(false, context);
-            });
-        }
-
-        private void handleJobListing() {
-            //Make sure job is closed so that no one else can apply
-            //Probably setting status to "Closed"
-        }
-
-        private void notifyEmployerAndEmployee(Boolean accepted, Context context) {
-
-            if(accepted){
-                //Do something for when employee accepted
-                Toast.makeText(context, "Accepted!", Toast.LENGTH_LONG).show();
-
-            } else {
-                //Do something for when employee rejected
-                Toast.makeText(context, "Unfortunately, Rejected!", Toast.LENGTH_LONG).show();
-            }
         }
     }
 }

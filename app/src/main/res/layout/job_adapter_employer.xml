@@ -8,6 +8,9 @@
     <!-- Back Button -->
 
     <!-- Title Text -->
+
+    <!-- Progress Bar -->
+
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="71dp"
@@ -20,22 +23,22 @@
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintBottom_toTopOf="@+id/employerJobPostingsRecyclerView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.21" />
 
     <TextView
         android:id="@+id/postedJobsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:text="Posted Jobs"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

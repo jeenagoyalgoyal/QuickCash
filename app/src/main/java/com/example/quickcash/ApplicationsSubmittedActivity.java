@@ -62,19 +62,30 @@ public class ApplicationsSubmittedActivity extends AppCompatActivity {
 
     private void fetchApplicationsForJob(String jobId) {
         Log.d(TAG, "jobID: " + jobId);
-        DatabaseReference applicationsRef = databaseReference.child("Jobs").child(jobId).child("Applications");
+        DatabaseReference applicationsRef = databaseReference.child("Jobs").child(jobId).child("applications");
+
         applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                applicationList.clear();
+                applicationList.clear();  // Clear the previous list of applications
                 for (DataSnapshot applicationSnapshot : snapshot.getChildren()) {
-                    Application application = applicationSnapshot.getValue(Application.class);
-                    if (application != null) {
-                        // Set the applicationId manually from the key
-                        application.setApplicationId(applicationSnapshot.getKey());
-                        applicationList.add(application);
-                    }
+                    // Extract application data, including applicationId
+                    String applicantName = applicationSnapshot.child("Applicant Name").getValue(String.class);
+                    Log.d(TAG, "Name: "+applicantName);
+                    String applicantEmail = applicationSnapshot.child("Applicant Email").getValue(String.class);
+                    Log.d(TAG, "Email: "+applicantEmail);
+                    String applicantMessage = applicationSnapshot.child("Cover Letter").getValue(String.class);  // Cover Letter mapped to applicantMessage
+                    Log.d(TAG, "Message: "+ applicantMessage);
+                    String status = applicationSnapshot.child("Status").getValue(String.class);
+                    String applicationId = applicationSnapshot.getKey();  // Firebase automatically assigns the key for each application
+
+                    // Create the application object and set the applicationId
+                    Application application = new Application(applicantName, applicantEmail, applicantMessage, status, applicationId);
+
+                    // Add the application to the list
+                    applicationList.add(application);
                 }
+                // Notify the adapter to refresh the view
                 applicationsAdapter.notifyDataSetChanged();
             }
 

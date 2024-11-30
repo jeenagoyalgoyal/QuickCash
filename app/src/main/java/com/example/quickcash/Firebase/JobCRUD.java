@@ -160,7 +160,7 @@ public class JobCRUD {
                     Log.d("Applications fetching: ", "Job found: " + jobSnapshot.getKey()); // Log job ID
 
                     // Now loop over the applications under each job
-                    DataSnapshot applicationsSnapshot = jobSnapshot.child("Applications");
+                    DataSnapshot applicationsSnapshot = jobSnapshot.child("applications");
                     Log.d("Applications fetching: ", "Applications snapshot found: " + applicationsSnapshot.getChildrenCount()); // Log number of applications
 
                     if (applicationsSnapshot.exists()) {

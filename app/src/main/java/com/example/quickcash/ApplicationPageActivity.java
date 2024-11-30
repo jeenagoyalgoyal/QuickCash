@@ -94,39 +94,44 @@ public class ApplicationPageActivity extends AppCompatActivity {
         applicationData.put("Applicant Email", email);
         applicationData.put("Cover Letter", message);
         applicationData.put("Status", "Applied"); // Add the status variable
+        String applicationId = databaseReference.push().getKey();
 
-        // Save the application data in the database
-        databaseReference.push().setValue(applicationData)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(ApplicationPageActivity.this, "Application submitted successfully", Toast.LENGTH_SHORT).show();
+        if (applicationId != null) {
+            applicationData.put("applicationId", applicationId); // Store the applicationId in the data
 
-                        // Clear input fields
-                        editTextName.setText("");
-                        editTextEmail.setText("");
-                        editTextMessage.setText("");
+            // Push application data to Firebase under the generated applicationId
+            databaseReference.child(applicationId).setValue(applicationData)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ApplicationPageActivity.this, "Application submitted successfully", Toast.LENGTH_SHORT).show();
 
-                        // Also save the job under the user's applied jobs
-                        String userId = getIntent().getStringExtra("userEmail");
-                        String jobTitle = getIntent().getStringExtra("jobTitle");
-                        String companyName = getIntent().getStringExtra("companyName");
+                            // Clear input fields
+                            editTextName.setText("");
+                            editTextEmail.setText("");
+                            editTextMessage.setText("");
 
-                        if (userId != null) {
-                            userId = userId.replace(".", ","); // Sanitize email for Firebase
-                            saveJobUnderUser(userId, jobTitle, companyName);
+                            // Also save the job under the user's applied jobs
+                            String userId = getIntent().getStringExtra("userEmail");
+                            String jobTitle = getIntent().getStringExtra("jobTitle");
+                            String companyName = getIntent().getStringExtra("companyName");
+
+                            if (userId != null) {
+                                userId = userId.replace(".", ","); // Sanitize email for Firebase
+                                saveJobUnderUser(userId, jobTitle, companyName, applicationId); // Pass applicationId here
+                            }
+
+                            // Navigate back to EmployeeHomepageActivity
+                            Intent intent = new Intent(ApplicationPageActivity.this, JobSearchParameterActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(ApplicationPageActivity.this, "Failed to submit application", Toast.LENGTH_SHORT).show();
                         }
-
-                        // Navigate back to EmployeeHomepageActivity
-                        Intent intent = new Intent(ApplicationPageActivity.this, JobSearchParameterActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(ApplicationPageActivity.this, "Failed to submit application", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    });
+        }
     }
 
-    private void saveJobUnderUser(String userId, String jobTitle, String companyName) {
+    private void saveJobUnderUser(String userId, String jobTitle, String companyName, String applicationId) {
         DatabaseReference userReference = FirebaseDatabase.getInstance()
                 .getReference("Users").child(userId).child("appliedJobs");
 
@@ -138,6 +143,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         jobData.put("jobTitle", jobTitle);
         jobData.put("companyName", companyName);
         jobData.put("Status", "Applied");
+        jobData.put("applicationId", applicationId); // Store the applicationId
 
         if (uniqueApplicationKey != null) {
             // Save the job application under the unique key
@@ -159,7 +165,4 @@ public class ApplicationPageActivity extends AppCompatActivity {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         return email.matches(emailPattern);
     }
-
-
-
 }

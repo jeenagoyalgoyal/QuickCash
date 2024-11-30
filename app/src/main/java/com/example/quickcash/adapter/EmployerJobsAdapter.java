@@ -26,15 +26,10 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
     private final DatabaseReference databaseReference;
     private HashMap<String, Integer> applicationCounts = new HashMap<>();
 
-    /**
-     * Constructor for EmployerJobsAdapter.
-     *
-     * @param jobList           List of Job objects to display.
-     * @param databaseReference Reference to the Firebase Realtime Database.
-     */
     public EmployerJobsAdapter(List<Job> jobList, DatabaseReference databaseReference) {
         this.jobList = jobList;
         this.databaseReference = databaseReference;
+        fetchApplicationCounts(); // Fetch counts on initialization
     }
 
     @NonNull
@@ -51,14 +46,32 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
         holder.bind(job, databaseReference, applicationCount);
     }
 
-    public void setApplicationCounts(HashMap<String, Integer> applicationCounts) {
-        this.applicationCounts = applicationCounts;
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         return jobList.size();
+    }
+
+    private void fetchApplicationCounts() {
+        for (Job job : jobList) {
+            DatabaseReference applicationsRef = databaseReference.child("Jobs").child(job.getJobId()).child("Applications");
+            applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    applicationCounts.put(job.getJobId(), (int) snapshot.getChildrenCount());
+                    notifyDataSetChanged(); // Notify adapter to update the views
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    applicationCounts.put(job.getJobId(), 0);
+                    notifyDataSetChanged(); // If error occurs, set count to 0
+                }
+            });
+        }
+    }
+
+    public void setApplicationCounts(HashMap<String, Integer> applicationCounts) {
+        this.applicationCounts = applicationCounts;
     }
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {
@@ -75,35 +88,13 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
             urgencyTextView = itemView.findViewById(R.id.urgencyTextView);
             noOfApplicationsTextView = itemView.findViewById(R.id.noOfApplicationsTextView);
             viewApplicationsButton = itemView.findViewById(R.id.viewApplicationsButton);
-
         }
 
-        /**
-         * Binds job data to the views.
-         *
-         * @param job               The Job object containing the data.
-         * @param databaseReference Reference to the Firebase Realtime Database.
-         */
         public void bind(Job job, DatabaseReference databaseReference, int applicationCount) {
             jobTitleTextView.setText(job.getJobTitle());
             startDateTextView.setText("Start Date: " + job.getStartDate());
             urgencyTextView.setText("Urgency: " + job.getUrgency());
             noOfApplicationsTextView.setText("Applications: " + applicationCount);
-
-            // Fetch and display the number of applications
-            DatabaseReference applicationsRef = databaseReference.child("Jobs").child(job.getJobId()).child("Applications");
-            applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int applicationCount = (int) snapshot.getChildrenCount();
-                    noOfApplicationsTextView.setText("Applications: " + applicationCount);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    noOfApplicationsTextView.setText("Applications: N/A");
-                }
-            });
 
             // Handle "View Applications" button click
             viewApplicationsButton.setOnClickListener(view -> {

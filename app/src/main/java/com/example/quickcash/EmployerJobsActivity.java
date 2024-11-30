@@ -1,6 +1,8 @@
 package com.example.quickcash;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EmployerJobsActivity extends AppCompatActivity {
-
+    private final static String TAG = "EmployerJobsActivity";
     private RecyclerView recyclerView;
+    private ImageButton backButton;
     private EmployerJobsAdapter adapter;
     private List<Job> jobList;
     private DatabaseReference databaseReference;
@@ -36,11 +39,11 @@ public class EmployerJobsActivity extends AppCompatActivity {
         setContentView(R.layout.job_adapter_employer);
         this.mAuth = FirebaseAuth.getInstance();
         this.emailID = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-
-        if (emailID != null) {
-            this.userID = emailID.replace(".", ",");
-        } else {
-            Toast.makeText(this, "Please login to the app before continuing", Toast.LENGTH_LONG).show();
+        Log.d(TAG, "EMail: "+emailID);
+        if(this.emailID!=null){
+            this.emailID = this.emailID.replace(".", ",");
+        } else{
+            Toast.makeText(this, "Please Login properly.", Toast.LENGTH_LONG).show();
         }
 
         // Initialize the RecyclerView and the job list
@@ -54,29 +57,29 @@ public class EmployerJobsActivity extends AppCompatActivity {
         // Initialize the Firebase Realtime Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> finish());
         // Fetch job postings from Firebase
         fetchJobPostings();
     }
 
     private void fetchJobPostings() {
-
         databaseReference.child("Jobs").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 jobList.clear();
                 HashMap<String, Integer> applicationCounts = new HashMap<>();
-
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
-                    if (job != null) {
-                        String jobId = jobSnapshot.getKey();
-                        if (job.getEmployerId().equals(userID)) {
+                    if(job.getEmployerId().equals(emailID)){
+                        if (job != null) {
+                            String jobId = jobSnapshot.getKey();
                             job.setJobId(jobId);
-                            jobList.add(job);
+                            jobList.add(job); // Add job to jobList
 
                             // Fetch number of applications for this job
                             DatabaseReference applicationsRef = jobSnapshot.child("Applications").getRef();
-                            applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            applicationsRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot applicationsSnapshot) {
                                     applicationCounts.put(jobId, (int) applicationsSnapshot.getChildrenCount());
@@ -91,8 +94,7 @@ public class EmployerJobsActivity extends AppCompatActivity {
                         }
                     }
                 }
-
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged(); // Notify adapter to display jobs after data has been fetched
             }
 
             @Override
