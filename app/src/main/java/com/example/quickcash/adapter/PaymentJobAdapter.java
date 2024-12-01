@@ -18,7 +18,7 @@ import java.util.List;
 public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.JobViewHolder> {
     private List<PaymentEmployeeModel> employeeList;
     private ViewGroup parent;
-    private OnItemSelectedListener listener;
+    private View.OnClickListener listener;
 
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {
@@ -38,12 +38,8 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
         }
     }
 
-    public interface OnItemSelectedListener{
-        void onItemSelected(PaymentEmployeeModel item);
-    }
 
-
-    public PaymentJobAdapter(List<PaymentEmployeeModel> employeeList, OnItemSelectedListener listener) {
+    public PaymentJobAdapter(List<PaymentEmployeeModel> employeeList, View.OnClickListener listener) {
         this.employeeList = employeeList;
         this.listener = listener;
     }
@@ -64,11 +60,8 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
         holder.jobTitle.setText("Job Title: " + paymentEmployeeModel.getJobTitle());
         holder.employeeName.setText("Company: " + paymentEmployeeModel.getEmployeeName());
         holder.paymentAmount.setText("Location: " + paymentEmployeeModel.getPaymentAmount());
-        holder.selectButton.setOnClickListener(view -> {
-            if (listener!=null){
-                listener.onItemSelected(paymentEmployeeModel);
-            }
-        });
+        holder.selectButton.setTag(paymentEmployeeModel);
+        holder.selectButton.setOnClickListener(listener);
     }
 
 

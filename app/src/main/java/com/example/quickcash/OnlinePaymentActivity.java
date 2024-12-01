@@ -139,7 +139,8 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter with callback mechanism
-        PaymentJobAdapter adapter = new PaymentJobAdapter(employeeList, selectedItem -> {
+        PaymentJobAdapter adapter = new PaymentJobAdapter(employeeList, view -> {
+            PaymentEmployeeModel selectedItem = (PaymentEmployeeModel) view.getTag();
             dialog.dismiss(); // Close the dialog once item selected
             handleSelectedItem(selectedItem); // Handle the selected item in parent activity
         });
