@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,6 +26,8 @@ public class ApplicationPageActivity extends AppCompatActivity {
     private Button buttonApply;
     private DatabaseReference databaseReference;
     private TextView textViewJobDetails;
+    private FirebaseAuth mAuth;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +70,12 @@ public class ApplicationPageActivity extends AppCompatActivity {
 
     private void submitApplication() {
         String name = editTextName.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
+        String email2 = editTextEmail.getText().toString().trim();
         String message = editTextMessage.getText().toString().trim();
+        //ID is retrieved
+        this.mAuth = FirebaseAuth.getInstance();
+        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+        String empID = email.replace(".", ",");
 
         // Validate input
         if (TextUtils.isEmpty(name)) {
@@ -91,9 +98,10 @@ public class ApplicationPageActivity extends AppCompatActivity {
         // Create a map to store application data
         Map<String, Object> applicationData = new HashMap<>();
         applicationData.put("Applicant Name", name);
-        applicationData.put("Applicant Email", email);
+        applicationData.put("Applicant Email", email2);
         applicationData.put("Cover Letter", message);
         applicationData.put("Status", "Applied"); // Add the status variable
+        applicationData.put("employeeID", empID);
         String applicationId = databaseReference.push().getKey();
 
         if (applicationId != null) {
@@ -115,9 +123,10 @@ public class ApplicationPageActivity extends AppCompatActivity {
                             String jobTitle = getIntent().getStringExtra("jobTitle");
                             String companyName = getIntent().getStringExtra("companyName");
 
+
                             if (userId != null) {
                                 userId = userId.replace(".", ","); // Sanitize email for Firebase
-                                saveJobUnderUser(userId, jobTitle, companyName, applicationId); // Pass applicationId here
+                                saveJobUnderUser(userId, jobTitle, companyName, applicationId, empID); // Pass applicationId here
                             }
 
                             // Navigate back to EmployeeHomepageActivity
@@ -131,19 +140,22 @@ public class ApplicationPageActivity extends AppCompatActivity {
         }
     }
 
-    private void saveJobUnderUser(String userId, String jobTitle, String companyName, String applicationId) {
+    private void saveJobUnderUser(String userId, String jobTitle, String companyName, String applicationId, String empID) {
         DatabaseReference userReference = FirebaseDatabase.getInstance()
                 .getReference("Users").child(userId).child("appliedJobs");
 
         // Generate a unique key for each application under the user
         String uniqueApplicationKey = userReference.push().getKey();
 
+
         // Create a map for the job details
         Map<String, Object> jobData = new HashMap<>();
         jobData.put("jobTitle", jobTitle);
         jobData.put("companyName", companyName);
         jobData.put("Status", "Applied");
-        jobData.put("applicationId", applicationId); // Store the applicationId
+        jobData.put("employeeId", empID);
+        jobData.put("applicationId", applicationId);
+
 
         if (uniqueApplicationKey != null) {
             // Save the job application under the unique key

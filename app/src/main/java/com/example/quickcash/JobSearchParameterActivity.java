@@ -167,7 +167,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 List<Job> jobs = task.getResult();
                 jobList.clear();
                 for (Job j : jobs) {
-                    if (passesAdditionalFilters(j)) {
+                    if ((j.getStatus()==null || j.getStatus().equals("pending")) && passesAdditionalFilters(j)) {
                         jobList.add(j);
                     }
                 }
@@ -253,7 +253,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     //The following lines can be added to prevent showing jobs with no proper location
                     //JobLocation jobLocation = job.getJobLocation();
                     // && jobLocation!=null
-                    if (passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
+                    if ((job.getStatus()==null || job.getStatus().equals("pending")) && passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
                         jobList.add(job);
                     }
                 }

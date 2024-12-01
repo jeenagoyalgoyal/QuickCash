@@ -1,6 +1,7 @@
 package com.example.quickcash.adapter;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.quickcash.model.Job;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -29,7 +31,6 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
     public EmployerJobsAdapter(List<Job> jobList, DatabaseReference databaseReference) {
         this.jobList = jobList;
         this.databaseReference = databaseReference;
-        fetchApplicationCounts(); // Fetch counts on initialization
     }
 
     @NonNull
@@ -42,8 +43,24 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         Job job = jobList.get(position);
-        int applicationCount = applicationCounts.getOrDefault(job.getJobId(), 0); // Get count from map
-        holder.bind(job, databaseReference, applicationCount);
+        DatabaseReference dbrf = FirebaseDatabase.getInstance().getReference().child("Jobs").child(job.getJobId()).child("applications");
+
+        dbrf.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Count the number of child nodes
+                String childCount = String.valueOf(dataSnapshot.getChildrenCount());
+                holder.bind(job, childCount);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("Error: " + databaseError.getMessage());
+            }
+        });
+        holder.bind(job, "0");
+
+
     }
 
     @Override
@@ -51,24 +68,6 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
         return jobList.size();
     }
 
-    private void fetchApplicationCounts() {
-        for (Job job : jobList) {
-            DatabaseReference applicationsRef = databaseReference.child("Jobs").child(job.getJobId()).child("Applications");
-            applicationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    applicationCounts.put(job.getJobId(), (int) snapshot.getChildrenCount());
-                    notifyDataSetChanged(); // Notify adapter to update the views
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    applicationCounts.put(job.getJobId(), 0);
-                    notifyDataSetChanged(); // If error occurs, set count to 0
-                }
-            });
-        }
-    }
 
     public void setApplicationCounts(HashMap<String, Integer> applicationCounts) {
         this.applicationCounts = applicationCounts;
@@ -90,11 +89,12 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
             viewApplicationsButton = itemView.findViewById(R.id.viewApplicationsButton);
         }
 
-        public void bind(Job job, DatabaseReference databaseReference, int applicationCount) {
+        public void bind(Job job,String applications) {
             jobTitleTextView.setText(job.getJobTitle());
             startDateTextView.setText("Start Date: " + job.getStartDate());
             urgencyTextView.setText("Urgency: " + job.getUrgency());
-            noOfApplicationsTextView.setText("Applications: " + applicationCount);
+            Log.d("BIND", "bind " + applications);
+            noOfApplicationsTextView.setText("Applications: " + applications);
 
             // Handle "View Applications" button click
             viewApplicationsButton.setOnClickListener(view -> {

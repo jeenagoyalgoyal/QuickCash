@@ -16,6 +16,7 @@ public class Job {
     private String startDate;
     private String urgency;
     private JobLocation jobLocation;
+    private String status;
 
     /**
      * Constructor for the job
@@ -169,6 +170,14 @@ public class Job {
         this.jobLocation = jobLocation;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
     /**
      * Set all the required fields for the form
      * @param jobTitle
@@ -189,7 +198,7 @@ public class Job {
     public void setAllField(String jobTitle, String companyName, String jobType,
                             String requirements, int salary, String urgency,
                             String location, String expectedDuration, String startDate,
-                            String employerId, String jobId, Double lat, Double lng) {
+                            String employerId, String jobId, Double lat, Double lng, String status) {
         this.jobTitle = jobTitle;
         this.companyName = companyName;
         this.jobType = jobType;
@@ -202,5 +211,6 @@ public class Job {
         this.employerId = employerId;
         this.jobId = jobId;
         this.jobLocation = new JobLocation(lat, lng, location);
+        this.status = status;
     }
 }

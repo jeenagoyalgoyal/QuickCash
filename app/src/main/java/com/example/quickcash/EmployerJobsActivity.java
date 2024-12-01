@@ -39,10 +39,10 @@ public class EmployerJobsActivity extends AppCompatActivity {
         setContentView(R.layout.job_adapter_employer);
         this.mAuth = FirebaseAuth.getInstance();
         this.emailID = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-        Log.d(TAG, "EMail: "+emailID);
-        if(this.emailID!=null){
+        Log.d(TAG, "EMail: " + emailID);
+        if (this.emailID != null) {
             this.emailID = this.emailID.replace(".", ",");
-        } else{
+        } else {
             Toast.makeText(this, "Please Login properly.", Toast.LENGTH_LONG).show();
         }
 
@@ -71,8 +71,9 @@ public class EmployerJobsActivity extends AppCompatActivity {
                 HashMap<String, Integer> applicationCounts = new HashMap<>();
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
-                    if(job.getEmployerId().equals(emailID)){
-                        if (job != null) {
+                    if (job != null) {
+                        if (job.getEmployerId()!=null && job.getEmployerId().equals(emailID)) {
+
                             String jobId = jobSnapshot.getKey();
                             job.setJobId(jobId);
                             jobList.add(job); // Add job to jobList

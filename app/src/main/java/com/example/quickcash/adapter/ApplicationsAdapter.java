@@ -58,6 +58,7 @@ import java.util.List;public class ApplicationsAdapter extends RecyclerView.Adap
 
     private void updateApplicationStatus(Application application, String status, ApplicationViewHolder holder) {
         Toast.makeText(this.context, "Updating application status...", Toast.LENGTH_LONG).show();
+
         DatabaseReference applicationRef = FirebaseDatabase.getInstance()
                 .getReference("Jobs")
                 .child(jobID)
@@ -72,6 +73,30 @@ import java.util.List;public class ApplicationsAdapter extends RecyclerView.Adap
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Error updating status", Toast.LENGTH_SHORT).show();
                 });
+
+        if(status.equals("Accepted")){
+            closeJob(application.getEmployeeID(), application.getApplicantName());
+        }
+
+    }
+
+    private void closeJob(String empID, String name) {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("Jobs")
+                .child(jobID)
+                .child("status");
+        ref.setValue("In-progress");
+
+        ref = FirebaseDatabase.getInstance()
+                .getReference("Jobs")
+                .child(jobID).child("employeeId");
+        ref.setValue(empID);
+
+        ref = FirebaseDatabase.getInstance()
+                .getReference("Jobs")
+                .child(jobID).child("employeeName");
+        ref.setValue(name);
+
     }
 
     @Override

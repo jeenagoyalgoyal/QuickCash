@@ -1,6 +1,8 @@
 package com.example.quickcash.model;
 
 public class Application {
+    private String employeeName;
+    private String employeeID;
     private String applicantName;
     private String applicantEmail;
     private String applicantMessage;
@@ -11,12 +13,13 @@ public class Application {
         // Default constructor required for Firebase
     }
 
-    public Application(String applicantName, String applicantEmail, String applicantMessage, String status, String applicationId) {
+    public Application(String applicantName, String applicantEmail, String applicantMessage, String status, String applicationId, String employeeID) {
         this.applicantName = applicantName;
         this.applicantEmail = applicantEmail;
         this.applicantMessage = applicantMessage;
         this.status = status;
         this.applicationId = applicationId;
+        this.employeeID = employeeID;
     }
 
     public String getApplicantName() {
@@ -58,4 +61,7 @@ public class Application {
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
+
+    public void setEmployeeID(String employeeID){this.employeeID = employeeID;}
+    public String getEmployeeID(){return this.employeeID;}
 }
