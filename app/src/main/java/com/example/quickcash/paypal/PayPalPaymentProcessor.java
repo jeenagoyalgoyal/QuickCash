@@ -34,7 +34,6 @@ public class PayPalPaymentProcessor {
             Log.e(TAG, "Invalid payment amount");
             return false;
         }
-
         // Create PayPalPayment
         PayPalPayment payment = new PayPalPayment(
                 new BigDecimal(amount),
@@ -71,8 +70,19 @@ public class PayPalPaymentProcessor {
                 Log.e(TAG, String.format("Payment %s%n with payment id is %s", state, payID));
                 return true;
             } catch (JSONException e) {
-                Log.e(TAG, "Error occurred with JSON Data: ", e);
+                Log.e(TAG, "Error occurred with JSON data parsing: ", e);
             }
+        }
+        return false;
+    }
+
+    public boolean handleResponse(JSONObject confirmationJson){
+        try{
+            this.payID = confirmationJson.getJSONObject("response").getString("id");
+            this.state = confirmationJson.getJSONObject("response").getString("state");
+            return true;
+        } catch (JSONException e) {
+            Log.e(TAG, "Error occurred with JSON data parsing: ", e);
         }
         return false;
     }

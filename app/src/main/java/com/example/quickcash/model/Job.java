@@ -16,6 +16,8 @@ public class Job {
     private String startDate;
     private String urgency;
     public String status;
+    public String employeeName;
+    public String employeeId;
 
     /**
      * Constructor for the job
@@ -93,6 +95,23 @@ public class Job {
      * @return status
      */
     public String getStatus() {return status;}
+
+    /**
+     * Get name of employee assigned to job
+     * @return employeeName
+     */
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    /**
+     * Get id of employee assigned to job
+     * @return employeeName
+     */
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
 
     /**
      * Set the company name

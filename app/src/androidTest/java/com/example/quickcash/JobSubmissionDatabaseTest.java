@@ -37,7 +37,7 @@ public class JobSubmissionDatabaseTest {
         job.setJobTitle("Cybersecurity Analyst");
         job.setCompanyName("Tech Company");
         job.setExpectedDuration("20");
-        job.setEmployerId("test@gmail.com");
+        job.setEmployerId("qwerty2@gmail.com");
         job.setLocation("Montreal");
         job.setRequirements("Linux, Java");
         job.setSalary(50);
@@ -60,7 +60,7 @@ public class JobSubmissionDatabaseTest {
         String expectedCompany = "Tech Company";
         String expectedType = "Full-time";
         String expectedDuration = "20";
-        String expectedEmployerId = "test@gmail.com";
+        String expectedEmployerId = "qwerty2@gmail.com";
         String expectedLocation = "Montreal";
         String expectedRequirements = "Linux, Java";
         String expectedStartDate = "Nov 20, 2024";

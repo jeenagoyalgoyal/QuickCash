@@ -80,7 +80,7 @@ public class JobCRUD {
         return taskCompletionSource.getTask();
     }
 
-    public Task<List<Job>> getCompletedJob(String emailID){
+    public Task<List<Job>> getInProgressJobs(String emailID){
         TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
 
         Query query = databaseReference.orderByChild("employerId").equalTo(emailID);
@@ -91,19 +91,17 @@ public class JobCRUD {
                 List<Job> jobs = new ArrayList<>();
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
-                    if (job != null && job.getStatus().equals("completed")) {
+                    if (job != null && job.getStatus().equals("In-progress")) {
                         jobs.add(job);
                     }
                 }
                 taskCompletionSource.setResult(jobs);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 taskCompletionSource.setException(error.toException());
             }
         });
-
         return taskCompletionSource.getTask();
     }
 

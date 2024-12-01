@@ -21,14 +21,12 @@ public class OnlinePaymentCRUD {
 
     public OnlinePaymentCRUD(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("PaymentTransaction");
+        databaseReference = firebaseDatabase.getReference("PaymentTransactions");
     }
 
     public Task<Boolean> pushTransaction(PaymentTransactionModel transaction) {
-        String transactionID = databaseReference.push().getKey();
-        if(transactionID != null){
-            transaction.setTransactionID(transactionID);
-            return databaseReference.child(transactionID).setValue(transaction)
+        if(transaction.getTransactionID() != null){
+            return databaseReference.child(transaction.getTransactionID()).setValue(transaction)
                     .continueWith(task -> task.isSuccessful());
         }
         return null;

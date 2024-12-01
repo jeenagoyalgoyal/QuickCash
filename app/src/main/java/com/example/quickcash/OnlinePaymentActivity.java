@@ -21,10 +21,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.Firebase.JobCRUD;
+import com.example.quickcash.Firebase.OnlinePaymentCRUD;
 import com.example.quickcash.adapter.PaymentJobAdapter;
+import com.example.quickcash.model.Job;
 import com.example.quickcash.model.PaymentEmployeeModel;
+import com.example.quickcash.model.PaymentTransactionModel;
 import com.example.quickcash.paypal.PayPalPaymentProcessor;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
@@ -45,6 +51,9 @@ public class OnlinePaymentActivity extends AppCompatActivity {
     private String userID;
     private PayPalPaymentProcessor payPalPaymentProcessor;
     public ActivityResultLauncher<Intent> activityResultLauncher;
+    private JobCRUD jobCRUD;
+    private OnlinePaymentCRUD onlinePaymentCRUD;
+    private PaymentEmployeeModel selectedEmployee;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -55,14 +64,24 @@ public class OnlinePaymentActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        //setup methods
+        setupOnlinePaymentCrud();
+        setupJobCrud();
         setupPayPalLauncher();
         setCurrentUserID();
-        //setup UI
         setupTextViews();
         setupPaymentButton();
+        setupCancelButton();
         setupSelectJobButton();
         setupDialog();
+    }
+
+    private void setupOnlinePaymentCrud() {
+        this.onlinePaymentCRUD = new OnlinePaymentCRUD();
+    }
+
+    private void setupJobCrud() {
+        this.jobCRUD = new JobCRUD(FirebaseDatabase.getInstance());
     }
 
     private void setupPayPalLauncher() {
@@ -77,15 +96,19 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                         String state = payPalPaymentProcessor.getState();
                         Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, String.format("Payment %s%n with payment id is %s", state, payID));
+                        PaymentTransactionModel transaction = new PaymentTransactionModel();
+                        transaction.setTransactionDetails(payID, selectedEmployee.getEmployeeId(), selectedEmployee.getEmployerId(), selectedEmployee.getJobId(),selectedEmployee.getPaymentAmount(), state);
+                        onlinePaymentCRUD.pushTransaction(transaction);
+                        clearEmployeeDetails();
                     } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
                         Log.e(TAG, "Payment failed due to invalid extra data (check result code)");
                         Toast.makeText(this, "Payment Failed!", Toast.LENGTH_SHORT).show();
                     } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                         Toast.makeText(this, "Payment Cancelled!", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Payment canceled (did user cancel payment?)");
-
                     }
-                });
+                }
+                );
     }
 
     private void setCurrentUserID(){
@@ -120,53 +143,87 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         });
     }
 
+    protected void setupCancelButton(){
+        paymentButton = findViewById(R.id.paymentCancelButton);
+        paymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearEmployeeDetails();
+            }
+        });
+    }
+
+    public void clearEmployeeDetails(){
+        this.selectedEmployee = null;
+        this.jobTitleText.setText("");
+        this.employeeNameText.setText("");
+        this.paymentAmountText.setText("");
+    }
+
+
     private void setupDialog() {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.payment_jobs_select_dialog);
         crossButton = dialog.findViewById(R.id.crossButton);
+        //dismiss fialog
         crossButton.setOnClickListener(v -> dialog.dismiss());
     }
 
     private void launchJobSelectDialog() {
-        // Initialize dummy data TEMPORARY
-        List<PaymentEmployeeModel> employeeList = new ArrayList<>();
-        employeeList.add(new PaymentEmployeeModel("Software Developer", "Alice", 5000));
-        employeeList.add(new PaymentEmployeeModel("UI/UX Designer", "Bob", 4500));
-        employeeList.add(new PaymentEmployeeModel("Project Manager", "Charlie", 7000));
-
-        // Set up recyclerView in the popup dialog
         RecyclerView recyclerView = dialog.findViewById(R.id.paymentJobsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Create and set the adapter with callback mechanism
+        List<PaymentEmployeeModel> employeeList = new ArrayList<>();
+        //listener is placed in recycler view in dialog box
         PaymentJobAdapter adapter = new PaymentJobAdapter(employeeList, view -> {
-            PaymentEmployeeModel selectedItem = (PaymentEmployeeModel) view.getTag();
-            dialog.dismiss(); // Close the dialog once item selected
-            handleSelectedItem(selectedItem); // Handle the selected item in parent activity
+            PaymentEmployeeModel selectedItem = (PaymentEmployeeModel) view.getTag(); //get selected item from recyclerview using Tag
+            dialog.dismiss();
+            handleSelectedItem(selectedItem);
         });
-
-        recyclerView.setAdapter(adapter); //set data in recycler view
-        dialog.show(); // Show the popup dialog
+        recyclerView.setAdapter(adapter);
+        //Fetch the jobs and put them in recycler view
+        jobCRUD.getInProgressJobs(email).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                for (Job j : task.getResult()) {
+                    if (j.getEmployeeId() != null) {
+                        employeeList.add(new PaymentEmployeeModel(j.getJobId(), j.getJobTitle(), j.getEmployeeName(), j.getEmployeeId(), j.getEmployerId(), j.getSalary()));
+                    }
+                }
+                if (employeeList.size()==0){
+                    Toast.makeText(this, "No in-progress jobs found!", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "No In-progress jobs detected (check firebase?)");
+                }
+                adapter.notifyDataSetChanged(); //reflect data set change in recycler view
+            } else {
+                Toast.makeText(this, "Failed to fetch jobs!", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "(is network connection ok?) Failed to fetch jobs: ", task.getException());
+            }
+        });
+        //show dialog box once data is loaded into it
+        dialog.show();
     }
 
     private void handleSelectedItem(PaymentEmployeeModel selectedItem) {
-        // Update the UI or perform actions based on the selected item
-        this.jobTitleText.setText(selectedItem.getJobTitle());
-        this.employeeNameText.setText(selectedItem.getEmployeeName());
-        this.paymentAmountText.setText(String.valueOf(selectedItem.getPaymentAmount()));
-        Toast.makeText(this, "Selected: " + selectedItem.getJobTitle(), Toast.LENGTH_SHORT).show();//temp
+        //update UI with details
+        this.selectedEmployee = selectedItem;
+        this.jobTitleText.setText(selectedEmployee.getJobTitle());
+        this.employeeNameText.setText(selectedEmployee.getEmployeeName());
+        this.paymentAmountText.setText(String.valueOf(selectedEmployee.getPaymentAmount()));
     }
 
-
     protected void paypalPayment() {
-        String jobTitle = this.jobTitleText.getText().toString();
-        String employeeName = this.employeeNameText.getText().toString();
-        int paymentAmount = Integer.parseInt(this.paymentAmountText.getText().toString());
-
-        boolean isPaymentInitiated = payPalPaymentProcessor.handlePayment(this, employeeName, paymentAmount);
-        if (!isPaymentInitiated) {
-            Log.e(TAG, "Failed to initiate payment");
-            Toast.makeText(this, "Payment initialization failed", Toast.LENGTH_SHORT).show();
+        if (this.selectedEmployee!=null){
+            String jobTitle = this.selectedEmployee.getJobTitle();
+            String employeeName = this.selectedEmployee.getEmployeeName();
+            int paymentAmount = this.selectedEmployee.getPaymentAmount();
+            boolean isPaymentInitiated = payPalPaymentProcessor.handlePayment(this, employeeName, paymentAmount);
+            if (!isPaymentInitiated) {
+                Log.e(TAG, "Failed to initiate payment");
+                Toast.makeText(this, "Payment initialization failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Log.e(TAG, "No employee selected");
+            Toast.makeText(this, "No employee selected!", Toast.LENGTH_SHORT).show();
         }
     }
 

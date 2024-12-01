@@ -58,10 +58,14 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
     public void onBindViewHolder(JobViewHolder holder, int position) {
         PaymentEmployeeModel paymentEmployeeModel = employeeList.get(position);
         holder.jobTitle.setText("Job Title: " + paymentEmployeeModel.getJobTitle());
-        holder.employeeName.setText("Company: " + paymentEmployeeModel.getEmployeeName());
-        holder.paymentAmount.setText("Location: " + paymentEmployeeModel.getPaymentAmount());
+        holder.employeeName.setText("Employee Name: " + paymentEmployeeModel.getEmployeeName());
+        holder.paymentAmount.setText("Payment: CAD$ " + paymentEmployeeModel.getPaymentAmount());
         holder.selectButton.setTag(paymentEmployeeModel);
-        holder.selectButton.setOnClickListener(listener);
+        holder.selectButton.setOnClickListener(view -> {
+            if (listener != null) {
+                listener.onClick(view); // Pass the view (with the tag) to the listener
+            }
+        });
     }
 
 

@@ -31,7 +31,6 @@ import androidx.appcompat.app.AppCompatActivity;
  * posted jobs in the database.
  */
 public class JobSearchParameterActivity extends AppCompatActivity{
-
     private EditText jobTitle;
     private EditText companyName;
     private EditText minSalary;
@@ -56,9 +55,7 @@ public class JobSearchParameterActivity extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_search_parameter);
-
         init();
-
         //getting email and ID
         Intent intentPreferredEmployers = getIntent();
         this.email = intentPreferredEmployers.getStringExtra("email");

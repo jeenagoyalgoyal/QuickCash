@@ -10,6 +10,15 @@ public class PaymentTransactionModel {
 
     public void setTransactionID(String transactionID) {this.transactionId = transactionID;}
 
+    public void setTransactionDetails(String transactionId, String employeeId, String employerId, String jobId, float paymentAmount, String transactionStatus){
+        this.transactionId = transactionId;
+        this.employeeId = employeeId;
+        this.employerId = employerId;
+        this.jobId = jobId;
+        this.paymentAmount = paymentAmount;
+        this.transactionStatus = transactionStatus;
+    }
+
     public String getTransactionID(){return transactionId;}
 
     public String getEmployeeId() {
