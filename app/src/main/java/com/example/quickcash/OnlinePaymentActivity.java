@@ -1,8 +1,10 @@
 package com.example.quickcash;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,12 +25,14 @@ import com.example.quickcash.adapter.PaymentJobAdapter;
 import com.example.quickcash.model.PaymentEmployeeModel;
 import com.example.quickcash.paypal.PayPalPaymentProcessor;
 import com.google.firebase.auth.FirebaseAuth;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OnlinePaymentActivity extends AppCompatActivity {
-
+    private static final String TAG = "OnlinePaymentActivity";
     private TextView jobTitleText;
     private TextView employeeNameText;
     private TextView paymentAmountText;
@@ -38,6 +44,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
     private String email;
     private String userID;
     private PayPalPaymentProcessor payPalPaymentProcessor;
+    public ActivityResultLauncher<Intent> activityResultLauncher;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,12 +56,36 @@ public class OnlinePaymentActivity extends AppCompatActivity {
             return insets;
         });
 
+        setupPayPalLauncher();
         setCurrentUserID();
         //setup UI
         setupTextViews();
         setupPaymentButton();
         setupSelectJobButton();
         setupDialog();
+    }
+
+    private void setupPayPalLauncher() {
+        payPalPaymentProcessor = new PayPalPaymentProcessor();
+        // Setup ActivityResultLauncher
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        final PaymentConfirmation confirmation = result.getData().getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                        payPalPaymentProcessor.handlePaymentConfirmation(confirmation);
+                        String payID = payPalPaymentProcessor.getPayID();
+                        String state = payPalPaymentProcessor.getState();
+                        Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, String.format("Payment %s%n with payment id is %s", state, payID));
+                    } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                        Log.e(TAG, "Payment failed due to invalid extra data (check result code)");
+                        Toast.makeText(this, "Payment Failed!", Toast.LENGTH_SHORT).show();
+                    } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                        Toast.makeText(this, "Payment Cancelled!", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Payment canceled (did user cancel payment?)");
+
+                    }
+                });
     }
 
     private void setCurrentUserID(){
@@ -97,24 +128,24 @@ public class OnlinePaymentActivity extends AppCompatActivity {
     }
 
     private void launchJobSelectDialog() {
-        // Initialize sample data
+        // Initialize dummy data TEMPORARY
         List<PaymentEmployeeModel> employeeList = new ArrayList<>();
         employeeList.add(new PaymentEmployeeModel("Software Developer", "Alice", 5000));
         employeeList.add(new PaymentEmployeeModel("UI/UX Designer", "Bob", 4500));
         employeeList.add(new PaymentEmployeeModel("Project Manager", "Charlie", 7000));
 
-        // Set up RecyclerView in dialog
+        // Set up recyclerView in the popup dialog
         RecyclerView recyclerView = dialog.findViewById(R.id.paymentJobsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Create and set the adapter with callback
+        // Create and set the adapter with callback mechanism
         PaymentJobAdapter adapter = new PaymentJobAdapter(employeeList, selectedItem -> {
-            dialog.dismiss(); // Close the dialog
+            dialog.dismiss(); // Close the dialog once item selected
             handleSelectedItem(selectedItem); // Handle the selected item in parent activity
         });
 
-        recyclerView.setAdapter(adapter);
-        dialog.show(); // Show the dialog
+        recyclerView.setAdapter(adapter); //set data in recycler view
+        dialog.show(); // Show the popup dialog
     }
 
     private void handleSelectedItem(PaymentEmployeeModel selectedItem) {
@@ -122,20 +153,28 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         this.jobTitleText.setText(selectedItem.getJobTitle());
         this.employeeNameText.setText(selectedItem.getEmployeeName());
         this.paymentAmountText.setText(String.valueOf(selectedItem.getPaymentAmount()));
-
-        Toast.makeText(this, "Selected: " + selectedItem.getJobTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Selected: " + selectedItem.getJobTitle(), Toast.LENGTH_SHORT).show();//temp
     }
 
 
-    protected void paypalPayment(){
-        //does paypal payment stuff
-        String jobTitle = (String) this.jobTitleText.getText();
-        String employeeName = (String) this.employeeNameText.getText();
-        int paymentAmount = Integer.parseInt((String) this.paymentAmountText.getText());
-        //payPalPaymentProcessor.handlePayment(employeeName, paymentAmount);
+    protected void paypalPayment() {
+        String jobTitle = this.jobTitleText.getText().toString();
+        String employeeName = this.employeeNameText.getText().toString();
+        int paymentAmount = Integer.parseInt(this.paymentAmountText.getText().toString());
+
+        boolean isPaymentInitiated = payPalPaymentProcessor.handlePayment(this, employeeName, paymentAmount);
+        if (!isPaymentInitiated) {
+            Log.e(TAG, "Failed to initiate payment");
+            Toast.makeText(this, "Payment initialization failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
     }
 }
+
+//fake credit card details:
+//4214026959287870
+//7/26
+//866
