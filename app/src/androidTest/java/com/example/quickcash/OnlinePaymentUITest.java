@@ -51,6 +51,11 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+//fake credit card details:
+//4214026959287870
+//7/26
+//866
+
 @RunWith(JUnit4.class)
 public class OnlinePaymentUITest {
 

@@ -173,8 +173,3 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         return email.replace(".", ",");
     }
 }
-
-//fake credit card details:
-//4214026959287870
-//7/26
-//866
