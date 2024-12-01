@@ -21,6 +21,9 @@ public class PayPalPaymentProcessor {
                 .clientId(CLIENT_ID);
     }
 
+    public boolean handlePayment(String employeeName, int amount){
+        return false;
+    }
 
     public void handlePaymentConfirmation(PaymentConfirmation confirmation){
 

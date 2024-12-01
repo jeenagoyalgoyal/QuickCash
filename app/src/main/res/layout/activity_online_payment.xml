@@ -32,58 +32,62 @@
         android:id="@+id/jobTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
         android:text="Job Title"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="234dp" />
+        app:layout_constraintTop_toBottomOf="@+id/jobSelectButton" />
 
     <TextView
         android:id="@+id/employeeNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:text="Employee Name:"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="328dp" />
+        app:layout_constraintTop_toBottomOf="@+id/paymentWindowJobTitleText" />
 
     <TextView
-        android:id="@+id/employeeNameText"
+        android:id="@+id/paymentWindowEmployeeNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="employeename"
+        android:layout_marginTop="2dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="354dp" />
+        app:layout_constraintTop_toBottomOf="@+id/employeeNameLabel" />
 
     <TextView
         android:id="@+id/paymentAmountLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
         android:text="Payment Amount:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="429dp" />
+        app:layout_constraintTop_toBottomOf="@+id/paymentWindowEmployeeNameText" />
 
     <TextView
-        android:id="@+id/JobTitleText"
+        android:id="@+id/paymentWindowJobTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="jobtitle"
+        android:layout_marginTop="2dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="258dp" />
+        app:layout_constraintTop_toBottomOf="@+id/jobTitleLabel" />
 
     <TextView
-        android:id="@+id/paymentAmountText"
+        android:id="@+id/paymentWindowAmountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="paymentamount"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="456dp" />
+        app:layout_constraintTop_toBottomOf="@+id/paymentAmountLabel" />
 
     <Button
         android:id="@+id/paymentCancelButton"

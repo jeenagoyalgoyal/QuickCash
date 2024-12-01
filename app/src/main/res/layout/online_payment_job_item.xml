@@ -21,7 +21,7 @@
 
     <!-- Employee Name -->
     <TextView
-        android:id="@+id/employeeNameText"
+        android:id="@+id/paymentWindowEmployeeNameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Employee Name: "
@@ -32,12 +32,12 @@
 
     <!-- Payment Amount -->
     <TextView
-        android:id="@+id/paymentAmountText"
+        android:id="@+id/paymentWindowAmountText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Payment Amount: "
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/employeeNameText"
+        app:layout_constraintTop_toBottomOf="@id/paymentWindowEmployeeNameText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/paymentAmountText"
+        app:layout_constraintTop_toBottomOf="@id/paymentWindowAmountText"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
