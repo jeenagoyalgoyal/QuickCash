@@ -110,7 +110,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
     private void createNotificationChannel(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         paymentNotification = new PaymentNotification(this, requestQueue);
-    };
+    }
 
     /**
      * Initializes the OnlinePaymentCRUD instance for interacting with the database.
@@ -185,12 +185,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
      */
     private void setupSelectJobButton() {
         selectJobButton = findViewById(R.id.jobSelectButton);
-        selectJobButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchJobSelectDialog();
-            }
-        });
+        selectJobButton.setOnClickListener(view -> launchJobSelectDialog());
     }
 
     /**
@@ -198,12 +193,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
      */
     protected void setupPaymentButton(){
         paymentButton = findViewById(R.id.paymentButton);
-        paymentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                paypalPayment();
-            }
-        });
+        paymentButton.setOnClickListener(view -> paypalPayment());
     }
 
     /**
@@ -211,12 +201,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
      */
     protected void setupCancelButton(){
         paymentButton = findViewById(R.id.paymentCancelButton);
-        paymentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearEmployeeDetails();
-            }
-        });
+        paymentButton.setOnClickListener(view -> clearEmployeeDetails());
     }
 
     /**
@@ -262,7 +247,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                         employeeList.add(new PaymentEmployeeModel(j.getJobId(), j.getJobTitle(), j.getEmployeeName(), j.getEmployeeId(), j.getEmployerId(), j.getSalary()));
                     }
                 }
-                if (employeeList.size() == 0) {
+                if (employeeList.isEmpty()) {
                     Toast.makeText(this, "No in-progress jobs found!", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "No In-progress jobs detected (check firebase?)");
                 }
