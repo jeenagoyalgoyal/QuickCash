@@ -10,8 +10,9 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.quickcash.AppliedJobsActivity;
 import com.example.quickcash.R;
-import com.example.quickcash.UseRole;
+import com.example.quickcash.model.UseRole;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -31,6 +32,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param token The newly generated FCM token.
      */
+    // Called when a new token is generated
     @Override
     public void onNewToken(String token) {
         super.onNewToken(token);
@@ -65,6 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         return token;
     }
 
+
     /**
      * Called when an FCM message is received.
      * Logs the message and displays a notification if the message contains a notification payload.
@@ -87,6 +90,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if(title.contains("Payment")) {
                 showPaymentNotification(title, body);
             }
+            showNotification(title, body);
         }
     }
 
@@ -101,6 +105,50 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, ViewPaymentNotificationActivity.class); // Replace with your activity
         intent.putExtra("title", title);
         intent.putExtra("body", body);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(),
+                10,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        // Create a notification
+        String channelId = "payment_notifications";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground) // Replace with your icon
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        builder.setContentIntent(pendingIntent);
+
+        // Get the notification manager
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        int id = (int) System.currentTimeMillis();
+        if (notificationManager == null) {
+            Log.e("NotificationError", "NotificationManager is null.");
+            return;
+        }
+
+        // Create the notification channel for Android O and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Payment Notifications",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Show the notification
+        notificationManager.notify(id, builder.build());
+    }
+
+    private void showNotification(String title, String body) {
+        // Create an intent to open when the notification is clicked
+        Intent intent = new Intent(this, AppliedJobsActivity.class); // Replace with your activity
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(

@@ -76,14 +76,20 @@
                 android:id="@+id/Apply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Apply"
-                android:layout_marginEnd="16dp" /> <!-- Add margin to separate buttons -->
+                android:text="Apply"/> <!-- Add margin to separate buttons -->
 
             <Button
                 android:id="@+id/optionsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Options" />
+
+            <Button
+                android:id="@+id/jobDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FeedBack" />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

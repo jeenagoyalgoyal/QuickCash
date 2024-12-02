@@ -221,7 +221,7 @@ public class Job {
     public void setAllField(String jobTitle, String companyName, String jobType,
                             String requirements, int salary, String urgency,
                             String location, String expectedDuration, String startDate,
-                            String employerId, String jobId, Double lat, Double lng) {
+                            String employerId, String jobId, Double lat, Double lng, String status) {
         this.jobTitle = jobTitle;
         this.companyName = companyName;
         this.jobType = jobType;
@@ -234,5 +234,6 @@ public class Job {
         this.employerId = employerId;
         this.jobId = jobId;
         this.jobLocation = new JobLocation(lat, lng, location);
+        this.status = status;
     }
 }

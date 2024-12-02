@@ -28,12 +28,12 @@
         app:layout_constraintTop_toBottomOf="@+id/welcomeEmployer" />
 
     <Button
-        android:id="@+id/employeeDirectoryButton"
+        android:id="@+id/applicationSubmissions"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:text="Employee Directory"
+        android:layout_marginTop="8dp"
+        android:text="My Job Postings and Applications"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createJobButton" />
 
@@ -44,12 +44,13 @@
         android:text="Analytics and Reports"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeDirectoryButton" />
+        app:layout_constraintTop_toBottomOf="@+id/applicationSubmissions" />
 
     <Button
         android:id="@+id/tasksAssignmentsButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
+        android:layout_marginTop="8dp"
         android:text="Tasks and Assignments"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +60,7 @@
         android:id="@+id/scheduleMeetingsButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
+        android:layout_marginTop="8dp"
         android:text="Schedule and Meetings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,11 +70,11 @@
         android:id="@+id/employerNotificationsButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
+        android:layout_marginTop="8dp"
         android:text="Notifications and Settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scheduleMeetingsButton" />
-
 
     <Button
         android:id="@+id/switchToEmployeeButton"

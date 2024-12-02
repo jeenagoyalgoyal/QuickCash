@@ -1,6 +1,8 @@
 package com.example.quickcash;
 
-import static com.example.quickcash.filter.JobSearchFilter.*;
+import static com.example.quickcash.JobSearchValidator.allEmptyFields;
+import static com.example.quickcash.filter.JobSearchFilter.isValidField;
+import static com.example.quickcash.filter.JobSearchFilter.passesAdditionalJobFilters;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +39,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     // UI components
     private EditText jobTitle, companyName, minSalary, maxSalary, duration, location;
     private TextView errorText;
-    private Button searchButton, mapButton;
+    private Button searchButton, mapButton, jobDetails;
     private RecyclerView recyclerView;
 
     // Adapter and Data
@@ -80,6 +82,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             /**
              * When user clicks search button, check the filters are filled
+             *
              * @param view
              */
             @Override
@@ -94,6 +97,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         /**
          * When user clicks show map button, check the filters are filled
@@ -112,10 +116,15 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         });
 
+        jobSearchAdapter = new JobSearchAdapter(this, jobList); // Pass 'this' as the context
+        recyclerView.setAdapter(jobSearchAdapter);
+
         // Set up the back button
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(JobSearchParameterActivity.this, EmployeeHomepageActivity.class);
+            intent.putExtra("email", email);
+            intent.putExtra("manualLocation", manualLocation);
             startActivity(intent);
             finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
@@ -140,11 +149,12 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        jobSearchAdapter = new JobSearchAdapter(jobList);
+        jobSearchAdapter = new JobSearchAdapter(this, jobList);
         recyclerView.setAdapter(jobSearchAdapter);
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);
     }
+
 
     /**
      * This method finds the results from the job search
@@ -162,7 +172,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 List<Job> jobs = task.getResult();
                 jobList.clear();
                 for (Job j : jobs) {
-                    if (passesAdditionalFilters(j)) {
+                    if ((j.getStatus()==null || j.getStatus().equals("pending")) && passesAdditionalFilters(j)) {
                         jobList.add(j);
                     }
                 }
@@ -178,11 +188,13 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Creates a firebase query with the input by user
      *
      * @return query
      */
+
     private Query createQuery() {
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
@@ -247,7 +259,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                     //The following lines can be added to prevent showing jobs with no proper location
                     //JobLocation jobLocation = job.getJobLocation();
                     // && jobLocation!=null
-                    if (passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
+                    if ((job.getStatus()==null || job.getStatus().equals("pending")) && passesAdditionalFilters(job, partialAddress, company, minSalStr, maxSalStr, jobDuration)) {
                         jobList.add(job);
                     }
                 }
@@ -433,7 +445,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         // Job passes all filters
         return true;
     }
-
 
     // Tests the job title (can be empty)
     public static boolean isValidJobTitle(String title) {

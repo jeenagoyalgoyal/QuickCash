@@ -57,6 +57,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Called when the activity is first created.
      * Initializes the UI elements, gets email of current user from FirebaseAuth, and calls methods that fetch preferred employers.
+     *
      * @param savedInstanceState Bundle object containing the activity's previously saved state, if any.
      */
     @Override
@@ -89,13 +90,12 @@ public class PreferredEmployersActivity extends AppCompatActivity {
      * Initializes database references and calls methods to fetch preferred employees
      * and display them in a listview.
      */
-    private void whenEmailRetrievedCorrectly(){
-        if (email!=null && !email.isEmpty()){
+    private void whenEmailRetrievedCorrectly() {
+        if (email != null && !email.isEmpty()) {
             this.userID = sanitizeEmail(email);
             this.initializeDatabaseRefs();
             this.setPreferredEmployersListView();
-        }
-        else {
+        } else {
             Log.e(PREFERRED_EMPLOYER_TEXT, "no ID initialized! (is the intent working correctly?)");
         }
     }
@@ -112,7 +112,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Calls the popup that displays jobs when an employer is clicked.
      */
-    private void setupEmployerSelector(){
+    private void setupEmployerSelector() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             displayJobsByEmployer(preferredEmployersIdList.get(position));
         });
@@ -121,7 +121,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Sets up the ListView for displaying preferred employers.
      */
-    private void setupListView(){
+    private void setupListView() {
         listView = findViewById(R.id.preferredEmployeesListView);
         preferredEmployersNameList = new ArrayList<>();
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, preferredEmployersNameList);
@@ -131,7 +131,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Sets up the popup dialog for displaying jobs.
      */
-    private void setupPopupDialog(){
+    private void setupPopupDialog() {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.preferred_employer_jobs_dialog_box);
         crossButton = dialog.findViewById(R.id.crossButton);
@@ -140,16 +140,20 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Sets up the RecyclerView for displaying jobs.
      */
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         recyclerView = dialog.findViewById(R.id.preferredEmployerJobsRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext())); // Use dialog context
         jobList = new ArrayList<>();
-        jobSearchAdapter = new JobSearchAdapter(jobList);
+
+        jobSearchAdapter = new JobSearchAdapter(dialog.getContext(), jobList);
+
         recyclerView.setAdapter(jobSearchAdapter);
     }
 
+
     /**
      * Displays jobs posted by a specific employer in a dialog.
+     *
      * @param employerId The ID of the employer whose jobs are to be displayed.
      */
     private void displayJobsByEmployer(String employerId) {
@@ -159,15 +163,16 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot jobSnapshot : snapshot.getChildren()){
+                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
                     jobList.add(job);
                 }
-                if (jobList.isEmpty()){
+                if (jobList.isEmpty()) {
                     Toast.makeText(PreferredEmployersActivity.this, "This employer has no jobs posted!", Toast.LENGTH_LONG).show();
                 }
                 jobSearchAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PreferredEmployersActivity.this, "Database Connection Error!", Toast.LENGTH_LONG).show();
@@ -180,7 +185,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Sets up the cross button for closing the job display dialog.
      */
-    private void setupCrossButton(){
+    private void setupCrossButton() {
         crossButton.setOnClickListener(v -> {
             dialog.cancel();
         });
@@ -188,6 +193,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
     /**
      * Retrieves the database reference for preferred employers.
+     *
      * @return A DatabaseReference pointing to the user's preferred employers.
      */
     private DatabaseReference getPreferredEmployersRef() {
@@ -196,6 +202,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
 
     /**
      * Retrieves the database reference for jobs.
+     *
      * @return A DatabaseReference pointing to the jobs database.
      */
     private DatabaseReference getJobsRef() {
@@ -211,17 +218,17 @@ public class PreferredEmployersActivity extends AppCompatActivity {
         //add listener to preferredEmployers
         this.preferredEmployersRef.addValueEventListener(new ValueEventListener() {
             PreferredEmployers preferredEmployers = new PreferredEmployers();
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //adding preferred employers to preferred employers object
-                if (snapshot.hasChildren()){
-                    for (DataSnapshot employerDetails : snapshot.getChildren()){
+                if (snapshot.hasChildren()) {
+                    for (DataSnapshot employerDetails : snapshot.getChildren()) {
                         String id = employerDetails.child("id").getValue(String.class);
-                        String name =  employerDetails.child("name").getValue(String.class);
+                        String name = employerDetails.child("name").getValue(String.class);
                         preferredEmployers.addDetails(id, name);
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(PreferredEmployersActivity.this, "You do not have any preferred employees saved!", Toast.LENGTH_LONG).show();
                 }
                 //retrieving the name and id lists
@@ -231,6 +238,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
                 adapter.addAll(preferredEmployersNameList);
                 adapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PreferredEmployersActivity.this, "Database Connection Error!", Toast.LENGTH_LONG).show();
@@ -242,6 +250,7 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Sanitizes an email address to be used as a Firebase id key.
      * Replaces '.' with ',' to avoid issues with Firebase paths.
+     *
      * @param email The email address to be sanitized.
      * @return A sanitized version of the email address that can be used as an id.
      */

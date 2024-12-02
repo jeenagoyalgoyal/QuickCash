@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quickcash.model.UseRole;
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * The EmployerHomepageActivity class provides the user interface and functionality
  * for the employer's homepage in the QuickCash application. Employers can:
@@ -25,13 +28,13 @@ public class EmployerHomepageActivity extends AppCompatActivity {
     public static final String EMAIL = "email";
     private String currentRole = "employer";
     private UseRole useRole;
-    private int id;
-
+    private String email;
+    FirebaseAuth mAuth;
 
     public TextView welcomeEmployer;
     public Button createJob;
     public Button payEmployee;
-    public Button employeeDirectory;
+    public Button applicationsButton;
     public Button analyticsReports;
     public Button tasksAssignments;
     public Button scheduleMeetings;
@@ -47,19 +50,20 @@ public class EmployerHomepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.employer_dashboard);
-        // Retrieve user details from the intent
-        Intent intentEmployerDash = getIntent();
-        id = intentEmployerDash.getIntExtra("userID", -1);
 
-        String email = intentEmployerDash.getStringExtra(EMAIL);
+        //ID is retrieved
+        this.mAuth = FirebaseAuth.getInstance();
+        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+        this.email = this.email.replace(".", ",");
 
         useRole = UseRole.getInstance();
+        useRole.setCurrentRole("Employer");
 
         welcomeEmployer = findViewById(R.id.welcomeEmployer);
         // Role-specific buttons
         createJob = findViewById(R.id.createJobButton);
         payEmployee = findViewById(R.id.payEmployeeButton);
-        employeeDirectory = findViewById(R.id.employeeDirectoryButton);
+        applicationsButton = findViewById(R.id.applicationSubmissions);
         analyticsReports = findViewById(R.id.analyticsReportButton);
         tasksAssignments = findViewById(R.id.tasksAssignmentsButton);
         scheduleMeetings = findViewById(R.id.scheduleMeetingsButton);
@@ -71,9 +75,9 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         employeeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                useRole.switchRole(id);
+                useRole.switchRole(email);
                 Intent intentSwitchToEmployee = new Intent(EmployerHomepageActivity.this, EmployeeHomepageActivity.class);
-                intentSwitchToEmployee.putExtra(EMAIL,email);
+                intentSwitchToEmployee.putExtra(EMAIL, email);
 
                 startActivity(intentSwitchToEmployee);
             }
@@ -92,13 +96,16 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             }
         });
 
-        //switches to online payment activity
-        payEmployee.setOnClickListener(new View.OnClickListener() {
+
+        applicationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentOnlinePayment = new Intent(EmployerHomepageActivity.this, OnlinePaymentActivity.class);
-                startActivity(intentOnlinePayment);
-                finish();
+                if (useRole.getCurrentRole().equals("employer")) {
+                    Intent intentApplications = new Intent(EmployerHomepageActivity.this, EmployerJobsActivity.class);
+                    intentApplications.putExtra(EMAIL, email); // Fixed
+                    Toast.makeText(EmployerHomepageActivity.this, "Viewing applications!", Toast.LENGTH_SHORT).show();
+                    startActivity(intentApplications);
+                }
             }
         });
     }
