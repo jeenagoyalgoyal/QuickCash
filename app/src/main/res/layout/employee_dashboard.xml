@@ -40,69 +40,27 @@
         app:layout_constraintTop_toBottomOf="@id/searchJobButton" />
 
     <Button
-        android:id="@+id/workScheduleButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-
-        android:text="Work Schedule"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/myProfileButton" />
-
-    <Button
-        android:id="@+id/tasksProjectsButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:text="Tasks and Projects"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/workScheduleButton" />
-
-    <Button
-        android:id="@+id/performanceReviewsButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:text="Performance Reviews"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tasksProjectsButton" />
-
-    <Button
-        android:id="@+id/employeeNotifications"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:text="Notifications and Settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/performanceReviewsButton" />
-
-    <Button
         android:id="@+id/switchToEmployerButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="484dp"
 
+        android:layout_marginTop="20dp"
         android:text="Switch to Employer"
         android:textColorLink="#7C7C7C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/preferredEmployersButton" />
 
     <Button
         android:id="@+id/preferredJobsButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
 
         android:text="My Preferred Jobs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeNotifications" />
+        app:layout_constraintTop_toBottomOf="@+id/myProfileButton" />
 
     <Button
         android:id="@+id/preferredEmployersButton"
@@ -116,14 +74,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobsRecycler"
-        android:layout_width="330dp"
-        android:layout_height="156dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/preferredEmployersButton"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/switchToEmployerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

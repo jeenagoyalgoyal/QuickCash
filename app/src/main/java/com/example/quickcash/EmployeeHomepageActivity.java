@@ -92,10 +92,10 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         // Initialize UI components
         searchJob = findViewById(R.id.searchJobButton);
         myProfile = findViewById(R.id.myProfileButton);
-        workSchedule = findViewById(R.id.workScheduleButton);
+        /*workSchedule = findViewById(R.id.workScheduleButton);
         tasksProjects = findViewById(R.id.tasksProjectsButton);
         performanceReview = findViewById(R.id.performanceReviewsButton);
-        employeeNotifications = findViewById(R.id.employeeNotifications);
+        employeeNotifications = findViewById(R.id.employeeNotifications);*/
         employerSwitch = findViewById(R.id.switchToEmployerButton);
         preferredEmployers = findViewById(R.id.preferredEmployersButton);
         preferredJobsButton = findViewById(R.id.preferredJobsButton);
