@@ -1,8 +1,12 @@
 package com.example.quickcash;
 
 import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQUEST_CODE;
+
+import com.example.quickcash.Firebase.UserCrud;
+import com.example.quickcash.FirebaseMessaging.MyFirebaseMessagingService;
 import com.google.android.gms.location.LocationRequest;
 import com.example.quickcash.R;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -17,11 +21,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import android.Manifest;
+
 import com.example.quickcash.Firebase.FirebaseCRUD;
 import com.example.quickcash.ui.MapsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,13 +45,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
-import android.Manifest;
 
+import android.Manifest;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -64,8 +72,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private boolean manualLocationDetect = false;
     private EditText location;
     private Button LocButton;
-    private String manualLocation=null;
+    private String manualLocation = null;
     private boolean locationPermissionDenied = false;
+    private UserCrud userCrud;
 
 
     // Regex patterns for email and password validation
@@ -74,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Called when the activity is first created. Initializes UI components and sets up event listeners.
+     *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
      *                           this Bundle contains the data it most recently supplied in onSaveInstanceState.
      */
@@ -93,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginButton.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
+        userCrud = new UserCrud();
 
         // Reference to your Firebase Realtime Database
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -106,8 +117,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        location= findViewById(R.id.Location);
-        LocButton=findViewById(R.id.LocButton);
+        location = findViewById(R.id.Location);
+        LocButton = findViewById(R.id.LocButton);
         LocButton.setOnClickListener(e -> handleManualLocationInput());
         requestLocationPermission();
     }
@@ -120,7 +131,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (manualLocation.isEmpty()) {
             Toast.makeText(this, "Location field cannot be empty", Toast.LENGTH_SHORT).show();
-        } Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        }
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocationName(manualLocation, 5);
             if (addresses != null && !addresses.isEmpty()) {
@@ -133,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 manualLocationDetect = true;
                 locationPermissionDenied = true;
 
-                Toast.makeText(this, "Manual Location set to: " + manualLocation , Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Manual Location set to: " + manualLocation, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Current location.", Toast.LENGTH_SHORT).show();
             }
@@ -142,6 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
     }
+
     private void navigateToMapsActivity() {
         intent.putExtra("manualLocation", manualLocation); // Pass manual location
         startActivity(intent);
@@ -159,6 +172,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Handles the click event for the login button. Validates input and initiates login if valid.
+     *
      * @param view The view that was clicked.
      */
     @Override
@@ -176,18 +190,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginUser(email, password);
         }
     }
-    public static boolean isEmptyEmailAddress(String email){return email.isEmpty();}
+
+    public static boolean isEmptyEmailAddress(String email) {
+        return email.isEmpty();
+    }
+
     public static boolean isValidEmail(String email) {
         return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
     }
-    public static boolean isEmptyPassword(String password){return password.isEmpty();}
+
+    public static boolean isEmptyPassword(String password) {
+        return password.isEmpty();
+    }
+
     public static boolean isValidPassword(String password) {
         return Pattern.compile(PASSWORD_PATTERN).matcher(password).matches();
     }
 
     /**
      * Logs in the user by checking credentials against Firebase Realtime Database.
-     * @param email The user's email.
+     *
+     * @param email    The user's email.
      * @param password The user's password.
      */
     private void loginUser(String email, String password) {
@@ -223,13 +246,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Authenticates the user using Firebase Authentication.
-     * @param email The user's email.
+     *
+     * @param email    The user's email.
      * @param password The user's password.
      */
     private void authenticateUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        updateDeviceToken(email);
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         fetchUserRoleAndNavigate(email);
                     } else {
@@ -238,8 +263,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    private void updateDeviceToken(String email) {    // Get the current FCM token
+        MyFirebaseMessagingService.getTokenFromPreferences(getSharedPreferences("QuickCashPrefs", MODE_PRIVATE));
+        MyFirebaseMessagingService.getTokenFromPreferences(getSharedPreferences("QuickCashPrefs", MODE_PRIVATE));
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                String deviceToken = task.getResult();
+                userCrud.setUserDeviceToken(email, deviceToken);
+                Log.d("LoginActivity", "Device token updated for user: " + email);
+            } else {
+                Log.e("LoginActivity", "Failed to retrieve FCM token", task.getException());
+            }
+        });
+    }
+
     /**
      * Fetches the user's role and navigates to MapsActivity.
+     *
      * @param email The user's email.
      */
     private void fetchUserRoleAndNavigate(String email) {
@@ -275,9 +315,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
     /**
      * Handles login errors and displays appropriate messages to the user.
+     *
      * @param e The exception that occurred during login.
      */
     private void handleLoginError(Exception e) {
@@ -296,7 +336,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     void requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        }else {
+        } else {
             getCurrentLocation(intent);
         }
     }
@@ -305,7 +345,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Gets the current location of the user and updates the intent.
      */
     void getCurrentLocation(Intent intent) {
-        if(manualLocationDetect){
+        if (manualLocationDetect) {
             return;
         }
         LocationRequest locationRequest = null;
@@ -322,8 +362,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (locationResult != null && !locationResult.getLocations().isEmpty()) {
                     latitude = locationResult.getLastLocation().getLatitude();
                     longitude = locationResult.getLastLocation().getLongitude();
-                    LatLng latLng= new LatLng(latitude,longitude);
-                    intent.putExtra("LatLng",latLng);
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    intent.putExtra("LatLng", latLng);
 
                 }
             }
@@ -336,9 +376,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Moves to the next activity after a delay and passes location data via intent.
+     *
      * @param manualLocation The manually entered location, if any.
      */
-    private void moveToNextWithDelay( String manualLocation) {
+    private void moveToNextWithDelay(String manualLocation) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(LoginActivity.this, EmployerHomepageActivity.class);
             if (manualLocation != null) {
@@ -355,8 +396,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Handles location permission request results.
-     * @param requestCode The request code passed in requestPermissions.
-     * @param permissions The requested permissions.
+     *
+     * @param requestCode  The request code passed in requestPermissions.
+     * @param permissions  The requested permissions.
      * @param grantResults The grant results for the requested permissions.
      */
     @Override

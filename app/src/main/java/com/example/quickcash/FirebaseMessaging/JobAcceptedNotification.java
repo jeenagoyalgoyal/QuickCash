@@ -41,7 +41,7 @@ public class JobAcceptedNotification {
 
     public void sendJobNotificationToEmployee(String employee) {
         // Fetch the employer's device token
-        userCrud.getUserDeviceToken("ravi@gmail,com").addOnCompleteListener(employeeTask -> {
+        userCrud.getUserDeviceToken(employee).addOnCompleteListener(employeeTask -> {
             if (employeeTask.isSuccessful()) {
                 String employeeToken = employeeTask.getResult();
                 Log.d("Employee Token", "Retrieved: " + employeeToken);

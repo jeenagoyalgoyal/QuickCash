@@ -66,7 +66,7 @@ import java.util.List;public class ApplicationsAdapter extends RecyclerView.Adap
 
     private void updateApplicationStatus(Application application, String status, ApplicationViewHolder holder) {
         Toast.makeText(this.context, "Updating application status...", Toast.LENGTH_SHORT).show();
-        jobAcceptedNotification.sendJobNotificationToEmployee("abcdef");
+        jobAcceptedNotification.sendJobNotificationToEmployee(application.getEmployeeID());
         emCRUD = new EmployerCRUD();
         Boolean success = emCRUD.changeApplicationStatusByJobId(jobID, application, status, context);
         if(success){
