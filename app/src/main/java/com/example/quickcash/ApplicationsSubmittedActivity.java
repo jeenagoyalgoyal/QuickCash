@@ -1,5 +1,44 @@
 package com.example.quickcash;
 
+/**
+ * ApplicationsSubmittedActivity
+ *
+ * This class represents an Android activity that displays a list of job applications for a specific job.
+ * It retrieves the application data from a Firebase Realtime Database and displays it in a RecyclerView.
+ * The data includes applicant name, email, cover letter (message), and application status.
+ *
+ * Key Features:
+ * 1. **Firebase Integration**: Fetches applications from the Firebase Realtime Database.
+ * 2. **RecyclerView Setup**: Uses RecyclerView to efficiently display the list of applications.
+ * 3. **Data Handling**: Extracts and organizes application data for display.
+ * 4. **Navigation**: Includes a back button to return to the previous activity.
+ *
+ * Main Components:
+ * - **RecyclerView (applicationsRecyclerView)**: Displays the list of applications in a scrollable list.
+ * - **ApplicationsAdapter (applicationsAdapter)**: Custom adapter to manage the data binding for each item in the RecyclerView.
+ * - **List<Application> (applicationList)**: Stores the list of applications fetched from Firebase.
+ * - **DatabaseReference (databaseReference)**: References the Firebase database node for job applications.
+ * - **TextView (pageTitle)**: Displays the title of the page, which includes the job title.
+ *
+ * Key Methods:
+ * - **onCreate()**: Initializes UI components, sets up the RecyclerView, and triggers data fetching from Firebase.
+ * - **fetchApplicationsForJob(String jobId)**: Fetches job applications based on the jobId from the Firebase database and updates the RecyclerView.
+ *
+ * Usage Flow:
+ * 1. The activity starts by receiving the `jobId` and `jobTitle` via Intent.
+ * 2. Initializes UI components like the RecyclerView and sets up the data adapter.
+ * 3. Fetches the list of applications for the specified job from Firebase.
+ * 4. Displays the fetched data in the RecyclerView, updating the UI dynamically.
+ * 5. Users can navigate back to the previous screen using the back button.
+ *
+ * Error Handling:
+ * - If there is an issue fetching data from Firebase, a Toast message is displayed to inform the user.
+ *
+ * Logging:
+ * - Uses `Log.d()` to log the details of the fetched applications, including the applicant's name, email, and message.
+ */
+
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;

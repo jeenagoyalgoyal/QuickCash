@@ -1,4 +1,39 @@
 package com.example.quickcash;
+/**
+ * AppliedJobsActivity
+ *
+ * This class represents an Android activity that displays the list of jobs a user has applied for.
+ * It retrieves job data from a Firebase Realtime Database and shows it in a ListView.
+ * The activity also provides a back button to navigate to the homepage.
+ *
+ * Key Features:
+ * 1. **Firebase Integration**: Connects to Firebase to fetch and display applied job data for the current user.
+ * 2. **UI Components**: Includes a ListView to display jobs and a ProgressBar to indicate loading.
+ * 3. **Data Formatting**: Formats job details including job title, company name, and application status.
+ * 4. **Navigation**: Provides a back button to return to the homepage.
+ *
+ * Main Components:
+ * - **ListView (listViewAppliedJobs)**: Displays the list of applied jobs.
+ * - **ProgressBar (progressBar)**: Shows loading indicator while data is being fetched.
+ * - **DatabaseReference (userApplicationsRef)**: Points to the user's applied jobs node in Firebase.
+ * - **ArrayList (jobList)**: Stores the list of job details.
+ * - **ArrayAdapter (adapter)**: Manages the data display in the ListView.
+ *
+ * Key Methods:
+ * - **onCreate()**: Initializes the UI components, sets up Firebase references, and triggers data fetching.
+ * - **fetchAppliedJobs()**: Listens for changes in the Firebase database and updates the job list accordingly.
+ * - **setupBackButton()**: Configures the back button to navigate to the homepage when clicked.
+ * - **navigateToHomepage()**: Handles the navigation to the EmployeeHomepageActivity.
+ *
+ * Usage Flow:
+ * 1. The activity starts by initializing UI components and Firebase references.
+ * 2. It fetches the user's applied jobs from Firebase and displays them in a formatted ListView.
+ * 3. The user can navigate back to the homepage using the back button.
+ *
+ * Error Handling:
+ * - If the user's email is not found, an error message is shown, and the process stops.
+ * - If there is an error fetching data from Firebase, an error message is displayed, and the progress bar is hidden.
+ */
 
 import android.content.Intent;
 import android.os.Bundle;
