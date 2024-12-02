@@ -171,4 +171,26 @@ public class JobCRUD {
 
         return taskCompletionSource.getTask();
     }
+
+    /**
+     * Deletes a job from the database based on the job ID.
+     *
+     * @param jobId The unique ID of the job to delete.
+     * @return A Task representing the completion status of the operation.
+     */
+    public Task<Boolean> deleteJobById(String jobId) {
+        TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
+
+        databaseReference.child(jobId).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("JobCRUD", "Job with ID " + jobId + " deleted successfully.");
+                taskCompletionSource.setResult(true);
+            } else {
+                Log.e("JobCRUD", "Failed to delete job with ID " + jobId, task.getException());
+                taskCompletionSource.setResult(false);
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
 }

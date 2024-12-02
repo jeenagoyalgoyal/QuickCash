@@ -44,7 +44,7 @@ public class OnlinePaymentUITest {
 
         // Check if pay employee button exists
         UiObject payEmployeeButton = device.findObject(new UiSelector().text("Pay Employee"));
-        assertTrue("Pay Employee button should be visible", payEmployeeButton.exists());
+        assertTrue("Pay Employee button should be visible", payEmployeeButton.waitForExists(10000));
     }
 
     @Test

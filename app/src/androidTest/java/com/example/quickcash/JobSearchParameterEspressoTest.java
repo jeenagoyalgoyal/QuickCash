@@ -13,12 +13,15 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +35,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 public class JobSearchParameterEspressoTest {
 
     @Rule
-    public ActivityScenarioRule<EmployeeHomepageActivity> activityRule = new ActivityScenarioRule<>(EmployeeHomepageActivity.class);
+    public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Before
     public void setup() {
@@ -41,9 +44,14 @@ public class JobSearchParameterEspressoTest {
 
 
     @Test
-    public void testJobSearchVisible() {
+    public void testJobSearchVisible() throws InterruptedException {
         // This will launch the employee dashboard
-        ActivityScenario.launch(EmployeeHomepageActivity.class);
+        // Log in
+        onView(ViewMatchers.withId(R.id.emailBox)).perform(ViewActions.click(), ViewActions.typeText("testingemail@test.db"));
+        onView(ViewMatchers.withId(R.id.passwordBox)).perform(ViewActions.click(), ViewActions.typeText("Test_Pass123#"));
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
+
+        Thread.sleep(8000);
 
         // Checks to see if Job Search button is there
         onView(withId(R.id.searchJobButton)).check(matches(isDisplayed()));
@@ -51,7 +59,13 @@ public class JobSearchParameterEspressoTest {
     }
 
     @Test
-    public void testNavigateJobSearch() {
+    public void testNavigateJobSearch() throws InterruptedException {
+        // Log in
+        onView(ViewMatchers.withId(R.id.emailBox)).perform(ViewActions.click(), ViewActions.typeText("testingemail@test.db"));
+        onView(ViewMatchers.withId(R.id.passwordBox)).perform(ViewActions.click(), ViewActions.typeText("Test_Pass123#"));
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
+
+        Thread.sleep(8000);
 
         // Employee dashboard with the Job Search button
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
@@ -63,7 +77,14 @@ public class JobSearchParameterEspressoTest {
     }
 
     @Test
-    public void testFilterOptions() {
+    public void testFilterOptions() throws InterruptedException {
+
+        // Log in
+        onView(ViewMatchers.withId(R.id.emailBox)).perform(ViewActions.click(), ViewActions.typeText("testingemail@test.db"));
+        onView(ViewMatchers.withId(R.id.passwordBox)).perform(ViewActions.click(), ViewActions.typeText("Test_Pass123#"));
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
+
+        Thread.sleep(8000);
         // On employee dashboard, click the Search Job button
         onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
@@ -79,7 +100,14 @@ public class JobSearchParameterEspressoTest {
     }
 
     @Test
-    public void testFilterInteraction() {
+    public void testFilterInteraction() throws InterruptedException {
+        // Log in
+        onView(ViewMatchers.withId(R.id.emailBox)).perform(ViewActions.click(), ViewActions.typeText("testingemail@test.db"));
+        onView(ViewMatchers.withId(R.id.passwordBox)).perform(ViewActions.click(), ViewActions.typeText("Test_Pass123#"));
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
+
+        Thread.sleep(8000);
+
         // Test the filters by implementing data and seeing if it works
         onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));
@@ -104,7 +132,13 @@ public class JobSearchParameterEspressoTest {
     }
 
     @Test
-    public void testNoResultsFound() {
+    public void testNoResultsFound() throws InterruptedException {
+        // Log in
+        onView(ViewMatchers.withId(R.id.emailBox)).perform(ViewActions.click(), ViewActions.typeText("testingemail@test.db"));
+        onView(ViewMatchers.withId(R.id.passwordBox)).perform(ViewActions.click(), ViewActions.typeText("Test_Pass123#"));
+        onView(ViewMatchers.withId(R.id.loginButton)).perform(click());
+
+        Thread.sleep(8000);
         // Test the filters by implementing data and seeing if it works
         onView(ViewMatchers.withId(R.id.welcomeEmployee)).check(ViewAssertions.matches(ViewMatchers.withText("Welcome Employee!")));
         onView(ViewMatchers.withId(R.id.searchJobButton)).check(ViewAssertions.matches(ViewMatchers.withText("Search Job")));

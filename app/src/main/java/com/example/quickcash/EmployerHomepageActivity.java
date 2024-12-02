@@ -108,5 +108,14 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                 }
             }
         });
+
+        payEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentApplications = new Intent(EmployerHomepageActivity.this, OnlinePaymentActivity.class);
+                intentApplications.putExtra(EMAIL, email);
+                startActivity(intentApplications);
+            }
+        });
     }
 }

@@ -50,8 +50,9 @@ public class JobSearchFilter {
         }
 
         if (isValidField(jobLocation)){
-            if(!job.getLocation().contains(jobLocation)) {
-                matches = false;
+            String jobLocationStr = job.getLocation();
+            if (jobLocationStr == null || !jobLocationStr.contains(jobLocation)) {
+                return false;
             }
         }
 
