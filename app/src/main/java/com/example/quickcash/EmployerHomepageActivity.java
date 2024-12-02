@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,8 +10,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * The EmployerHomepageActivity class provides the user interface and functionality
+ * for the employer's homepage in the QuickCash application. Employers can:
+ * - Create job listings
+ * - View employee directory
+ * - Access analytics reports and tasks
+ * - Schedule meetings and manage notifications
+ * - Switch to the employee role
+ * This activity manages the employer-specific navigation and role-based actions.
+ */
 public class EmployerHomepageActivity extends AppCompatActivity {
 
+    public static final String EMAIL = "email";
     private String currentRole = "employer";
     private UseRole useRole;
     private int id;
@@ -26,15 +38,20 @@ public class EmployerHomepageActivity extends AppCompatActivity {
     public Button notificationSettings;
     public Button employeeSwitch;
 
+    /**
+     * Initializes the activity, sets up UI components, and handles employer-specific actions.
+     *
+     * @param savedInstance The saved state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.employer_dashboard);
-
+        // Retrieve user details from the intent
         Intent intentEmployerDash = getIntent();
         id = intentEmployerDash.getIntExtra("userID", -1);
 
-        String email = intentEmployerDash.getStringExtra("email");
+        String email = intentEmployerDash.getStringExtra(EMAIL);
 
         useRole = UseRole.getInstance();
 
@@ -56,7 +73,8 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 useRole.switchRole(id);
                 Intent intentSwitchToEmployee = new Intent(EmployerHomepageActivity.this, EmployeeHomepageActivity.class);
-                intentSwitchToEmployee.putExtra("email",email);
+                intentSwitchToEmployee.putExtra(EMAIL,email);
+
                 startActivity(intentSwitchToEmployee);
             }
         });
@@ -67,7 +85,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (useRole.getCurrentRole().equals("employer")) {
                     Intent intentJobSub = new Intent(EmployerHomepageActivity.this, JobSubmissionActivity.class);
-                    intentJobSub.putExtra("email", email); // Fixed
+                    intentJobSub.putExtra(EMAIL, email); // Fixed
                     Toast.makeText(EmployerHomepageActivity.this, "Creating a Job!", Toast.LENGTH_SHORT).show();
                     startActivity(intentJobSub);
                 }

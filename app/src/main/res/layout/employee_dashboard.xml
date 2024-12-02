@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".EmployeeHomepageActivity">
 
     <TextView
         android:id="@+id/welcomeEmployee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="Welcome Employee!"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +22,7 @@
         android:id="@+id/searchJobButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="12dp"
         android:text="Search Job"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -83,11 +84,12 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="580dp"
+        android:layout_marginTop="484dp"
 
         android:text="Switch to Employer"
         android:textColorLink="#7C7C7C"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -107,10 +109,21 @@
         android:layout_width="286dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
-
         android:text="Preferred Employers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preferredJobsButton" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/jobsRecycler"
+        android:layout_width="330dp"
+        android:layout_height="156dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preferredEmployersButton"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

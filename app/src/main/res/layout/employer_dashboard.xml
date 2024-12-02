@@ -9,7 +9,7 @@
         android:id="@+id/welcomeEmployer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="Welcome Employer!"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,42 +33,8 @@
         android:layout_marginTop="8dp"
         android:text="Employee Directory"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/payEmployeeButton" />
-
-    <Button
-        android:id="@+id/tasksAssignmentsButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:text="Tasks and Assignments"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/analyticsReportButton" />
-
-    <Button
-        android:id="@+id/employerNotificationsButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:text="Notifications and Settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scheduleMeetingsButton" />
-
-    <Button
-        android:id="@+id/scheduleMeetingsButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:text="Schedule and Meetings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasksAssignmentsButton" />
+        app:layout_constraintTop_toBottomOf="@+id/createJobButton" />
 
     <Button
         android:id="@+id/analyticsReportButton"
@@ -77,27 +43,59 @@
         android:layout_marginTop="8dp"
         android:text="Analytics and Reports"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/employeeDirectoryButton" />
 
     <Button
-        android:id="@+id/switchToEmployeeButton"
-        android:layout_width="286dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="580dp"
-        android:text="Switch to Employee"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/payEmployeeButton"
+        android:id="@+id/tasksAssignmentsButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
-        android:text="Pay Employee"
+        android:text="Tasks and Assignments"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createJobButton" />
+        app:layout_constraintTop_toBottomOf="@+id/analyticsReportButton" />
+
+    <Button
+        android:id="@+id/scheduleMeetingsButton"
+        android:layout_width="286dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:text="Schedule and Meetings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tasksAssignmentsButton" />
+
+    <Button
+        android:id="@+id/employerNotificationsButton"
+        android:layout_width="286dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:text="Notifications and Settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scheduleMeetingsButton" />
+
+    <Button
+        android:id="@+id/switchToEmployeeButton"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="412dp"
+        android:text="Switch to Employee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workersRecyclerView"
+        android:layout_width="260dp"
+        android:layout_height="167dp"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employerNotificationsButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

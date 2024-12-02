@@ -142,4 +142,32 @@ public class JobCRUD {
 
         return taskCompletionSource.getTask();
     }
+
+    public Task<List<Job>> getJobsByLocation(String city) {
+        TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
+        Query query = databaseReference.orderByChild("location").equalTo(city);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Job> jobs = new ArrayList<>();
+                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
+                    Job job = jobSnapshot.getValue(Job.class);
+                    if (job != null) {
+                        jobs.add(job);
+                    }
+                }
+                taskCompletionSource.setResult(jobs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                taskCompletionSource.setException(error.toException());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
+
+
 }

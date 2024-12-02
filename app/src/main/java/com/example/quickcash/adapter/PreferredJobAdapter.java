@@ -96,7 +96,7 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
         private final TextView locationResult;
         private final TextView salaryResult;
         private final TextView durationResult;
-        private final Button showMapButton;
+        private final Button ApplyButton;
         private final Button showViewButton;
         private final Button cancelButton;
 
@@ -112,7 +112,7 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             locationResult = itemView.findViewById(R.id.locationResult);
             salaryResult = itemView.findViewById(R.id.salaryResult);
             durationResult = itemView.findViewById(R.id.durationResult);
-            showMapButton = itemView.findViewById(R.id.showMap);
+            ApplyButton = itemView.findViewById(R.id.Apply);
             showViewButton = itemView.findViewById(R.id.ViewButton);
             cancelButton = itemView.findViewById(R.id.cancelButton);
 
