@@ -17,9 +17,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.quickcash.EmployerHomepageActivity;
-import com.example.quickcash.UseRole;
 import com.example.quickcash.EmployeeHomepageActivity;
 import com.example.quickcash.R;
+import com.example.quickcash.model.UseRole;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;

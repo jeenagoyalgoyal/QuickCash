@@ -119,6 +119,40 @@
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <!-- Application Page  Activity -->
+        <activity android:name=".ApplicationPageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Employer Application Page -->
+        <activity android:name=".ApplicationsSubmittedActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Application Page  Activity -->
+        <activity android:name=".AppliedJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Jobs posted by employer activity -->
+        <activity android:name=".EmployerJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Applicants for each job activity -->
+        <service
+            android:name=".FirebaseMessaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
         <!-- Job Details Activity -->
         <activity
             android:name=".JobDetails"

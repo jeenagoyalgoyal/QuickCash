@@ -208,7 +208,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
                 employerId,
                 jobId,
                 geoLocal.getLatitude(),
-                geoLocal.getLongitude()
+                geoLocal.getLongitude(),
+                "pending"
         );
 
         // Submit to Firebase

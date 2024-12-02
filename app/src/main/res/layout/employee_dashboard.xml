@@ -84,7 +84,7 @@
         android:id="@+id/switchToEmployerButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="484dp"
+        android:layout_marginTop="516dp"
 
         android:text="Switch to Employer"
         android:textColorLink="#7C7C7C"
@@ -108,9 +108,21 @@
         android:id="@+id/preferredEmployersButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="48dp"
         android:text="Preferred Employers"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preferredJobsButton" />
+
+    <Button
+        android:id="@+id/appliedJobsButton"
+        android:layout_width="286dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="4dp"
+        android:text="Applied Jobs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preferredJobsButton" />
 

@@ -1,7 +1,10 @@
 package com.example.quickcash.Firebase;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.example.quickcash.model.Application;
 import com.example.quickcash.model.Job;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -143,6 +146,4 @@ public class JobCRUD {
 
         return taskCompletionSource.getTask();
     }
-
-
 }

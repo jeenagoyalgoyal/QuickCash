@@ -13,12 +13,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+      <SelectionState runConfigName="Tests in 'com.example.quickcash'">
+        <option name="selectionMode" value="DROPDOWN" />
       <SelectionState runConfigName="UserRatingUITest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="EmployerJobApplicationUITest">
       <SelectionState runConfigName="RegistrationActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="testAcceptButtonFunctionality()">
       <SelectionState runConfigName="testAddCommentButtonEnabledCheck()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
