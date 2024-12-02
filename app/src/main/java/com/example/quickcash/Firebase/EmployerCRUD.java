@@ -30,45 +30,50 @@ public class EmployerCRUD {
     private final DatabaseReference databaseReference;
 
     /**
-     * Constructs a JobCRUD instance with a reference to the "Jobs" node in the
-     * firebase database
+     * Constructs an {@code EmployerCRUD} instance with a reference to the "Jobs" node in the Firebase database.
      */
     public EmployerCRUD() {
         databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
     }
 
-    public Boolean changeApplicationStatusByJobId(String jobID, Application application, String status, Context context) {
+    /**
+     * Updates the status of a specific job application in the database.
+     *
+     * @param jobID       The unique identifier for the job.
+     * @param application The application whose status needs to be updated.
+     * @param status      The new status of the application (e.g., "Accepted", "Rejected").
+     * @return A {@link Task} representing the asynchronous operation of updating the status.
+     */
+    public Task<Void> changeApplicationStatusByJobId(String jobID, Application application, String status) {
         DatabaseReference applicationRef = FirebaseDatabase.getInstance()
                 .getReference("Jobs")
                 .child(jobID)
                 .child("applications")
                 .child(application.getApplicationId());
-        AtomicReference<Boolean> flag = new AtomicReference<>(false);
 
-        applicationRef.child("Status").setValue(status)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(context, "Application " + status, Toast.LENGTH_SHORT).show();
-                    flag.set(true);
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error updating status", Toast.LENGTH_SHORT).show();
-                    flag.set(false);
-                });
-
-        return flag.get();
+        return applicationRef.child("Status").setValue(status);
     }
 
-    public void closeJob(String employeeID, String applicantName, String jobID) {
-        databaseReference.child(jobID).child("status");
-        databaseReference.setValue("In-progress");
-
-        databaseReference.child(jobID).child("employeeId");
-        databaseReference.setValue(employeeID);
-
-        databaseReference.child(jobID).child("employeeName");
-        databaseReference.setValue(applicantName);
+    /**
+     * Closes a job by updating its status and assigning it to a specific employee.
+     *
+     * @param jobID         The unique identifier for the job to be closed.
+     * @param employeeID    The ID of the employee who accepted the job.
+     * @param applicantName The name of the employee assigned to the job.
+     */
+    public void closeJob(String jobID, String employeeID, String applicantName) {
+        DatabaseReference jobRef = databaseReference.child(jobID);
+        jobRef.child("status").setValue("In-progress");
+        jobRef.child("employeeId").setValue(employeeID);
+        jobRef.child("employeeName").setValue(applicantName);
     }
 
+    /**
+     * Retrieves the count of applications for a given job and passes it to a callback.
+     *
+     * @param job      The {@link Job} object whose applications are being queried.
+     * @param listener The callback listener to handle the application count or errors.
+     */
     public void getApplicationsByJob(Job job, OnApplicationCountListener listener) {
         databaseReference.child(job.getJobId())
                 .child("applications")
@@ -88,6 +93,13 @@ public class EmployerCRUD {
                 });
     }
 
+    /**
+     * Retrieves all jobs posted by a specific employer using their email ID.
+     *
+     * @param emailID The email ID of the employer.
+     * @param context The context used for displaying error messages if necessary.
+     * @return A {@link Task} containing a list of {@link Job} objects posted by the employer.
+     */
     public Task<List<Job>> getJobsByEmailID(String emailID, Context context) {
 
         TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
@@ -110,6 +122,7 @@ public class EmployerCRUD {
                         }
                     }
                 }
+
                 taskCompletionSource.setResult(jobList);
             }
 
@@ -122,10 +135,42 @@ public class EmployerCRUD {
         return taskCompletionSource.getTask();
     }
 
-    // Define a callback interface
+    /**
+     * Updates the status of a specific job application for a user.
+     *
+     * @param employeeID The ID of the employee whose application status needs to be updated.
+     * @param jobID      The ID of the job being updated.
+     * @param status     The new status of the job application (e.g., "Accepted", "Rejected").
+     */
+    public void changeStatusOfUserJobsApplied(String employeeID, String jobID, String status) {
+        employeeID = employeeID.replace(".", ",");
+        DatabaseReference userJobsRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(employeeID)
+                .child("appliedJobs")
+                .child(jobID)
+                .child("Status");
+
+        userJobsRef.setValue(status);
+    }
+
+
+    /**
+     * A callback interface for handling application counts and errors.
+     */
     public interface OnApplicationCountListener {
+        /**
+         * Called when the application count is successfully retrieved.
+         *
+         * @param count The count of applications as a string.
+         */
         void onCountRetrieved(String count);
 
+        /**
+         * Called when an error occurs while retrieving the application count.
+         *
+         * @param error The error message.
+         */
         void onError(String error);
     }
 }

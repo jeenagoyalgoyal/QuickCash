@@ -146,45 +146,4 @@ public class JobCRUD {
 
         return taskCompletionSource.getTask();
     }
-
-    public Task<List<Application>> getApplicationsForJobsByQuery(Query query) {
-        TaskCompletionSource<List<Application>> taskCompletionSource = new TaskCompletionSource<>();
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Application> applications = new ArrayList<>();
-
-                // Loop over all job snapshots
-                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
-                    Log.d("Applications fetching: ", "Job found: " + jobSnapshot.getKey()); // Log job ID
-
-                    // Now loop over the applications under each job
-                    DataSnapshot applicationsSnapshot = jobSnapshot.child("applications");
-                    Log.d("Applications fetching: ", "Applications snapshot found: " + applicationsSnapshot.getChildrenCount()); // Log number of applications
-
-                    if (applicationsSnapshot.exists()) {
-                        for (DataSnapshot applicationSnapshot : applicationsSnapshot.getChildren()) {
-                            Application application = applicationSnapshot.getValue(Application.class);
-                            if (application != null) {
-                                applications.add(application);
-                            }
-                        }
-                    } else {
-                        Log.d("Applications fetching: ", "No applications found for this job.");
-                    }
-                }
-
-                taskCompletionSource.setResult(applications); // Return the list of applications
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Applications fetching: ", "Database error: ", error.toException()); // Log any database error
-                taskCompletionSource.setException(error.toException());
-            }
-        });
-
-        return taskCompletionSource.getTask();
-    }
 }

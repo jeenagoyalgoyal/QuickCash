@@ -10,6 +10,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.quickcash.ApplicationsSubmittedActivity;
+import com.example.quickcash.AppliedJobsActivity;
 import com.example.quickcash.R;
 import com.example.quickcash.UseRole;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -65,9 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void showNotification(String title, String body) {
         // Create an intent to open when the notification is clicked
-        Intent intent = new Intent(this, ViewJobNotifications.class); // Replace with your activity
-        intent.putExtra("title", title);
-        intent.putExtra("body", body);
+        Intent intent = new Intent(this, AppliedJobsActivity.class); // Replace with your activity
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(

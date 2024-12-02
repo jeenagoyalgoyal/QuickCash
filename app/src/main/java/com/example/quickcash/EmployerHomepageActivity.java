@@ -55,6 +55,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         this.email = this.email.replace(".", ",");
 
         useRole = UseRole.getInstance();
+        useRole.setCurrentRole("Employer");
 
         welcomeEmployer = findViewById(R.id.welcomeEmployer);
         // Role-specific buttons

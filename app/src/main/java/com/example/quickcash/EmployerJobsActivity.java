@@ -33,7 +33,12 @@ public class EmployerJobsActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String emailID, userID;
     private FirebaseAuth mAuth;
-
+    /**
+     * Called when the activity is created.
+     * Initializes the UI components and fetches job postings from Firebase.
+     *
+     * @param savedInstanceState a Bundle containing saved state if the activity is being recreated
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +68,9 @@ public class EmployerJobsActivity extends AppCompatActivity {
         // Fetch job postings from Firebase
         fetchJobPostings();
     }
-
+    /**
+     * Fetches job postings from Firebase Realtime Database based on the employer's email ID.
+     */
     private void fetchJobPostings() {
         EmployerCRUD employerCRUD = new EmployerCRUD();
         employerCRUD.getJobsByEmailID(emailID, this).addOnCompleteListener(task -> {

@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ApplicationsSubmittedActivity">
 
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="44dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back Button"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toTopOf="@+id/applicationsRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.21" />
+
     <!-- Page Title -->
     <TextView
         android:id="@+id/pageTitle"

@@ -12,11 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Job Title"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Start Date -->
@@ -26,9 +26,9 @@
         android:layout_height="wrap_content"
         android:text="Start Date: YYYY-MM-DD"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/jobTitleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/jobTitleTextView" />
 
     <!-- Urgency -->
     <TextView
@@ -37,9 +37,9 @@
         android:layout_height="wrap_content"
         android:text="Urgency: High"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/startDateTextView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/startDateTextView" />
 
     <!-- Number of Applications -->
     <TextView
@@ -49,8 +49,7 @@
         android:text="Applications: 0"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/viewApplicationsButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/urgencyTextView" />
 
@@ -61,10 +60,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="View Applications"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/urgencyTextView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/noOfApplicationsTextView" />
+
+    <!-- Separator Line -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewApplicationsButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

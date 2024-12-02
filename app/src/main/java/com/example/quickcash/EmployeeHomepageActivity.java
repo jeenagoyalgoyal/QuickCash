@@ -88,6 +88,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         String manualLocation = intentEmployeeDash.getStringExtra("manualLocation"); // Retrieve manual location
 
         useRole = UseRole.getInstance();
+        useRole.setCurrentRole("Employee");
 
         jobCrud = new JobCRUD(FirebaseDatabase.getInstance());
         jobsRef = FirebaseDatabase.getInstance();

@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
+/**
+ * Handles the display of jobs that the user has applied for, including job details and statuses.
+ */
 public class AppliedJobsActivity extends AppCompatActivity {
 
     private ListView listViewAppliedJobs;
@@ -29,7 +31,11 @@ public class AppliedJobsActivity extends AppCompatActivity {
     private DatabaseReference userApplicationsRef;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> jobList;
-
+    /**
+     * Initializes the activity, UI components, and Firebase references, and starts fetching applied jobs data.
+     *
+     * @param savedInstanceState If the activity is being re-initialized, this contains the saved state data.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +72,9 @@ public class AppliedJobsActivity extends AppCompatActivity {
         // Set up the back button functionality
         setupBackButton();
     }
-
+    /**
+     * Fetches the list of jobs the user has applied for from the Firebase database and updates the ListView.
+     */
     private void fetchAppliedJobs() {
         userApplicationsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,7 +113,7 @@ public class AppliedJobsActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets up the back button to navigate to the homepage.
+     * Sets up the back button to navigate to the homepage when clicked.
      */
     private void setupBackButton() {
         ImageButton backButton = findViewById(R.id.backButton);

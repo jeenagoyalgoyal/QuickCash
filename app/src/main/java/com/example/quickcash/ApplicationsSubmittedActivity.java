@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -9,9 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.quickcash.FirebaseMessaging.JobAcceptedNotification;
 import com.example.quickcash.adapter.ApplicationsAdapter;
 import com.example.quickcash.model.Application;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,11 +18,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.core.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays the list of applications submitted for a specific job, fetched from the Firebase database.
+ */
 public class ApplicationsSubmittedActivity extends AppCompatActivity {
     private final static String TAG = "Applications Page activity";
     private RecyclerView applicationsRecyclerView;
@@ -34,7 +34,11 @@ public class ApplicationsSubmittedActivity extends AppCompatActivity {
     private String jobId;
     private TextView pageTitle;
 
-
+    /**
+     * Initializes the activity, sets up the RecyclerView, and fetches job applications for the given job.
+     *
+     * @param savedInstanceState If the activity is being re-initialized, this contains the saved state data.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +64,19 @@ public class ApplicationsSubmittedActivity extends AppCompatActivity {
         // Initialize Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //Setup back button
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v->finish());
+
         // Fetch applications for the selected job
         fetchApplicationsForJob(jobId);
     }
 
+    /**
+     * Fetches applications for a specific job from the Firebase database and updates the RecyclerView with the data.
+     *
+     * @param jobId The unique identifier of the job for which applications are fetched.
+     */
     private void fetchApplicationsForJob(String jobId) {
         Log.d(TAG, "jobID: " + jobId);
         DatabaseReference applicationsRef = databaseReference.child("Jobs").child(jobId).child("applications");
