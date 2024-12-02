@@ -64,7 +64,7 @@ public class UserRatingUITest {
         searchButton.longClick();
 
         // Check if "View Job Details" button is visible in the popup
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("FeedBack"));
         assertTrue("View Job Details button should be visible in the popup", viewJobDetailsButton.exists());
     }
 
@@ -90,7 +90,7 @@ public class UserRatingUITest {
         searchButton.longClick();
 
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("FeedBack"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Check if redirected to the 'Job Details' page by checking for title displayed on the page.
@@ -120,7 +120,7 @@ public class UserRatingUITest {
         searchButton.longClick();
 
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("FeedBack"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Star rating component and comment field are checked to be clickable to see if they exist
@@ -152,7 +152,7 @@ public class UserRatingUITest {
         searchButton.longClick();
 
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("FeedBack"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // 'Add Comment' button should now be disabled
@@ -191,7 +191,7 @@ public class UserRatingUITest {
         searchButton.longClick();
 
         // Click on the 'View Job Details' button
-        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("Details"));
+        UiObject viewJobDetailsButton = device.findObject(new UiSelector().text("FeedBack"));
         viewJobDetailsButton.clickAndWaitForNewWindow();
 
         // Star rating component and comment field are given values through interaction and comment is submitted
