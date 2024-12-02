@@ -140,13 +140,16 @@ public class PreferredEmployersActivity extends AppCompatActivity {
     /**
      * Sets up the RecyclerView for displaying jobs.
      */
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         recyclerView = dialog.findViewById(R.id.preferredEmployerJobsRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext())); // Use dialog context
         jobList = new ArrayList<>();
-        jobSearchAdapter = new JobSearchAdapter(jobList);
+
+        jobSearchAdapter = new JobSearchAdapter(dialog.getContext(), jobList);
+
         recyclerView.setAdapter(jobSearchAdapter);
     }
+
 
     /**
      * Displays jobs posted by a specific employer in a dialog.

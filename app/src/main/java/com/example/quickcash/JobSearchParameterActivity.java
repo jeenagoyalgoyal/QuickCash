@@ -1,6 +1,8 @@
 package com.example.quickcash;
 
-import static com.example.quickcash.filter.JobSearchFilter.*;
+import static com.example.quickcash.JobSearchValidator.allEmptyFields;
+import static com.example.quickcash.filter.JobSearchFilter.isValidField;
+import static com.example.quickcash.filter.JobSearchFilter.passesAdditionalJobFilters;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +39,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     // UI components
     private EditText jobTitle, companyName, minSalary, maxSalary, duration, location;
     private TextView errorText;
-    private Button searchButton, mapButton;
+    private Button searchButton, mapButton, jobDetails;
     private RecyclerView recyclerView;
 
     // Adapter and Data
@@ -81,6 +83,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             /**
              * When user clicks search button, check the filters are filled
+             *
              * @param view
              */
             @Override
@@ -95,6 +98,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         /**
          * When user clicks show map button, check the filters are filled
@@ -113,20 +117,19 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         });
 
+        jobSearchAdapter = new JobSearchAdapter(this, jobList); // Pass 'this' as the context
+        recyclerView.setAdapter(jobSearchAdapter);
+
         // Set up the back button
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(JobSearchParameterActivity.this, EmployeeHomepageActivity.class);
-            intent.putExtra("email",email);
+            intent.putExtra("email", email);
             intent.putExtra("manualLocation", manualLocation);
             startActivity(intent);
             finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
     }
-
-    /**
-     * Method initializes the job search form input variables
-     */
     public void init() {
         jobList = new ArrayList<>();
 
@@ -143,12 +146,11 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        jobSearchAdapter = new JobSearchAdapter(jobList);
+        jobSearchAdapter = new JobSearchAdapter(this,jobList);
         recyclerView.setAdapter(jobSearchAdapter);
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);
     }
-
 
 
     /**
@@ -183,12 +185,12 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * Creates a firebase query with the input by user
      *
      * @return query
      */
+
     private Query createQuery() {
         // Get search parameters
         String title = jobTitle.getText().toString().trim();
@@ -372,7 +374,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         }
 
-        // Check salary range
+// Check salary range
         int jobSalary = job.getSalary();
         if (isValidField(minSalStr)) {
             try {
@@ -440,7 +442,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         return true;
     }
 
-
     // Tests the job title (can be empty)
     public static boolean isValidJobTitle(String title) {
         return title != null && !title.trim().isEmpty();
@@ -504,7 +505,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 .trim()
                 .toLowerCase();
     }
-
     private boolean isCoordinateSearch(String search) {
         // Check if the search string matches coordinate format (lat,lng)
         return search.matches("^-?\\d+\\.?\\d*,-?\\d+\\.?\\d*$");

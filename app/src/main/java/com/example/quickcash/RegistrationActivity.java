@@ -72,6 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private boolean isLocationReceived = false;
     public LocationCallback locationCallback;
     public static boolean isTesting = false;
+    private SessionManager sessionManager;
 
     /**
      * Initializes the activity, sets up UI components, and handles location permission requests.
@@ -100,6 +101,8 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
+        sessionManager = new SessionManager(this);
+
 
         this.loadRoleSpinner();
         this.initializeDatabaseAccess();
@@ -399,6 +402,8 @@ public class RegistrationActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        String userId = mAuth.getCurrentUser().getUid();
+                                        sessionManager.createSession();
                                         addToDatabase(name, email, password, role);
 
                                     } else {

@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * The EmployeeHomepageActivity class provides the user interface and functionality
@@ -49,6 +48,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
     private JobCRUD jobCrud;
     private GoogleMap mMap;
     private FirebaseDatabase jobsRef;
+    private String selectedJobId;
     // UI components
     public TextView welcomeEmployee;
     public Button searchJob;
@@ -85,6 +85,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
         jobCrud = new JobCRUD(FirebaseDatabase.getInstance());
         jobsRef = FirebaseDatabase.getInstance();
 
+
         // Initialize LocationHelper with this activity as the listener
         locationHelper = new LocationHelper(this, this);
         welcomeEmployee = findViewById(R.id.welcomeEmployee);
@@ -117,14 +118,13 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
             }
         });
 
-        myProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentProfile = new Intent(EmployeeHomepageActivity.this, Profile.class);
-                startActivity(intentProfile);
-                finish();
-            }
+        myProfile.setOnClickListener(view -> {
+            Intent intentProfile = new Intent(EmployeeHomepageActivity.this, Profile.class);
+            intentProfile.putExtra("jobId", selectedJobId); // Pass jobId dynamically
+            startActivity(intentProfile);
+            finish();
         });
+
 
         preferredEmployers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,8 +254,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
      * @param jobs The list of job objects to display.
      */
     private void displayJobs(List<Job> jobs) {
-        // Initialize the adapter with the retrieved job listings
-        jobAdapter = new JobSearchAdapter(jobs);
+        jobAdapter = new JobSearchAdapter(this, jobs);
         jobRecyclerView.setAdapter(jobAdapter);
         jobAdapter.notifyDataSetChanged();
     }

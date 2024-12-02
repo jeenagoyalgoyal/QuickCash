@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button LocButton;
     private String manualLocation=null;
     private boolean locationPermissionDenied = false;
+    private SessionManager sessionManager;
 
 
     // Regex patterns for email and password validation
@@ -88,6 +89,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         passwordBox = findViewById(R.id.passwordBox);
         statusLabel = findViewById(R.id.statusLabel);
         Button loginButton = findViewById(R.id.loginButton);
+
+        sessionManager = new SessionManager(this);
 
         this.initializeDatabaseAccess();
 
@@ -230,6 +233,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        String userId = mAuth.getCurrentUser().getUid();
+
+                        sessionManager.createSession();
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         fetchUserRoleAndNavigate(email);
                     } else {
