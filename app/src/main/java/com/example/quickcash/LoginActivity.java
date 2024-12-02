@@ -337,24 +337,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void updateDeviceToken(String email) {
-        // Get the current FCM token
-        MyFirebaseMessagingService.getTokenFromPreferences(getSharedPreferences("QuickCashPrefs", MODE_PRIVATE));
-
-        MyFirebaseMessagingService.getTokenFromPreferences(getSharedPreferences("QuickCashPrefs", MODE_PRIVATE));
-
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        String deviceToken = task.getResult();
-                        userCrud.setUserDeviceToken(email, deviceToken);
-                        Log.d("LoginActivity", "Device token updated for user: " + email);
-                    } else {
-                        Log.e("LoginActivity", "Failed to retrieve FCM token", task.getException());
-                    }
-                });
-    }
-
     /**
      * Requests location permission from the user.
      */
