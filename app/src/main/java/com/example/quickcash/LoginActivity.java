@@ -2,11 +2,11 @@ package com.example.quickcash;
 
 import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQUEST_CODE;
 
-import com.example.quickcash.Firebase.UserCrud;
+
 import com.example.quickcash.FirebaseMessaging.MyFirebaseMessagingService;
 import com.example.quickcash.model.UseRole;
 import com.google.android.gms.location.LocationRequest;
-
+import com.example.quickcash.Firebase.UserCrud;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button LocButton;
     private String manualLocation = null;
     private boolean locationPermissionDenied = false;
+    private SessionManager sessionManager;
     private UserCrud userCrud;
 
 
@@ -96,6 +97,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         passwordBox = findViewById(R.id.passwordBox);
         statusLabel = findViewById(R.id.statusLabel);
         Button loginButton = findViewById(R.id.loginButton);
+
+        sessionManager = new SessionManager(this);
 
         this.initializeDatabaseAccess();
 
@@ -252,6 +255,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        String userId = mAuth.getCurrentUser().getUid();
+
+                        sessionManager.createSession();
                         updateDeviceToken(email);
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         fetchUserRoleAndNavigate(email);
