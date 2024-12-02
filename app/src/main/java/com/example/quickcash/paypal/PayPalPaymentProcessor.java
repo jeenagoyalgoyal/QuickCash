@@ -16,19 +16,34 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
+/**
+ * Handles PayPal payment processing, including initiating payments and processing confirmations.
+ */
 public class PayPalPaymentProcessor {
     private static final String TAG = "PayPalPaymentProcessor";
+    //ID usually not included in prod in industry, but for purposes of course project, is it kept here to avoid complications.
     final String CLIENT_ID ="AUJVGR_8i6AOY0_cXuzLZgNNTO08R65CC9gGbBJ3BMJOGHOjJDs-fbFBELR7COakrnECzR1S6cKD-1Ur"; //note: working paypal ClientID
     PayPalConfiguration payPalConfiguration;
     String payID;
     String state;
 
+    /**
+     * Constructs a new PayPalPaymentProcessor and sets up the PayPal configuration.
+     */
     public PayPalPaymentProcessor(){
         payPalConfiguration = new PayPalConfiguration()
                 .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(CLIENT_ID);
     }
 
+    /**
+     * Initiates a payment request using PayPal.
+     *
+     * @param context       The context from which the payment is initiated (usually an activity).
+     * @param employeeName  The name of the employee for whom the payment is being made.
+     * @param amount        The payment amount in CAD.
+     * @return {@code true} if the payment request is successfully initiated, {@code false} otherwise.
+     */
     public boolean handlePayment(Context context, String employeeName, int amount) {
         if (amount <= 0) {
             Log.e(TAG, "Invalid payment amount");
@@ -52,14 +67,30 @@ public class PayPalPaymentProcessor {
         return true;
     }
 
+    /**
+     * Retrieves the payment ID from the most recent PayPal transaction.
+     *
+     * @return The payment ID.
+     */
     public String getPayID() {
         return payID;
     }
 
+    /**
+     * Retrieves the state of the most recent PayPal transaction.
+     *
+     * @return The payment state (e.g., approved, pending).
+     */
     public String getState() {
         return state;
     }
 
+    /**
+     * Handles the PayPal payment confirmation after the PaymentActivity returns a result.
+     *
+     * @param confirmation The payment confirmation object from PayPal.
+     * @return true if the confirmation was successfully processed, false otherwise.
+     */
     public boolean handlePaymentConfirmation(PaymentConfirmation confirmation){
         if (confirmation!=null){
             try{
@@ -76,6 +107,12 @@ public class PayPalPaymentProcessor {
         return false;
     }
 
+    /**
+     * Processes a payment response represented as a JSONObject.
+     *
+     * @param confirmationJson A JSON object containing the PayPal response.
+     * @return true if the response was successfully processed, false otherwise.
+     */
     public boolean handleResponse(JSONObject confirmationJson){
         try{
             this.payID = confirmationJson.getJSONObject("response").getString("id");

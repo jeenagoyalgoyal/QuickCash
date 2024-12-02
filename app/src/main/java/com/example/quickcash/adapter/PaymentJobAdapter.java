@@ -15,12 +15,18 @@ import com.example.quickcash.model.PaymentEmployeeModel;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying a list of employees and their corresponding job details in a RecyclerView.
+ */
 public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.JobViewHolder> {
     private List<PaymentEmployeeModel> employeeList;
     private ViewGroup parent;
     private View.OnClickListener listener;
 
 
+    /**
+     * ViewHolder class for holding the views corresponding to a single job item.
+     */
     public static class JobViewHolder extends RecyclerView.ViewHolder {
         public TextView jobTitle;
         public TextView employeeName;
@@ -29,6 +35,11 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
         public ConstraintLayout paymentEmployeeLayout;
 
 
+        /**
+         * Constructor for JobViewHolder.
+         *
+         * @param itemView The root view of the job item layout.
+         */
         public JobViewHolder(View itemView) {
             super(itemView);
             jobTitle = itemView.findViewById(R.id.jobTitleText);
@@ -38,13 +49,25 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
         }
     }
 
-
+    /**
+     * Constructor for PaymentJobAdapter.
+     *
+     * @param employeeList The list of employees and job details to display.
+     * @param listener     A click listener for the select button in each item.
+     */
     public PaymentJobAdapter(List<PaymentEmployeeModel> employeeList, View.OnClickListener listener) {
         this.employeeList = employeeList;
         this.listener = listener;
     }
 
 
+    /**
+     * Called to create a new ViewHolder when there are no existing reusable ViewHolders.
+     *
+     * @param parent   The parent ViewGroup in which the new view will be added.
+     * @param viewType The view type of the new view.
+     * @return A new JobViewHolder that holds the view for a job item.
+     */
     @Override
     public JobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.parent=parent;
@@ -54,6 +77,12 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
     }
 
 
+    /**
+     * Binds data to the views of a ViewHolder at a given position.
+     *
+     * @param holder   The ViewHolder whose contents should be updated.
+     * @param position The position of the item within the dataset.
+     */
     @Override
     public void onBindViewHolder(JobViewHolder holder, int position) {
         PaymentEmployeeModel paymentEmployeeModel = employeeList.get(position);
@@ -69,6 +98,11 @@ public class PaymentJobAdapter extends RecyclerView.Adapter<PaymentJobAdapter.Jo
     }
 
 
+    /**
+     * Returns the total number of items in the dataset.
+     *
+     * @return The size of the employee list.
+     */
     @Override
     public int getItemCount() {
         return employeeList.size();

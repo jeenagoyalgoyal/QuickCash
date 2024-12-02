@@ -37,8 +37,15 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity responsible for handling online payments using PayPal.
+ * It handles job selection, payment processing, and transaction recording
+ * in Firebase.
+ */
 public class OnlinePaymentActivity extends AppCompatActivity {
     private static final String TAG = "OnlinePaymentActivity";
+
+    //UI components
     private TextView jobTitleText;
     private TextView employeeNameText;
     private TextView paymentAmountText;
@@ -46,15 +53,25 @@ public class OnlinePaymentActivity extends AppCompatActivity {
     private Button selectJobButton;
     private Dialog dialog;
     private ImageButton crossButton;
+
+    //Firebase
     private FirebaseAuth mAuth;
     private String email;
     private String userID;
+
+    //Paypal and related
     private PayPalPaymentProcessor payPalPaymentProcessor;
     public ActivityResultLauncher<Intent> activityResultLauncher;
     private JobCRUD jobCRUD;
     private OnlinePaymentCRUD onlinePaymentCRUD;
     private PaymentEmployeeModel selectedEmployee;
 
+    /**
+     * Called when the activity is first created. Initializes the activity's components
+     * and sets up required configurations.
+     *
+     * @param savedInstanceState Bundle containing the activity's previously saved state.
+     */
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -76,14 +93,23 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         setupDialog();
     }
 
+    /**
+     * Initializes the OnlinePaymentCRUD instance for interacting with the database.
+     */
     private void setupOnlinePaymentCrud() {
         this.onlinePaymentCRUD = new OnlinePaymentCRUD();
     }
 
+    /**
+     * Initializes the JobCRUD instance for retrieving and managing jobs in the database.
+     */
     private void setupJobCrud() {
         this.jobCRUD = new JobCRUD(FirebaseDatabase.getInstance());
     }
 
+    /**
+     * Sets up the PayPal payment processor and result handling for the payment activity.
+     */
     private void setupPayPalLauncher() {
         payPalPaymentProcessor = new PayPalPaymentProcessor();
         // Setup ActivityResultLauncher
@@ -111,18 +137,29 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                 );
     }
 
+    /**
+     * Sets the current user's ID using Firebase Authentication.
+     * Converts the email to a sanitized form for database usage.
+     */
     private void setCurrentUserID(){
         this.mAuth = FirebaseAuth.getInstance();
         this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
         this.userID = sanitizeEmail(email);
     }
 
+    /**
+     * Configures the text views for displaying job and payment details.
+     */
     private void setupTextViews() {
         this.jobTitleText = findViewById(R.id.paymentWindowJobTitleText);
         this.employeeNameText = findViewById(R.id.paymentWindowEmployeeNameText);
         this.paymentAmountText = findViewById(R.id.paymentWindowAmountText);
     }
 
+
+    /**
+     * Sets up the job selection button, allowing the user to choose a job for payment.
+     */
     private void setupSelectJobButton() {
         selectJobButton = findViewById(R.id.jobSelectButton);
         selectJobButton.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +170,9 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configures the payment button to initiate PayPal payment when clicked.
+     */
     protected void setupPaymentButton(){
         paymentButton = findViewById(R.id.paymentButton);
         paymentButton.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +183,9 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configures the cancel button to clear selected employee details when clicked.
+     */
     protected void setupCancelButton(){
         paymentButton = findViewById(R.id.paymentCancelButton);
         paymentButton.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +196,9 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Clears all details of the currently selected employee from the UI and stored employee object.
+     */
     public void clearEmployeeDetails(){
         this.selectedEmployee = null;
         this.jobTitleText.setText("");
@@ -160,15 +206,20 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         this.paymentAmountText.setText("");
     }
 
-
+    /**
+     * Configures a dialog for displaying available jobs in a RecyclerView.
+     */
     private void setupDialog() {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.payment_jobs_select_dialog);
         crossButton = dialog.findViewById(R.id.crossButton);
-        //dismiss fialog
         crossButton.setOnClickListener(v -> dialog.dismiss());
     }
 
+
+    /**
+     * Displays the job selection popup dialog, allowing the user to choose a job for payment.
+     */
     private void launchJobSelectDialog() {
         RecyclerView recyclerView = dialog.findViewById(R.id.paymentJobsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -202,6 +253,11 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Handles the job selected by the user from the job selection dialog.
+     *
+     * @param selectedItem The selected job's details.
+     */
     private void handleSelectedItem(PaymentEmployeeModel selectedItem) {
         //update UI with details
         this.selectedEmployee = selectedItem;
@@ -210,6 +266,9 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         this.paymentAmountText.setText(String.valueOf(selectedEmployee.getPaymentAmount()));
     }
 
+    /**
+     * Initiates the PayPal payment process for the selected job and employee.
+     */
     protected void paypalPayment() {
         if (this.selectedEmployee!=null){
             String jobTitle = this.selectedEmployee.getJobTitle();
@@ -227,6 +286,12 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sanitizes an email address by replacing '.' with ',' for Firebase compatibility.
+     *
+     * @param email The email address to be sanitized.
+     * @return A sanitized email string.
+     */
     private String sanitizeEmail(String email) {
         return email.replace(".", ",");
     }
