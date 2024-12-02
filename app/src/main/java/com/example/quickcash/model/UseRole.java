@@ -5,7 +5,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 /**
  * Singleton class to manage and switch user roles (e.g., employee or employer) in the application.
  * Handles interactions with Firebase to persist user role data.
@@ -16,7 +15,6 @@ public class UseRole {
     private String currentRole;
 
     private DatabaseReference db;
-
     /**
      * Private constructor to initialize the Firebase database reference and default role.
      */
@@ -24,7 +22,6 @@ public class UseRole {
         db = FirebaseDatabase.getInstance().getReference("Users");
         currentRole = "employee";
     }
-
     /**
      * Returns the singleton instance of {@code UseRole}.
      *
@@ -36,7 +33,6 @@ public class UseRole {
         }
         return instance;
     }
-
     /**
      * Retrieves the current role of the user.
      *
@@ -45,13 +41,12 @@ public class UseRole {
     public String getCurrentRole() {
         return currentRole;
     }
-
     /**
      * Switches the user's role between "employee" and "employer" and updates the role in the database.
      *
      * @param id the user's unique ID
      */
-    public void switchRole(int id) {
+    public void switchRole(String id) {
         if (currentRole.equals("employee")) {
             currentRole = "employer";
         } else {
@@ -59,26 +54,24 @@ public class UseRole {
         }
         updateDatabase(id, currentRole);
     }
-
     /**
      * Updates the user's role in the Firebase database.
      *
      * @param id   the user's unique ID
      * @param role the role to update
      */
-    private void updateDatabase(int id, String role) {
-        db.child(String.valueOf(id)).child("role").setValue(role)
+    private void updateDatabase(String id, String role) {
+        db.child(id).child("role").setValue(role)
                 .addOnSuccessListener(y -> {})
                 .addOnFailureListener(e -> {});
     }
-
     /**
      * Sets the current role of the user and updates it in the database.
      *
      * @param id          the user's unique ID
      * @param currentRole the role to set (e.g., "employee" or "employer")
      */
-    public void setCurrentRole(int id, String currentRole) {
+    public void setCurrentRole(String id, String currentRole) {
         this.currentRole = currentRole;
         updateDatabase(id, currentRole);
     }
@@ -131,14 +124,12 @@ public class UseRole {
     private String emailToValidNodeName(String email) {
         return email.replace(".", ",");
     }
-
     /**
      * Interface to handle the result of fetching a user's role from Firebase.
      */
     public interface OnRoleFetchedListener {
         void onRoleFetched(String role);
     }
-
     /**
      * Sets the current role of the user without updating the database.
      *

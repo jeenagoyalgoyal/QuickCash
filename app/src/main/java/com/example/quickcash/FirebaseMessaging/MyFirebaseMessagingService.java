@@ -10,10 +10,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.quickcash.ApplicationsSubmittedActivity;
 import com.example.quickcash.AppliedJobsActivity;
 import com.example.quickcash.R;
-import com.example.quickcash.UseRole;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

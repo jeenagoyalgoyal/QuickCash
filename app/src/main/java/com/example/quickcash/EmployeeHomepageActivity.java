@@ -20,6 +20,7 @@ import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.adapter.JobSearchAdapter;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.model.JobLocation;
+import com.example.quickcash.model.UseRole;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -32,7 +33,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * The EmployeeHomepageActivity class provides the user interface and functionality

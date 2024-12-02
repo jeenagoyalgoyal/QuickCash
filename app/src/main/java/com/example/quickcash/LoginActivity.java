@@ -4,8 +4,8 @@ import static com.example.quickcash.RegistrationActivity.LOCATION_PERMISSION_REQ
 
 import com.example.quickcash.Firebase.UserCrud;
 import com.example.quickcash.FirebaseMessaging.MyFirebaseMessagingService;
+import com.example.quickcash.model.UseRole;
 import com.google.android.gms.location.LocationRequest;
-import com.example.quickcash.R;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -51,8 +51,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
-
-import android.Manifest;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {

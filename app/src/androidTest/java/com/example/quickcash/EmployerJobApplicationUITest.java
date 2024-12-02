@@ -1,6 +1,7 @@
 package com.example.quickcash;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,15 +30,16 @@ public class EmployerJobApplicationUITest {
     private static final int LAUNCH_TIMEOUT = 5000;
 
     protected void loginAsEmployer() throws UiObjectNotFoundException, InterruptedException {
+
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
         if (allowButton.exists()) {
             allowButton.click();
         }
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
-        emailBox.setText("testingemail@test.db");
+        emailBox.setText("testemployer@test.com");
         UiObject passwordBox = device.findObject(new UiSelector().text("Password"));
-        passwordBox.setText("Test_Pass123#");
+        passwordBox.setText("Employer123#");
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
         Thread.sleep(4000);
@@ -55,17 +57,22 @@ public class EmployerJobApplicationUITest {
 
     @Test
     public void testApplicationPageLoads() throws InterruptedException, UiObjectNotFoundException {
+
         loginAsEmployer();
-        UiObject manageApplicationsButton = device.findObject(new UiSelector().text("Manage Applications"));
+        UiObject manageApplicationsButton = device.findObject(new UiSelector().textContains("Applications"));
         manageApplicationsButton.click();
         Log.d(TAG, "Clicked Manage Applications button");
 
-        UiObject jobApplicationsPage = device.findObject(new UiSelector().text("Job Applications"));
+        UiObject viewApplicationsButton = device.findObject(new UiSelector().textContains("View"));
+        viewApplicationsButton.clickAndWaitForNewWindow();
+
+        UiObject jobApplicationsPage = device.findObject(new UiSelector().textContains("Application"));
         assertTrue("Job Applications page should be displayed", jobApplicationsPage.waitForExists(LAUNCH_TIMEOUT));
     }
 
     @Test
     public void testAcceptRejectButtonsExist() throws InterruptedException, UiObjectNotFoundException {
+
         loginAsEmployer();
         UiObject manageApplicationsButton = device.findObject(new UiSelector().text("Manage Applications"));
         manageApplicationsButton.click();
@@ -79,6 +86,7 @@ public class EmployerJobApplicationUITest {
 
     @Test
     public void testAcceptButtonFunctionality() throws InterruptedException, UiObjectNotFoundException {
+
         loginAsEmployer();
         UiObject manageApplicationsButton = device.findObject(new UiSelector().text("Manage Applications"));
         manageApplicationsButton.click();
@@ -95,6 +103,7 @@ public class EmployerJobApplicationUITest {
 
     @Test
     public void testRejectButtonFunctionality() throws InterruptedException, UiObjectNotFoundException {
+        fail();
         loginAsEmployer();
         UiObject manageApplicationsButton = device.findObject(new UiSelector().text("Manage Applications"));
         manageApplicationsButton.click();
