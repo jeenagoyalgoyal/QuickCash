@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.ApplicationsSubmittedActivity;
+import com.example.quickcash.Firebase.EmployerCRUD;
 import com.example.quickcash.R;
 import com.example.quickcash.model.Job;
 import com.google.firebase.database.DataSnapshot;
@@ -24,13 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapter.JobViewHolder> {
+    private final static String TAG = "EmployerJobsAdapter";
     private final List<Job> jobList;
-    private final DatabaseReference databaseReference;
     private HashMap<String, Integer> applicationCounts = new HashMap<>();
 
-    public EmployerJobsAdapter(List<Job> jobList, DatabaseReference databaseReference) {
+    public EmployerJobsAdapter(List<Job> jobList) {
         this.jobList = jobList;
-        this.databaseReference = databaseReference;
     }
 
     @NonNull
@@ -43,34 +43,26 @@ public class EmployerJobsAdapter extends RecyclerView.Adapter<EmployerJobsAdapte
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         Job job = jobList.get(position);
-        DatabaseReference dbrf = FirebaseDatabase.getInstance().getReference().child("Jobs").child(job.getJobId()).child("applications");
-
-        dbrf.addListenerForSingleValueEvent(new ValueEventListener() {
+        EmployerCRUD emCRUD = new EmployerCRUD();
+        Log.d(TAG, "JOB: "+job.getEmployerId());
+        emCRUD.getApplicationsByJob(job, new EmployerCRUD.OnApplicationCountListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Count the number of child nodes
-                String childCount = String.valueOf(dataSnapshot.getChildrenCount());
-                holder.bind(job, childCount);
+            public void onCountRetrieved(String applicationCount) {
+                Log.d(TAG, "Reached"+ applicationCount);
+                holder.bind(job, applicationCount); // Update UI with the retrieved count
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.err.println("Error: " + databaseError.getMessage());
+            public void onError(String error) {
+                System.err.println("Error retrieving application count: " + error);
             }
         });
-        holder.bind(job, "0");
-
-
     }
+
 
     @Override
     public int getItemCount() {
         return jobList.size();
-    }
-
-
-    public void setApplicationCounts(HashMap<String, Integer> applicationCounts) {
-        this.applicationCounts = applicationCounts;
     }
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {

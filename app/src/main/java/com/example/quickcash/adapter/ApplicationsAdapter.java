@@ -1,6 +1,5 @@
 package com.example.quickcash.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +11,30 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.quickcash.Firebase.EmployerCRUD;
+import com.example.quickcash.FirebaseMessaging.JobAcceptedNotification;
 import com.example.quickcash.R;
 import com.example.quickcash.model.Application;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapter.ApplicationViewHolder> {
 
     private final List<Application> applicationList;
     private final String jobID;
     private final Context context;
+    private EmployerCRUD emCRUD;
+    private JobAcceptedNotification jobAcceptedNotification;
 
     public ApplicationsAdapter(List<Application> applicationList, String jobID, Context context) {
         this.applicationList = applicationList;
         this.jobID = jobID;
         this.context = context;
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        jobAcceptedNotification = new JobAcceptedNotification(context, requestQueue);
+
     }
 
     @NonNull
@@ -57,46 +65,18 @@ import java.util.List;public class ApplicationsAdapter extends RecyclerView.Adap
     }
 
     private void updateApplicationStatus(Application application, String status, ApplicationViewHolder holder) {
-        Toast.makeText(this.context, "Updating application status...", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.context, "Updating application status...", Toast.LENGTH_SHORT).show();
+        jobAcceptedNotification.sendJobNotificationToEmployee("abcdef");
+        emCRUD = new EmployerCRUD();
+        Boolean success = emCRUD.changeApplicationStatusByJobId(jobID, application, status, context);
+        if(success){
+            Toast.makeText(context,"Application Status updated!", Toast.LENGTH_LONG).show();
 
-        DatabaseReference applicationRef = FirebaseDatabase.getInstance()
-                .getReference("Jobs")
-                .child(jobID)
-                .child("applications")
-                .child(application.getApplicationId());
-
-        applicationRef.child("Status").setValue(status)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(context, "Application " + status, Toast.LENGTH_SHORT).show();
-                    holder.statusTextView.setText(status); // Update the UI status
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error updating status", Toast.LENGTH_SHORT).show();
-                });
-
-        if(status.equals("Accepted")){
-            closeJob(application.getEmployeeID(), application.getApplicantName());
+            if(status.equals("Accepted")){
+                emCRUD.closeJob(application.getEmployeeID(), application.getApplicantName(), jobID);
+                Toast.makeText(context, "Job Listing closed!", Toast.LENGTH_SHORT).show();
+            }
         }
-
-    }
-
-    private void closeJob(String empID, String name) {
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("Jobs")
-                .child(jobID)
-                .child("status");
-        ref.setValue("In-progress");
-
-        ref = FirebaseDatabase.getInstance()
-                .getReference("Jobs")
-                .child(jobID).child("employeeId");
-        ref.setValue(empID);
-
-        ref = FirebaseDatabase.getInstance()
-                .getReference("Jobs")
-                .child(jobID).child("employeeName");
-        ref.setValue(name);
-
     }
 
     @Override

@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.quickcash.FirebaseMessaging.JobAcceptedNotification;
 import com.example.quickcash.adapter.ApplicationsAdapter;
 import com.example.quickcash.model.Application;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,11 +34,11 @@ public class ApplicationsSubmittedActivity extends AppCompatActivity {
     private String jobId;
     private TextView pageTitle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_applications_submitted);
-
 
         // Get jobId and jobTitle passed from the Intent
         jobId = getIntent().getStringExtra("jobId");

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quickcash.Firebase.EmployerCRUD;
 import com.example.quickcash.adapter.EmployerJobsAdapter;
 import com.example.quickcash.model.Job;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,7 @@ public class EmployerJobsActivity extends AppCompatActivity {
         setContentView(R.layout.job_adapter_employer);
         this.mAuth = FirebaseAuth.getInstance();
         this.emailID = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-        Log.d(TAG, "EMail: " + emailID);
+        Log.d(TAG, "Email: " + emailID);
         if (this.emailID != null) {
             this.emailID = this.emailID.replace(".", ",");
         } else {
@@ -51,7 +52,7 @@ public class EmployerJobsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         jobList = new ArrayList<>();
-        adapter = new EmployerJobsAdapter(jobList, FirebaseDatabase.getInstance().getReference());
+        adapter = new EmployerJobsAdapter(jobList);
         recyclerView.setAdapter(adapter);
 
         // Initialize the Firebase Realtime Database reference
@@ -64,44 +65,17 @@ public class EmployerJobsActivity extends AppCompatActivity {
     }
 
     private void fetchJobPostings() {
-        databaseReference.child("Jobs").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                jobList.clear();
-                HashMap<String, Integer> applicationCounts = new HashMap<>();
-                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
-                    Job job = jobSnapshot.getValue(Job.class);
-                    if (job != null) {
-                        if (job.getEmployerId()!=null && job.getEmployerId().equals(emailID)) {
-
-                            String jobId = jobSnapshot.getKey();
-                            job.setJobId(jobId);
-                            jobList.add(job); // Add job to jobList
-
-                            // Fetch number of applications for this job
-                            DatabaseReference applicationsRef = jobSnapshot.child("Applications").getRef();
-                            applicationsRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot applicationsSnapshot) {
-                                    applicationCounts.put(jobId, (int) applicationsSnapshot.getChildrenCount());
-                                    adapter.setApplicationCounts(applicationCounts); // Pass updated counts to the adapter
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(EmployerJobsActivity.this, "Failed to load applications", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                }
-                adapter.notifyDataSetChanged(); // Notify adapter to display jobs after data has been fetched
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EmployerJobsActivity.this, "Failed to load job postings", Toast.LENGTH_SHORT).show();
+        EmployerCRUD employerCRUD = new EmployerCRUD();
+        employerCRUD.getJobsByEmailID(emailID, this).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                jobList.clear(); // Clear the existing list
+                jobList.addAll(task.getResult()); // Add the fetched jobs
+                adapter.notifyDataSetChanged(); // Notify the adapter
+                Log.d("Fetching, JobList Size", String.valueOf(jobList.size()));
+            } else {
+                Toast.makeText(this, "Failed to fetch job postings", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

@@ -1,9 +1,12 @@
 package com.example.quickcash.Firebase;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.quickcash.EmployerJobsActivity;
 import com.example.quickcash.model.Application;
 import com.example.quickcash.model.Job;
 import com.google.android.gms.tasks.Task;
@@ -12,11 +15,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This class provides methods for creating, reading, and managing job
@@ -29,43 +32,100 @@ public class EmployerCRUD {
     /**
      * Constructs a JobCRUD instance with a reference to the "Jobs" node in the
      * firebase database
-     * @param firebaseDatabase
      */
-    public EmployerCRUD(FirebaseDatabase firebaseDatabase) {
-        databaseReference = firebaseDatabase.getReference("Jobs");
+    public EmployerCRUD() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("Jobs");
     }
 
-    public Task<List<Job>> getJobsByQuery(Query query) {
+    public Boolean changeApplicationStatusByJobId(String jobID, Application application, String status, Context context) {
+        DatabaseReference applicationRef = FirebaseDatabase.getInstance()
+                .getReference("Jobs")
+                .child(jobID)
+                .child("applications")
+                .child(application.getApplicationId());
+        AtomicReference<Boolean> flag = new AtomicReference<>(false);
+
+        applicationRef.child("Status").setValue(status)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Application " + status, Toast.LENGTH_SHORT).show();
+                    flag.set(true);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error updating status", Toast.LENGTH_SHORT).show();
+                    flag.set(false);
+                });
+
+        return flag.get();
+    }
+
+    public void closeJob(String employeeID, String applicantName, String jobID) {
+        databaseReference.child(jobID).child("status");
+        databaseReference.setValue("In-progress");
+
+        databaseReference.child(jobID).child("employeeId");
+        databaseReference.setValue(employeeID);
+
+        databaseReference.child(jobID).child("employeeName");
+        databaseReference.setValue(applicantName);
+    }
+
+    public void getApplicationsByJob(Job job, OnApplicationCountListener listener) {
+        databaseReference.child(job.getJobId())
+                .child("applications")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Pass the count to the callback
+                        long count = dataSnapshot.getChildrenCount();
+                        listener.onCountRetrieved(String.valueOf(count));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle errors and pass them to the callback
+                        listener.onError(databaseError.getMessage());
+                    }
+                });
+    }
+
+    public Task<List<Job>> getJobsByEmailID(String emailID, Context context) {
+
         TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            /**
-             * Uses listener
-             * @param snapshot The current data at the location
-             */
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Job> jobs = new ArrayList<>();
+                ArrayList<Job> jobList = new ArrayList<>();
+                Log.d("Fetching", emailID);
                 for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
                     Job job = jobSnapshot.getValue(Job.class);
+
                     if (job != null) {
-                        jobs.add(job);
+
+                        if (job.getEmployerId() != null && job.getEmployerId().equals(emailID)) {
+                            Log.d("Fetching", job.getEmployerId());
+                            String jobId = jobSnapshot.getKey();
+                            job.setJobId(jobId);
+                            jobList.add(job); // Add job to jobList
+                        }
                     }
                 }
-                taskCompletionSource.setResult(jobs);
+                taskCompletionSource.setResult(jobList);
             }
 
-            /**
-             * Uses listener
-             * @param error A description of the error that occurred
-             */
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                taskCompletionSource.setException(error.toException());
+                Toast.makeText(context, "Failed to load job postings", Toast.LENGTH_SHORT).show();
             }
         });
 
         return taskCompletionSource.getTask();
     }
 
+    // Define a callback interface
+    public interface OnApplicationCountListener {
+        void onCountRetrieved(String count);
+
+        void onError(String error);
+    }
 }
