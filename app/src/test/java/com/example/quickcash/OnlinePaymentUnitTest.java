@@ -16,65 +16,88 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class OnlinePaymentUnitTest{
-/*
 
-    private PayPalPaymentProcessor paymentProcessor;
-    @Mock
-    private PaymentConfirmation mockPaymentConfirmation;
+
+    private PaymentTransactionModel transaction;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        paymentProcessor = new PayPalPaymentProcessor();
+        // Initialize a new PaymentTransactionModel instance before each test
+        transaction = new PaymentTransactionModel();
     }
 
     @Test
-    public void testSuccessfulPayment() throws JSONException {
-        JSONObject successResponse = new JSONObject();
-        successResponse.put("id", "PAYID-SUCCESS123");
-        successResponse.put("state", "approved");
+    public void testSuccessfulPayment() {
+        // Arrange: Mock a successful payment response
+        String paymentId = "PAYID-SUCCESS123";
+        String paymentState = "approved";
 
-        JSONObject response = new JSONObject();
-        response.put("response", successResponse);
+        // Act: Set the transaction details
+        transaction.setTransactionDetails(
+                paymentId,
+                "employee@test.com",
+                "employer@test.com",
+                "test_job_id",
+                500.0f,
+                paymentState
+        );
 
-        when(mockPaymentConfirmation.toJSONObject()).thenReturn(response);
-
-        paymentProcessor.handlePaymentConfirmation(mockPaymentConfirmation);
-
-        assertEquals("Payment approved\n with payment id is PAYID-SUCCESS123", paymentProcessor.paymentStatusTV.getText().toString());
+        // Assert: Verify the transaction details
+        assertEquals("PAYID-SUCCESS123", transaction.getTransactionID());
+        assertEquals("employee@test.com", transaction.getEmployeeId());
+        assertEquals("employer@test.com", transaction.getEmployerId());
+        assertEquals("test_job_id", transaction.getJobId());
+        assertEquals(500.0f, transaction.getPaymentAmount(), 0.001);
+        assertEquals("approved", transaction.getTransactionStatus());
     }
 
     @Test
-    public void testFailedPayment() throws JSONException {
-        JSONObject failedResponse = new JSONObject();
-        failedResponse.put("id", "PAYID-FAILED456");
-        failedResponse.put("state", "failed");
+    public void testFailedPayment() {
+        // Arrange: Mock a failed payment response
+        String paymentId = "PAYID-FAILED456";
+        String paymentState = "failed";
 
-        JSONObject response = new JSONObject();
-        response.put("response", failedResponse);
+        // Act: Set the transaction details
+        transaction.setTransactionDetails(
+                paymentId,
+                "employee@test.com",
+                "employer@test.com",
+                "test_job_id",
+                400.0f,
+                paymentState
+        );
 
-        when(mockPaymentConfirmation.toJSONObject()).thenReturn(response);
-
-        paymentProcessor.handlePaymentConfirmation(mockPaymentConfirmation);
-
-        assertEquals("Payment failed\n with payment id is PAYID-FAILED456", paymentProcessor.paymentStatusTV.getText().toString());
+        // Assert: Verify the transaction details
+        assertEquals("PAYID-FAILED456", transaction.getTransactionID());
+        assertEquals("employee@test.com", transaction.getEmployeeId());
+        assertEquals("employer@test.com", transaction.getEmployerId());
+        assertEquals("test_job_id", transaction.getJobId());
+        assertEquals(400.0f, transaction.getPaymentAmount(), 0.001);
+        assertEquals("failed", transaction.getTransactionStatus());
     }
 
     @Test
-    public void testPendingPayment() throws JSONException {
-        JSONObject pendingResponse = new JSONObject();
-        pendingResponse.put("id", "PAYID-PENDING789");
-        pendingResponse.put("state", "pending");
+    public void testPendingPayment() {
+        // Arrange: Mock a pending payment response
+        String paymentId = "PAYID-PENDING789";
+        String paymentState = "pending";
 
-        JSONObject response = new JSONObject();
-        response.put("response", pendingResponse);
+        // Act: Set the transaction details
+        transaction.setTransactionDetails(
+                paymentId,
+                "employee@test.com",
+                "employer@test.com",
+                "test_job_id",
+                300.0f,
+                paymentState
+        );
 
-        when(mockPaymentConfirmation.toJSONObject()).thenReturn(response);
-
-        paymentProcessor.handlePaymentConfirmation(mockPaymentConfirmation);
-
-        assertEquals("Payment pending\n with payment id is PAYID-PENDING789", paymentProcessor.paymentStatusTV.getText().toString());
+        // Assert: Verify the transaction details
+        assertEquals("PAYID-PENDING789", transaction.getTransactionID());
+        assertEquals("employee@test.com", transaction.getEmployeeId());
+        assertEquals("employer@test.com", transaction.getEmployerId());
+        assertEquals("test_job_id", transaction.getJobId());
+        assertEquals(300.0f, transaction.getPaymentAmount(), 0.001);
+        assertEquals("pending", transaction.getTransactionStatus());
     }
-
- */
 }

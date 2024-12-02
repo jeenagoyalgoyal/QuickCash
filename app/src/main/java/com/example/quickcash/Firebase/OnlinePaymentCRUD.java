@@ -21,7 +21,7 @@ public class OnlinePaymentCRUD {
 
     public OnlinePaymentCRUD(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("PaymentTransactions");
+        databaseReference = firebaseDatabase.getReference("PaymentTransaction");
     }
 
     public Task<Boolean> pushTransaction(PaymentTransactionModel transaction) {

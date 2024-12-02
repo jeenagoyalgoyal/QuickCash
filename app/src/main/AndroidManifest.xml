@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -28,7 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MainActivity"></activity>
+
         <activity
             android:name=".Profile"
             android:exported="true"
@@ -45,7 +52,6 @@
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -63,16 +69,33 @@
         <activity android:name=".OnlinePaymentActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".JobSubmissionActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
         <activity android:name=".PreferredJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
+        <activity android:name=".FirebaseMessaging.ViewPaymentNotificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <service
+            android:name=".FirebaseMessaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

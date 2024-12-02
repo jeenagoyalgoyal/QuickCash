@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickcash.Firebase.FirebaseCRUD;
+import com.example.quickcash.Firebase.UserCrud;
+import com.example.quickcash.FirebaseMessaging.MyFirebaseMessagingService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.regex.Pattern;
 
@@ -32,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText emailBox, passwordBox;
     private TextView statusLabel;
     private DatabaseReference databaseReference;
+    private UserCrud userCrud;
 
 
     // Regex patterns for email and password validation
@@ -48,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         statusLabel = findViewById(R.id.statusLabel);
         Button loginButton = findViewById(R.id.loginButton);
 
+        userCrud =new UserCrud();
         this.initializeDatabaseAccess();
 
         loginButton.setOnClickListener(this);
@@ -133,12 +138,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (task.isSuccessful()) {
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
                         // Fetch user role
+                        updateDeviceToken(email);
                         fetchUserRole(email);
                     } else {
                         handleLoginError(task.getException());
                     }
                 });
     }
+
+    private void updateDeviceToken(String email) {
+        // Get the current FCM token
+        MyFirebaseMessagingService.getTokenFromPreferences(getSharedPreferences("QuickCashPrefs", MODE_PRIVATE));
+
+        MyFirebaseMessagingService.getTokenFromPreferences(getSharedPreferences("QuickCashPrefs", MODE_PRIVATE));
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String deviceToken = task.getResult();
+                        userCrud.setUserDeviceToken(email, deviceToken);
+                        Log.d("LoginActivity", "Device token updated for user: " + email);
+                    } else {
+                        Log.e("LoginActivity", "Failed to retrieve FCM token", task.getException());
+                    }
+                });
+    }
+
 
     private void handleLoginError(Exception e) {
         if (e instanceof FirebaseAuthInvalidUserException) {

@@ -30,9 +30,15 @@ android {
     buildFeatures {
         viewBinding true
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES']
+        }
+    }
 }
 
 dependencies {
+
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
@@ -44,7 +50,14 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.espresso.core
     androidTestImplementation libs.ext.junit
+    //3rd party library - for network request or api request to the firebase server
+    implementation 'com.android.volley:volley:1.2.1'
+
+    // messaging libraries
+    implementation 'com.google.firebase:firebase-messaging:24.1.0'
+    implementation platform("com.google.firebase:firebase-bom:33.6.0")
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.30.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'  // Add this line
     androidTestImplementation 'androidx.test:runner:1.6.1'

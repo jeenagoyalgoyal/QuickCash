@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -28,7 +28,6 @@ import com.example.quickcash.model.Job;
 import com.example.quickcash.model.PaymentEmployeeModel;
 import com.example.quickcash.model.PaymentTransactionModel;
 import com.example.quickcash.paypal.PayPalPaymentProcessor;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.paypal.android.sdk.payments.PaymentActivity;
@@ -36,6 +35,10 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.quickcash.FirebaseMessaging.PaymentNotification;
 
 /**
  * Activity responsible for handling online payments using PayPal.
@@ -65,6 +68,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
     private JobCRUD jobCRUD;
     private OnlinePaymentCRUD onlinePaymentCRUD;
     private PaymentEmployeeModel selectedEmployee;
+    private PaymentNotification paymentNotification;
 
     /**
      * Called when the activity is first created. Initializes the activity's components
@@ -81,6 +85,12 @@ public class OnlinePaymentActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Create notification channel
+        createNotificationChannel();
+
+
+        // Setup UI
         //setup methods
         setupOnlinePaymentCrud();
         setupJobCrud();
@@ -92,6 +102,15 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         setupSelectJobButton();
         setupDialog();
     }
+
+    /**
+     * Initializes the PaymentNotification and sets up the notification channel.
+     * Uses a Volley RequestQueue for sending payment notifications.
+     */
+    private void createNotificationChannel(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        paymentNotification = new PaymentNotification(this, requestQueue);
+    };
 
     /**
      * Initializes the OnlinePaymentCRUD instance for interacting with the database.
@@ -126,6 +145,10 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                         transaction.setTransactionDetails(payID, selectedEmployee.getEmployeeId(), selectedEmployee.getEmployerId(), selectedEmployee.getJobId(),selectedEmployee.getPaymentAmount(), state);
                         onlinePaymentCRUD.pushTransaction(transaction);
                         clearEmployeeDetails();
+
+                        paymentNotification.sendPaymentNotifications(transaction.getEmployerId(), transaction.getEmployeeId());
+                        Intent intent =new Intent(this, EmployerHomepageActivity.class);
+                        startActivity(intent);
                     } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
                         Log.e(TAG, "Payment failed due to invalid extra data (check result code)");
                         Toast.makeText(this, "Payment Failed!", Toast.LENGTH_SHORT).show();
@@ -239,7 +262,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                         employeeList.add(new PaymentEmployeeModel(j.getJobId(), j.getJobTitle(), j.getEmployeeName(), j.getEmployeeId(), j.getEmployerId(), j.getSalary()));
                     }
                 }
-                if (employeeList.size()==0){
+                if (employeeList.size() == 0) {
                     Toast.makeText(this, "No in-progress jobs found!", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "No In-progress jobs detected (check firebase?)");
                 }
@@ -270,7 +293,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
      * Initiates the PayPal payment process for the selected job and employee.
      */
     protected void paypalPayment() {
-        if (this.selectedEmployee!=null){
+        if (this.selectedEmployee != null) {
             String jobTitle = this.selectedEmployee.getJobTitle();
             String employeeName = this.selectedEmployee.getEmployeeName();
             int paymentAmount = this.selectedEmployee.getPaymentAmount();
@@ -279,8 +302,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                 Log.e(TAG, "Failed to initiate payment");
                 Toast.makeText(this, "Payment initialization failed", Toast.LENGTH_SHORT).show();
             }
-        }
-        else{
+        } else {
             Log.e(TAG, "No employee selected");
             Toast.makeText(this, "No employee selected!", Toast.LENGTH_SHORT).show();
         }
