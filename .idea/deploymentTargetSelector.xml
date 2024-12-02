@@ -19,9 +19,6 @@
       <SelectionState runConfigName="EmployerJobApplicationUITest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testRejectButtonFunctionality()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="testAcceptButtonFunctionality()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

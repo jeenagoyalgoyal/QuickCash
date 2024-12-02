@@ -118,7 +118,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
         });
 
         // Update user's applied job status
-        emCRUD.changeStatusOfUserJobsApplied(application.getEmployeeID(), jobID, status);
+        emCRUD.changeStatusOfUserJobsApplied(application.getEmployeeID(), application.getApplicationId(), status);
         if (status.equals("Accepted")) {
             ((Activity) context).finish();
         }

@@ -139,16 +139,16 @@ public class EmployerCRUD {
      * Updates the status of a specific job application for a user.
      *
      * @param employeeID The ID of the employee whose application status needs to be updated.
-     * @param jobID      The ID of the job being updated.
+     * @param applicationId      The ID of the job being updated.
      * @param status     The new status of the job application (e.g., "Accepted", "Rejected").
      */
-    public void changeStatusOfUserJobsApplied(String employeeID, String jobID, String status) {
+    public void changeStatusOfUserJobsApplied(String employeeID, String applicationId, String status) {
         employeeID = employeeID.replace(".", ",");
         DatabaseReference userJobsRef = FirebaseDatabase.getInstance()
                 .getReference("Users")
                 .child(employeeID)
                 .child("appliedJobs")
-                .child(jobID)
+                .child(applicationId)
                 .child("Status");
 
         userJobsRef.setValue(status);
