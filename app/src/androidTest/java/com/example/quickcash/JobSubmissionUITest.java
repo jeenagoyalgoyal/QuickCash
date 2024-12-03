@@ -153,7 +153,7 @@ public class JobSubmissionUITest {
         onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"));
         onView(withId(R.id.buildingName)).perform(typeText("Tech Company"));
         onView(withId(R.id.spinnerJobType)).perform(click());
-        onData(hasToString("Full-time")).perform(click());
+        onData(hasToString("Multi day")).perform(click());
 
         onView(withId(R.id.jobSubmissionButton)).perform(click());
 
