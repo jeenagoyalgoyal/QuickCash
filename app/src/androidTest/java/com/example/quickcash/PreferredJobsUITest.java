@@ -83,7 +83,7 @@ public class PreferredJobsUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject registerButton = device.findObject(new UiSelector().text("Login"));
         registerButton.clickAndWaitForNewWindow();
-        Thread.sleep(4000);
+        Thread.sleep(8000);
         //looking for 'Search Jobs' button on homepage
         UiObject searchJobButton = device.findObject(new UiSelector().text("My Preferred Jobs"));
         assertTrue("My preferred jobs button should be present on employee dashboard", searchJobButton.exists());

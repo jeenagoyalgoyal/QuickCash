@@ -16,7 +16,9 @@ public class Job {
     private String startDate;
     private String urgency;
     private JobLocation jobLocation;
-    private String status;
+    public String status;
+    public String employeeName;
+    public String employeeId;
 
     /**
      * Constructor for the job
@@ -97,6 +99,29 @@ public class Job {
         return jobLocation;
     }
     /**
+     * Get job status
+     * @return status
+     */
+    public String getStatus() {return status;}
+
+    /**
+     * Get name of employee assigned to job
+     * @return employeeName
+     */
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    /**
+     * Get id of employee assigned to job
+     * @return employeeName
+     */
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+
+    /**
      * Set the company name
      * @param companyName
      */
@@ -163,19 +188,17 @@ public class Job {
     public void setUrgency(String urgency) {this.urgency = urgency;}
 
     /**
+     * sets job status
+     * @param status
+     */
+    public void setStatus(String status){this.status =status;}
+
+    /**
      * Sets job location
      * @param jobLocation
      */
     public void setJobLocation(JobLocation jobLocation) {
         this.jobLocation = jobLocation;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     /**

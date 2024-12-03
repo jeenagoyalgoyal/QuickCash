@@ -37,6 +37,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.model.LatLng;
+import com.example.quickcash.Firebase.UserCrud;
+import com.example.quickcash.FirebaseMessaging.MyFirebaseMessagingService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -52,6 +54,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+
+import android.Manifest;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -100,11 +104,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         sessionManager = new SessionManager(this);
 
+        userCrud =new UserCrud();
         this.initializeDatabaseAccess();
 
         loginButton.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
-        userCrud = new UserCrud();
 
         // Reference to your Firebase Realtime Database
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -155,7 +159,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
     }
-
     private void navigateToMapsActivity() {
         intent.putExtra("manualLocation", manualLocation); // Pass manual location
         startActivity(intent);
@@ -173,7 +176,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Handles the click event for the login button. Validates input and initiates login if valid.
-     *
      * @param view The view that was clicked.
      */
     @Override
@@ -260,6 +262,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         sessionManager.createSession();
                         updateDeviceToken(email);
                         Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
+                        // Fetch user role
                         fetchUserRoleAndNavigate(email);
                     } else {
                         handleLoginError(task.getException());

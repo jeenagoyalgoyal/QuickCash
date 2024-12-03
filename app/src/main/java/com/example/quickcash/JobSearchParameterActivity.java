@@ -70,7 +70,6 @@ public class JobSearchParameterActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_search_parameter);
-
         init();
 
         // Getting email and user ID
@@ -130,6 +129,10 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             finish(); // Optional: Call finish() if you don't want to keep the  in the back stack
         });
     }
+
+    /**
+     * Method initializes the job search form input variables
+     */
     public void init() {
         jobList = new ArrayList<>();
 
@@ -146,7 +149,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        jobSearchAdapter = new JobSearchAdapter(this,jobList);
+        jobSearchAdapter = new JobSearchAdapter(this, jobList);
         recyclerView.setAdapter(jobSearchAdapter);
         jobsRef = FirebaseDatabase.getInstance();
         jobCRUD = new JobCRUD(jobsRef);
@@ -184,6 +187,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         });
     }
+
 
     /**
      * Creates a firebase query with the input by user
@@ -374,7 +378,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
             }
         }
 
-// Check salary range
+        // Check salary range
         int jobSalary = job.getSalary();
         if (isValidField(minSalStr)) {
             try {
@@ -505,6 +509,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 .trim()
                 .toLowerCase();
     }
+
     private boolean isCoordinateSearch(String search) {
         // Check if the search string matches coordinate format (lat,lng)
         return search.matches("^-?\\d+\\.?\\d*,-?\\d+\\.?\\d*$");

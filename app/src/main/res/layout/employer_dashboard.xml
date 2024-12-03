@@ -20,9 +20,10 @@
         android:id="@+id/createJobButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="12dp"
         android:text="Create Job"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeEmployer" />
 
@@ -40,7 +41,6 @@
         android:id="@+id/analyticsReportButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
         android:text="Analytics and Reports"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,24 +78,36 @@
 
     <Button
         android:id="@+id/switchToEmployeeButton"
-        android:layout_width="295dp"
+        android:layout_width="286dp"
         android:layout_height="48dp"
-        android:layout_marginTop="412dp"
+        android:layout_marginTop="20dp"
         android:text="Switch to Employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/payEmployeeButton" />
+
+    <Button
+        android:id="@+id/payEmployeeButton"
+        android:layout_width="286dp"
+        android:layout_height="45dp"
+        android:text="Pay Employee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employerNotificationsButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workersRecyclerView"
-        android:layout_width="260dp"
-        android:layout_height="167dp"
+        android:layout_width="0dp"
+        android:layout_height="280dp"
         android:layout_marginTop="16dp"
         android:padding="16dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employerNotificationsButton" />
+        app:layout_constraintTop_toBottomOf="@+id/employerNotificationsButton"
+        app:layout_constraintVertical_bias="0.933" />
 </androidx.constraintlayout.widget.ConstraintLayout>

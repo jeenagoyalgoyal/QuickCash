@@ -6,8 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -107,6 +108,14 @@
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <activity android:name=".OnlinePaymentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <!-- Job Submission Activity -->
         <activity android:name=".JobSubmissionActivity"
             android:exported="true"
@@ -115,6 +124,11 @@
 
         <!-- Preferred Jobs Activity -->
         <activity android:name=".PreferredJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <activity android:name=".FirebaseMessaging.ViewPaymentNotificationActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
@@ -143,6 +157,13 @@
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <!-- Job Details Activity -->
+        <activity
+            android:name=".JobDetails"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
         <!-- Applicants for each job activity -->
         <service
             android:name=".FirebaseMessaging.MyFirebaseMessagingService"
@@ -151,14 +172,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-
-        <!-- Job Details Activity -->
-        <activity
-            android:name=".JobDetails"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
 
     </application>
 

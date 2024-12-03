@@ -2,6 +2,7 @@ package com.example.quickcash;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
 
     public TextView welcomeEmployer;
     public Button createJob;
+    public Button payEmployee;
     public Button applicationsButton;
     public Button analyticsReports;
     public Button tasksAssignments;
@@ -60,6 +62,7 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         welcomeEmployer = findViewById(R.id.welcomeEmployer);
         // Role-specific buttons
         createJob = findViewById(R.id.createJobButton);
+        payEmployee = findViewById(R.id.payEmployeeButton);
         applicationsButton = findViewById(R.id.applicationSubmissions);
         analyticsReports = findViewById(R.id.analyticsReportButton);
         tasksAssignments = findViewById(R.id.tasksAssignmentsButton);
@@ -103,6 +106,15 @@ public class EmployerHomepageActivity extends AppCompatActivity {
                     Toast.makeText(EmployerHomepageActivity.this, "Viewing applications!", Toast.LENGTH_SHORT).show();
                     startActivity(intentApplications);
                 }
+            }
+        });
+
+        payEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentApplications = new Intent(EmployerHomepageActivity.this, OnlinePaymentActivity.class);
+                intentApplications.putExtra(EMAIL, email);
+                startActivity(intentApplications);
             }
         });
     }

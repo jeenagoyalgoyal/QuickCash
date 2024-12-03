@@ -83,6 +83,31 @@ public class JobCRUD {
         return taskCompletionSource.getTask();
     }
 
+    public Task<List<Job>> getInProgressJobs(String emailID){
+        TaskCompletionSource<List<Job>> taskCompletionSource = new TaskCompletionSource<>();
+
+        Query query = databaseReference.orderByChild("employerId").equalTo(emailID);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Job> jobs = new ArrayList<>();
+                for (DataSnapshot jobSnapshot : snapshot.getChildren()) {
+                    Job job = jobSnapshot.getValue(Job.class);
+                    if (job != null && job.getStatus().equals("In-progress")) {
+                        jobs.add(job);
+                    }
+                }
+                taskCompletionSource.setResult(jobs);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                taskCompletionSource.setException(error.toException());
+            }
+        });
+        return taskCompletionSource.getTask();
+    }
+
     /**
      * Gets a list of jobs posted
      * @param query
@@ -141,6 +166,28 @@ public class JobCRUD {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 taskCompletionSource.setException(error.toException());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
+
+    /**
+     * Deletes a job from the database based on the job ID.
+     *
+     * @param jobId The unique ID of the job to delete.
+     * @return A Task representing the completion status of the operation.
+     */
+    public Task<Boolean> deleteJobById(String jobId) {
+        TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
+
+        databaseReference.child(jobId).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("JobCRUD", "Job with ID " + jobId + " deleted successfully.");
+                taskCompletionSource.setResult(true);
+            } else {
+                Log.e("JobCRUD", "Failed to delete job with ID " + jobId, task.getException());
+                taskCompletionSource.setResult(false);
             }
         });
 
