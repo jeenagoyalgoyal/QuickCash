@@ -85,7 +85,7 @@ public class UserRatingUITest {
 
         // Enter job details
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Software Developer");
+        jobTitleBox.setText("Lawn Mowing");
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
@@ -115,7 +115,7 @@ public class UserRatingUITest {
 
         // Enter job details
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Software Developer");
+        jobTitleBox.setText("Lawn Mowing");
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
@@ -147,7 +147,7 @@ public class UserRatingUITest {
 
         // Enter job details
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Software Developer");
+        jobTitleBox.setText("Lawn Mowing");
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
@@ -186,7 +186,7 @@ public class UserRatingUITest {
 
         // Enter job details
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Software Developer");
+        jobTitleBox.setText("Lawn Mowing");
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 

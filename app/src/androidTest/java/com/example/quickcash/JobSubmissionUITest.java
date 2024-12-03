@@ -239,7 +239,7 @@ public class JobSubmissionUITest {
         UiObject submitJob = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/jobSubmissionButton"));
         submitJob.click();
 
-        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
+        onView(withId(R.id.welcomeEmployer)).check(matches(isDisplayed()));
     }
 
     public static class ToastMatcher extends TypeSafeMatcher<Root> {

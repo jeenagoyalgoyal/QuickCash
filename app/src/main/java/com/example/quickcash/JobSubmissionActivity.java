@@ -159,7 +159,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         }
 
         int salaryValue = Integer.parseInt(salaryText);
-        String employerId = email.replace(".", ",");
+        String employerId = email;
         String jobId = null;
 
         // Show progress dialog

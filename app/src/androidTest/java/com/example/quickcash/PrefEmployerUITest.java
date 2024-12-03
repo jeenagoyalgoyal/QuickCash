@@ -65,7 +65,7 @@ public class PrefEmployerUITest {
 
         //enter job details
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Software Developer");
+        jobTitleBox.setText("Lawn Mowing");
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
