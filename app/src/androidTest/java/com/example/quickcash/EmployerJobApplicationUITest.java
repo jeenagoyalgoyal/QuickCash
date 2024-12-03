@@ -83,16 +83,16 @@ public class EmployerJobApplicationUITest {
     }
 
     @Test
-    public void testAcceptButtonFunctionality() throws InterruptedException, UiObjectNotFoundException {
+    public void testRejectButtonFunctionality() throws InterruptedException, UiObjectNotFoundException {
 
         loginAsEmployer();
         UiObject manageApplicationsButton = device.findObject(new UiSelector().text("View Applications"));
         manageApplicationsButton.click();
         Log.d(TAG, "Clicked Manage Applications button");
 
-        UiObject acceptButton = device.findObject(new UiSelector().text("Accept"));
-        assertTrue("Accept button should be visible", acceptButton.exists());
-        acceptButton.clickAndWaitForNewWindow();
+        UiObject rejectButton = device.findObject(new UiSelector().text("Reject"));
+        assertTrue("Accept button should be visible", rejectButton.exists());
+        rejectButton.clickAndWaitForNewWindow();
         Log.d(TAG, "Clicked Accept button");
 
         UiObject jobApplicationsPage = device.findObject(new UiSelector().textContains("Application"));

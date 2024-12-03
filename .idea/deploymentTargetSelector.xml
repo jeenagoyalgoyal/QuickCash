@@ -2,10 +2,19 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="Tests in 'com.example.quickcash'">
+      <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="EmployeeJobApplicationUITest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="EmployerJobApplicationUITest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testAcceptButtonFunctionality()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testRejectButtonFunctionality()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
