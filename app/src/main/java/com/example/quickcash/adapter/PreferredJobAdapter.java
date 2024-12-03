@@ -38,14 +38,24 @@
 
 package com.example.quickcash.adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.quickcash.ApplicationPageActivity;
+import com.example.quickcash.PreferredJobsActivity;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
@@ -96,9 +106,9 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
         private final TextView locationResult;
         private final TextView salaryResult;
         private final TextView durationResult;
-        private final Button showMapButton;
         private final Button showViewButton;
         private final Button cancelButton;
+        private final Button applyButton;
 
         /**
          * Constructor for PreferredJobViewHolder.
@@ -112,9 +122,9 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             locationResult = itemView.findViewById(R.id.locationResult);
             salaryResult = itemView.findViewById(R.id.salaryResult);
             durationResult = itemView.findViewById(R.id.durationResult);
-            showMapButton = itemView.findViewById(R.id.showMap);
             showViewButton = itemView.findViewById(R.id.ViewButton);
             cancelButton = itemView.findViewById(R.id.cancelButton);
+            applyButton = itemView.findViewById(R.id.applyButton);
 
             initializeView();
         }
@@ -126,6 +136,7 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             // Initially hide the additional fields and cancel button
             toggleDetailVisibility(View.GONE);
             cancelButton.setVisibility(View.GONE);
+            applyButton.setVisibility(View.GONE);
         }
 
         /**
@@ -157,7 +168,20 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             });
 
             cancelButton.setOnClickListener(view -> hideJobDetails());
+
+            applyButton.setOnClickListener(view -> {
+                Intent intent = new Intent(itemView.getContext(), ApplicationPageActivity.class);
+                intent.putExtra("jobId", job.getJobId()); // Pass job ID to Application Page
+                intent.putExtra("jobTitle", job.getJobTitle());
+                intent.putExtra("buildingName", job.getCompanyName());
+                itemView.getContext().startActivity(intent);
+            });
+
+
+
+
         }
+
 
         /**
          * Displays the job details in the UI.
@@ -173,6 +197,7 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             toggleDetailVisibility(View.VISIBLE);
             showViewButton.setVisibility(View.GONE);
             cancelButton.setVisibility(View.VISIBLE);
+            applyButton.setVisibility(View.VISIBLE);
         }
 
         /**
@@ -182,6 +207,7 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
             toggleDetailVisibility(View.GONE);
             showViewButton.setVisibility(View.VISIBLE);
             cancelButton.setVisibility(View.GONE);
+            applyButton.setVisibility(View.GONE);
         }
     }
 }

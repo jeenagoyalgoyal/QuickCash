@@ -28,13 +28,17 @@ public class PrefEmployerUITest {
     private UiDevice device;
 
     @Before
-    public void setup() {
+    public void setup() throws UiObjectNotFoundException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         Context context = ApplicationProvider.getApplicationContext();
         Intent launcherIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackageName);
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launcherIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
     }
 
     @Test
@@ -61,7 +65,7 @@ public class PrefEmployerUITest {
 
         //enter job details
         UiObject jobTitleBox = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitleBox.setText("Software Developer");
+        jobTitleBox.setText("Lawn Mowing");
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));
         searchButton.longClick();
 
@@ -75,7 +79,12 @@ public class PrefEmployerUITest {
     }
 
     @Test
-    public void testPreferredEmployersButtonOnDashboard() throws UiObjectNotFoundException {
+    public void testPreferredEmployersButtonOnDashboard() throws UiObjectNotFoundException, InterruptedException {
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
+
         // Log in
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
         emailBox.setText("testingemail@test.db");
@@ -83,6 +92,7 @@ public class PrefEmployerUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject loginButton = device.findObject(new UiSelector().text("Login"));
         loginButton.clickAndWaitForNewWindow();
+        Thread.sleep(4000);
 
         // Check if "My Preferred Employers" button is visible
         UiObject preferredEmployersButton = device.findObject(new UiSelector().text("Preferred Employers"));

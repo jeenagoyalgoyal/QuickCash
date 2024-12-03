@@ -7,8 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,8 +14,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.quickcash.databinding.ActivityMainBinding;
+import com.example.quickcash.model.Job;
+import com.example.quickcash.model.JobLocation;
+import com.example.quickcash.model.UseRole;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,32 +51,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //Switching Role
-        // Switching Role based on current user role
         if (id == R.id.switch_role) {
             UseRole useRole = UseRole.getInstance();
             int userid = 123;
             Intent intent;
 
-            // Check the current role and set the destination activity
             if (useRole.getCurrentRole().equals("employer")) {
                 intent = new Intent(MainActivity.this, EmployeeHomepageActivity.class);
                 Toast.makeText(this, "Switched to Employee role", Toast.LENGTH_SHORT).show();
-            }
-
-            else {
+            } else {
                 intent = new Intent(MainActivity.this, EmployerHomepageActivity.class);
                 Toast.makeText(this, "Switched to Employer role", Toast.LENGTH_SHORT).show();
             }
@@ -83,17 +76,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_settings) {
             return true;
         }
-        //Navigating to Profile Screen
-        if(id == R.id.action_profile) {
+
+        if (id == R.id.action_profile) {
             Intent intent = new Intent(MainActivity.this, Profile.class);
             startActivity(intent);
             finish();
             Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -104,5 +96,42 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void singleCallToMap(Job job) {
+        Intent intentToMapSingleJob = new Intent(this, GoogleSearchMapActivity.class);
+
+        // Get location using the helper method from Job class
+        JobLocation jobLocation = job.getJobLocation();
+        if (jobLocation == null) {
+            Toast.makeText(this, "No location data available for this job", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<Double> latitudes = new ArrayList<>();
+        ArrayList<Double> longitudes = new ArrayList<>();
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<Integer> salaries = new ArrayList<>();
+        ArrayList<String> durations = new ArrayList<>();
+        ArrayList<String> companies = new ArrayList<>();
+        ArrayList<String> jobTypes = new ArrayList<>();
+
+        latitudes.add(jobLocation.getLat());
+        longitudes.add(jobLocation.getLng());
+        titles.add(job.getJobTitle());
+        salaries.add(job.getSalary());
+        durations.add(job.getExpectedDuration());
+        companies.add(job.getCompanyName());
+        jobTypes.add(job.getJobType());
+
+        intentToMapSingleJob.putExtra("latitudes", latitudes);
+        intentToMapSingleJob.putExtra("longitudes", longitudes);
+        intentToMapSingleJob.putStringArrayListExtra("titles", titles);
+        intentToMapSingleJob.putIntegerArrayListExtra("salaries", salaries);
+        intentToMapSingleJob.putStringArrayListExtra("durations", durations);
+        intentToMapSingleJob.putStringArrayListExtra("companies", companies);
+        intentToMapSingleJob.putStringArrayListExtra("jobTypes", jobTypes);
+
+        startActivity(intentToMapSingleJob);
     }
 }

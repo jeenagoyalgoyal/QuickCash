@@ -55,12 +55,12 @@
 
 
     <EditText
-        android:id="@+id/companyName"
+        android:id="@+id/buildingName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="168dp"
         android:ems="10"
-        android:hint="Company Name"
+        android:hint="Building/Company Name"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="340dp"
         android:ems="10"
-        android:hint="Salary"
+        android:hint="Payment Amount"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
@@ -209,7 +209,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="508dp"
         android:ems="10"
-        android:hint="Expected Duration"
+        android:hint="Expected time in hours"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.517"
@@ -230,16 +230,6 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
-        android:id="@+id/jobSubmissionButton"
-        android:layout_width="203dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="632dp"
-        android:text="Post Job"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -247,6 +237,16 @@
         android:text="Start Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/jobSubmissionButton"
+        android:layout_width="203dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="632dp"
+        android:text="Post Job"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,63 +19,160 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickCash"
-        tools:targetApi="31">
+        tools:targetApi="34">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key" />
+
+        <!-- Dynamic Location Map Activity -->
         <activity
-            android:name=".RegistrationActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".PreferredEmployersActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity
-            android:name=".Profile"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-            </activity>
-        <activity
-            android:name=".JobSearchParameterActivity"
-            android:exported="true"
-            android:theme="@style/Theme.QuickCash">
-        </activity>
+            android:name=".ui.MapsActivity"
+            android:exported="false"/>
+
+        <!-- Login Activity as Launcher -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".EmployeeHomepageActivity"
+        <!-- Preferred Employers Activity -->
+        <activity
+            android:name=".PreferredEmployersActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity">
+        </activity>
+
+        <!-- Profile activity -->
+        <activity
+            android:name=".Profile"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            </activity>
+
+        <!-- Job Search by Parameter Activity -->
+        <activity
+            android:name=".JobSearchParameterActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <!-- Registration Activity -->
+        <activity
+            android:name=".RegistrationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+
+        </activity>
+
+        <!-- Google Map Search Activity -->
+        <activity
+            android:name=".GoogleSearchMapActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Employer Homepage Activity -->
+        <activity android:name=".EmployeeHomepageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash" />
+
+        <!-- Employer Homepage Activity -->
         <activity android:name=".EmployerHomepageActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
 
+        <activity android:name=".OnlinePaymentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Job Submission Activity -->
         <activity android:name=".JobSubmissionActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
+        <!-- Preferred Jobs Activity -->
         <activity android:name=".PreferredJobsActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickCash">
         </activity>
+
+        <activity android:name=".FirebaseMessaging.ViewPaymentNotificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Application Page  Activity -->
+        <activity android:name=".ApplicationPageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Employer Application Page -->
+        <activity android:name=".ApplicationsSubmittedActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Application Page  Activity -->
+        <activity android:name=".AppliedJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Jobs posted by employer activity -->
+        <activity android:name=".EmployerJobsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Job Details Activity -->
+        <activity
+            android:name=".JobDetails"
+            android:exported="true"
+            android:theme="@style/Theme.QuickCash">
+        </activity>
+
+        <!-- Applicants for each job activity -->
+        <service
+            android:name=".FirebaseMessaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

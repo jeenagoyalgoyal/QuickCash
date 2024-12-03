@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="707dp"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Job"
+            android:textAlignment="center"
+            android:textColor="#1a73e8"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Job Title Section -->
+
+        <!-- Company Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Title"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/jobTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="4dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:textColor="#202124"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Location Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Company"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/companyNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:textColor="#202124"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Job Type Section -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/locationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:textColor="#202124"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Salary Section -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Type"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/jobTypeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="#202124"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Duration Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salary"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/salaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="#202124"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Rating Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duration"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/durationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="#202124"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Add a Comment Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rating"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RatingBar
+                android:id="@+id/jobRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <!-- Add Comment Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add a Comment"
+                android:textColor="#5f6368"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/commentInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Enter your comment here"
+                android:inputType="textMultiLine"
+                android:maxLines="4" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/addCommentButton"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:backgroundTint="#1a73e8"
+            android:text="Add Comment"
+            android:enabled="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <!-- Close Button -->
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:backgroundTint="#1a73e8"
+            android:text="Close"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

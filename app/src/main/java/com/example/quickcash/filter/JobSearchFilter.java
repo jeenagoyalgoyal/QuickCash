@@ -50,13 +50,14 @@ public class JobSearchFilter {
         }
 
         if (isValidField(jobLocation)){
-            if(!jobLocation.equalsIgnoreCase(job.getLocation())) {
-                matches = false;
+            String jobLocationStr = job.getLocation();
+            if (jobLocationStr == null || !jobLocationStr.contains(jobLocation)) {
+                return false;
             }
         }
 
         if (isValidField(jobDuration)){
-            if(!jobDuration.equalsIgnoreCase(job.getExpectedDuration())) {
+            if(!jobDuration.contains(job.getExpectedDuration())) {
                 matches = false;
             }
         }

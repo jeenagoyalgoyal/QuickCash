@@ -70,7 +70,12 @@ public class PreferredJobsUITest {
     }
 
     @Test
-    public void checkForPreferredJobsButton() throws UiObjectNotFoundException {
+    public void checkForPreferredJobsButton() throws UiObjectNotFoundException, InterruptedException {
+        UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
         //logging in
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
         emailBox.setText("testingemail@test.db");
@@ -78,6 +83,7 @@ public class PreferredJobsUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject registerButton = device.findObject(new UiSelector().text("Login"));
         registerButton.clickAndWaitForNewWindow();
+        Thread.sleep(8000);
         //looking for 'Search Jobs' button on homepage
         UiObject searchJobButton = device.findObject(new UiSelector().text("My Preferred Jobs"));
         assertTrue("My preferred jobs button should be present on employee dashboard", searchJobButton.exists());
@@ -93,7 +99,12 @@ public class PreferredJobsUITest {
     }
 
     @Test
-    public void AddToPreferredJobs() throws UiObjectNotFoundException {
+    public void AddToPreferredJobs() throws UiObjectNotFoundException, InterruptedException {
+        UiDevice device= UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
         //logging in
         UiObject emailBox = device.findObject(new UiSelector().text("Email"));
         emailBox.setText("testingemail@test.db");
@@ -101,13 +112,14 @@ public class PreferredJobsUITest {
         passwordBox.setText("Test_Pass123#");
         UiObject registerButton = device.findObject(new UiSelector().text("Login"));
         registerButton.clickAndWaitForNewWindow();
+        Thread.sleep(4000);
 
         //looking for 'Search Jobs' button on homepage
         UiObject searchJobButton = device.findObject(new UiSelector().text("Search Job"));
         searchJobButton.clickAndWaitForNewWindow();
 
         UiObject jobTitle = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitle.setText("Software Developer");
+        jobTitle.setText("Lawn Mowing");
 
         //Press Search
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));

@@ -3,8 +3,11 @@ package com.example.quickcash;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import android.util.Log;
+
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.model.Job;
+import com.example.quickcash.model.JobLocation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
@@ -19,8 +22,6 @@ public class JobSubmissionDatabaseTest {
 
     private FirebaseDatabase firebaseDatabase;
 
-    private DatabaseReference mockDatabaseReference;
-
     private JobCRUD jobCRUD;
 
     @Before
@@ -34,41 +35,59 @@ public class JobSubmissionDatabaseTest {
     public void testSubmitJobSendsCorrectDataToBackend() throws ExecutionException, InterruptedException {
         // Arrange
         Job job = new Job();
-        job.setJobTitle("Cybersecurity Analyst");
-        job.setCompanyName("Tech Company");
+        job.setJobTitle("Lawn Mowing");
+        job.setCompanyName("Mowad");
         job.setExpectedDuration("20");
         job.setEmployerId("test@gmail.com");
-        job.setLocation("Montreal");
+        job.setLocation("Halifax, NS B3H 4P7");
         job.setRequirements("Linux, Java");
         job.setSalary(50);
-        job.setJobType("Full-time");
+        job.setJobType("Multi day");
         job.setStartDate("Nov 20, 2024");
         job.setUrgency("High");
 
         // Act
         Task<Boolean> task = jobCRUD.submitJob(job);
         Boolean result = Tasks.await(task);
+        Log.d("JobID", job.getJobId());
 
         // Assert
         assertTrue(result);
+
+        jobCRUD.deleteJobById(job.getJobId());
     }
 
     @Test
     public void testJobDataMappingToBackendStructure() throws ExecutionException, InterruptedException{
         // Arrange
-        String expectedTitle = "Cybersecurity Analyst";
-        String expectedCompany = "Tech Company";
-        String expectedType = "Full-time";
+        Job job = new Job();
+        job.setJobTitle("Lawn Mowing");
+        job.setCompanyName("Mowad");
+        job.setExpectedDuration("20");
+        job.setEmployerId("test@gmail.com");
+        job.setLocation("Halifax, NS B3H 4P7");
+        job.setRequirements("Linux, Java");
+        job.setSalary(50);
+        job.setJobType("Multi day");
+        job.setStartDate("Nov 20, 2024");
+        job.setUrgency("High");
+
+        // Act
+        Task<Boolean> task = jobCRUD.submitJob(job);
+
+        String expectedTitle = "Lawn Mowing";
+        String expectedCompany = "Mowad";
+        String expectedType = "Multi day";
         String expectedDuration = "20";
         String expectedEmployerId = "test@gmail.com";
-        String expectedLocation = "Montreal";
+        String expectedLocation = "Halifax, NS B3H 4P7";
         String expectedRequirements = "Linux, Java";
         String expectedStartDate = "Nov 20, 2024";
         String expectedUrgency = "High";
         int expectedSalary = 50;
 
 
-       Task<Job> job1 = jobCRUD.getJobById("-OAp1kyUG5YHgHnSFMpM");
+       Task<Job> job1 = jobCRUD.getJobById(job.getJobId());
        Job job2 = Tasks.await(job1);
 
         // Act & Assert
@@ -83,5 +102,6 @@ public class JobSubmissionDatabaseTest {
         assertEquals(expectedRequirements, job2.getRequirements());
         assertEquals(expectedStartDate, job2.getStartDate());
 
+        jobCRUD.deleteJobById(job.getJobId());
     }
 }

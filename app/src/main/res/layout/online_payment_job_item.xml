@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <!-- Job Title -->
+    <TextView
+        android:id="@+id/jobTitleText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Job Title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Employee Name -->
+    <TextView
+        android:id="@+id/paymentWindowEmployeeNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Employee Name: "
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/jobTitleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Payment Amount -->
+    <TextView
+        android:id="@+id/paymentWindowAmountText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Payment Amount: "
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/paymentWindowEmployeeNameText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Select Button -->
+    <Button
+        android:id="@+id/selectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Select"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/paymentWindowAmountText" />
+
+    <!-- Separator Line -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

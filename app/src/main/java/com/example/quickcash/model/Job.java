@@ -15,6 +15,10 @@ public class Job {
     private int salary;
     private String startDate;
     private String urgency;
+    private JobLocation jobLocation;
+    public String status;
+    public String employeeName;
+    public String employeeId;
 
     /**
      * Constructor for the job
@@ -88,6 +92,36 @@ public class Job {
     public String getUrgency() {return urgency;}
 
     /**
+     * Get the job location
+     * @return jobLocation
+     */
+    public JobLocation getJobLocation() {
+        return jobLocation;
+    }
+    /**
+     * Get job status
+     * @return status
+     */
+    public String getStatus() {return status;}
+
+    /**
+     * Get name of employee assigned to job
+     * @return employeeName
+     */
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    /**
+     * Get id of employee assigned to job
+     * @return employeeName
+     */
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+
+    /**
      * Set the company name
      * @param companyName
      */
@@ -154,6 +188,20 @@ public class Job {
     public void setUrgency(String urgency) {this.urgency = urgency;}
 
     /**
+     * sets job status
+     * @param status
+     */
+    public void setStatus(String status){this.status =status;}
+
+    /**
+     * Sets job location
+     * @param jobLocation
+     */
+    public void setJobLocation(JobLocation jobLocation) {
+        this.jobLocation = jobLocation;
+    }
+
+    /**
      * Set all the required fields for the form
      * @param jobTitle
      * @param companyName
@@ -166,14 +214,18 @@ public class Job {
      * @param startDate
      * @param employerId
      * @param jobId
+     * @param lat
+     * @param lng
      */
-    public void setAllField(String jobTitle, String companyName, String jobType, String requirements,
-                            int salary, String urgency, String location, String expectedDuration,
-                            String startDate, String employerId, String jobId) {
+    // Method to set all fields at once
+    public void setAllField(String jobTitle, String companyName, String jobType,
+                            String requirements, int salary, String urgency,
+                            String location, String expectedDuration, String startDate,
+                            String employerId, String jobId, Double lat, Double lng, String status) {
         this.jobTitle = jobTitle;
         this.companyName = companyName;
         this.jobType = jobType;
-        this.requirements = requirements;
+        this.requirements = requirements != null ? requirements : ""; // Handle null requirements
         this.salary = salary;
         this.urgency = urgency;
         this.location = location;
@@ -181,5 +233,7 @@ public class Job {
         this.startDate = startDate;
         this.employerId = employerId;
         this.jobId = jobId;
+        this.jobLocation = new JobLocation(lat, lng, location);
+        this.status = status;
     }
 }

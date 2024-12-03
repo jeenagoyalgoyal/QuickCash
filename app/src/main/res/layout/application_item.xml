@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/applicantName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Applicant Name"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/applicantEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Applicant Email"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/applicantName" />
+
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="message: "
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/applicantEmail" />
+
+    <TextView
+        android:id="@+id/applicantMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="status: "
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statusTextView" />
+
+    <Button
+        android:id="@+id/acceptButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="15dp"
+        android:text="Accept"
+        app:layout_constraintEnd_toStartOf="@+id/rejectButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/applicantMessage" />
+
+    <Button
+        android:id="@+id/rejectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="25dp"
+        android:text="Reject"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/acceptButton"
+        app:layout_constraintTop_toBottomOf="@+id/applicantMessage" />
+
+    <!-- Separator Line -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rejectButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>
