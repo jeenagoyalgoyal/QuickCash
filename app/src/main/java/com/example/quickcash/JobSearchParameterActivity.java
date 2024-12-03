@@ -171,7 +171,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 List<Job> jobs = task.getResult();
                 jobList.clear();
                 for (Job j : jobs) {
-                    if ((j.getStatus()==null || j.getStatus().equals("pending")) && passesAdditionalFilters(j)) {
+                    if (( j.getStatus().equals("pending")) && passesAdditionalFilters(j)) {
                         jobList.add(j);
                     }
                 }
