@@ -219,11 +219,11 @@ public class JobSubmissionUITest {
         welcome.exists();
         onView(withId(R.id.createJobButton)).perform(click());
 
-        onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"),closeSoftKeyboard());
-        onView(withId(R.id.buildingName)).perform(typeText("Tech Company"),closeSoftKeyboard());
+        onView(withId(R.id.jobTitle)).perform(typeText("Lawn Mower"),closeSoftKeyboard());
+        onView(withId(R.id.buildingName)).perform(typeText("Joe's Backyard"),closeSoftKeyboard());
         onView(withId(R.id.spinnerJobType)).perform(click());
         onData(hasToString("Multi day")).perform(click());
-        onView(withId(R.id.requirementText)).perform(typeText("Plumber"),closeSoftKeyboard());
+        onView(withId(R.id.requirementText)).perform(typeText("lawnmower expertise"),closeSoftKeyboard());
         onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
@@ -237,9 +237,10 @@ public class JobSubmissionUITest {
 
         onView(withText("OK")).perform(click());
         UiObject submitJob = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/jobSubmissionButton"));
-        submitJob.click();
+        submitJob.clickAndWaitForNewWindow();
 
-        onView(withId(R.id.welcomeEmployer)).check(matches(isDisplayed()));
+        UiObject landingPage = device.findObject(new UiSelector().textContains("Employer"));
+        landingPage.exists();
     }
 
     public static class ToastMatcher extends TypeSafeMatcher<Root> {
