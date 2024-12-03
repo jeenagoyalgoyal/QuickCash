@@ -5,11 +5,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,8 +20,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.quickcash.Firebase.JobCRUD;
 import com.example.quickcash.Firebase.OnlinePaymentCRUD;
+import com.example.quickcash.FirebaseMessaging.PaymentNotification;
 import com.example.quickcash.adapter.PaymentJobAdapter;
 import com.example.quickcash.model.Job;
 import com.example.quickcash.model.PaymentEmployeeModel;
@@ -35,10 +37,6 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.quickcash.FirebaseMessaging.PaymentNotification;
 
 /**
  * Activity responsible for handling online payments using PayPal.
@@ -146,8 +144,12 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                         onlinePaymentCRUD.pushTransaction(transaction);
                         clearEmployeeDetails();
 
+                        //Set status of job to completed
+                        jobCRUD.setStatusOfJobToCompleted(transaction.getJobId());
+
                         paymentNotification.sendPaymentNotifications(transaction.getEmployerId(), transaction.getEmployeeId());
                         Intent intent =new Intent(this, EmployerHomepageActivity.class);
+                        startActivity(intent);
                         startActivity(intent);
                     } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
                         Log.e(TAG, "Payment failed due to invalid extra data (check result code)");

@@ -177,7 +177,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         jobData.put("applicationId", uniqueApplicationKey);
 
 
-        if (uniqueApplicationKey != null) {
+        if (uniqueApplicationKey != null && !empID.equals(userId)) {
             // Save the job application under the unique key
             userReference.child(uniqueApplicationKey).setValue(jobData)
                     .addOnCompleteListener(task -> {
@@ -187,7 +187,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
                             Log.e("ApplicationPageActivity", "Failed to add job to applied jobs");
                         }
                     });
-        } else {
+        } else{
             Log.e("ApplicationPageActivity", "Failed to generate unique key for job application");
         }
     }
