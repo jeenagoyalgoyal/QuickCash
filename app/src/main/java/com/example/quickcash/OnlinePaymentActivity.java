@@ -242,7 +242,7 @@ public class OnlinePaymentActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
         //Fetch the jobs and put them in recycler view
-        jobCRUD.getInProgressJobs(email).addOnCompleteListener(task -> {
+        jobCRUD.getInProgressJobs(userID).addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 for (Job j : task.getResult()) {
                     if (j.getEmployeeId() != null) {

@@ -195,7 +195,6 @@ public class JobCRUD {
     }
 
     public void setStatusOfJobToCompleted(String jobId) {
-        databaseReference.child(jobId);
-        databaseReference.child("status").setValue("complete");
+        databaseReference.child(jobId).child("status").setValue("complete");
     }
 }
