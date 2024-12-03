@@ -1,6 +1,5 @@
 package com.example.quickcash;
 
-import static com.example.quickcash.JobSearchValidator.allEmptyFields;
 import static com.example.quickcash.filter.JobSearchFilter.isValidField;
 import static com.example.quickcash.filter.JobSearchFilter.passesAdditionalJobFilters;
 
@@ -137,7 +136,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         jobList = new ArrayList<>();
 
         jobTitle = findViewById(R.id.jobTitle);
-        companyName = findViewById(R.id.companyName);
+        companyName = findViewById(R.id.buildingName);
         minSalary = findViewById(R.id.minSalary);
         maxSalary = findViewById(R.id.maxSalary);
         duration = findViewById(R.id.duration);
@@ -172,7 +171,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
                 List<Job> jobs = task.getResult();
                 jobList.clear();
                 for (Job j : jobs) {
-                    if ((j.getStatus()==null || j.getStatus().equals("pending")) && passesAdditionalFilters(j)) {
+                    if (( j.getStatus().equals("pending")) && passesAdditionalFilters(j)) {
                         jobList.add(j);
                     }
                 }
@@ -211,7 +210,7 @@ public class JobSearchParameterActivity extends AppCompatActivity {
         if (isValidField(title)) {
             query = query.orderByChild("jobTitle").equalTo(title);
         } else if (isValidField(company)) {
-            query = query.orderByChild("companyName").equalTo(company);
+            query = query.orderByChild("buildingName").equalTo(company);
         } else if (isValidField(jobLocation)) {
             String locationKey = normalizeLocationString(jobLocation);
             query = query.orderByChild("location").startAt(locationKey).endAt(locationKey + "\uf8ff");

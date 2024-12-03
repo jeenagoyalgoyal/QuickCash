@@ -33,7 +33,7 @@
         android:id="@+id/myProfileButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="3dp"
         android:text="My Profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
         android:layout_width="286dp"
         android:layout_height="45dp"
 
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="3dp"
         android:text="My Preferred Jobs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
         android:id="@+id/appliedJobsButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="3dp"
         android:text="Applied Jobs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -78,19 +78,26 @@
         android:id="@+id/preferredEmployersButton"
         android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="3dp"
         android:text="Preferred Employers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appliedJobsButton" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/jobsRecycler" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobsRecycler"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

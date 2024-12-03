@@ -64,10 +64,6 @@ public class EmployerHomepageActivity extends AppCompatActivity {
         createJob = findViewById(R.id.createJobButton);
         payEmployee = findViewById(R.id.payEmployeeButton);
         applicationsButton = findViewById(R.id.applicationSubmissions);
-        analyticsReports = findViewById(R.id.analyticsReportButton);
-        tasksAssignments = findViewById(R.id.tasksAssignmentsButton);
-        scheduleMeetings = findViewById(R.id.scheduleMeetingsButton);
-        notificationSettings = findViewById(R.id.employerNotificationsButton);
         employeeSwitch = findViewById(R.id.switchToEmployeeButton);
 
 

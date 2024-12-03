@@ -5,9 +5,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -16,7 +14,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -24,21 +21,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 import android.graphics.Color;
-import android.os.SystemClock;
 import android.widget.TextView;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.action.TypeTextAction;
 import androidx.test.espresso.assertion.ViewAssertions;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasToString;
 
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -47,7 +40,6 @@ import android.os.IBinder;
 import android.view.WindowManager;
 
 import androidx.test.espresso.Root;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -56,8 +48,6 @@ import androidx.test.uiautomator.UiSelector;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(JUnit4.class)
 public class JobSubmissionUITest {
@@ -101,7 +91,7 @@ public class JobSubmissionUITest {
     public void checkRequiredFields() {
         setupJobSubmissionActivityScenario();
         onView(withId(R.id.jobTitle)).check(matches(isDisplayed()));
-        onView(withId(R.id.companyName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buildingName)).check(matches(isDisplayed()));
         onView(withId(R.id.spinnerJobType)).check(matches(isDisplayed()));
         onView(withId(R.id.requirementText)).check(matches(isDisplayed()));
         onView(withId(R.id.salaryText)).check(matches(isDisplayed()));
@@ -161,9 +151,9 @@ public class JobSubmissionUITest {
         setupJobSubmissionActivityScenario();
 
         onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"));
-        onView(withId(R.id.companyName)).perform(typeText("Tech Company"));
+        onView(withId(R.id.buildingName)).perform(typeText("Tech Company"));
         onView(withId(R.id.spinnerJobType)).perform(click());
-        onData(hasToString("Full-time")).perform(click());
+        onData(hasToString("Multi day")).perform(click());
 
         onView(withId(R.id.jobSubmissionButton)).perform(click());
 
@@ -229,11 +219,11 @@ public class JobSubmissionUITest {
         welcome.exists();
         onView(withId(R.id.createJobButton)).perform(click());
 
-        onView(withId(R.id.jobTitle)).perform(typeText("Software Developer"),closeSoftKeyboard());
-        onView(withId(R.id.companyName)).perform(typeText("Tech Company"),closeSoftKeyboard());
+        onView(withId(R.id.jobTitle)).perform(typeText("Lawn Mower"),closeSoftKeyboard());
+        onView(withId(R.id.buildingName)).perform(typeText("Joe's Backyard"),closeSoftKeyboard());
         onView(withId(R.id.spinnerJobType)).perform(click());
-        onData(hasToString("Full-time")).perform(click());
-        onView(withId(R.id.requirementText)).perform(typeText("Plumber"),closeSoftKeyboard());
+        onData(hasToString("Multi day")).perform(click());
+        onView(withId(R.id.requirementText)).perform(typeText("lawnmower expertise"),closeSoftKeyboard());
         onView(withId(R.id.salaryText)).perform(typeText("25"),closeSoftKeyboard());
         onView(withId(R.id.spinnerUrgency)).perform(click());
         onData(hasToString("High")).perform(click());
@@ -247,9 +237,10 @@ public class JobSubmissionUITest {
 
         onView(withText("OK")).perform(click());
         UiObject submitJob = device.findObject(new UiSelector().resourceId("com.example.quickcash:id/jobSubmissionButton"));
-        submitJob.click();
+        submitJob.clickAndWaitForNewWindow();
 
-        onView(withText("Welcome Employer!")).check(matches(isDisplayed()));
+        UiObject landingPage = device.findObject(new UiSelector().textContains("Employer"));
+        landingPage.exists();
     }
 
     public static class ToastMatcher extends TypeSafeMatcher<Root> {

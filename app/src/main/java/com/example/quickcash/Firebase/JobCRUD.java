@@ -193,4 +193,8 @@ public class JobCRUD {
 
         return taskCompletionSource.getTask();
     }
+
+    public void setStatusOfJobToCompleted(String jobId) {
+        databaseReference.child(jobId).child("status").setValue("complete");
+    }
 }

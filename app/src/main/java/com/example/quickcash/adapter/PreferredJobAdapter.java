@@ -173,7 +173,7 @@ public class PreferredJobAdapter extends RecyclerView.Adapter<PreferredJobAdapte
                 Intent intent = new Intent(itemView.getContext(), ApplicationPageActivity.class);
                 intent.putExtra("jobId", job.getJobId()); // Pass job ID to Application Page
                 intent.putExtra("jobTitle", job.getJobTitle());
-                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("buildingName", job.getCompanyName());
                 itemView.getContext().startActivity(intent);
             });
 

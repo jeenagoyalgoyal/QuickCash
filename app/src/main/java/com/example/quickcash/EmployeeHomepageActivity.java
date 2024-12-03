@@ -256,7 +256,7 @@ public class EmployeeHomepageActivity extends AppCompatActivity implements Locat
                 List<Job> filteredJobs = new ArrayList<>();
                 for (Job job : jobs) {
                     JobLocation jobLocation = job.getJobLocation(); //Make sure location is not null
-                    if (jobLocation != null && jobLocation.getAddress().toLowerCase().contains(city.toLowerCase())) {
+                    if (job.getStatus().equals("pending") && jobLocation != null && jobLocation.getAddress().toLowerCase().contains(city.toLowerCase())) {
                         filteredJobs.add(job);
                     }
                 }

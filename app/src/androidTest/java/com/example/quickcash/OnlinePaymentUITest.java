@@ -23,13 +23,17 @@ public class OnlinePaymentUITest {
     private UiDevice device;
 
     @Before
-    public void setup() {
+    public void setup() throws UiObjectNotFoundException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         Context context = ApplicationProvider.getApplicationContext();
         Intent launcherIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackageName);
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launcherIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackageName).depth(0)), LAUNCH_TIMEOUT);
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
     }
 
     @Test
@@ -118,7 +122,7 @@ public class OnlinePaymentUITest {
         UiObject cvvBox = device.findObject(new UiSelector().textContains("123"));
         cvvBox.setText("123");
         UiObject doneButton = device.findObject(new UiSelector().textContains("Done"));
-        doneButton.longClick();
+        doneButton.clickAndWaitForNewWindow();
 
         // checks if charge card option is visible, does not actually charge since that closes the job
         UiObject chargeButton = device.findObject(new UiSelector().textContains("Charge Card"));

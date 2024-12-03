@@ -22,8 +22,6 @@ public class JobSubmissionDatabaseTest {
 
     private FirebaseDatabase firebaseDatabase;
 
-    private DatabaseReference mockDatabaseReference;
-
     private JobCRUD jobCRUD;
 
     @Before
@@ -37,14 +35,14 @@ public class JobSubmissionDatabaseTest {
     public void testSubmitJobSendsCorrectDataToBackend() throws ExecutionException, InterruptedException {
         // Arrange
         Job job = new Job();
-        job.setJobTitle("Cybersecurity Analyst");
-        job.setCompanyName("Tech Company");
+        job.setJobTitle("Lawn Mowing");
+        job.setCompanyName("Mowad");
         job.setExpectedDuration("20");
         job.setEmployerId("test@gmail.com");
         job.setLocation("Halifax, NS B3H 4P7");
         job.setRequirements("Linux, Java");
         job.setSalary(50);
-        job.setJobType("Full-time");
+        job.setJobType("Multi day");
         job.setStartDate("Nov 20, 2024");
         job.setUrgency("High");
 
@@ -63,23 +61,23 @@ public class JobSubmissionDatabaseTest {
     public void testJobDataMappingToBackendStructure() throws ExecutionException, InterruptedException{
         // Arrange
         Job job = new Job();
-        job.setJobTitle("Cybersecurity Analyst");
-        job.setCompanyName("Tech Company");
+        job.setJobTitle("Lawn Mowing");
+        job.setCompanyName("Mowad");
         job.setExpectedDuration("20");
         job.setEmployerId("test@gmail.com");
         job.setLocation("Halifax, NS B3H 4P7");
         job.setRequirements("Linux, Java");
         job.setSalary(50);
-        job.setJobType("Full-time");
+        job.setJobType("Multi day");
         job.setStartDate("Nov 20, 2024");
         job.setUrgency("High");
 
         // Act
         Task<Boolean> task = jobCRUD.submitJob(job);
 
-        String expectedTitle = "Cybersecurity Analyst";
-        String expectedCompany = "Tech Company";
-        String expectedType = "Full-time";
+        String expectedTitle = "Lawn Mowing";
+        String expectedCompany = "Mowad";
+        String expectedType = "Multi day";
         String expectedDuration = "20";
         String expectedEmployerId = "test@gmail.com";
         String expectedLocation = "Halifax, NS B3H 4P7";

@@ -119,7 +119,7 @@ public class PreferredJobsUITest {
         searchJobButton.clickAndWaitForNewWindow();
 
         UiObject jobTitle = device.findObject(new UiSelector().text("Enter Job Title"));
-        jobTitle.setText("Software Developer");
+        jobTitle.setText("Lawn Mowing");
 
         //Press Search
         UiObject searchButton = device.findObject(new UiSelector().text("Search"));

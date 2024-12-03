@@ -3,7 +3,6 @@ package com.example.quickcash;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -102,7 +101,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
 
         // The inputs from employer
         jobTitle = findViewById(R.id.jobTitle);
-        companyName = findViewById(R.id.companyName);
+        companyName = findViewById(R.id.buildingName);
         jobType = findViewById(R.id.spinnerJobType);
         requirements = findViewById(R.id.requirementText);
         salary = findViewById(R.id.salaryText);
@@ -122,9 +121,8 @@ public class JobSubmissionActivity extends AppCompatActivity {
         // Array list for the job type
         List<String> typeList = new ArrayList<>();
         typeList.add(0, "Select job type");
-        typeList.add("Full-time");
-        typeList.add("Part-time");
-        typeList.add("Internship");
+        typeList.add("Single day");
+        typeList.add("Multi day");
 
         // Array list for the urgency
         List<String> urgencyList = new ArrayList<>();
@@ -161,7 +159,7 @@ public class JobSubmissionActivity extends AppCompatActivity {
         }
 
         int salaryValue = Integer.parseInt(salaryText);
-        String employerId = email.replace(".", ",");
+        String employerId = email;
         String jobId = null;
 
         // Show progress dialog

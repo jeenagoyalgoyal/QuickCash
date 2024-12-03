@@ -7,32 +7,30 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
-
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quickcash.ApplicationPageActivity;
 import com.example.quickcash.GoogleSearchMapActivity;
 import com.example.quickcash.JobDetails;
-import com.example.quickcash.model.Job;
 import com.example.quickcash.R;
+import com.example.quickcash.model.Job;
 import com.example.quickcash.model.JobLocation;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.example.quickcash.model.PreferredEmployerModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +39,7 @@ import java.util.List;
  * Class using adapter for displaying job search results in a RecyclerView
  */
 public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobViewHolder> {
+    public static final String TAG = "Job Search Adapter";
     private List<Job> jobList;
     private DatabaseReference preferredJobsRef;
     private ViewGroup parent;
@@ -75,7 +74,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
             durationResult = itemView.findViewById(R.id.durationResult);
             applyButton = itemView.findViewById(R.id.Apply);
             optionsButton = itemView.findViewById(R.id.optionsButton);
-            jobDetails= itemView.findViewById(R.id.jobDetails);
+            jobDetails = itemView.findViewById(R.id.jobDetails);
             jobSearchLinearLayout = itemView.findViewById(R.id.jobSearchLinearLayout);
             addToPreferredButton = itemView.findViewById(R.id.add_to_preferred_employers);
         }
@@ -87,7 +86,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
      * @param jobList
      */
     public JobSearchAdapter(Context context, List<Job> jobList) {
-        this.context= context;
+        this.context = context;
         this.jobList = jobList;
 
     }
@@ -117,6 +116,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
      */
     @Override
     public void onBindViewHolder(JobViewHolder holder, int position) {
+
         Job job = jobList.get(position);
 
         // Set the job details
@@ -136,18 +136,28 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
 
         // Handle Apply Button Click
         holder.applyButton.setOnClickListener(view -> {
+
             Context context = holder.itemView.getContext();
-            Intent intent = new Intent(context, ApplicationPageActivity.class);
+
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+            String email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
+            String userId = email.replace(".", ",");
 
-            // Pass job details to the Application Page
-            intent.putExtra("jobId", job.getJobId());
-            intent.putExtra("jobTitle", job.getJobTitle());
-            intent.putExtra("companyName", job.getCompanyName());
-            intent.putExtra("userEmail", userId); // Add the user's email
+            Log.d(TAG, job.getEmployerId());
+            if ((job.getEmployerId()).equals(userId)) {
+                //Make sure you can't apply to your own jobs!
+                Toast.makeText(context, "Cannot apply to own jobs", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(context, ApplicationPageActivity.class);
+                // Pass job details to the Application Page
+                intent.putExtra("jobId", job.getJobId());
+                intent.putExtra("employerId", job.getEmployerId());
+                intent.putExtra("jobTitle", job.getJobTitle());
+                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("userEmail", userId); // Add the user's email
 
-            context.startActivity(intent);
+                context.startActivity(intent);
+            }
         });
 
         holder.jobDetails.setOnClickListener(v -> {
@@ -157,7 +167,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                 // Pass the job ID and additional data to the details activity
                 intent.putExtra("JOB_ID", job.getJobId());
                 intent.putExtra("jobTitle", job.getJobTitle());
-                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("buildingName", job.getCompanyName());
                 intent.putExtra("location", job.getJobLocation() != null ? job.getJobLocation().getAddress() : "Not specified");
                 intent.putExtra("salary", job.getSalary());
                 intent.putExtra("duration", job.getExpectedDuration());
@@ -183,7 +193,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                     } else if (item.getTitle().equals("Add to Preferred Jobs")) {
                         //Do preferred Job calls here!
                         addJobToPreferredList(job, holder.itemView.getContext());
-                    } else if (item.getTitle().equals("Show on Map")){
+                    } else if (item.getTitle().equals("Show on Map")) {
                         showOnMap(job);
                     }
                     return true;

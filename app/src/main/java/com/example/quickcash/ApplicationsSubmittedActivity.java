@@ -137,11 +137,8 @@ public class ApplicationsSubmittedActivity extends AppCompatActivity {
                     Log.d(TAG, "Message: "+ applicantMessage);
                     String status = applicationSnapshot.child("Status").getValue(String.class);
                     String applicationId = applicationSnapshot.getKey();  // Firebase automatically assigns the key for each application
-
-                    //ID is retrieved
-                    this.mAuth = FirebaseAuth.getInstance();
-                    this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-                    String employeeID = email.replace(".", ",");
+                    String employeeID = applicationSnapshot.child("employeeID").getValue(String.class);
+                    employeeID = employeeID.replace(".", ",");
                     // Create the application object and set the applicationId
                     Application application = new Application(applicantName, applicantEmail, applicantMessage, status, applicationId, employeeID);
 

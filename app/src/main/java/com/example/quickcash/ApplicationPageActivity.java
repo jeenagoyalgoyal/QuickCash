@@ -74,7 +74,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         buttonApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitApplication();
+                submitApplication(userId);
             }
         });
     }
@@ -83,25 +83,22 @@ public class ApplicationPageActivity extends AppCompatActivity {
      * Handles the submission of a job application. Validates user input, creates application data,
      * and saves it to Firebase.
      */
-    private void submitApplication() {
+    private void submitApplication(String userId) {
         String name = editTextName.getText().toString().trim();
         String email2 = editTextEmail.getText().toString().trim();
         String message = editTextMessage.getText().toString().trim();
-        //ID is retrieved
-        this.mAuth = FirebaseAuth.getInstance();
-        this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
-        String empID = email.replace(".", ",");
+
 
         // Validate input
         if (TextUtils.isEmpty(name)) {
             editTextName.setError("Name is required");
             return;
         }
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(email2)) {
             editTextEmail.setError("Email is required");
             return;
         }
-        if (!isValidEmail(email)) {
+        if (!isValidEmail(email2)) {
             editTextEmail.setError("Invalid email format");
             return;
         }
@@ -116,7 +113,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         applicationData.put("Applicant Email", email2);
         applicationData.put("Cover Letter", message);
         applicationData.put("Status", "Applied"); // Add the status variable
-        applicationData.put("employeeID", empID);
+        applicationData.put("employeeID", userId);
         uniqueApplicationKey = databaseReference.push().getKey();
 
         if (uniqueApplicationKey != null) {
@@ -134,15 +131,13 @@ public class ApplicationPageActivity extends AppCompatActivity {
                             editTextMessage.setText("");
 
                             // Also save the job under the user's applied jobs
-                            String userId = getIntent().getStringExtra("userEmail");
+
                             String jobTitle = getIntent().getStringExtra("jobTitle");
                             String companyName = getIntent().getStringExtra("companyName");
+                            final String userId2 = userId.replace(".", ",");
 
+                            saveJobUnderUser(userId2, jobTitle, companyName, userId2); // Pass applicationId here
 
-                            if (userId != null) {
-                                userId = userId.replace(".", ","); // Sanitize email for Firebase
-                                saveJobUnderUser(userId, jobTitle, companyName, empID); // Pass applicationId here
-                            }
 
                             // Navigate back to EmployeeHomepageActivity
                             Intent intent = new Intent(ApplicationPageActivity.this, JobSearchParameterActivity.class);
@@ -203,3 +198,4 @@ public class ApplicationPageActivity extends AppCompatActivity {
         return email.matches(emailPattern);
     }
 }
+
