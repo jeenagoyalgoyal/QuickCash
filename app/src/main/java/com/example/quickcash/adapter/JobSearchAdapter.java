@@ -153,8 +153,8 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                 intent.putExtra("jobId", job.getJobId());
                 intent.putExtra("employerId", job.getEmployerId());
                 intent.putExtra("jobTitle", job.getJobTitle());
-                intent.putExtra("buildingName", job.getCompanyName());
-                intent.putExtra("userEmail", email); // Add the user's email
+                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("userEmail", userId); // Add the user's email
 
                 context.startActivity(intent);
             }
