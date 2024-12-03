@@ -150,7 +150,6 @@ public class OnlinePaymentActivity extends AppCompatActivity {
                         paymentNotification.sendPaymentNotifications(transaction.getEmployerId(), transaction.getEmployeeId());
                         Intent intent =new Intent(this, EmployerHomepageActivity.class);
                         startActivity(intent);
-                        startActivity(intent);
                     } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
                         Log.e(TAG, "Payment failed due to invalid extra data (check result code)");
                         Toast.makeText(this, "Payment Failed!", Toast.LENGTH_SHORT).show();
