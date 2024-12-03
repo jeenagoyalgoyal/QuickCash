@@ -91,9 +91,9 @@ public class EmployerJobApplicationUITest {
         Log.d(TAG, "Clicked Manage Applications button");
 
         UiObject rejectButton = device.findObject(new UiSelector().text("Reject"));
-        assertTrue("Accept button should be visible", rejectButton.exists());
+        assertTrue("Reject button should be visible", rejectButton.exists());
         rejectButton.clickAndWaitForNewWindow();
-        Log.d(TAG, "Clicked Accept button");
+        Log.d(TAG, "Clicked Reject button");
 
         UiObject jobApplicationsPage = device.findObject(new UiSelector().textContains("Application"));
         assertTrue("Job Applications page should be displayed", jobApplicationsPage.waitForExists(LAUNCH_TIMEOUT));

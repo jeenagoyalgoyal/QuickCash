@@ -151,8 +151,9 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                 Intent intent = new Intent(context, ApplicationPageActivity.class);
                 // Pass job details to the Application Page
                 intent.putExtra("jobId", job.getJobId());
+                intent.putExtra("employerId", job.getEmployerId());
                 intent.putExtra("jobTitle", job.getJobTitle());
-                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("buildingName", job.getCompanyName());
                 intent.putExtra("userEmail", email); // Add the user's email
 
                 context.startActivity(intent);
@@ -166,7 +167,7 @@ public class JobSearchAdapter extends RecyclerView.Adapter<JobSearchAdapter.JobV
                 // Pass the job ID and additional data to the details activity
                 intent.putExtra("JOB_ID", job.getJobId());
                 intent.putExtra("jobTitle", job.getJobTitle());
-                intent.putExtra("companyName", job.getCompanyName());
+                intent.putExtra("buildingName", job.getCompanyName());
                 intent.putExtra("location", job.getJobLocation() != null ? job.getJobLocation().getAddress() : "Not specified");
                 intent.putExtra("salary", job.getSalary());
                 intent.putExtra("duration", job.getExpectedDuration());

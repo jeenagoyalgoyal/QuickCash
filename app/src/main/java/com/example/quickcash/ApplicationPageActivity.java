@@ -52,6 +52,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         String jobTitle = getIntent().getStringExtra("jobTitle");
         String companyName = getIntent().getStringExtra("companyName");
         String userId = getIntent().getStringExtra("userEmail");
+        String employerId = getIntent().getStringExtra("employerId");
 
         // Initialize UI components
         editTextName = findViewById(R.id.editTextName);
@@ -74,7 +75,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         buttonApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitApplication();
+                submitApplication(employerId);
             }
         });
     }
@@ -83,10 +84,11 @@ public class ApplicationPageActivity extends AppCompatActivity {
      * Handles the submission of a job application. Validates user input, creates application data,
      * and saves it to Firebase.
      */
-    private void submitApplication() {
+    private void submitApplication(String employerId) {
         String name = editTextName.getText().toString().trim();
         String email2 = editTextEmail.getText().toString().trim();
         String message = editTextMessage.getText().toString().trim();
+
         //ID is retrieved
         this.mAuth = FirebaseAuth.getInstance();
         this.email = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getEmail() : null;
@@ -141,7 +143,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
 
                             if (userId != null) {
                                 userId = userId.replace(".", ","); // Sanitize email for Firebase
-                                saveJobUnderUser(userId, jobTitle, companyName, empID); // Pass applicationId here
+                                saveJobUnderUser(empID, jobTitle, companyName, employerId); // Pass applicationId here
                             }
 
                             // Navigate back to EmployeeHomepageActivity
@@ -161,11 +163,12 @@ public class ApplicationPageActivity extends AppCompatActivity {
      * @param userId              The ID of the user.
      * @param jobTitle            The title of the job.
      * @param companyName         The name of the company.
-     * @param empID               The employee ID of the user.
      */
     private void saveJobUnderUser(String userId, String jobTitle, String companyName, String empID) {
         DatabaseReference userReference = FirebaseDatabase.getInstance()
-                .getReference("Users").child(userId).child("appliedJobs");
+                .getReference("Users")
+                .child(userId)
+                .child("appliedJobs");
 
 
         // Create a map for the job details
@@ -173,7 +176,7 @@ public class ApplicationPageActivity extends AppCompatActivity {
         jobData.put("jobTitle", jobTitle);
         jobData.put("companyName", companyName);
         jobData.put("Status", "Applied");
-        jobData.put("employeeId", empID);
+        jobData.put("employerId", empID);
         jobData.put("applicationId", uniqueApplicationKey);
 
 

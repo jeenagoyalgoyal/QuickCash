@@ -154,6 +154,13 @@ public class EmployerCRUD {
         userJobsRef.setValue(status);
     }
 
+    public void resetToPending(String jobID) {
+        DatabaseReference jobRef = databaseReference.child(jobID);
+        jobRef.child("status").setValue("pending");
+        jobRef.child("employeeId").setValue("");
+        jobRef.child("employeeName").setValue("");
+    }
+
 
     /**
      * A callback interface for handling application counts and errors.

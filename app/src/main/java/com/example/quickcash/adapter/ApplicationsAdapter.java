@@ -121,6 +121,8 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
         emCRUD.changeStatusOfUserJobsApplied(application.getEmployeeID(), application.getApplicationId(), status);
         if (status.equals("Accepted")) {
             ((Activity) context).finish();
+        } else {
+            emCRUD.resetToPending(jobID);
         }
     }
     /**

@@ -8,13 +8,16 @@
       <SelectionState runConfigName="EmployeeJobApplicationUITest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="EmployerJobApplicationUITest">
+      <SelectionState runConfigName="GPSTestCases">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testAcceptButtonFunctionality()">
+      <SelectionState runConfigName="JobSearchDatabaseTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testRejectButtonFunctionality()">
+      <SelectionState runConfigName="JobSearchParameterEspressoTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testFilterInteraction()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

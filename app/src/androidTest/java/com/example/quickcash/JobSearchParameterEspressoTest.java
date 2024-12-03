@@ -11,16 +11,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import org.junit.After;
@@ -38,8 +38,13 @@ public class JobSearchParameterEspressoTest {
     public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Before
-    public void setup() {
+    public void setup() throws UiObjectNotFoundException {
         Intents.init();
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject allowButton = device.findObject(new UiSelector().text("While using the app"));
+        if (allowButton.exists()) {
+            allowButton.click();
+        }
     }
 
 
@@ -92,7 +97,7 @@ public class JobSearchParameterEspressoTest {
 
         // Checks to see if text boxes are displayed in the job search page
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        onView(ViewMatchers.withId(R.id.companyName)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        onView(ViewMatchers.withId(R.id.buildingName)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         onView(ViewMatchers.withId(R.id.minSalary)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         onView(ViewMatchers.withId(R.id.maxSalary)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         onView(ViewMatchers.withId(R.id.duration)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
@@ -115,12 +120,11 @@ public class JobSearchParameterEspressoTest {
 
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Software Developer"));
-        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Tech Company"));
+        onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Lawn Mowing"));
+        onView(ViewMatchers.withId(R.id.buildingName)).perform(ViewActions.click(), ViewActions.typeText("MowMow"));
         onView(ViewMatchers.withId(R.id.minSalary)).perform(ViewActions.click(), ViewActions.typeText("20"));
         onView(ViewMatchers.withId(R.id.maxSalary)).perform(ViewActions.click(), ViewActions.typeText("27"));
         onView(ViewMatchers.withId(R.id.duration)).perform(ViewActions.click(), ViewActions.typeText("20"));
-        onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("IRVING SHIPBUILDING INC"));
 
         // Will test the submission button to see if the filters worked
         Espresso.closeSoftKeyboard();
@@ -128,7 +132,7 @@ public class JobSearchParameterEspressoTest {
         // Switches to the results
         onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(isDisplayed()));
         // Checks if our job title shows up
-        onView(ViewMatchers.withText("Software Developer")).check(matches(isDisplayed()));
+        onView(ViewMatchers.withText("Lawn Mowing")).check(matches(isDisplayed()));
     }
 
     @Test
@@ -145,7 +149,7 @@ public class JobSearchParameterEspressoTest {
         onView(ViewMatchers.withId(R.id.searchJobButton)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.jobTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         onView(ViewMatchers.withId(R.id.jobTitle)).perform(ViewActions.click(), ViewActions.typeText("Software Developer"));
-        onView(ViewMatchers.withId(R.id.companyName)).perform(ViewActions.click(), ViewActions.typeText("Tech Corp"));
+        onView(ViewMatchers.withId(R.id.buildingName)).perform(ViewActions.click(), ViewActions.typeText("Tech Corp"));
         onView(ViewMatchers.withId(R.id.location)).perform(ViewActions.click(), ViewActions.typeText("Mumbai, India"));
 
         onView(ViewMatchers.withId(R.id.search_job_parameter)).perform(ViewActions.click());

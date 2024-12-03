@@ -281,6 +281,7 @@
                   <entry key="Medium_Phone_API_35" value="120" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -684,6 +685,7 @@
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Pixel_7_API_35" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung SM-G998B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
