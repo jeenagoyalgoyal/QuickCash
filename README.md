@@ -1,4 +1,4 @@
-# CSCI3130-Fall2024-G15
+# QuickCash App
 
 
 
